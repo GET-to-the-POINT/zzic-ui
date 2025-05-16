@@ -5,7 +5,7 @@ export const load = async ({fetch}) => {
 	const doneResponse = await fetch(getTodos(false));
 
 	if (!doneResponse.ok || !yetToDoResponse.ok) {
-		throw new Error('Failed to fetch todos');
+		throw new Error('Failed to fetch yeon');
 	}
 
 	const [ yetTodos, doneTodos ] = await Promise.all([

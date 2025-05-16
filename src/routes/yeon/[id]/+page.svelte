@@ -16,7 +16,7 @@
     <i data-lucide="edit"></i>
     수정
   </a>
-  <form method="POST" action="/todos/done-toggle">
+  <form method="POST" action="/src/routes/yeon/done-toggle">
     <input name="id" value={todo.id} type="hidden" />
     <input name="done" value={todo.done} type="hidden" />
     <button class="btn btn-primary full" type="submit">
