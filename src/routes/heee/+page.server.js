@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 
 export function load() {
 
-	return { todos : todos.filter(todo => !todo.done),
+	return { yetTodos : todos.filter(todo => !todo.done),
 		dones: todos.filter(todo => todo.done),
 	};
 }

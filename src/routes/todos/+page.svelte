@@ -2,7 +2,8 @@
 	import { enhance } from '$app/forms';
 
 	const { data } = $props();
-	let todos = $state(data.todos);
+	let todos = $state(data.yetTodos);
+	let doneTodos = $state(data.doneTodos);
 </script>
 
 {#snippet todoItem(todo)}
@@ -41,17 +42,16 @@
 	<button type="submit">추가</button>
 </form>
 
-
 <h2>탑승 전 할일</h2>
 <ul>
-	{#each todos.filter(todo => !todo.done) as todo (todo.id)}
+	{#each todos as todo (todo.id)}
 		{@render todoItem(todo)}
 	{/each}
 </ul>
 
 <h2>탑승 완료</h2>
 <ul>
-	{#each todos.filter(todo => todo.done) as todo (todo.id)}
+	{#each doneTodos as todo (todo.id)}
 		{@render todoItem(todo)}
 	{/each}
 </ul>

@@ -15,4 +15,6 @@
 	const { children } = $props();
 </script>
 
-{@render children()}
+<div class="container">
+	{@render children()}
+</div>

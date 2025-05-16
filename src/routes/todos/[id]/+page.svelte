@@ -1,4 +1,5 @@
-<script lang="ts">
+<script>
+  import { enhance } from '$app/forms';
   // 서버 load 함수에서 전달된 데이터 받기
   const { data } = $props();
   const todo = $state(data.todo);
@@ -29,15 +30,14 @@
   </form>
 </div>
 
-<form method="POST" action="/todos/delete">
-  <input name="id" value={todo.id} type="hidden" />
+<form method="POST" action="?/delete" use:enhance>
   <button class="btn btn-primary full margin-block" type="submit">
     <i data-lucide="trash-2"></i>
     삭제
   </button>
 </form>
 
-<a class="btn btn-secondary btn-full-width" href="../">
+<a class="btn btn-secondary btn-full-width" href="..">
   <i data-lucide="list"></i>
   목록으로 돌아가기
 </a>

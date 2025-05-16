@@ -64,7 +64,7 @@
 		<h2 style:view-transition-name="yet">할 일</h2>
 		<ul id="todos"
 		>
-			{#each page.data.todos as todo (['yet', todo.id].join('-'))}
+			{#each page.data.yetTodos as todo (['yet', todo.id].join('-'))}
 				{@render zzic(todo)}
 			{/each}
 		</ul>
