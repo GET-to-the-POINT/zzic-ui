@@ -1,6 +1,6 @@
 <script>
-	let todos = [];
-	let completedTodos = [];
+	let todos = [{ id: 1, title: 'Demo 1', description: '설명입니다', done: false }];
+	let completedTodos = [{ id: 2, title: 'Demo 2', description: '완료된 설명입니다', done: true }];
 
 	let newTitle = '';
 	let newDescription = '';
@@ -222,13 +222,9 @@
 
 	<div class="todo-section">
 		<h2 class="section-title">📝 할 일 <span>{todos.length}</span></h2>
-
 		{#if todos.length === 0}
-			<div class="empty-state">
-				<p>🌱 새로운 할 일을 추가해보세요!</p>
-			</div>
+			<div class="empty-state">🌱 새로운 할 일을 추가해보세요!</div>
 		{/if}
-
 		{#each todos as todo (todo.id)}
 			<div class="todo-item">
 				<form on:submit|preventDefault={() => toggleTodo(todo.id)}>
@@ -244,13 +240,9 @@
 
 	<div class="todo-section">
 		<h2 class="section-title">✨ 완료된 일 <span>{completedTodos.length}</span></h2>
-
 		{#if completedTodos.length === 0}
-			<div class="empty-state">
-				<p>💪 아직 완료된 일이 없어요!</p>
-			</div>
+			<div class="empty-state">💪 아직 완료된 일이 없어요!</div>
 		{/if}
-
 		{#each completedTodos as todo (todo.id)}
 			<div class="todo-item completed">
 				<form on:submit|preventDefault={() => toggleTodo(todo.id, true)}>

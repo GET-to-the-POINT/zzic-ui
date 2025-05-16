@@ -1,7 +1,7 @@
 <script>
 	let todos = [
-		{ id: 1, title: '예시 할일1', description: '설명', done: false, priority: 1 },
-		{ id: 2, title: '예시 할일2', description: '설명', done: true, priority: 3 }
+		{ id: 1, title: 'Demo 1', description: '설명', done: false, priority: 1 },
+		{ id: 2, title: 'Demo 2', description: '설명', done: true, priority: 3 }
 	];
 
 	function submitTodo(e) {
