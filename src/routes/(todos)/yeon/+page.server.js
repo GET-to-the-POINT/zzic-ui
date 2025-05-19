@@ -1,4 +1,4 @@
-import { createTodo, getTodo } from '$lib/todos';
+import { createTodo, getTodo } from '$lib/todos.js';
 
 export const actions = {
 	default: async ({ request }) => {
