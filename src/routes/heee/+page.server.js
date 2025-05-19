@@ -1,10 +1,14 @@
-import { todos, actionAdd, actionDone, actionRemove } from '$lib/dummy.js';
-import { redirect } from '@sveltejs/kit';
+// +page.server.js
+
+let todos = [
+	{ id: 1, title: 'Demo 1', description: '설명', done: false },
+	{ id: 2, title: 'Demo 2', description: '설명', done: true }
+];
 
 export function load() {
-
-	return { yetTodos : todos.filter(todo => !todo.done),
-		dones: todos.filter(todo => todo.done),
+	return {
+		yetTodos: todos.filter((t) => !t.done),
+		dones: todos.filter((t) => t.done)
 	};
 }
 
@@ -13,19 +17,25 @@ export const actions = {
 	add: async ({ request }) => {
 		const data = await request.formData();
 		const title = data.get('title');
-		actionAdd(title);
+		const newTodo = {
+			id: Date.now(),
+			title,
+			description: '',
+			done: false
+		};
+		todos.push(newTodo);
 		return { success: true };
 	},
 	done: async ({ request }) => {
 		const data = await request.formData();
 		const id = Number(data.get('id'));
-		actionDone(id);
+		todos = todos.map((t) => (t.id === id ? { ...t, done: true } : t));
 		return { success: true };
 	},
 	remove: async ({ request }) => {
 		const data = await request.formData();
 		const id = Number(data.get('id'));
-		actionRemove(id);
-		redirect(304, '/');
+		todos = todos.filter((t) => t.id !== id);
+		throw redirect(303, '/'); // 303 is more correct for POST redirect
 	}
 };

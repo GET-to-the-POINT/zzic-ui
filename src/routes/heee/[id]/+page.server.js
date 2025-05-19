@@ -1,11 +1,15 @@
-import { todos } from '$lib/dummy.js';
+export function load({ params }) {
+	const todos = [
+		{ id: 1, title: 'Demo 1', description: '설명입니다', done: false },
+		{ id: 2, title: 'Demo 2', description: '설명입니다', done: true }
+	];
 
-export function load({params}) {
 	const id = Number(params.id);
+	const todo = todos.find((t) => t.id === id);
 
-	const todo = todos.filter(todo => todo.id === id)[0];
-
-	return {
-		todo
+	if (!todo) {
+		throw error(404, 'Todo not found');
 	}
+
+	return { todo };
 }
