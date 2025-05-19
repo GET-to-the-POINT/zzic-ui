@@ -1,4 +1,4 @@
-<form method="POST" action="/sign-up">
+<form method="POST">
 	<h1>회원가입</h1>
 
 	<label>이메일 <input id="email" required type="email" /></label>
