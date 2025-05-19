@@ -39,6 +39,61 @@
 	}
 </script>
 
+<div class="container-wrapper">
+	<div class="container">
+		<div class="header">
+			<h1>✨ ZZIC Todo List ✨</h1>
+			<p>{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
+		</div>
+
+		<div class="add-todo-form">
+			<form on:submit|preventDefault={addTodo}>
+				<div class="input-group">
+					<input type="text" bind:value={newTitle} placeholder="할 일을 입력하세요" required />
+					<input type="text" bind:value={newDescription} placeholder="상세 설명 (선택사항)" />
+				</div>
+				<button type="submit" class="btn btn-primary">✏️ 할 일 추가하기</button>
+			</form>
+		</div>
+
+		<div class="todo-section">
+			<h2 class="section-title">📝 할 일 <span>{todos.length}</span></h2>
+			{#if todos.length === 0}
+				<div class="empty-state">🌱 새로운 할 일을 추가해보세요!</div>
+			{/if}
+			{#each todos as todo (todo.id)}
+				<div class="todo-item">
+					<form on:submit|preventDefault={() => toggleTodo(todo.id)}>
+						<button type="submit" class="btn btn-secondary">✓</button>
+					</form>
+					<a href={`/todos/${todo.id}`} class="todo-title">{todo.title}</a>
+					<form on:submit|preventDefault={() => deleteTodo(todo.id)}>
+						<button type="submit" class="btn btn-danger">🗑️</button>
+					</form>
+				</div>
+			{/each}
+		</div>
+
+		<div class="todo-section">
+			<h2 class="section-title">✨ 완료된 일 <span>{completedTodos.length}</span></h2>
+			{#if completedTodos.length === 0}
+				<div class="empty-state">💪 아직 완료된 일이 없어요!</div>
+			{/if}
+			{#each completedTodos as todo (todo.id)}
+				<div class="todo-item completed">
+					<form on:submit|preventDefault={() => toggleTodo(todo.id, true)}>
+						<button type="submit" class="btn btn-secondary">↩️</button>
+					</form>
+					<a href={`/todos/${todo.id}`} class="todo-title">{todo.title}</a>
+					<form on:submit|preventDefault={() => deleteTodo(todo.id, true)}>
+						<button type="submit" class="btn btn-danger">🗑️</button>
+					</form>
+				</div>
+			{/each}
+		</div>
+	</div>
+</div>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -53,19 +108,25 @@
         background-color: #f7f8fc;
         color: #2d3748;
         line-height: 1.6;
-        padding: 2rem;
+        padding: 0;
+        margin: 0;
+    }
+
+    .container-wrapper {
         display: flex;
         justify-content: center;
-        align-items: center;
         min-height: 100vh;
+        padding: 2rem;
     }
 
     .container {
+        width: 100%;
         max-width: 800px;
         background: white;
         border-radius: 16px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 2rem;
+        margin: auto;
     }
 
     .header {
@@ -91,8 +152,15 @@
 
     .input-group {
         display: flex;
+        flex-direction: column;
         gap: 1rem;
         margin-bottom: 1rem;
+    }
+
+    @media (min-width: 600px) {
+        .input-group {
+            flex-direction: row;
+        }
     }
 
     input[type="text"] {
@@ -203,56 +271,3 @@
         font-size: 1.2rem;
     }
 </style>
-
-<div class="container">
-	<div class="header">
-		<h1>✨ ZZIC Todo List ✨</h1>
-		<p>{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
-	</div>
-
-	<div class="add-todo-form">
-		<form on:submit|preventDefault={addTodo}>
-			<div class="input-group">
-				<input type="text" bind:value={newTitle} placeholder="할 일을 입력하세요" required />
-				<input type="text" bind:value={newDescription} placeholder="상세 설명 (선택사항)" />
-			</div>
-			<button type="submit" class="btn btn-primary">✏️ 할 일 추가하기</button>
-		</form>
-	</div>
-
-	<div class="todo-section">
-		<h2 class="section-title">📝 할 일 <span>{todos.length}</span></h2>
-		{#if todos.length === 0}
-			<div class="empty-state">🌱 새로운 할 일을 추가해보세요!</div>
-		{/if}
-		{#each todos as todo (todo.id)}
-			<div class="todo-item">
-				<form on:submit|preventDefault={() => toggleTodo(todo.id)}>
-					<button type="submit" class="btn btn-secondary">✓</button>
-				</form>
-				<a href={`/todos/${todo.id}`} class="todo-title">{todo.title}</a>
-				<form on:submit|preventDefault={() => deleteTodo(todo.id)}>
-					<button type="submit" class="btn btn-danger">🗑️</button>
-				</form>
-			</div>
-		{/each}
-	</div>
-
-	<div class="todo-section">
-		<h2 class="section-title">✨ 완료된 일 <span>{completedTodos.length}</span></h2>
-		{#if completedTodos.length === 0}
-			<div class="empty-state">💪 아직 완료된 일이 없어요!</div>
-		{/if}
-		{#each completedTodos as todo (todo.id)}
-			<div class="todo-item completed">
-				<form on:submit|preventDefault={() => toggleTodo(todo.id, true)}>
-					<button type="submit" class="btn btn-secondary">↩️</button>
-				</form>
-				<a href={`/todos/${todo.id}`} class="todo-title">{todo.title}</a>
-				<form on:submit|preventDefault={() => deleteTodo(todo.id, true)}>
-					<button type="submit" class="btn btn-danger">🗑️</button>
-				</form>
-			</div>
-		{/each}
-	</div>
-</div>

@@ -16,7 +16,6 @@
 			description
 		};
 
-		// 예: fetch로 서버에 PUT 요청 보내기
 		fetch(`/api/todos/${todo.id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
@@ -32,6 +31,33 @@
 	}
 </script>
 
+<div class="wrapper">
+	<div class="container">
+		<div class="header">
+			<h1>할 일 수정</h1>
+		</div>
+
+		<div class="update-form">
+			<form on:submit|preventDefault={updateTodo}>
+				<div class="input-group">
+					<label for="title">제목</label>
+					<input type="text" id="title" bind:value={title} required autocomplete="off" />
+				</div>
+
+				<div class="input-group">
+					<label for="description">설명</label>
+					<input type="text" id="description" bind:value={description} autocomplete="off" />
+				</div>
+
+				<div class="btn-group">
+					<button type="submit" class="btn btn-primary">수정 완료</button>
+					<button type="button" class="btn btn-secondary" on:click={cancelEdit}>취소</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -46,14 +72,19 @@
         background-color: #f4f4f4;
         color: #2d3748;
         line-height: 1.6;
-        padding: 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .wrapper {
+        display: grid;
+        place-items: center;
         min-height: 100vh;
+        padding: 2rem;
     }
 
     .container {
+        width: 100%;
         max-width: 800px;
         background: white;
         border-radius: 16px;
@@ -146,28 +177,3 @@
         margin-top: 1rem;
     }
 </style>
-
-<div class="container">
-	<div class="header">
-		<h1>할 일 수정</h1>
-	</div>
-
-	<div class="update-form">
-		<form on:submit|preventDefault={updateTodo}>
-			<div class="input-group">
-				<label for="title">제목</label>
-				<input type="text" id="title" bind:value={title} required autocomplete="off" />
-			</div>
-
-			<div class="input-group">
-				<label for="description">설명</label>
-				<input type="text" id="description" bind:value={description} autocomplete="off" />
-			</div>
-
-			<div class="btn-group">
-				<button type="submit" class="btn btn-primary">수정 완료</button>
-				<button type="button" class="btn btn-secondary" on:click={cancelEdit}>취소</button>
-			</div>
-		</form>
-	</div>
-</div>

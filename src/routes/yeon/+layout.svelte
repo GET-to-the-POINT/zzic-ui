@@ -2,8 +2,10 @@
 	const { children } = $props();
 </script>
 
-<div class="container">
-	{@render children()}
+<div class="wrapper">
+	<div class="container">
+		{@render children()}
+	</div>
 </div>
 
 <style>
@@ -15,17 +17,12 @@
         --accent-color: #ffcc00;
     }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: var(--background-color);
-        color: var(--text-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .wrapper {
+        display: grid;
+        place-items: center;
         min-height: 100vh;
-        margin: 0;
         padding: 20px;
-        box-sizing: border-box;
+        background-color: var(--background-color);
     }
 
     .container {

@@ -7,6 +7,22 @@
 	};
 </script>
 
+<div class="wrapper">
+	<div class="container">
+		<div class="header">
+			<h1>할 일 상세</h1>
+		</div>
+
+		<div class="todo-detail">
+			<h2>{todo.title}</h2>
+			<p class="description">{todo.description}</p>
+			<p class="status">{todo.done ? '완료' : '미완료'}</p>
+			<a href={`/todos/${todo.id}/update`} class="btn btn-primary">수정</a>
+			<a href="/todos" class="btn btn-secondary">목록으로</a>
+		</div>
+	</div>
+</div>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
@@ -21,14 +37,19 @@
         background-color: #f4f4f4;
         color: #2d3748;
         line-height: 1.6;
-        padding: 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .wrapper {
+        display: grid;
+        place-items: center;
         min-height: 100vh;
+        padding: 2rem;
     }
 
     .container {
+        width: 100%;
         max-width: 800px;
         background: white;
         border-radius: 16px;
@@ -111,17 +132,3 @@
         background-color: #cbd5e0;
     }
 </style>
-
-<div class="container">
-	<div class="header">
-		<h1>할 일 상세</h1>
-	</div>
-
-	<div class="todo-detail">
-		<h2>{todo.title}</h2>
-		<p class="description">{todo.description}</p>
-		<p class="status">{todo.done ? '완료' : '미완료'}</p>
-		<a href={`/todos/${todo.id}/update`} class="btn btn-primary">수정</a>
-		<a href="/todos" class="btn btn-secondary">목록으로</a>
-	</div>
-</div>
