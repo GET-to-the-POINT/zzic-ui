@@ -1,13 +1,13 @@
 <form method="POST">
 	<h1>회원가입</h1>
 
-	<label>이메일 <input id="email" required type="email" /></label>
+	<label>이메일 <input name="email" required type="email" /></label>
 
-	<label>닉네임 <input id="nickname" required type="text" /></label>
+	<label>닉네임 <input name="nickName" required type="text" /></label>
 
-	<label>비밀번호 <input id="password" required type="password" /></label>
+	<label>비밀번호 <input name="password" required type="password" /></label>
 
-	<label>비밀번호 확인 <input id="confirm-password" required type="password" /></label>
+	<label>비밀번호 확인 <input name="confirmPassword" required type="password" /></label>
 
 	<button type="submit">회원가입</button>
 </form>

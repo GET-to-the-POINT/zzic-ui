@@ -4,9 +4,12 @@ export const prerender = false;
 
 export const actions = {
 	default: async ({ request, fetch }) => {
-		const response = await fetch('https://zzic-api.xiyo.dev/sign-out', {
+		const response = await fetch('https://zzic-api.xiyo.dev/auth/sign-out', {
 			method: 'POST',
 		});
+
+		cookies.delete('accessToken', { path: '/' });
+		cookies.delete('refreshToken', { path: '/' });
 
 		if (response.ok) {
 			redirect(303, '/');

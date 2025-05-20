@@ -7,10 +7,10 @@ export const actions = {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
-		const passwordConfirm = formData.get('passwordConfirm');
-		const nickname = formData.get('nickname');
+		const confirmPassword = formData.get('confirmPassword');
+		const nickName = formData.get('nickName');
 
-		const response = await fetch('https://zzic-api.xiyo.dev/sign-up', {
+		const response = await fetch('https://zzic-api.xiyo.dev/auth/sign-up', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -18,14 +18,16 @@ export const actions = {
 			body: JSON.stringify({
 				email,
 				password,
-				passwordConfirm,
-				nickname
+				confirmPassword,
+				nickName
 			})
 		});
 
 		if (response.ok) {
 			redirect(303, '/sign/done');
 		}
+
+		const text = await response.text();
 
 		error(response.status, 'Failed to sign up');
 	}
