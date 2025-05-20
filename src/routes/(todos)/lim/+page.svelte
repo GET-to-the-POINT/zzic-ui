@@ -1,13 +1,54 @@
 <script>
 	let todos = [
-		{ id: 1, title: 'Demo 1', description: '설명', done: false, priority: 1 },
-		{ id: 2, title: 'Demo 2', description: '설명', done: true, priority: 3 }
+		{ id: 1, title: 'Demo 1', description: '설명', done: false},
+		{ id: 2, title: 'Demo 2', description: '설명', done: true}
 	];
 
-	function submitTodo(e) {
+	async function submitTodo(e) {
 		e.preventDefault();
-		// 할 일 추가 처리 (추후 구현)
+
+		try {
+			const form = e.currentTarget;
+			const data = new FormData(form);
+			const title = data.get('title');
+			const description = data.get('description');
+
+			if (!title) {
+				alert('제목이 비어 있습니다.');
+				return;
+			}
+
+			const response = await fetch('https://zzic-api.xiyo.dev/api/todos', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ title, description })
+			});
+
+			if (!response.ok) {
+				const msg = await response.text();
+				console.error('등록 실패:', response.status, msg);
+				return;
+			}
+
+			const res2 = await fetch('https://zzic-api.xiyo.dev/api/todos?done=false');
+			if (!res2.ok) {
+				const msg = await res2.text();
+				console.error(' 목록 조회 실패:', res2.status, msg);
+				alert('목록 불러오기 실패: ' + msg);
+				return;
+			}
+
+			const newTodos = await res2.json();
+
+			todos = [...newTodos];
+			form.reset();
+		} catch (err) {
+			console.error('❗️예외 발생:', err);
+			alert('오류 발생: ' + err.message);
+		}
 	}
+
+
 
 	function markDone(id) {
 		console.log(`${id} 완료 처리`);
@@ -151,11 +192,6 @@
 	<form on:submit={submitTodo}>
 		<input type="text" name="title" placeholder="무엇을 해야하나요?" required />
 		<textarea name="description" placeholder="자세한 설명"></textarea>
-		<div>
-			<label><input type="radio" name="priority" value="1" /> 1 (급함)</label>
-			<label><input type="radio" name="priority" value="2" /> 2 (보통)</label>
-			<label><input type="radio" name="priority" value="3" /> 3 (여유)</label>
-		</div>
 		<button type="submit">할 일 추가</button>
 	</form>
 
