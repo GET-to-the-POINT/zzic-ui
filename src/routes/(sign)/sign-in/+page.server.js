@@ -15,8 +15,14 @@ export const actions = {
 			credentials: 'include'
 		});
 
-//		if (response.ok) {
-			redirect(303, '/');
-//		}
+		const setCookie = response.headers.get('set-cookie');
+		if (setCookie) {
+			cookies.set('zzic-cookie', setCookie, {
+				path: '/',
+				httpOnly: true
+			});
+		}
+
+		redirect(303, '/');
 	}
 };
