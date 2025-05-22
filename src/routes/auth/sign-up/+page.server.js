@@ -24,10 +24,8 @@ export const actions = {
 		});
 
 		if (response.ok) {
-			redirect(303, '/sign/done');
+			redirect(303, '/auth/sign/done');
 		}
-
-		const text = await response.text();
 
 		error(response.status, 'Failed to sign up');
 	}
