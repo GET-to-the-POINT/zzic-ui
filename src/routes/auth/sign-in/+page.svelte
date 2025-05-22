@@ -1,4 +1,14 @@
-<form method="POST">
+<script>
+	import { enhance } from '$app/forms';
+	const { form } = $props();
+</script>
+
+<!--폼을 제줄한후 에러가 리턴이 잇을 경우 렌더링된다.-->
+{#if form}
+	{JSON.stringify(form)}
+{/if}
+
+<form method="POST" use:enhance>
 		<h1>로그인</h1>
 
 		<label  for="email">이메일</label>

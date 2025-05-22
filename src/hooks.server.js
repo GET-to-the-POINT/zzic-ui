@@ -1,23 +1,32 @@
-const mode = import.meta.env.VITE_MODE;
-const REAL_BASE = import.meta.env.VITE_API_BASE;
+import dev from '$app/environment';
 
 /** @type {import('@sveltejs/kit').HandleFetch} */
-export async function handleFetch({ request, fetch }) {
-	let req = request;
-
-	if (mode === 'real') {
-		// Parse current request URL and the real backend base
-		const original = new URL(request.url);
-		const real     = new URL(REAL_BASE);
-
-		// Swap only the origin parts
-		original.protocol = real.protocol;
-		original.hostname = real.hostname;
-		original.port     = real.port;
-
-		// Create new Request with the updated URL while preserving everything else
-		req = new Request(original.toString(), request);
+export async function handleFetch({ request, fetch, event }) {
+	const res = await fetch(request);
+	const setCookie = res.headers.get('set-cookie');
+	if (setCookie) {
+		if (dev) {
+			event.locals.forwardedCookie = setCookie;
+		} else {
+			const parts = setCookie.split(';').map((part) => part.trim());
+			const cookieValue = parts[0]; // first key=value
+			const pathPart = parts.find((p) => p.toLowerCase().startsWith('path='));
+			const attributes = [cookieValue];
+			if (pathPart) attributes.push(pathPart);
+			event.locals.forwardedCookie = attributes.join('; ');
+		}
 	}
 
-	return fetch(req);
+	return res;
+}
+
+/** @type {import('@sveltejs/kit').Handle} */
+export async function handle({ event, resolve }) {
+	const response = await resolve(event);
+
+	if (event.locals.forwardedCookie) {
+		response.headers.append('set-cookie', event.locals.forwardedCookie);
+	}
+
+	return response;
 }
