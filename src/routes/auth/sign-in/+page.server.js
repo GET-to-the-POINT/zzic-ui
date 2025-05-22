@@ -23,6 +23,6 @@ export const actions = {
 			});
 		}
 
-		redirect(303, '/');
+		redirect(303, '/member');
 	}
 };

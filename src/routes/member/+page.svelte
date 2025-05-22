@@ -1,11 +1,17 @@
+<script>
+	let nickname = "유림";
+</script>
+
 <header class="header">
 	<div class="logo">Todo List</div>
 
-	<div class="auth">
-		<button on:click={() => window.location.href = '/auth/sign-in'}>로그인</button>
-		<button on:click={() => window.location.href = '/auth/sign-up'}>회원가입</button>
-		<button on:click={() => window.location.href = '/thema'}>테마선택</button>
+	<div class="welcome">{nickname}님 환영합니다!</div>
 
+
+	<div class="auth">
+		<button on:click={() => window.location.href = '/auth/sign-out'}>로그아웃</button>
+		<button on:click={() => window.location.href = '/auth/sign-up'}>마이페이지</button>
+		<button on:click={() => window.location.href = '/thema'}>테마선택</button>
 	</div>
 </header>
 
@@ -19,8 +25,8 @@
 		ZZIC와 함께라면 하루하루를 계획적으로 보내고,<br />
 		목표 달성에 한 걸음 더 가까워질 수 있습니다.
 	</p>
-	<button class="go-todo" on:click={() => window.location.href = '/anonym/todos'}>
-		일정관리 바로가기
+	<button class="go-todo" on:click={() => window.location.href = '/member/todos'}>
+		나만의 일정관리 바로가기
 	</button>
 </main>
 
@@ -107,4 +113,12 @@
     .go-todo:hover {
         background-color: #45a049;
     }
+
+    .welcome {
+        position: absolute;
+        left: 2rem;
+        font-size: 0.95rem;
+        color: #333;
+    }
+
 </style>
