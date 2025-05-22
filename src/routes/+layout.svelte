@@ -1,5 +1,6 @@
 <script>
 	import { onNavigate } from '$app/navigation';
+	import Header from '$lib/components/Header.svelte';
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
@@ -15,4 +16,5 @@
 	const { children } = $props();
 </script>
 
+<Header/>
 {@render children()}

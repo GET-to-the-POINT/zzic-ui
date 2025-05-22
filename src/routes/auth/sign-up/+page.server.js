@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
 export const prerender = false;
 
@@ -23,10 +23,21 @@ export const actions = {
 			})
 		});
 
-		if (response.ok) {
-			redirect(303, '/auth/sign/done');
+		if (!response.ok) {
+			const errorResponse = await response.json().catch(() => null) || {};
+			// Map errors array to a field->message object
+			const fieldErrors = {};
+			if (Array.isArray(errorResponse.errors)) {
+				for (const e of errorResponse.errors) {
+					fieldErrors[e.field] = e.defaultMessage;
+				}
+			}
+			return fail(errorResponse.status || response.status, {
+				errors: fieldErrors,
+				message: errorResponse.message || '회원가입에 실패했습니다.'
+			});
 		}
 
-		error(response.status, 'Failed to sign up');
+		return redirect(303, '/auth/sign/done');
 	}
 };

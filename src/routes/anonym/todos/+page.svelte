@@ -1,8 +1,5 @@
 <script>
-	let todos = [
-		{ id: 1, title: 'Demo 1', description: '설명입니다', done: false },
-		{ id: 2, title: 'Demo 2', description: '완료된 작업입니다', done: true }
-	];
+	import { todos } from '$lib/store';
 
 	let nextId = 3;
 
@@ -10,33 +7,36 @@
 		e.preventDefault();
 		const form = e.currentTarget;
 		const data = new FormData(form);
-		const title = data.get('title');
-		const description = data.get('description');
+		const title = data.get('title')?.toString() ?? '';
+		const description = data.get('description')?.toString() ?? '';
 
 		if (!title) {
 			alert('제목이 비어 있습니다.');
 			return;
 		}
 
-		todos = [
-			...todos,
-			{
-				id: nextId++,
-				title,
-				description,
-				done: false
-			}
-		];
+		todos.update(current => [
+			...current,
+			{ id: nextId++, title, description, done: false }
+		]);
 
 		form.reset();
 	}
 
 	function markDone(id) {
-		todos = todos.map(todo => todo.id === id ? { ...todo, done: true } : todo);
+		todos.update(current =>
+			current.map(todo =>
+				todo.id === id ? { ...todo, done: true } : todo
+			)
+		);
 	}
 
 	function markUndone(id) {
-		todos = todos.map(todo => todo.id === id ? { ...todo, done: false } : todo);
+		todos.update(current =>
+			current.map(todo =>
+				todo.id === id ? { ...todo, done: false } : todo
+			)
+		);
 	}
 </script>
 
@@ -201,20 +201,16 @@
 <div class="cloud cloud-2"></div>
 <div class="cloud cloud-3"></div>
 
-<!-- 🚨 배너는 헤더 밖에 위치 -->
 <div class="trial-banner">
 	현재 페이지는 <strong>체험판</strong>입니다. 데이터는 저장되지 않습니다.
 </div>
 
-<!-- 헤더 (고정 ❌) -->
 <header>
 	<h1 data-view-transition-name="h1">ZZIC</h1>
 </header>
 
-<!-- ✈️ 비행기 (fixed로 따로 띄우기) -->
 <div class="airplane"></div>
 
-<!-- 컨텐츠 -->
 <div class="container">
 	<form on:submit={submitTodo}>
 		<input type="text" name="title" placeholder="무엇을 해야하나요?" required />
@@ -224,7 +220,7 @@
 
 	<h2>해야 할 일</h2>
 	<ul>
-		{#each todos.filter(todo => !todo.done) as todo (todo.id)}
+		{#each $todos.filter(todo => !todo.done) as todo (todo.id)}
 			<li class="todo-item">
 				<form on:submit|preventDefault={() => markDone(todo.id)}>
 					<button type="submit">완료</button>
@@ -236,7 +232,7 @@
 
 	<h2>한 일</h2>
 	<ul>
-		{#each todos.filter(todo => todo.done) as todo (todo.id)}
+		{#each $todos.filter(todo => todo.done) as todo (todo.id)}
 			<li class="todo-item done">
 				<form on:submit|preventDefault={() => markUndone(todo.id)}>
 					<button type="submit">미완료</button>
@@ -246,5 +242,3 @@
 		{/each}
 	</ul>
 </div>
-
-<a href="/auth/sign-up" class="signup-button">가입하러 가기</a>

@@ -22,6 +22,6 @@ export const actions = {
 			});
 		}
 
-		redirect(303, '/member');
+		redirect(303, '/');
 	}
 };

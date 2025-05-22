@@ -1,15 +1,4 @@
-<header class="header">
-	<div class="logo">Todo List</div>
-
-	<div class="auth">
-		<button on:click={() => window.location.href = '/auth/sign-in'}>로그인</button>
-		<button on:click={() => window.location.href = '/auth/sign-up'}>회원가입</button>
-		<button on:click={() => window.location.href = '/thema'}>테마선택</button>
-
-	</div>
-</header>
-
-<main class="main-content">
+<file name=0 path=+page.svelte><main class="main-content">
 	<h1 class="main-title">ZZIC</h1>
 	<p class="intro-text">
 		저희 ZZIC는 쉽고 빠른 일정 관리를 위해 탄생한 서비스입니다.<br />
@@ -19,54 +8,12 @@
 		ZZIC와 함께라면 하루하루를 계획적으로 보내고,<br />
 		목표 달성에 한 걸음 더 가까워질 수 있습니다.
 	</p>
-	<button class="go-todo" on:click={() => window.location.href = '/anonym/todos'}>
+	<button class="go-todo" on:click={() => window.location.href = '/members/anonym/todos'}>
 		일정관리 바로가기
 	</button>
 </main>
 
 <style>
-    .header {
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        height: 60px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f8f8f8;
-        padding: 0 2rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
-
-    .logo {
-        font-weight: bold;
-        font-size: 1.9rem;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .auth {
-        position: absolute;
-        right: 2rem;
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .auth button {
-        padding: 0.4rem 0.8rem;
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-    }
-
-    .auth button:hover {
-        background-color: #45a049;
-    }
-
     /* 메인 컨텐츠 중앙 배치 */
     .main-content {
         margin-top: 200px;
@@ -108,3 +55,4 @@
         background-color: #45a049;
     }
 </style>
+</file>
