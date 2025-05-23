@@ -2,7 +2,7 @@ export async function load({ fetch, params }) {
 	const memberId = params.memberId;
 
 	let url = `https://zzic-api.xiyo.dev/api/members/${memberId}/todos`;
-	if (memberId === 'anonym') {
+	if (memberId === 'anon') {
 		return {
 			todos : [
 				{ id: 1, title: "Demo 1", description: "설명입니다", done: false },

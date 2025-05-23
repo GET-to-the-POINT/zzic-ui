@@ -8,7 +8,7 @@
 		ZZIC와 함께라면 하루하루를 계획적으로 보내고,<br />
 		목표 달성에 한 걸음 더 가까워질 수 있습니다.
 	</p>
-	<button class="go-todo" on:click={() => window.location.href = '/members/anonym/todos'}>
+	<button class="go-todo" on:click={() => window.location.href = '/members/anon/todos'}>
 		일정관리 바로가기
 	</button>
 </main>
