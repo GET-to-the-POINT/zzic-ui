@@ -1,4 +1,4 @@
-import dev from '$app/environment';
+import { dev } from '$app/environment';
 import { sequence } from '@sveltejs/kit/hooks';
 import { parseJwtPayload } from '$lib/jwt.js';
 
@@ -22,23 +22,21 @@ export async function handleFetch({ request, fetch, event }) {
 	const res = await fetch(request);
 	const setCookie = res.headers.get('set-cookie');
 	if (setCookie) {
+		let forwarded = setCookie;
 		if (dev) {
-			event.locals.forwardedCookie = setCookie;
-		} else {
 			const parts = setCookie.split(';').map((part) => part.trim());
-			const cookieValue = parts[0]; // first key=value
-			const pathPart = parts.find((p) => p.toLowerCase().startsWith('path='));
-			const attributes = [cookieValue];
-			if (pathPart) attributes.push(pathPart);
-			event.locals.forwardedCookie = attributes.join('; ');
+			const filtered = parts.filter(
+				p => !/^secure$/i.test(p) && !/^domain=/i.test(p)
+			);
+			forwarded = filtered.join('; ');
 		}
+		event.locals.forwardedCookie = forwarded;
 	}
-
 	return res;
 }
 
 /** @type {import('@sveltejs/kit').Handle} */
-export async function cookieHandle({ event, resolve }) {
+export async function cookieForwarder({ event, resolve }) {
 	const response = await resolve(event);
 
 	if (event.locals.forwardedCookie) {
@@ -49,4 +47,4 @@ export async function cookieHandle({ event, resolve }) {
 }
 
 // sequence로 합성
-export const handle = sequence(user, cookieHandle);
+export const handle = sequence(user, cookieForwarder);
