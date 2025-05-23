@@ -25,7 +25,7 @@
 
 		<p class="text-sm text-center">
 			계정이 없으신가요?
-			<a href="/auth/sign-up" class="text-blue-600 hover:underline">회원가입</a>
+			<a href="/(no-header)/auth/sign-up" class="text-blue-600 hover:underline">회원가입</a>
 		</p>
 	</form>
 </div>

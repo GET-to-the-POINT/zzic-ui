@@ -9,7 +9,7 @@ export const actions = {
 			credentials: 'include'
 		});
 		if (response.ok) {
-			cookies.delete('zzic-cookie', { path: '/' });
+			cookies.delete('Authorization', { path: '/' });
 			throw redirect(303, '/');
 		}
 		throw error(response.status, 'Failed to sign out');

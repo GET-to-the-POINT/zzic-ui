@@ -5,26 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment="feat: 화면">
-      <change afterPath="$PROJECT_DIR$/src/lib/store.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/+page.server.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/+layout.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/update/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/+layout.server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/Header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(sign)/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/+layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/anonym/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/[id]/+page.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/[id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/anonym/todos/[id]/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign/done/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth/sign/done/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/member/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/member/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/member/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/+page.server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/+page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/[id]/+page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/detail/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/detail/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-in/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-in/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-out/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-out/+page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign/done/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign/done/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/[id]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/[id]/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/[id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/[id]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/demo/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/demo/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/detail/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/detail/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/update/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/detail/+page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/modify/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/modify/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/update/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +64,7 @@
         <option value="+page" />
         <option value="Header" />
         <option value="JavaScript File" />
+        <option value="+layout" />
       </list>
     </option>
   </component>
@@ -58,10 +83,13 @@
     &quot;accountId&quot;: &quot;9bf7c964-f239-4384-ac9b-83313711c365&quot;
   }
 }</component>
-  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="uJBeSCbK" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -84,14 +112,16 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "npm.dev.executor": "Run",
+    "npm.dev.executor": "Debug",
     "prettierjs.PrettierConfiguration.Package": "/Users/yurim/project/ZZIC-ui/node_modules/prettier",
-    "ts.external.directory.path": "/Users/yurim/project/ZZIC-ui/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Users/gimtaehui/IdeaProjects/ZZIC-ui/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/routes/(no-header)" />
+      <recent name="$PROJECT_DIR$/src/routes/(main)" />
       <recent name="$PROJECT_DIR$/src/routes/members/[memberId]" />
     </key>
   </component>
@@ -218,29 +248,11 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/auth/sign-up/+page.svelte</url>
-          <line>42</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js</url>
-          <line>25</line>
+          <url>file://$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.server.js</url>
+          <line>6</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js</url>
-          <line>40</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js</url>
-          <line>5</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="37" />
+          <option name="timeStamp" value="49" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -21,7 +21,7 @@
 
     <div>
       <label class="block mb-1">닉네임</label>
-      <input name="nickName" type="text" required class="w-full p-2 border rounded" />
+      <input name="nickname" type="text" required class="w-full p-2 border rounded" />
     </div>
 
     <div>
@@ -41,6 +41,6 @@
 <div class="text-center mt-4">
 	<p>
 		이미 계정이 있으신가요?
-		<a href="/auth/sign-in" class="text-blue-600 hover:underline">로그인</a>
+		<a href="/(no-header)/auth/sign-in" class="text-blue-600 hover:underline">로그인</a>
 	</p>
 </div>

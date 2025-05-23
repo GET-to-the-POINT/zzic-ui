@@ -8,7 +8,7 @@ export const actions = {
 		const email = formData.get('email');
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirmPassword');
-		const nickName = formData.get('nickName');
+		const nickname = formData.get('nickname');
 
 		const response = await fetch('https://zzic-api.xiyo.dev/auth/sign-up', {
 			method: 'POST',
@@ -19,7 +19,7 @@ export const actions = {
 				email,
 				password,
 				confirmPassword,
-				nickName
+				nickname
 			})
 		});
 
