@@ -1,7 +1,5 @@
-export function load({ locals, depends }) {
-	depends('auth:sign');
-	const user = locals.user ?? null;
+export function load({ locals }) {
 	return {
-		user
+		user: locals.user ?? null
 	};
 }

@@ -1,9 +1,11 @@
 <script>
-	const { form } = $props();
+  import { enhance } from '$app/forms';
+
+  const { form } = $props();
 </script>
 
 <div class="pt-14 max-w-md mx-auto p-4">
-  <form method="POST" class="space-y-4">
+  <form method="POST" class="space-y-4" use:enhance>
     {#if form?.message}
       <div class="mb-2 p-2 bg-red-100 text-red-700 rounded">
         {form.message}

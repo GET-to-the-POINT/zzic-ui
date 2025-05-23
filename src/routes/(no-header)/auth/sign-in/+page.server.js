@@ -1,8 +1,5 @@
 import { redirect, fail } from '@sveltejs/kit';
 
-
-export const prerender = false;
-
 export const actions = {
 	default: async ({ request, fetch }) => {
 		const formData = await request.formData();
