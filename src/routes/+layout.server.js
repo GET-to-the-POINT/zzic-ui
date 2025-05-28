@@ -1,5 +1,5 @@
-export function load({ locals }) {
+export async function load({ locals: { user } }) {
 	return {
-		user: locals.user ?? null
+		user
 	};
 }

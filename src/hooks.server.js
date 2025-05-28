@@ -12,6 +12,18 @@ export async function user({ event, resolve }) {
 		if (user) {
 			event.locals.user = user;
 		}
+	} else {
+		const res = await fetch('https://zzic-api.xiyo.dev/auth/sign-in', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ email: 'anonymous@shared.com' })
+		});
+		const setCookie = res.headers.get('set-cookie');
+		if (setCookie) {
+			event.locals.forwardedCookie = setCookie;
+		}
 	}
 
 	return resolve(event);
@@ -22,15 +34,7 @@ export async function handleFetch({ request, fetch, event }) {
 	const res = await fetch(request);
 	const setCookie = res.headers.get('set-cookie');
 	if (setCookie) {
-		let forwarded = setCookie;
-		if (dev) {
-			const parts = setCookie.split(';').map((part) => part.trim());
-			const filtered = parts.filter(
-				p => !/^secure$/i.test(p) && !/^domain=/i.test(p)
-			);
-			forwarded = filtered.join('; ');
-		}
-		event.locals.forwardedCookie = forwarded;
+		event.locals.forwardedCookie = setCookie;
 	}
 	return res;
 }
@@ -40,7 +44,15 @@ export async function cookieForwarder({ event, resolve }) {
 	const response = await resolve(event);
 
 	if (event.locals.forwardedCookie) {
-		response.headers.append('set-cookie', event.locals.forwardedCookie);
+		let cookie = event.locals.forwardedCookie;
+		if (!dev) {
+			// In production, enforce Secure and SameSite attributes
+			const parts = cookie.split(';').map((p) => p.trim());
+			// Remove duplicate attributes if present
+			const filtered = parts.filter((p) => !/^(Secure|SameSite)/i.test(p));
+			cookie = [...filtered, 'Secure', 'SameSite=Strict'].join('; ');
+		}
+		response.headers.append('set-cookie', cookie);
 	}
 
 	return response;
