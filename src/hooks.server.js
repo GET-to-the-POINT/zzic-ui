@@ -23,7 +23,15 @@ export async function user({ event, resolve }) {
 		const setCookie = res.headers.get('set-cookie');
 		if (setCookie) {
 			event.locals.forwardedCookie = setCookie;
+			const match = setCookie.match(/Authorization=([^;]+)/);
+			if (match) {
+				const user = parseJwtPayload(match[1]);
+				if (user) {
+					event.locals.user = user;
+				}
+			}
 		}
+
 	}
 
 	return resolve(event);
