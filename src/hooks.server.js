@@ -4,10 +4,11 @@ import { parseJwtPayload } from '$lib/jwt.js';
 
 // 사용자 정보 주입 핸들러
 /** @type {import('@sveltejs/kit').Handle} */
-export async function user({ event, resolve }) {
+export async function user({ event, resolve, fetch }) {
 	let token = event.cookies.get('Authorization');
+	const refreshToken = event.cookies.get('Authorization-refresh');
 
-	if (!token) {
+	if (!refreshToken) {
 		const res = await fetch('https://zzic-api.xiyo.dev/auth/sign-in', {
 			method: 'POST',
 			headers: {
@@ -15,6 +16,12 @@ export async function user({ event, resolve }) {
 			},
 			body: JSON.stringify({ email: 'anonymous@shared.com' })
 		});
+		const setCookie = res.headers.get('set-cookie');
+		event.locals.forwardedCookie = setCookie;
+		const match = setCookie.match(/Authorization=([^;]+)/);
+		token = match[1];
+	} else if (!token) {
+		const res = await fetch('https://zzic-api.xiyo.dev/auth/refresh');
 		const setCookie = res.headers.get('set-cookie');
 		event.locals.forwardedCookie = setCookie;
 		const match = setCookie.match(/Authorization=([^;]+)/);
