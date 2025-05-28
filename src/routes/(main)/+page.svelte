@@ -8,13 +8,13 @@
 		ZZIC와 함께라면 하루하루를 계획적으로 보내고,<br />
 		목표 달성에 한 걸음 더 가까워질 수 있습니다.
 	</p>
-	<button class="go-todo" on:click={() => window.location.href = '/members/anon/todos'}>
+	<button class="go-todo" on:click={() => window.location.href = '/members/me/todos'}>
 		일정관리 바로가기
 	</button>
 </main>
 
-<style>
-    /* 메인 컨텐츠 중앙 배치 */
+	<style>
+			/* 메인 컨텐츠 중앙 배치 */
     .main-content {
         margin-top: 200px;
         display: flex;
@@ -22,6 +22,7 @@
         align-items: center;
         text-align: center;
         padding: 0 1rem;
+
     }
 
     .main-title {
@@ -44,7 +45,7 @@
         padding: 0.8rem 2rem;
         font-size: 1.1rem;
         background-color: #4CAF50;
-        color: white;
+        color: #ffffff;
         border: none;
         border-radius: 6px;
         cursor: pointer;

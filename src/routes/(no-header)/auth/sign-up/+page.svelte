@@ -43,6 +43,6 @@
 <div class="text-center mt-4">
 	<p>
 		이미 계정이 있으신가요?
-		<a href="/(no-header)/auth/sign-in" class="text-blue-600 hover:underline">로그인</a>
+		<a href="/auth/sign-in" class="text-blue-600 hover:underline">로그인</a>
 	</p>
 </div>
