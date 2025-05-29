@@ -5,15 +5,11 @@
 <header class="flex justify-between items-center bg-gray-100 px-8 shadow h-14">
 	<div class="font-bold text-[1.9rem]">Todo List</div>
 	{#if page.data.user}
-		{#if page.data.user.nickname === 'anonymous'}
-			<div class="text-sm text-gray-700">비회원님 환영합니다!</div>
-		{:else}
 			<div class="text-sm text-gray-700">{page.data.user.nickname}님 환영합니다!</div>
-		{/if}
 	{/if}
 
 	<div class="flex gap-2">
-		{#if page.data.user?.nickname === 'anonymous'}
+		{#if !page.data.user || page.data.user.nickname === 'anonymous'}
 			<a class="py-1.5 px-3 bg-green-600 text-white rounded text-sm hover:bg-green-700" href="/auth/sign-in">로그인</a>
 			<a class="py-1.5 px-3 bg-green-600 text-white rounded text-sm hover:bg-green-700" href="/auth/sign-up">회원가입</a>
 		{:else}

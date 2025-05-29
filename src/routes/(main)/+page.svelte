@@ -1,4 +1,4 @@
-<file name=0 path=+page.svelte><main class="main-content">
+<main class="main-content">
 	<h1 class="main-title">ZZIC</h1>
 	<p class="intro-text">
 		저희 ZZIC는 쉽고 빠른 일정 관리를 위해 탄생한 서비스입니다.<br />
@@ -13,8 +13,8 @@
 	</button>
 </main>
 
-	<style>
-			/* 메인 컨텐츠 중앙 배치 */
+<style>
+    /* 메인 컨텐츠 중앙 배치 */
     .main-content {
         margin-top: 200px;
         display: flex;
@@ -56,4 +56,3 @@
         background-color: #45a049;
     }
 </style>
-</file>
