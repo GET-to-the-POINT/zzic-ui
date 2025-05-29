@@ -7,7 +7,7 @@
 </script>
 
 <div>
-	{#if page.data.user.nickname === 'anonymous'}
+	{#if page.data.user?.nickname === 'anonymous'}
 		<div class="w-full bg-yellow-100 text-yellow-800 text-center py-2 text-sm border-b border-yellow-300 relative z-[1000]">
 			⚠️ 현재 페이지는 <strong>체험판</strong>입니다. 저장된 데이터는 모두에게 공개되며 민감한 정보는 입력하지 마세요.
 		</div>
