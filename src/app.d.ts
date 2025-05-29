@@ -4,8 +4,8 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: any;
-			forwardedCookie?: string;
+			zzic: any | null;
+			user: User | null;
 		}
 		// interface PageData {}
 		// interface PageState {}
