@@ -160,16 +160,7 @@ export function createZzicServerClient(apiUrl, options = {}) {
 				let user = getUserFromCookies(cookies);
 
 				if (!user) {
-					const response = await fetchFn(`${apiUrl}/auth/refresh`);
-
-					if (!response.ok) {
-						const error = await response.text();
-						return { data: { user: null }, error };
-					}
-
-					user = getUserFromCookies(cookies);
-
-					return { data: { user }, error: { message: 'User not authenticated' } };
+					return { data: { user: null }, error: { message: 'User not authenticated' } };
 				}
 
 				return { data: { user }, error: null };
