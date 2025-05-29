@@ -1,6 +1,6 @@
 import '$lib/app.css';
 import { browser } from '$app/environment';
-import { createZzicBrowserClient, createZzicServerClient } from '$lib/zzic.js';
+import { createZzicBrowserClient, createZzicServerClient } from '$lib/zzic-api/zzic.js';
 import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 
 export const trailingSlash = 'always';

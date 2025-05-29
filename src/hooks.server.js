@@ -1,5 +1,5 @@
 import { sequence } from '@sveltejs/kit/hooks';
-import { createZzicServerClient } from '$lib/zzic.js';
+import { createZzicServerClient } from '$lib/zzic-api/zzic.js';
 import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 
 const zzic = async ({ event, resolve }) => {
