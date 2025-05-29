@@ -1,9 +1,9 @@
 export const trailingSlash = 'always';
 
-export async function load({ cookies }) {
+export async function load({ locals: {user}, cookies }) {
+	const usera = await user();
 	return {
-		cookies: {
-			getAll: cookies.getAll()
-		}
-	};
+		usera,
+		cookies: cookies.getAll(),
+	}
 }

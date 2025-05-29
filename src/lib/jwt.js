@@ -59,7 +59,7 @@ export function parseJwtPayload(token) {
  * @returns {object|null} 파싱된 유저 객체 또는 null
  */
 export function getUserFromCookies(cookies) {
-	const tokenArray = cookies.getAll?.().getAll ?? [];
+	const tokenArray = cookies.getAll();
 	const tokenValue = tokenArray.find(/** @param {{ name: string; value: string; }} c */ c => c.name === 'Authorization')?.value;
 
 	if (!tokenValue) return null;
