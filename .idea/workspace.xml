@@ -1,54 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AIAssistantCustomInstructionsStorage">
+    <option name="instructions">
+      <map>
+        <entry key="AIAssistant.VCS.GenerateCommitMessage">
+          <value>
+            <AIAssistantStoredInstruction>
+              <option name="actionId" value="AIAssistant.VCS.GenerateCommitMessage" />
+              <option name="content" value="Avoid overly verbose descriptions or unnecessary details. speak korean and use gitmoji conventions&#10;" />
+            </AIAssistantStoredInstruction>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment="feat: 화면">
-      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/+layout.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/update/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/+layout.server.js" afterDir="false" />
+    <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/demo.spec.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/Header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(sign)/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/+layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/[id]/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/anonym/todos/detail/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/detail/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-in/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-in/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-in/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-out/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-out/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign-up/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth/sign/done/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign/done/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/members/[memberId]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/[id]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/[id]/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/[id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/[id]/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/heee/demo/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/heee/demo/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/detail/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/detail/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/hell/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/hell/update/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/detail/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/modify/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/lim/modify/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/lim/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/thema/yeon/[id]/update/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/update/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/zzic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +42,8 @@
       <list>
         <option value="+page" />
         <option value="Header" />
-        <option value="JavaScript File" />
         <option value="+layout" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -80,15 +59,21 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/GET-to-the-POINT/ZZIC-ui.git&quot;,
-    &quot;accountId&quot;: &quot;9bf7c964-f239-4384-ac9b-83313711c365&quot;
+    &quot;accountId&quot;: &quot;87becfa3-4256-43bd-9b14-d761c2d14248&quot;
   }
 }</component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
+  </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="uJBeSCbK" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -101,23 +86,27 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.dev.executor": "Debug",
-    "prettierjs.PrettierConfiguration.Package": "/Users/yurim/project/ZZIC-ui/node_modules/prettier",
-    "ts.external.directory.path": "/Users/gimtaehui/IdeaProjects/ZZIC-ui/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Debug&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/yurim/project/ZZIC-ui/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/gimtaehui/IdeaProjects/ZZIC-ui/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/routes/(no-header)" />
@@ -156,8 +145,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -194,6 +182,12 @@
       <workItem from="1747800807862" duration="7832000" />
       <workItem from="1747819120267" duration="7927000" />
       <workItem from="1747877908178" duration="23090000" />
+      <workItem from="1748102815249" duration="597000" />
+      <workItem from="1748137826516" duration="599000" />
+      <workItem from="1748316570410" duration="612000" />
+      <workItem from="1748403508316" duration="20639000" />
+      <workItem from="1748481920583" duration="7408000" />
+      <workItem from="1748489632515" duration="8963000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
@@ -219,7 +213,103 @@
       <option name="project" value="LOCAL" />
       <updated>1747877990734</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat: refactor layout structure and enhance user authentication flow">
+      <option name="closed" value="true" />
+      <created>1747975318070</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747975318070</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat: streamline sign-out process and improve cookie handling">
+      <option name="closed" value="true" />
+      <created>1747976082735</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747976082735</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: correct member ID reference from 'anonym' to 'anon' in API calls and navigation">
+      <option name="closed" value="true" />
+      <created>1747977960075</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1747977960075</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat: simplify user loading and enhance logout form handling">
+      <option name="closed" value="true" />
+      <created>1747979570719</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747979570719</updated>
+    </task>
+    <task id="LOCAL-00010" summary="🔥 `api/todos` 삭제 및 쿠키 처리 로직 개선 ✨  &#10;- `/api/todos` 관련 서버 핸들러 제거 (`+server.js`).  &#10;- 인증 미사용 시 익명 사용자로 자동 로그인 기능 추가.  &#10;- `set-cookie` 헤더 처리 개선(보안 속성 강화).  &#10;- `App.Locals` 타입 정의 업데이트.">
+      <option name="closed" value="true" />
+      <created>1748422817619</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1748422817619</updated>
+    </task>
+    <task id="LOCAL-00011" summary="✨ 사용자 인증 정보 파싱 추가">
+      <option name="closed" value="true" />
+      <created>1748423226656</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1748423226656</updated>
+    </task>
+    <task id="LOCAL-00012" summary="`:recycle: 사용자 인증 로직 리팩토링`">
+      <option name="closed" value="true" />
+      <created>1748423449096</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1748423449096</updated>
+    </task>
+    <task id="LOCAL-00013" summary="🔒 사용자 인증 로직 수정: 리프레시 토큰 처리 및 토큰 갱신 로직 추가">
+      <option name="closed" value="true" />
+      <created>1748424569941</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1748424569941</updated>
+    </task>
+    <task id="LOCAL-00014" summary=":coffin: 사용하지 않는 코드 삭제">
+      <option name="closed" value="true" />
+      <created>1748445929940</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1748445929940</updated>
+    </task>
+    <task id="LOCAL-00015" summary=":recycle: 인증 로직 리팩토링 및 `zzic` 클라이언트 도입  &#10;- `fetch` 기반 인증 로직 제거 및 `zzic` 클라이언트 사용으로 대체.  &#10;- JWT 디코딩 유틸리티 개선 및 환경별 지원 추가.  &#10;- 사용자 로그인/로그아웃 및 토큰 관리 코드 간소화.  &#10;- `App.Locals` 타입 정의 업데이트.  &#10;- 레이아웃 로드 로직 리팩토링 및 `trailingSlash` 설정 추가.">
+      <option name="closed" value="true" />
+      <created>1748496315549</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1748496315549</updated>
+    </task>
+    <task id="LOCAL-00016" summary=":recycle: 코드 정리 및 사용자 환영 메시지 로직 개선">
+      <option name="closed" value="true" />
+      <created>1748496394662</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748496394662</updated>
+    </task>
+    <task id="LOCAL-00017" summary=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가.">
+      <option name="closed" value="true" />
+      <created>1748504687500</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1748504687500</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,7 +320,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -243,18 +345,54 @@
     <MESSAGE value="feat: 백엔드 연결" />
     <MESSAGE value="feat: 백엔드 연결2" />
     <MESSAGE value="feat: 화면" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 화면" />
+    <MESSAGE value="feat: refactor layout structure and enhance user authentication flow" />
+    <MESSAGE value="feat: streamline sign-out process and improve cookie handling" />
+    <MESSAGE value="fix: correct member ID reference from 'anonym' to 'anon' in API calls and navigation" />
+    <MESSAGE value="feat: simplify user loading and enhance logout form handling" />
+    <MESSAGE value="feat: enhance user loading and cookie management in layout and hooks" />
+    <MESSAGE value="Refactor API and authentication logic&#10;&#10;Remove todos API endpoints and update authentication to support anonymous sign-in. Improve cookie handling for production, enforcing Secure and SameSite attributes, and enhance type definitions for server locals." />
+    <MESSAGE value=" `api/todos` 삭제 및 쿠키 처리 로직 개선 ✨  &#10;- `/api/todos` 관련 서버 핸들러 제거 (`+server.js`).  &#10;- 인증 미사용 시 익명 사용자로 자동 로그인 기능 추가.  &#10;- `set-cookie` 헤더 처리 개선(보안 속성 강화).  &#10;- `App.Locals` 타입 정의 업데이트." />
+    <MESSAGE value="✨ 사용자 인증 정보 파싱 추가" />
+    <MESSAGE value="`:recycle: 사용자 인증 로직 리팩토링`" />
+    <MESSAGE value=":recycle: 사용자 인증 로직 리팩토링" />
+    <MESSAGE value=" 사용자 인증 로직 수정: 리프레시 토큰 처리 및 토큰 갱신 로직 추가" />
+    <MESSAGE value="import { redirect } from '@sveltejs/kit';&#10;&#10;export async function user(event) {&#10;  const res = await event.fetch('https://zzic-api.xiyo.dev/auth/sign-in', {&#10;    method: 'POST',&#10;    headers: {&#10;      'Content-Type': 'application/json'&#10;    },&#10;    body: JSON.stringify({ email: 'anonymous@shared.com' })&#10;  });&#10;&#10;  if (!res.ok) {&#10;    throw redirect(302, '/login');&#10;  }&#10;&#10;  const data = await res.json();&#10;&#10;  return {&#10;    user: data.user,&#10;    token: data.token&#10;  };&#10;}&#10;&#10;export async function refreshToken(event) {&#10;  const cookieHeader = event.request.headers.get('cookie') ?? '';&#10;  const res = await event.fetch('https://zzic-api.xiyo.dev/auth/refresh', {&#10;    headers: {&#10;      cookie: cookieHeader&#10;    }&#10;  });&#10;&#10;  if (!res.ok) {&#10;    throw redirect(302, '/login');&#10;  }&#10;&#10;  const data = await res.json();&#10;&#10;  return {&#10;    token: data.token&#10;  };&#10;}" />
+    <MESSAGE value=":coffin: 사용하지 않는 코드 삭제" />
+    <MESSAGE value=":recycle: 인증 로직 리팩토링 및 `zzic` 클라이언트 도입  &#10;- `fetch` 기반 인증 로직 제거 및 `zzic` 클라이언트 사용으로 대체.  &#10;- JWT 디코딩 유틸리티 개선 및 환경별 지원 추가.  &#10;- 사용자 로그인/로그아웃 및 토큰 관리 코드 간소화.  &#10;- `App.Locals` 타입 정의 업데이트.  &#10;- 레이아웃 로드 로직 리팩토링 및 `trailingSlash` 설정 추가." />
+    <MESSAGE value=":recycle: 코드 정리 및 사용자 환영 메시지 로직 개선" />
+    <MESSAGE value=":recycle: `handleFetch` 추가 및 307 리디렉트 처리 개선  &#10;- 자동 리디렉트 방지 및 수동 리디렉션 처리 로직 추가.  &#10;- `set-cookie` 헤더 파싱 및 쿠키 관리 로직 구현.  &#10;- 안전한 요청 재시도를 위한 쿠키 설정 로직 강화." />
+    <MESSAGE value=":recycle: `handleFetch` 추가 및 307 리디렉트 처리 개선  &#10;- 자동 리디렉트 방지 및 수동 리디렉션 처리 로직 추가.  &#10;- `set-cookie` 헤더 파싱 및 쿠키 관리 로직 구현.  &#10;- 안전한 요청 재시도를 위한 쿠키 설정 로직 강화.  " />
+    <MESSAGE value=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가." />
+    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가." />
+    <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/(no-header)/auth/sign-out/+page.server.js</url>
-          <line>6</line>
+          <url>file://$PROJECT_DIR$/src/lib/zzic.js</url>
+          <line>263</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/hooks.server.js</url>
+          <line>36</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/lib/jwt.js</url>
+          <line>39</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="49" />
+          <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="javascript-exception" />
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>

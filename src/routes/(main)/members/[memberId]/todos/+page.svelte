@@ -1,13 +1,13 @@
 <script>
 	import { page } from '$app/state';
+	import { enhance } from '$app/forms';
 
-	export let data;
-	let todos = data.todos;
-	let nickname = data.user.nickname;
+	const { data } = $props();
+	let { todos: { content } } = $derived(data);
 </script>
 
 <div>
-	{#if nickname === 'anonymous'}
+	{#if page.data.user.nickname === 'anonymous'}
 		<div class="w-full bg-yellow-100 text-yellow-800 text-center py-2 text-sm border-b border-yellow-300 relative z-[1000]">
 			⚠️ 현재 페이지는 <strong>체험판</strong>입니다. 저장된 데이터는 모두에게 공개되며 민감한 정보는 입력하지 마세요.
 		</div>
@@ -18,7 +18,7 @@
 		<div class="airplane absolute top-1 left-32 w-12 h-12 bg-cover animate-[fly_linear_infinite]" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/a9/Emoji_u2708.svg');"></div>
 	</header>
 
-	<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-3xl mx-auto mt-8">
+	<form use:enhance method="POST" action="?/create" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-3xl mx-auto mt-8">
 		<h2 class="text-2xl font-semibold text-gray-800 mb-4">새 할 일 추가</h2>
 		<div class="mb-4">
 			<input
@@ -47,9 +47,10 @@
 	<div class="max-w-3xl mx-auto my-5 bg-white p-5 rounded shadow relative z-10">
 		<h2 class="text-xl font-semibold mb-2">해야 할 일</h2>
 		<ul class="list-none p-0">
-			{#each todos.filter(todo => !todo.done) as todo (todo.id)}
+			{#each content.filter(todo => !todo.done) as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
-					<form class="mr-2">
+					<form method="POST" action="?/done" class="mr-2" use:enhance>
+						<input type="hidden" name="id" value={todo.id} />
 						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">완료</button>
 					</form>
 					<a href={`/todos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
@@ -59,9 +60,10 @@
 
 		<h2 class="text-xl font-semibold mt-6 mb-2">한 일</h2>
 		<ul class="list-none p-0">
-			{#each todos.filter(todo => todo.done) as todo (todo.id)}
+			{#each content.filter(todo => todo.done) as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
-					<form class="mr-2">
+					<form method="POST" action="?/undone" class="mr-2" use:enhance>
+						<input type="hidden" name="id" value={todo.id} />
 						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">미완료</button>
 					</form>
 					<a href={`/todos/${todo.id}`} class="line-through text-gray-500">{todo.title}</a>

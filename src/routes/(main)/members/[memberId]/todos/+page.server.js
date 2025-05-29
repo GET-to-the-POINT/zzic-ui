@@ -1,25 +1,35 @@
-export async function load({ fetch }) {
-	let user = { nickname: 'anonymous' };
-	let todos = [];
+import { fail, redirect } from '@sveltejs/kit';
 
-	try {
-		const userRes = await fetch('https://zzic-api.xiyo.dev/api/members/me', {
-			credentials: 'include'
-		});
-		if (userRes.ok) {
-			const data = await userRes.json();
-			user.nickname = data.nickname ?? 'anonymous';
-
-			const todoRes = await fetch('https://zzic-api.xiyo.dev/api/members/me/todos', {
-				credentials: 'include'
-			});
-			if (todoRes.ok) {
-				todos = await todoRes.json();
-			}
+export const actions = {
+	create: async ({ request, locals, params }) => {
+		const formData = await request.formData();
+		const title = formData.get('title');
+		const description = formData.get('description');
+		const { zzic } = locals;
+		const { data, error } = await zzic.todo.createTodo(params.memberId, { title, description });
+		if (error) {
+			return fail(400, { error: error.message || '할 일 생성 실패' });
 		}
-	} catch (_) {
-		// user.nickname === 'anonymous' 유지
+		return { success: true, todos: data.todos };
+	},
+	done: async ({ request, locals, params }) => {
+		const formData = await request.formData();
+		const id = formData.get('id');
+		const { zzic } = locals;
+		const { data, error } = await zzic.todo.updateTodo(params.memberId, id, { done: true });
+		if (error) {
+			return fail(400, { error: error.message || '완료 처리 실패' });
+		}
+		return { success: true, todos: data.todos };
+	},
+	undone: async ({ request, locals, params }) => {
+		const formData = await request.formData();
+		const id = formData.get('id');
+		const { zzic } = locals;
+		const { data, error } = await zzic.todo.updateTodo(params.memberId, id, { done: false });
+		if (error) {
+			return fail(400, { error: error.message || '미완료 처리 실패' });
+		}
+		return { success: true, todos: data.todos };
 	}
-
-	return { todos, user };
-}
+};

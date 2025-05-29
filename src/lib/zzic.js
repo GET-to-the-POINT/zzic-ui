@@ -94,7 +94,57 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 		},
 	};
 
-	return { auth };
+			const todo = {
+			/**
+			 * @param {string} memberId
+			 */
+			async getTodos(memberId) {
+				const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos`); // memberId가 me 로 변경되어야 하지만, 일단 유지. API 문서와 불일치.
+				if (!response.ok) {
+					const error = await response.json().catch(() => ({}));
+					return { data: null, error };
+				}
+				const data = await response.json();
+				return { data, error: null };
+			},
+			/**
+			 * @param {{ title: string, description: string }} todoData
+			 */
+			async createTodo(todoData) {
+				const response = await fetchFn(`${apiUrl}/api/members/me/todos`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(todoData)
+				});
+				if (response.status !== 201) { // API 문서 기준 201
+					const error = await response.json().catch(() => ({ message: 'Failed to create todo' }));
+					return { data: null, error };
+				}
+				// 201 Created 응답은 일반적으로 본문이 없거나, 생성된 리소스의 위치를 반환합니다.
+				// API 문서에 따르면 생성된 Todo를 반환하지 않으므로, 성공 여부만 반환하거나, getTodos를 다시 호출해야 합니다.
+				// 여기서는 성공 여부만 반환하도록 단순화합니다. 필요시 +page.server.js에서 목록을 다시 로드해야 합니다.
+				return { data: { success: true }, error: null };
+			},
+			/**
+			 * @param {string} id
+			 * @param {{ title?: string, description?: string, done?: boolean }} todoData
+			 */
+			async updateTodo(id, todoData) {
+				const response = await fetchFn(`${apiUrl}/api/members/me/todos/${id}`, {
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(todoData)
+				});
+				if (response.status !== 204) { // API 문서 기준 204
+					const error = await response.json().catch(() => ({ message: 'Failed to update todo' }));
+					return { data: null, error };
+				}
+				// 204 No Content 응답은 본문이 없습니다.
+				return { data: { success: true }, error: null };
+			}
+		}
+
+	return { auth, todo };
 }
 
 /**
@@ -107,22 +157,21 @@ export function createZzicServerClient(apiUrl, options = {}) {
 	return {
 		auth: {
 			async getUser() {
-				const user = getUserFromCookies(cookies);
+				let user = getUserFromCookies(cookies);
 
 				if (!user) {
-					const response = await fetchFn(`${apiUrl}/auth/refresh`, {
-						method: 'GET',
-					});
+					const response = await fetchFn(`${apiUrl}/auth/refresh`);
+
+					if (!response.ok) {
+						const error = await response.text();
+						return { data: { user: null }, error };
+					}
+
+					user = getUserFromCookies(cookies);
+
+					return { data: { user }, error: { message: 'User not authenticated' } };
 				}
 
-				// 	if (response.ok) {
-				// 		const user = getUserFromCookies(cookies);
-				// 		if (user) {
-				// 			return { data: { user }, error: null };
-				// 		}
-				// 	}
-				// 	return { data: { user: null }, error: { message: 'User not found' } };
-				// }
 				return { data: { user }, error: null };
 			},
 
@@ -137,7 +186,7 @@ export function createZzicServerClient(apiUrl, options = {}) {
 					});
 
 					if (!response.ok) {
-						const error = await response.json();
+						const error = await response.text();
 						return { data: { user: null }, error };
 					}
 
@@ -200,6 +249,23 @@ export function createZzicServerClient(apiUrl, options = {}) {
 				}
 			},
 
+			async signUp(credentials) {
+				const signUpResponse = await fetchFn(`${apiUrl}/auth/sign-up`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(credentials)
+				});
+
+				if (!signUpResponse.ok) {
+					const error = await signUpResponse.json();
+					return { error };
+				}
+
+				return { error: null };
+			},
+
 			async signOut() {
 				try {
 					await fetchFn(`${apiUrl}/auth/sign-out`, {
@@ -211,6 +277,37 @@ export function createZzicServerClient(apiUrl, options = {}) {
 					console.error('서버 로그아웃 실패:', error);
 					return { error };
 				}
+			}
+		},
+		todo: {
+			/**
+			 * @param {string} memberId
+			 */
+			async getTodos(memberId) {
+				const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos`);
+				if (!response.ok) {
+					const error = await response.json().catch(() => ({}));
+					return { data: null, error };
+				}
+				const data = await response.json();
+				return { data, error: null };
+			},
+			/**
+			 * @param {string} memberId
+			 * @param {object} todo
+			 */
+			async createTodo(memberId, todo) {
+				const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(todo)
+				});
+				if (!response.ok) {
+					const error = await response.json().catch(() => ({}));
+					return { data: { todos: [] }, error };
+				}
+				const todos = await response.json();
+				return { data: { todos }, error: null };
 			}
 		}
 	};
