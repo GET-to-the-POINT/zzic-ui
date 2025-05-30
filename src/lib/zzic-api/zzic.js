@@ -232,11 +232,9 @@ export function createZzicServerClient(apiUrl, options = {}) {
 						// 쿠키 설정 실패해도 계속 진행
 					}
 
-					const user = { nickname: 'test'}
-					return { data: { user }, error: null };
+					return { error: null };
 				} catch (error) {
-					console.error('서버 로그인 실패:', error);
-					return { data: { user: null }, error };
+					return { error };
 				}
 			},
 
