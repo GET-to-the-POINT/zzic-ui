@@ -20,14 +20,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/demo.spec.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(no-header)/auth/sign-up/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,6 +181,7 @@
       <workItem from="1748403508316" duration="20639000" />
       <workItem from="1748481920583" duration="7408000" />
       <workItem from="1748489632515" duration="8963000" />
+      <workItem from="1748572889771" duration="598000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
@@ -386,7 +380,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/lib/jwt.js</url>
           <line>39</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>

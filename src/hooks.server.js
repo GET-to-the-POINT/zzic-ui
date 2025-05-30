@@ -4,7 +4,7 @@ import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 
 /**
  * ZZIC 인증 훅
- * @param {{ event: import('@sveltejs/kit').RequestEvent; resolve: Function }} param0
+ * @type {import('@sveltejs/kit').Handle}
  */
 const zzic = async ({ event, resolve }) => {
 
@@ -20,7 +20,7 @@ const zzic = async ({ event, resolve }) => {
 			const setCookieHeader = response.headers.get('set-cookie');
 			if (setCookieHeader) {
 				try {
-					/** @type {Array<{name: string, value: string, options: any} | null>} */
+					/** @type {Array<{name: string, value: string, options: {path?: string, expires?: Date, maxAge?: number, httpOnly?: boolean, secure?: boolean, sameSite?: 'strict' | 'lax' | 'none'}} | null>} */
 					const cookieEntries = setCookieHeader
 						.split(/,(?=\s*[^;=\s]+=)/)
 						.map(/** @param {string} cookie */ (cookie) => {
@@ -88,16 +88,36 @@ const zzic = async ({ event, resolve }) => {
 		},
 		cookies: {
 			getAll: () => event.cookies.getAll(),
-			setAll: /** @param {Array<{name: string, value: string, options: any}>} cookiesToSet */ (cookiesToSet) => {
-				cookiesToSet.forEach(/** @param {{ name: any; value: any; options: any; }} param0 */ ({ name, value, options }) => {
-					event.cookies.set(name, value, { ...options, path: '/' });
+			/**
+			 * 쿠키 배열을 설정하는 함수
+			 * @param {Array<{name: string, value: string, options: {path?: string, expires?: Date, maxAge?: number, httpOnly?: boolean, secure?: boolean, sameSite?: 'strict' | 'lax' | 'none'}}>} cookiesToSet - 설정할 쿠키 배열
+			 */
+			setAll: (cookiesToSet) => {
+				cookiesToSet.forEach(/** @param {{ name: string; value: string; options: {path?: string, expires?: Date, maxAge?: number, httpOnly?: boolean, secure?: boolean, sameSite?: 'strict' | 'lax' | 'none'}; }} cookieItem */ ({ name, value, options }) => {
+					try {
+						event.cookies.set(name, value, { ...options, path: options.path || '/' });
+					} catch (error) {
+						console.warn('쿠키 설정 실패:', error);
+						// 응답이 이미 생성된 후에는 쿠키 설정이 불가능함
+					}
 				});
 			}
 		}
 	});
 
+	// 익명 사용자 로그인을 resolve 전에 완료
+	if (!accessToken && !refreshToken) {
+		try {
+			await event.locals.zzic.auth.signIn({email: "anonymous@shared.com"});
+		} catch (error) {
+			console.warn('익명 로그인 실패:', error);
+			// 익명 로그인 실패해도 계속 진행
+		}
+	}
+
 	/**
 	 * 현재 사용자 정보만 가져오기
+	 * @returns {Promise<object|null>} 사용자 정보 객체 또는 null
 	 */
 	event.locals.user = async () => {
 		try {
