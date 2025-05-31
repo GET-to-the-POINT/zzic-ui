@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms';
 
 	const { data } = $props();
-	let { todos: { content } } = $derived(data);
+	let { todoPage: { content: todos } } = $derived(data);
 </script>
 
 <div>
@@ -47,7 +47,7 @@
 	<div class="max-w-3xl mx-auto my-5 bg-white p-5 rounded shadow relative z-10">
 		<h2 class="text-xl font-semibold mb-2">해야 할 일</h2>
 		<ul class="list-none p-0">
-			{#each content.filter(todo => !todo.done) as todo (todo.id)}
+			{#each todos.filter(todo => !todo.done) as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
 					<form method="POST" action="?/done" class="mr-2" use:enhance>
 						<input type="hidden" name="id" value={todo.id} />
@@ -60,7 +60,7 @@
 
 		<h2 class="text-xl font-semibold mt-6 mb-2">한 일</h2>
 		<ul class="list-none p-0">
-			{#each content.filter(todo => todo.done) as todo (todo.id)}
+			{#each todos.filter(todo => todo.done) as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
 					<form method="POST" action="?/undone" class="mr-2" use:enhance>
 						<input type="hidden" name="id" value={todo.id} />

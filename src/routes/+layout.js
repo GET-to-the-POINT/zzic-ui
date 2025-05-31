@@ -5,6 +5,7 @@ import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 
 export const trailingSlash = 'always';
 
+/** @type {import('./$types').LayoutLoad} */
 export const load = async ({ data, depends, fetch }) => {
 	depends('zzic:auth');
 
@@ -17,9 +18,7 @@ export const load = async ({ data, depends, fetch }) => {
 			}
 		});
 
-	let {
-		data: { user }
-	} = await zzic.auth.getUser();
+	const user = (await zzic.auth.getUser()).data.user;
 
 	return { zzic, user };
 };
