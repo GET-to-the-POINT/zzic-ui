@@ -16,7 +16,7 @@ export const actions = {
 	done: async ({ request, locals : { zzic, user } }) => {
 		const formData = await request.formData();
 		const id = formData.get('id');
-		const { data, error } = await zzic.todo.updateTodo(user.id, id, { done: true });
+		const { data, error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: true });
 		if (error) {
 			return fail(400, { error: error.message || '완료 처리 실패' });
 		}
@@ -25,9 +25,9 @@ export const actions = {
 	undone: async ({ request, locals : { zzic, user } }) => {
 		const formData = await request.formData();
 		const id = formData.get('id');
-		const { data, error } = await zzic.todo.updateTodo(user.id, id, { done: false });
+		const { data, error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: false });
 		if (error) {
-			return fail(400, { error: error.message || '미완료 처리 실패' });
+			return fail(400, { error: error.message || '완료 처리 실패' });
 		}
 		return { success: true, todos: data.todos };
 	}

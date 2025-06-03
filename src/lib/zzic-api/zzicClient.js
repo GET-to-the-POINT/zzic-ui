@@ -54,15 +54,15 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 				return [name, value];
 			});
 
-			// 'Authorization' 쿠키 찾기
-			const authPair = cookiesArray.find(([name]) => name === 'Authorization');
+			// 'access-token' 쿠키 찾기
+			const authPair = cookiesArray.find(([name]) => name === 'access-token');
 
-			// 'Authorization' 쿠키가 없거나 값이 없는 경우
+			// 'access-token' 쿠키가 없거나 값이 없는 경우
 			if (!authPair || authPair[1] === undefined) {
-				return { data: { user: null }, error: { message: 'Authorization cookie not found or has no value' } };
+				return { data: { user: null }, error: { message: 'access-token cookie not found or has no value' } };
 			}
 			
-			const token = authPair[1]; // 'Authorization' 쿠키의 값
+			const token = authPair[1]; // 'access-token' 쿠키의 값
 
 			try {
 				const parsedUser = parseJwtPayload(token); // 토큰으로 사용자 정보 파싱
@@ -156,35 +156,6 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 
 	// 할 일 팩토리 클라이언트 생성
 	const todoClient = createTodoClient(apiUrl, fetchFn);
-	const taskList = {
-		/**
-		 * 목록 조회
-		 * @param {string} memberId - 멤버 ID  
-		 * @returns {Promise<{data: import('./todo.js').ItemPageResponse|null, error: Object|null}>}
-		 */
-		async getTodos(memberId) {
-			return await todoClient.getTodos(memberId);
-		},
-		
-		/**
-		 * 생성
-		 * @param {import('./todo.js').CreateItemRequest} taskData - 생성할 할 일 데이터
-		 * @returns {Promise<{data: {success: boolean}|null, error: Object|null}>}
-		 */
-		async createTodo(taskData) {
-			return await todoClient.createTodo(taskData);
-		},
-		
-		/**
-		 * 업데이트
-		 * @param {string} id - 할 일 항목 ID
-		 * @param {import('./todo.js').UpdateItemRequest} taskData - 업데이트할 할 일 데이터
-		 * @returns {Promise<{data: {success: boolean}|null, error: Object|null}>}
-		 */
-		async updateTodo(id, taskData) {
-			return await todoClient.updateTodo(id, taskData);
-		}
-	};
 
-	return { auth, todo: taskList };
+	return { auth, todo: todoClient };
 }

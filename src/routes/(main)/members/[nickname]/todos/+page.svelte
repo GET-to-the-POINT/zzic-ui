@@ -3,11 +3,11 @@
 	import { enhance } from '$app/forms';
 
 	const { data } = $props();
-	let { todoPage: { content: todos } } = $derived(data);
+	let { yetTodoPage: { content: yetTodos }, doneTodoPage: { content: doneTodos } } = $derived(data);
 </script>
 
 <div>
-	{#if page.data.user?.nickname === 'anonymous'}
+	{#if page.data.user?.nickname === '익명의 찍찍이'}
 		<div class="w-full bg-yellow-100 text-yellow-800 text-center py-2 text-sm border-b border-yellow-300 relative z-[1000]">
 			⚠️ 현재 페이지는 <strong>체험판</strong>입니다. 저장된 데이터는 모두에게 공개되며 민감한 정보는 입력하지 마세요.
 		</div>
@@ -47,26 +47,26 @@
 	<div class="max-w-3xl mx-auto my-5 bg-white p-5 rounded shadow relative z-10">
 		<h2 class="text-xl font-semibold mb-2">해야 할 일</h2>
 		<ul class="list-none p-0">
-			{#each todos.filter(todo => !todo.done) as todo (todo.id)}
+			{#each yetTodos as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
 					<form method="POST" action="?/done" class="mr-2" use:enhance>
 						<input type="hidden" name="id" value={todo.id} />
 						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">완료</button>
 					</form>
-					<a href={`/todos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
+					<a href={`stodos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
 				</li>
 			{/each}
 		</ul>
 
 		<h2 class="text-xl font-semibold mt-6 mb-2">한 일</h2>
 		<ul class="list-none p-0">
-			{#each todos.filter(todo => todo.done) as todo (todo.id)}
+			{#each doneTodos as todo (todo.id)}
 				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
 					<form method="POST" action="?/undone" class="mr-2" use:enhance>
 						<input type="hidden" name="id" value={todo.id} />
 						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">미완료</button>
 					</form>
-					<a href={`/todos/${todo.id}`} class="line-through text-gray-500">{todo.title}</a>
+					<a href={`todos/${todo.id}`} class="line-through text-gray-500">{todo.title}</a>
 				</li>
 			{/each}
 		</ul>

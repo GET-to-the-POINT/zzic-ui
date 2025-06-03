@@ -60,7 +60,7 @@ export function parseJwtPayload(token) {
  */
 export function getUserFromCookies(cookies) {
 	const tokenArray = cookies.getAll();
-	const tokenValue = tokenArray.find(/** @param {{ name: string; value: string; }} c */ c => c.name === 'Authorization')?.value;
+	const tokenValue = tokenArray.find(/** @param {{ name: string; value: string; }} c */ c => c.name === 'access-token')?.value;
 
 	if (!tokenValue) return null;
 

@@ -9,8 +9,8 @@ import { ResponseCookieManager } from '$lib/utils/cookies.js';
  */
 const zzic = async ({ event, resolve }) => {
 
-	const accessToken = event.cookies.get('Authorization');
-	const refreshToken = event.cookies.get('Authorization-refresh');
+	const accessToken = event.cookies.get('access-token');
+	const refreshToken = event.cookies.get('refresh-token');
 
 	if (!accessToken && refreshToken) {
 		const response = await event.fetch(`${PUBLIC_ZZIC_API_URL}/auth/refresh`, {
@@ -42,13 +42,13 @@ const zzic = async ({ event, resolve }) => {
 
 	// 익명 사용자 로그인을 resolve 전에 완료
 	if (!accessToken && !refreshToken) {
-		try {
-			await event.locals.zzic.auth.signIn({email: "anonymous@shared.com"});
-		} catch (error) {
-			console.warn('익명 로그인 실패:', error);
-			// 익명 로그인 실패해도 계속 진행
+		const { error } = await event.locals.zzic.auth.signIn({email: "anon@zzic.com", password: ""});
+		if (error) {
+			console.error('익명 사용자 로그인 실패:', error);
 		}
 	}
+	const { data: { user } } = await event.locals.zzic.auth.getUser();
+	event.locals.user = user;
 
 	return resolve(event);
 };

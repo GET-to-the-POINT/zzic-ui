@@ -45,17 +45,20 @@ import { browser } from "$app/environment";
  */
 export function createTodoClient(apiUrl, fetchFn) {
 	return {
-		/**
-		 * 목록 조회
-		 * @param {string} memberId - 멤버 ID
-		 * @returns {Promise<{data: ItemPageResponse|null, error: Object|null}>}
-		 */
-		async getTodos(memberId) {
-			let options = {};
-			if (browser) {
-				options.credentials = 'include'; // 브라우저 환경에서는 쿠키를 포함
-			}
-			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos`, { ...options });
+		async getTodos(memberId, options = { }) {
+			const url = new URL(`${apiUrl}/api/members/${memberId}/todos`);
+
+			Object.entries(options).forEach(([key, value]) => {
+				if (value != null) {
+					url.searchParams.append(key, String(value));
+				}
+			});
+
+			// fetch 호출 시 URL.toString()이 자동으로 쿼리 스트링을 포함
+			const response = await fetchFn(url.toString(), {
+				credentials: 'include',
+			});
+
 			if (!response.ok) {
 				const error = await response.text();
 				return { data: null, error };
@@ -115,22 +118,12 @@ export function createTodoClient(apiUrl, fetchFn) {
 			return { error: null };
 		},
 
-		/**
-		 * 업데이트
-		 * @param {string} id - 할 일 항목 ID
-		 * @param {UpdateItemRequest} taskData - 업데이트할 할 일 데이터
-		 * @returns {Promise<{data: {success: boolean}|null, error: Object|null}>}
-		 */
-		async updateTodo(id, taskData) {
-			let options = {};
-			if (browser) {
-				options.credentials = 'include'; // 브라우저 환경에서는 쿠키를 포함
-			}
-			const response = await fetchFn(`${apiUrl}/api/members/me/todos/${id}`, {
+		async updateTodo({userId, todoId}, taskData) {
+			const response = await fetchFn(`${apiUrl}/api/members/${userId}/todos/${todoId}`, {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(taskData),
-				...options
+				credentials: 'include'
 			});
 			if (response.status !== 204) { // API 문서 기준 204
 				const error = await response.json().catch(() => ({ message: 'Failed to update todo' }));

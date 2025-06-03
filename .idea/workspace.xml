@@ -21,23 +21,12 @@
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/todo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/utils/cookies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/utils/cookies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/zzic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/zzic.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[memberId]/todos/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+layout.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(no-header)/thema/yeon/[id]/update/+page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/jwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/jwt.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/+layout.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.server.js" afterDir="false" />
     </list>
@@ -145,8 +134,15 @@
       </scripts>
       <node-interpreter value="project" />
       <envs />
+      <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
+        <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" start="true" with-js-debugger="true" url="http://lcoalhost:5173" />
+      </EXTENSION>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="npm.build" />
+      <item itemvalue="npm.dev" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
@@ -202,6 +198,11 @@
       <workItem from="1748489632515" duration="8963000" />
       <workItem from="1748572889771" duration="1237000" />
       <workItem from="1748671169101" duration="599000" />
+      <workItem from="1748697813863" duration="598000" />
+      <workItem from="1748854873554" duration="603000" />
+      <workItem from="1748860805664" duration="599000" />
+      <workItem from="1748914135074" duration="1193000" />
+      <workItem from="1748930088399" duration="4785000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
@@ -386,23 +387,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/lib/zzic.js</url>
-          <line>263</line>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/hooks.server.js</url>
-          <line>22</line>
-          <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/lib/jwt.js</url>
-          <line>39</line>
-          <option name="timeStamp" value="103" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint enabled="true" type="javascript-exception" />
       </default-breakpoints>
