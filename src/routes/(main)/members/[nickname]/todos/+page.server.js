@@ -11,24 +11,21 @@ export const actions = {
 		if (error) {
 			return fail(400, { error: error.message || '할 일 생성 실패' });
 		}
-		return { success: true };
 	},
 	done: async ({ request, locals : { zzic, user } }) => {
 		const formData = await request.formData();
 		const id = formData.get('id');
-		const { data, error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: true });
+		const { error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: true });
 		if (error) {
 			return fail(400, { error: error.message || '완료 처리 실패' });
 		}
-		return { success: true, todos: data.todos };
 	},
 	undone: async ({ request, locals : { zzic, user } }) => {
 		const formData = await request.formData();
 		const id = formData.get('id');
-		const { data, error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: false });
+		const { error } = await zzic.todo.updateTodo({ userId: user.sub, todoId: id}, { done: false });
 		if (error) {
 			return fail(400, { error: error.message || '완료 처리 실패' });
 		}
-		return { success: true, todos: data.todos };
 	}
 };
