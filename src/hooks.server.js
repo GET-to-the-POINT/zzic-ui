@@ -38,14 +38,9 @@ const zzic = async ({ event, resolve }) => {
 		}
 	});
 
-	// 익명 사용자 로그인을 resolve 전에 완료
-	if (!accessToken && !refreshToken) {
-		const { error } = await event.locals.zzic.auth.signIn({email: "anon@zzic.com", password: ""});
-		if (error) {
-			console.error('익명 사용자 로그인 실패:', error);
-		}
-	}
-	const { data: { user } } = await event.locals.zzic.auth.getUser();
+	const {
+		data: { user }
+	} = await event.locals.zzic.auth.getUser();
 	event.locals.user = user;
 
 	return resolve(event);
