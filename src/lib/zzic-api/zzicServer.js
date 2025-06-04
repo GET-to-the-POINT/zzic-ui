@@ -1,6 +1,5 @@
 import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
-import { parseSetCookieHeader } from '$lib/utils/cookies.js';
 
 /**
  * @typedef {Object} SignInRequest
@@ -23,7 +22,6 @@ import { parseSetCookieHeader } from '$lib/utils/cookies.js';
 
 /**
  * @typedef {Object} AuthResponse
- * @property {{user: MemberMeResponse|null}} data - 사용자 데이터
  * @property {Object|null} error - 에러 정보
  */
 
@@ -74,25 +72,12 @@ export function createZzicServerClient(apiUrl, options) {
 
 				if (!response.ok) {
 					const error = /** @type {any} */ (await response.text());
-					return { data: { user: null }, error };
+					return { error };
 				}
 
-				// 서버에서 받은 Set-Cookie 헤더를 안전하게 처리
-				try {
-					const setCookieHeader = response.headers.get('set-cookie');
-					if (setCookieHeader) {
-							// 유틸 함수로 모든 쿠키 속성(도메인 등) 보존하며 파싱
-						const cookieEntries = parseSetCookieHeader(setCookieHeader);
-						/** @type {any} */ (cookies).setAll(cookieEntries);
-					}
-				} catch (cookieError) {
-					console.warn('쿠키 설정 실패:', cookieError);
-					// 쿠키 설정 실패해도 계속 진행
-				}
-
-				return { data: { user: null }, error: null };
+				return { error: null };
 			} catch (error) {
-				return { data: { user: null }, error: /** @type {any} */ (error) };
+				return { error: /** @type {any} */ (error) };
 			}
 		},
 
