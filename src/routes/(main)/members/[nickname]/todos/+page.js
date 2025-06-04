@@ -1,4 +1,4 @@
-export async function load({ parent, fetch }) {
+export async function load({ parent }) {
 	const { zzic, user } = await parent();
 
 	const { data : yetTodoPage, error } = await zzic.todo.getTodos(user.sub);
