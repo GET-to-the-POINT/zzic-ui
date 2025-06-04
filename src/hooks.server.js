@@ -16,11 +16,9 @@ const zzic = async ({ event, resolve }) => {
 		const response = await event.fetch(`${PUBLIC_ZZIC_API_URL}/auth/refresh`, {
 			redirect: 'manual',
 		});
-		if (response.status === 307) {
-			// 새로운 ResponseCookieManager를 사용하여 간편하게 쿠키 처리
-			const cookieManager = new ResponseCookieManager(event.cookies);
-			cookieManager.applyFromResponse(response);
-		}
+		// 새로운 ResponseCookieManager를 사용하여 간편하게 쿠키 처리
+		const cookieManager = new ResponseCookieManager(event.cookies);
+		cookieManager.applyFromResponse(response);
 	}
 
 	event.locals.zzic = createZzicServerClient(PUBLIC_ZZIC_API_URL, {
