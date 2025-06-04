@@ -55,17 +55,28 @@ export function parseJwtPayload(token) {
 
 /**
  * 쿠키에서 JWT를 파싱하여 유저 객체 생성 (검증 없음)
- * @param {import('@sveltejs/kit').Cookies} cookies - SvelteKit 쿠키 객체
+ * @param {import('@sveltejs/kit').Cookies|string} cookies - SvelteKit 쿠키 객체(서버) 또는 document.cookie 문자열(클��이언트)
  * @returns {object|null} 파싱된 유저 객체 또는 null
  */
 export function getUserFromCookies(cookies) {
-	const tokenArray = cookies.getAll();
-	const tokenValue = tokenArray.find(/** @param {{ name: string; value: string; }} c */ c => c.name === 'access-token')?.value;
-
-	if (!tokenValue) return null;
-
-	const payload = parseJwtPayload(tokenValue);
-	if (!payload) return null;
-
-	return payload;
+	// 클라이언트: document.cookie 문자열
+	if (typeof cookies === 'string') {
+		const cookieArr = cookies.split(';').map(c => c.trim()).filter(Boolean);
+		const tokenValue = cookieArr.find(c => c.startsWith('access-token='))?.split('=')[1];
+		if (!tokenValue) return null;
+		const payload = parseJwtPayload(tokenValue);
+		if (!payload) return null;
+		return payload;
+	}
+	// 서버: SvelteKit Cookies 객체
+	if (typeof cookies?.getAll === 'function') {
+		const tokenArray = cookies.getAll();
+		const tokenValue = tokenArray.find(c => c.name === 'access-token')?.value;
+		if (!tokenValue) return null;
+		const payload = parseJwtPayload(tokenValue);
+		if (!payload) return null;
+		return payload;
+	}
+	return null;
 }
+

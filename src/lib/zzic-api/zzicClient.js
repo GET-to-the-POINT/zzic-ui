@@ -1,4 +1,4 @@
-import { parseJwtPayload } from '$lib/jwt.js';
+import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
 
 /**
@@ -43,36 +43,14 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 		 * @returns {Promise<AuthResponse>}
 		 */
 		async getUser() {
-			const cookiesArray = document.cookie.split(';').map(cookieStr => {
-				const indexOfEqualSign = cookieStr.indexOf('=');
-				if (indexOfEqualSign === -1) {
-					// 값이 없는 쿠키 (예: "myCookie;") -> 이름만 있고 값은 undefined
-					return [cookieStr.trim(), undefined];
-				}
-				const name = cookieStr.substring(0, indexOfEqualSign).trim();
-				const value = cookieStr.substring(indexOfEqualSign + 1).trim();
-				return [name, value];
-			});
+			const cookies = document.cookie;
+			let user = getUserFromCookies(/** @type {any} */ (cookies));
 
-			// 'access-token' 쿠키 찾기
-			const authPair = cookiesArray.find(([name]) => name === 'access-token');
-
-			// 'access-token' 쿠키가 없거나 값이 없는 경우
-			if (!authPair || authPair[1] === undefined) {
-				return { data: { user: null }, error: { message: 'access-token cookie not found or has no value' } };
+			if (!user) {
+				return { data: { user: null }, error: { message: 'User not authenticated' } };
 			}
-			
-			const token = authPair[1]; // 'access-token' 쿠키의 값
 
-			try {
-				const parsedUser = parseJwtPayload(token); // 토큰으로 사용자 정보 파싱
-				// currentUser = parsedUser; // getUser에서 currentUser를 직접 변경하지 않도록 수정
-
-				return { data: { user: /** @type {MemberMeResponse|null} */ (parsedUser) }, error: null };
-			} catch (error) {
-				console.error('JWT 파싱 실패:', error);
-				return { data: { user: null }, error: { message: 'Invalid token format' } };
-			}
+			return { data: { user: /** @type {MemberMeResponse} */ (user) }, error: null };
 		},
 
 		/**
