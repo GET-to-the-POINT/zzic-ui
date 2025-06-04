@@ -23,43 +23,43 @@
  */
 export function parseSetCookieHeader(setCookieHeader) {
 	if (!setCookieHeader) return [];
-	
+
 	/** @type {Array<ParsedCookie>} */
 	const results = [];
-	
+
 	setCookieHeader
 		.split(/,(?=\s*[^;=\s]+=)/) // 쿠키 구분자로 분리 (날짜의 쉼표와 구분)
 		.forEach(/** @param {string} cookie */ (cookie) => {
 			const parts = cookie.trim().split(';').map(/** @param {string} p */ (p) => p.trim());
-			const [name, value] = parts[0].split('=');
+				const [name, value] = parts[0].split('=');
 
-			if (!name) return;
+				if (!name) return;
 
-			/** @type {CookieOptions} */
-			const options = {};
-			
-			for (let i = 1; i < parts.length; i++) {
-				const [optKey, optVal] = parts[i].split('=');
-				const key = optKey.toLowerCase();
-				
-				switch (key) {
-					case 'path':
-						options.path = optVal;
-						break;
-					case 'expires':
-						options.expires = new Date(optVal);
-						break;
-					case 'max-age':
-						options.maxAge = parseInt(optVal, 10);
-						break;
-					case 'secure':
-						options.secure = true;
-						break;
-					case 'httponly':
-						options.httpOnly = true;
-						break;
-					case 'samesite': {
-						const sameSiteValue = optVal?.toLowerCase();
+				/** @type {CookieOptions} */
+				const options = {};
+
+				for (let i = 1; i < parts.length; i++) {
+					const [optKey, optVal] = parts[i].split('=');
+					const key = optKey.toLowerCase();
+
+					switch (key) {
+						case 'path':
+							options.path = optVal;
+							break;
+						case 'expires':
+							options.expires = new Date(optVal);
+							break;
+						case 'max-age':
+							options.maxAge = parseInt(optVal, 10);
+							break;
+						case 'secure':
+							options.secure = true;
+							break;
+						case 'httponly':
+							options.httpOnly = true;
+							break;
+						case 'samesite': {
+							const sameSiteValue = optVal?.toLowerCase();
 						if (sameSiteValue === 'strict' || sameSiteValue === 'lax' || sameSiteValue === 'none') {
 								options.sameSite = sameSiteValue;
 							}
@@ -77,7 +77,7 @@ export function parseSetCookieHeader(setCookieHeader) {
 					options
 				});
 		});
-	
+
 	return results;
 }
 
@@ -87,14 +87,14 @@ export function parseSetCookieHeader(setCookieHeader) {
 export class ResponseCookieManager {
 	/** @type {import('@sveltejs/kit').Cookies} */
 	#cookies;
-	
+
 	/**
 	 * @param {import('@sveltejs/kit').Cookies} cookies - SvelteKit 쿠키 객체
 	 */
 	constructor(cookies) {
 		this.#cookies = cookies;
 	}
-	
+
 	/**
 	 * Response에서 Set-Cookie 헤더를 추출하여 쿠키를 설정
 	 * @param {Response} response - HTTP 응답 객체
@@ -104,14 +104,14 @@ export class ResponseCookieManager {
 		try {
 			const setCookieHeader = response.headers.get('set-cookie');
 			if (!setCookieHeader) return false;
-			
+
 			return this.applyFromHeader(setCookieHeader);
 		} catch (error) {
 			console.warn('응답에서 쿠키 적용 실패:', error);
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Set-Cookie 헤더 문자열에서 쿠키를 설정
 	 * @param {string} setCookieHeader - Set-Cookie 헤더 문자열
@@ -120,12 +120,12 @@ export class ResponseCookieManager {
 	applyFromHeader(setCookieHeader) {
 		try {
 			const parsedCookies = parseSetCookieHeader(setCookieHeader);
-			
+
 			parsedCookies.forEach(/** @param {ParsedCookie} cookie */ (cookie) => {
-				/** @type {any} */
-				const cookieOptions = {
-					path: cookie.options.path || '/',
-					httpOnly: cookie.options.httpOnly || false,
+					/** @type {any} */
+					const cookieOptions = {
+						path: cookie.options.path || '/',
+						httpOnly: cookie.options.httpOnly || false,
 					secure: cookie.options.secure || false,
 					};
 
@@ -137,14 +137,14 @@ export class ResponseCookieManager {
 
 					this.#cookies.set(cookie.name, cookie.value, cookieOptions);
 			});
-			
+
 			return parsedCookies.length > 0;
 		} catch (error) {
 			console.warn('Set-Cookie 헤더에서 쿠키 적용 실패:', error);
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 쿠키 배열을 한 번에 설정
 	 * @param {Array<{name: string, value: string, options?: CookieOptions}>} cookiesToSet - 설정할 쿠키 배열
