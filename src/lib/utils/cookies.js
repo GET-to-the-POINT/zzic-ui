@@ -31,9 +31,9 @@ export function parseSetCookieHeader(setCookieHeader) {
 		.forEach(/** @param {string} cookie */ (cookie) => {
 			const parts = cookie.trim().split(';').map(/** @param {string} p */ (p) => p.trim());
 			const [name, value] = parts[0].split('=');
-			
-			if (!name || !value) return;
-			
+
+			if (!name) return;
+
 			/** @type {CookieOptions} */
 			const options = {};
 			
