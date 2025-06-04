@@ -70,13 +70,12 @@ export function parseSetCookieHeader(setCookieHeader) {
 							break;
 					}
 				}
-			}
-			
-			results.push({
-				name: name.trim(),
-				value: value.trim(),
-				options
-			});
+
+				results.push({
+					name: name.trim(),
+					value: value.trim(),
+					options
+				});
 		});
 	
 	return results;
