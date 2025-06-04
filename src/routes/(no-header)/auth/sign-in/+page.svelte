@@ -18,7 +18,7 @@
 
 		<div>
 			<label for="password" class="block mb-1">비밀번호</label>
-			<input name="password" id="password" type="password" required class="w-full p-2 border rounded" />
+			<input name="password" id="password" type="password" class="w-full p-2 border rounded" />
 		</div>
 
 		<button type="submit" class="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700">로그인</button>
