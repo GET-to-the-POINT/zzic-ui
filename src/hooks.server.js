@@ -47,11 +47,3 @@ const zzic = async ({ event, resolve }) => {
 };
 
 export const handle = sequence(zzic);
-
-export const handleFetch = async ({ event, request, fetch }) => {
-	// const newRequest = new Request(request, {
-	// 	credentials: 'include',
-	// });
-
-	return fetch(request);
-}
