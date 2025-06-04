@@ -53,7 +53,7 @@
 						<input type="hidden" name="id" value={todo.id} />
 						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">완료</button>
 					</form>
-					<a href={`stodos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
+					<a href={`todos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
 				</li>
 			{/each}
 		</ul>
