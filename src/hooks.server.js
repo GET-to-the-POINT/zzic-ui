@@ -34,11 +34,8 @@ const zzic = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-/**
- * 인증 가드 훅 - 로그인이 필요한 페이지 접근 제어
- * @type {import('@sveltejs/kit').Handle}
- */
-const authGuard = async ({ event, resolve }) => {
+const tokenRefresh = async ({ event, resolve }) => {
+	// 토큰 갱신 로직
 	const accessToken = event.cookies.get('access-token');
 	const refreshToken = event.cookies.get('refresh-token');
 
@@ -46,6 +43,14 @@ const authGuard = async ({ event, resolve }) => {
 		await event.fetch(`${PUBLIC_ZZIC_API_URL}/auth/refresh`);
 	}
 
+	return resolve(event);
+}
+
+/**
+ * 인증 가드 훅 - 로그인이 필요한 페이지 접근 제어
+ * @type {import('@sveltejs/kit').Handle}
+ */
+const authGuard = async ({ event, resolve }) => {
 	if (!event.locals.user && event.url.pathname.startsWith('/members')) {
 		redirect(303, '/auth/sign-in');
 	}
@@ -57,7 +62,7 @@ const authGuard = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(authGuard, zzic);
+export const handle = sequence(tokenRefresh, zzic, authGuard);
 
 /**
  * 페치 핸들러 - 307 리다이렉트 시 토큰 헤더를 유지하며 재요청, 응답 쿠키를 클라이언트에 전달
@@ -69,19 +74,23 @@ export const handleFetch = async ({ event, request, fetch }) => {
 	});
 
 	let response = await fetch(newRequest);
+	let setCookieHeaders;
 
 	if (response.status === 307) {
 		const redirectUrl = response.headers.get('location');
 
 		if (redirectUrl) {
 			// 307 응답의 쿠키를 다음 요청에 포함
-			const initialCookies = response.headers.get('set-cookie');
+			const authorization = response.headers.get('Authorization');
+			const authorizationRefresh = response.headers.get('Authorization-refresh');
+			setCookieHeaders = response.headers.getSetCookie();
 
 			const redirectRequest = new Request(`${PUBLIC_ZZIC_API_URL}${redirectUrl}`, {
 				method: request.method,
 				headers: {
 					...request.headers,
-					cookie: initialCookies
+					'Authorization': authorization || '',
+					'Authorization-refresh': authorizationRefresh
 				},
 				body: request.body
 			});
@@ -91,7 +100,7 @@ export const handleFetch = async ({ event, request, fetch }) => {
 	}
 
 	// Retrieve all 'set-cookie' headers without splitting on commas
-	const setCookieHeaders = response.headers.getSetCookie();
+	setCookieHeaders = setCookieHeaders ?? response.headers.getSetCookie();
 
 	setCookieHeaders.forEach((singleCookieHeader) => {
 		const cookieParts = singleCookieHeader.split(';');
