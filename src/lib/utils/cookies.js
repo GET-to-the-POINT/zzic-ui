@@ -6,6 +6,7 @@
  * @property {boolean} [httpOnly] - HTTP 전용 플래그
  * @property {boolean} [secure] - 보안 플래그
  * @property {'strict'|'lax'|'none'} [sameSite] - SameSite 속성
+ * @property {string} [domain] - 쿠키 도메인
  */
 
 /**
@@ -60,9 +61,13 @@ export function parseSetCookieHeader(setCookieHeader) {
 					case 'samesite': {
 						const sameSiteValue = optVal?.toLowerCase();
 						if (sameSiteValue === 'strict' || sameSiteValue === 'lax' || sameSiteValue === 'none') {
-							options.sameSite = sameSiteValue;
+								options.sameSite = sameSiteValue;
+							}
+							break;
 						}
-						break;
+						case 'domain':
+							options.domain = optVal;
+							break;
 					}
 				}
 			}
@@ -123,14 +128,15 @@ export class ResponseCookieManager {
 					path: cookie.options.path || '/',
 					httpOnly: cookie.options.httpOnly || false,
 					secure: cookie.options.secure || false,
-				};
-				
-				// 선택적 속성들 추가
-				if (cookie.options.expires) cookieOptions.expires = cookie.options.expires;
-				if (cookie.options.maxAge) cookieOptions.maxAge = cookie.options.maxAge;
-				if (cookie.options.sameSite) cookieOptions.sameSite = cookie.options.sameSite;
-				
-				this.#cookies.set(cookie.name, cookie.value, cookieOptions);
+					};
+
+					// 선택적 속성들 추가
+					if (cookie.options.expires) cookieOptions.expires = cookie.options.expires;
+					if (cookie.options.maxAge) cookieOptions.maxAge = cookie.options.maxAge;
+					if (cookie.options.sameSite) cookieOptions.sameSite = cookie.options.sameSite;
+					if (cookie.options.domain) cookieOptions.domain = cookie.options.domain;
+
+					this.#cookies.set(cookie.name, cookie.value, cookieOptions);
 			});
 			
 			return parsedCookies.length > 0;

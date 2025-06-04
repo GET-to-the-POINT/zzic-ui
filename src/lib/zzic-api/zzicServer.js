@@ -1,5 +1,6 @@
 import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
+import { parseSetCookieHeader } from '$lib/utils/cookies.js';
 
 /**
  * @typedef {Object} SignInRequest
@@ -80,46 +81,8 @@ export function createZzicServerClient(apiUrl, options) {
 				try {
 					const setCookieHeader = response.headers.get('set-cookie');
 					if (setCookieHeader) {
-						// 모든 쿠키 속성을 보존하며 파싱
-						const cookieEntries = setCookieHeader
-							.split(/,(?=\s*[^;=\s]+=)/) // handle multiple cookies, more robust for names with non-word chars
-							.map(/** @param {any} cookie */ cookie => {
-								const parts = cookie.trim().split(';').map(/** @param {any} p */ p => p.trim());
-								const [name, value] = parts[0].split('=');
-								if (!name || !value) return null;
-
-								const options = {};
-								for (let i = 1; i < parts.length; i++) {
-									const [optKey, optVal] = parts[i].split('=');
-									const key = optKey.toLowerCase();
-									switch (key) {
-										case 'path':
-											options.path = optVal;
-											break;
-										case 'expires':
-											options.expires = new Date(optVal);
-											break;
-										case 'max-age':
-											options.maxAge = parseInt(optVal);
-											break;
-										case 'secure':
-											options.secure = true;
-											break;
-										case 'httponly':
-											options.httpOnly = true;
-											break;
-										case 'samesite':
-											options.sameSite = optVal;
-											break;
-									}
-									if (options.httpOnly === undefined) {
-										options.httpOnly = false;
-									}
-								}
-
-								return { name: name.trim(), value: value.trim(), options };
-							})
-							.filter(Boolean);
+							// 유틸 함수로 모든 쿠키 속성(도메인 등) 보존하며 파싱
+						const cookieEntries = parseSetCookieHeader(setCookieHeader);
 						/** @type {any} */ (cookies).setAll(cookieEntries);
 					}
 				} catch (cookieError) {
