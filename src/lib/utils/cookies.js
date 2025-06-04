@@ -36,7 +36,15 @@ export function parseSetCookieHeader(setCookieHeader) {
 				if (!name) return;
 
 				/** @type {CookieOptions} */
-				const options = {};
+				const options = {
+					path: undefined,
+					expires: undefined,
+					maxAge: undefined,
+					domain: undefined,
+					sameSite: undefined,
+					httpOnly: false,
+					secure: false
+				};
 
 				for (let i = 1; i < parts.length; i++) {
 					const [optKey, optVal] = parts[i].split('=');
