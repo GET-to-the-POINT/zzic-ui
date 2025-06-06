@@ -1,13 +1,10 @@
 export async function load({ parent }) {
 	const { zzic, user } = await parent();
 
-	const { data : yetTodoPage, error } = await zzic.todo.getTodos(user.sub);
-	const { data : doneTodoPage } = await zzic.todo.getTodos(user.sub, { done : true });
+	const yetTodoPromise = zzic.todo.getTodos(user.sub);
+	const doneTodoPromise = zzic.todo.getTodos(user.sub, { done : true });
 
-	if (error) {
-		console.error('Failed to load todos:', error);
-		throw Error('Failed to load todos');
-	}
+	const [ { data : yetTodoPage }, { data : doneTodoPage } ] = await Promise.all([yetTodoPromise, doneTodoPromise]);
 
-	return { yetTodoPage, doneTodoPage};
+	return { yetTodoPage, doneTodoPage };
 }
