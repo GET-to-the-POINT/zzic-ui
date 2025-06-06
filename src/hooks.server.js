@@ -69,12 +69,10 @@ export const handleFetch = async ({ event, request, fetch }) => {
 	});
 
 	let response = await fetch(newRequest);
-	let setCookieHeaders;
 
-	if (response.status === 307) {
-		setCookieHeaders = response.headers.getSetCookie();
+	const setCookieHeaders = response.headers.getSetCookie();
 
-			setCookieHeaders.forEach((singleCookieHeader) => {
+	setCookieHeaders.forEach((singleCookieHeader) => {
 		const cookieParts = singleCookieHeader.split(';');
 		const [name, value] = cookieParts[0].split('=');
 		const cookieName = name?.trim();
@@ -107,7 +105,6 @@ export const handleFetch = async ({ event, request, fetch }) => {
 			event.cookies.set(cookieName, value?.trim() || '', options);
 		}
 	});
-	}
 
 	return response;
 };
