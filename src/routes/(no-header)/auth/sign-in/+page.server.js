@@ -10,7 +10,7 @@ export const actions = {
 
 		if (error) {
 			const failure = Object.create(null);
-			failure.message = error.message;
+			failure.message = error;
 			return fail(400, { failure });
 		}
 
