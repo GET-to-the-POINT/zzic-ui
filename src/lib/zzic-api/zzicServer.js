@@ -125,36 +125,5 @@ export function createZzicServerClient(apiUrl, options) {
 		}
 	};
 
-	const todo = {
-		/**
-		 * 할 일 목록 조회
-		 * @param {string} memberId - 멤버 ID
-		 * @returns {Promise<{data: import('./todo.js').ItemPageResponse|null, error: Object|null}>}
-		 */
-		async getTodos(memberId) {
-			return await todoClient.getTodos(memberId);
-		},
-
-		/**
-		 * 할 일 생성
-		 * @param {string} memberId - 멤버 ID
-		 * @param {import('./todo.js').CreateItemRequest} taskData - 할 일 데이터 객체
-		 * @returns {Promise<{data: import('./todo.js').ItemMainResponse|null, error: Object|null}>}
-		 */
-		async createTodo(memberId, taskData) {
-			return await todoClient.createTodoForMember(memberId, taskData);
-		},
-
-		/**
-		 * 할 일 업데이트
-		 * @param {string} id - 할 일 ID
-		 * @param {import('./todo.js').UpdateItemRequest} itemData - 업데이트할 데이터
-		 * @returns {Promise<{data: import('./todo.js').ItemMainResponse|null, error: Object|null}>}
-		 */
-		async updateTodo(id, itemData) {
-			return await todoClient.updateTodo(id, itemData);
-		}
-	};
-
-	return { auth, todo };
+	return { auth, todo: todoClient };
 }

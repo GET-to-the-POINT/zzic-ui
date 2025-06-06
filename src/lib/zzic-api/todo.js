@@ -61,8 +61,8 @@ export function createTodoClient(apiUrl, fetchFn) {
 		return { data, error: null };
 	}
 
-	async function createTodo(todo) {
-		const response = await fetchFn(`${apiUrl}/api/members/me/todos`, {
+	async function createTodo({ userId }, todo) {
+		const response = await fetchFn(`${apiUrl}/api/members/${userId}/todos`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(todo),
