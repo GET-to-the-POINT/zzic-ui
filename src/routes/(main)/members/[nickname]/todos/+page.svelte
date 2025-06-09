@@ -1,74 +1,78 @@
 <script>
-	import { page } from '$app/state';
-	import { enhance } from '$app/forms';
+	import TodoDetail from '$lib/components/sections/todo/TodoDetail.svelte';
+	import CreateTodo from '$lib/todo/CreateTodo.svelte';
+	import TodoSection from '$lib/todo/TodoSection.svelte';
+	import TodoStats from '$lib/todo/TodoStats.svelte';
 
+	/**
+	 * @typedef {Object} Todo
+	 * @property {string} id - Todo ID
+	 * @property {string} title - Todo 제목
+	 * @property {string} [description] - Todo 설명
+	 * @property {boolean} done - 완료 여부
+	 * @property {string} createdAt - 생성 시간
+	 * @property {string} [updatedAt] - 수정 시간
+	 */
+
+	/**
+	 * @typedef {Object} TodoPage
+	 * @property {Array<Todo>} content - Todo 목록
+	 * @property {number} totalElements - 전체 요소 개수
+	 * @property {number} totalPages - 전체 페이지 수
+	 * @property {number} number - 현재 페이지 번호
+	 * @property {number} size - 페이지 크기
+	 */
+
+	/**
+	 * @typedef {Object} PageData
+	 * @property {Array<Todo>} yetTodos - 미완료 todo 목록
+	 * @property {Array<Todo>} doneTodos - 완료된 todo 목록
+	 * @property {TodoPage} yetTodoPage - 미완료 todo 페이지 정보
+	 * @property {TodoPage} doneTodoPage - 완료된 todo 페이지 정보
+	 */
+
+	/** @type {{ data: PageData }} */
 	const { data } = $props();
-	let { yetTodoPage: { content: yetTodos }, doneTodoPage: { content: doneTodos } } = $derived(data);
+	
+	// Svelte 5에서 데이터 추출 (page.js에서 이미 배열로 추출됨)
+	let yetTodos = $derived(data?.yetTodos || []);
+	let doneTodos = $derived(data?.doneTodos || []);
+	let yetTodoPage = $derived(data?.yetTodoPage);
+	let doneTodoPage = $derived(data?.doneTodoPage);
 </script>
 
-<div>
-	{#if page.data.user?.nickname === '익명의 찍찍이'}
-		<div class="w-full bg-yellow-100 text-yellow-800 text-center py-2 text-sm border-b border-yellow-300 relative z-[1000]">
-			⚠️ 현재 페이지는 <strong>체험판</strong>입니다. 저장된 데이터는 모두에게 공개되며 민감한 정보는 입력하지 마세요.
-		</div>
-	{/if}
+<main class={[
+  'container mx-auto',
+  'px-4 py-8',
+  'space-y-6'
+]}>
+	<TodoStats 
+		{yetTodos} 
+		{doneTodos} 
+		fadeDelay={200}
+				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
 
-	<header class="bg-green-600 text-white text-center py-4 flex items-center justify-center relative z-10">
-		<h1 class="mr-5 text-lg font-bold" data-view-transition-name="h1">ZZIC</h1>
-		<div class="airplane absolute top-1 left-32 w-12 h-12 bg-cover animate-[fly_linear_infinite]" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/a9/Emoji_u2708.svg');"></div>
-	</header>
+	/>
 
-	<form use:enhance method="POST" action="?/create" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-3xl mx-auto mt-8">
-		<h2 class="text-2xl font-semibold text-gray-800 mb-4">새 할 일 추가</h2>
-		<div class="mb-4">
-			<input
-				type="text"
-				name="title"
-				placeholder="무엇을 해야하나요?"
-				required
-				class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
-			/>
-		</div>
-		<div class="mb-4">
-			<textarea
-				name="description"
-				placeholder="자세한 설명"
-				class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-blue-300"
-				rows="3"
-			></textarea>
-		</div>
-		<div class="flex justify-end">
-			<button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-				할 일 추가
-			</button>
-		</div>
-	</form>
+	<TodoDetail 
+		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
+		action="?/create" 
+		buttonText="추가하기"
+	/>
 
-	<div class="max-w-3xl mx-auto my-5 bg-white p-5 rounded shadow relative z-10">
-		<h2 class="text-xl font-semibold mb-2">해야 할 일</h2>
-		<ul class="list-none p-0">
-			{#each yetTodos as todo (todo.id)}
-				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
-					<form method="POST" action="?/done" class="mr-2" use:enhance>
-						<input type="hidden" name="id" value={todo.id} />
-						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">완료</button>
-					</form>
-					<a href={`todos/${todo.id}`} class="text-blue-600 hover:underline">{todo.title}</a>
-				</li>
-			{/each}
-		</ul>
+	<TodoSection 
+		todos={yetTodos}
+		totalCount={yetTodoPage?.totalElements}
+		title="이루어갈 꿈들"
+				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
 
-		<h2 class="text-xl font-semibold mt-6 mb-2">한 일</h2>
-		<ul class="list-none p-0">
-			{#each doneTodos as todo (todo.id)}
-				<li class="bg-blue-50 mb-3 p-3 rounded flex items-center">
-					<form method="POST" action="?/undone" class="mr-2" use:enhance>
-						<input type="hidden" name="id" value={todo.id} />
-						<button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">미완료</button>
-					</form>
-					<a href={`todos/${todo.id}`} class="line-through text-gray-500">{todo.title}</a>
-				</li>
-			{/each}
-		</ul>
-	</div>
-</div>
+	/>
+
+	<TodoSection 
+		todos={doneTodos}
+		totalCount={doneTodoPage?.totalElements}
+		title="이루어낸 꿈들"
+				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
+
+	/>
+</main>

@@ -18,17 +18,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가.">
+    <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/jwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/jwt.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/Header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/+layout.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+layout.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +91,9 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.dev JavaScript.executor&quot;: &quot;Debug&quot;,
+    &quot;JavaScript Debug.dev:ssl JavaScript.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
@@ -103,7 +108,9 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;npm.dev.executor&quot;: &quot;Debug&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/yurim/project/ZZIC-ui/node_modules/prettier&quot;,
+    &quot;npm.dev:insecure.executor&quot;: &quot;Debug&quot;,
+    &quot;npm.dev:ssl.executor&quot;: &quot;Debug&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/gimtaehui/IdeaProjects/ZZIC-ui/node_modules/prettier&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/gimtaehui/IdeaProjects/ZZIC-ui/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -116,6 +123,20 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.dev">
+    <configuration name="dev JavaScript" type="JavascriptDebugType" uri="http://zzic.xiyo.com">
+      <method v="2" />
+    </configuration>
+    <configuration name="dev:ssl JavaScript" type="JavascriptDebugType" uri="https://localhost:5173">
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -135,17 +156,33 @@
       <node-interpreter value="project" />
       <envs />
       <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
-        <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" start="true" with-js-debugger="true" url="http://lcoalhost:5173" />
+        <browser start="true" with-js-debugger="true" url="http://zzic.xiyo.com" />
       </EXTENSION>
       <method v="2" />
     </configuration>
+    <configuration name="dev:insecure" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev:insecure" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <list>
+      <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+      <item itemvalue="JavaScript Debug.dev:ssl JavaScript" />
+      <item itemvalue="JavaScript Debug.dev JavaScript" />
+      <item itemvalue="npm.dev:insecure" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.dev" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="npm.dev:insecure" />
         <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
@@ -153,7 +190,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
       </set>
     </attachedChunks>
   </component>
@@ -203,6 +240,12 @@
       <workItem from="1748860805664" duration="599000" />
       <workItem from="1748914135074" duration="1193000" />
       <workItem from="1748930088399" duration="4785000" />
+      <workItem from="1749015050395" duration="30545000" />
+      <workItem from="1749085916357" duration="117000" />
+      <workItem from="1749086097322" duration="13633000" />
+      <workItem from="1749114322551" duration="1957000" />
+      <workItem from="1749116785274" duration="4200000" />
+      <workItem from="1749230774488" duration="599000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
@@ -324,7 +367,63 @@
       <option name="project" value="LOCAL" />
       <updated>1748504687500</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary=":art: Initialize cookie options with default values">
+      <option name="closed" value="true" />
+      <created>1749016165536</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1749016165536</updated>
+    </task>
+    <task id="LOCAL-00019" summary=":poop: 아오... 어웨잇을 안 붙이다니 나의 큰 실수">
+      <option name="closed" value="true" />
+      <created>1749045421271</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1749045421271</updated>
+    </task>
+    <task id="LOCAL-00020" summary=":recycle: 사인인 로직 간소화">
+      <option name="closed" value="true" />
+      <created>1749045639194</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1749045639194</updated>
+    </task>
+    <task id="LOCAL-00021" summary=":recycle: 유저 추출 로직을 역할에 맞게 이동">
+      <option name="closed" value="true" />
+      <created>1749045663947</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1749045663947</updated>
+    </task>
+    <task id="LOCAL-00022" summary=":poop: 의미 없는 코드 삭제">
+      <option name="closed" value="true" />
+      <created>1749045717889</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1749045717889</updated>
+    </task>
+    <task id="LOCAL-00023" summary=":recycle: 핸들페치에서 쿠키에 데이터 담도록 변경">
+      <option name="closed" value="true" />
+      <created>1749045752782</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1749045752782</updated>
+    </task>
+    <task id="LOCAL-00024" summary=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
+      <option name="closed" value="true" />
+      <created>1749046670646</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1749046670646</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -354,12 +453,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat:" />
-    <MESSAGE value="feat: form" />
-    <MESSAGE value="feat: 화면과 비즈니스 로직분리" />
-    <MESSAGE value="feat: 백엔드 연결" />
-    <MESSAGE value="feat: 백엔드 연결2" />
-    <MESSAGE value="feat: 화면" />
     <MESSAGE value="feat: refactor layout structure and enhance user authentication flow" />
     <MESSAGE value="feat: streamline sign-out process and improve cookie handling" />
     <MESSAGE value="fix: correct member ID reference from 'anonym' to 'anon' in API calls and navigation" />
@@ -378,7 +471,14 @@
     <MESSAGE value=":recycle: `handleFetch` 추가 및 307 리디렉트 처리 개선  &#10;- 자동 리디렉트 방지 및 수동 리디렉션 처리 로직 추가.  &#10;- `set-cookie` 헤더 파싱 및 쿠키 관리 로직 구현.  &#10;- 안전한 요청 재시도를 위한 쿠키 설정 로직 강화." />
     <MESSAGE value=":recycle: `handleFetch` 추가 및 307 리디렉트 처리 개선  &#10;- 자동 리디렉트 방지 및 수동 리디렉션 처리 로직 추가.  &#10;- `set-cookie` 헤더 파싱 및 쿠키 관리 로직 구현.  &#10;- 안전한 요청 재시도를 위한 쿠키 설정 로직 강화.  " />
     <MESSAGE value=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가." />
-    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: ZZIC 인증 클라이언트 추가 및 요청/쿠키 처리 핸들러 개선&#10;- 브라우저/서버용 ZZIC 인증 클라이언트 추가 (`createZzicBrowserClient`, `createZzicServerClient`).&#10;- 사용자 인증 로직(로그인/로그아웃, 사용자 정보 가져오기) 구현.&#10;- `handleFetch`에서 307 리디렉트 응답 및 `set-cookie` 헤더 처리 추가." />
+    <MESSAGE value=":art: Initialize cookie options with default values" />
+    <MESSAGE value=":poop: 아오... 어웨잇을 안 붙이다니 나의 큰 실수" />
+    <MESSAGE value=":recycle: 사인인 로직 간소화" />
+    <MESSAGE value=":recycle: 유저 추출 로직을 역할에 맞게 이동" />
+    <MESSAGE value=":poop: 의미 없는 코드 삭제" />
+    <MESSAGE value=":recycle: 핸들페치에서 쿠키에 데이터 담도록 변경" />
+    <MESSAGE value=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="VgoProject">
@@ -387,6 +487,43 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
+          <line>47</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js</url>
+          <line>62</line>
+          <option name="timeStamp" value="70" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js</url>
+          <line>63</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/hooks.server.js</url>
+          <line>75</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
+          <line>51</line>
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
+          <line>48</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte</url>
+          <line>27</line>
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint enabled="true" type="javascript-exception" />
       </default-breakpoints>

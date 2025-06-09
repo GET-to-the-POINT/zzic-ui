@@ -1,18 +1,58 @@
-@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
-@import "tailwindcss";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
 
-@view-transition {
-    navigation: auto;
+@theme {
+    /* ZZIC 컬러 시스템: Tailwind 4 기반, glass/gradient/primary/semantic 컬러 체계 */
+    /* Primary (메인) */
+    --color-primary: oklch(0.65 0.22 300); /* 보라색 계열, #800080 근처 */
+    --color-primary-dark: oklch(0.45 0.22 300); /* #4B0082 근처 */
+    --color-primary-light: oklch(0.85 0.12 300); /* #e9d8fd 근처 */
+    /* Accent/Secondary */
+    --color-accent: oklch(0.72 0.18 340); /* #bb6bd9 근처 */
+    --color-accent-light: oklch(0.85 0.13 340); /* #fbd3e9 근처 */
+    --color-accent-dark: oklch(0.55 0.18 340); /* #9f48c1 근처 */
+    /* Success/Warning/Danger */
+    --color-success: oklch(0.75 0.18 150); /* #34d399 근처 */
+    --color-warning: oklch(0.9 0.18 80); /* #facc15 근처 */
+    --color-danger: oklch(0.75 0.18 30); /* #f87171 근처 */
+    /* Gray scale (semantic) */
+    --color-bg: oklch(0.98 0.01 270); /* #f7f8fc */
+    --color-bg-alt: oklch(0.99 0.01 270); /* #fff */
+    --color-surface: oklch(0.95 0.01 270); /* #f4f4f4 */
+    --color-border: oklch(0.88 0.01 270); /* #e2e8f0 */
+    --color-border-dark: oklch(0.82 0.01 270); /* #cbd5e0 */
+    --color-text: oklch(0.25 0.01 270); /* #2d3748 */
+    --color-text-muted: oklch(0.45 0.01 270); /* #4a5568 */
+    --color-text-light: oklch(0.7 0.01 270); /* #a0aec0 */
+    /* Glassmorphism */
+    --glass-bg: rgba(255,255,255,0.2);
+    --glass-border: rgba(255,255,255,0.3);
+    /* Lim 테마 (skyblue/blue 계열) */
+    --color-lim-main: #4682B4;
+    --color-lim-main-dark: #357ae8;
+    --color-lim-bg: #f0f8ff;
+    /* Heee 테마 (black/green 계열) */
+    --color-heee-main: black;
+    --color-heee-accent: mediumseagreen;
+    /* Gradient 프리셋 (Tailwind 호환) */
+    --gradient-primary: linear-gradient(to right, #ec4899, #8b5cf6);
+    --gradient-secondary: linear-gradient(to right, #06b6d4, #818cf8);
+    --gradient-success: linear-gradient(to right, #34d399, #10b981);
+    --gradient-warning: linear-gradient(to right, #facc15, #fb923c);
+    --gradient-danger: linear-gradient(to right, #f87171, #f43f5e);
+    --gradient-star: radial-gradient(circle, #ffb3e6, #fff9b3, #b3d9ff);
 }
 
-html {
-    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Hiragino Sans', 'Apple SD Gothic Neo', Meiryo, 'Noto Sans JP', 'Noto Sans KR', 'Malgun Gothic', Osaka, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-    font-feature-settings: 'ss05';
-    background-color: #F6F7F9;
+@layer theme {
 }
 
-input, textarea, select, button {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
+@layer base {
+    :root {
+        font-family: 'Pretendard Variable', sans-serif;
+        color-scheme: light dark;
+    }
 }
+
+

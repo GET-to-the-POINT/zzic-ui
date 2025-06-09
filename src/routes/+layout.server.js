@@ -1,4 +1,4 @@
-export async function load({ cookies}) {
+export async function load({ cookies }) {
 	return {
 		cookies: cookies.getAll(),
 	}

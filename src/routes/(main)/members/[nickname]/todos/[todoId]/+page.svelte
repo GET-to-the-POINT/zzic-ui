@@ -1,41 +1,99 @@
 <script>
-	const { data } = $props();
-	let { todo } = $derived(data);
+  import { enhance } from '$app/forms';
+	import TodoDetail from '$lib/components/sections/todo/TodoDetail.svelte';
+  let { data } = $props();
+  let { todo } = data;
+
+  /** @type { HTMLDialogElement } */
+  let deleteDialogRef;
+  function openDeleteDialog() {
+    deleteDialogRef.showModal();
+  }
 </script>
 
-<div>
-	<header class="bg-green-600 text-white text-center py-4 flex items-center justify-center relative z-10">
-		<h1 class="mr-5 text-lg font-bold" data-view-transition-name="h1">ZZIC</h1>
-		<div class="airplane absolute top-1 left-32 w-12 h-12 bg-cover animate-[fly_linear_infinite]" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/a/a9/Emoji_u2708.svg');"></div>
-	</header>
+<main class={[
+  'container mx-auto',
+  'px-4 py-8',
+  'space-y-6'
+]}>
+<TodoDetail {todo} action="?/update" buttonText="수정" />
 
-	<div class="max-w-4xl mx-auto my-8 bg-white shadow-lg rounded-lg overflow-hidden">
-		<div class="bg-green-50 px-8 py-6">
-			<h2 class="text-3xl font-bold text-gray-800 mb-4">{todo.title}</h2>
-			<p class="text-gray-700 text-lg leading-relaxed mb-4">{todo.description}</p>
-			<div class="flex items-center">
-				<span class="text-gray-600 mr-2">상태:</span>
-				<span class="inline-block px-3 py-1 rounded-full text-sm font-medium {todo.done ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
-					{todo.done ? '완료됨' : '미완료'}
-				</span>
-			</div>
-		</div>
-
-		<div class="px-8 py-6 bg-gray-50 border-t border-gray-200">
-			<div class="flex flex-wrap gap-3 mb-6">
-				<button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
-					삭제
-				</button>
-				<button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
-					수정
-				</button>
-			</div>
-
-			<div>
-				<a href="/members/{data.user?.nickname}/todos" class="inline-block text-green-600 hover:text-green-800 hover:underline transition-colors">
-					← 목록으로 돌아가기
-				</a>
-			</div>
-		</div>
-	</div>
+<div class={[
+  'flex gap-2 justify-end'
+]}>
+  <button type="button" onclick={openDeleteDialog} class={[
+    'px-4 py-2 rounded-xl',
+    'bg-gradient-to-r from-pink-200 via-pink-100 to-rose-100', // 더 옅은 붉은 계열
+    'text-pink-400',
+    'font-bold text-lg',
+    'shadow',
+    'hover:scale-105 hover:-translate-y-0.5',
+    'active:scale-98',
+    'transition-all duration-200',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-200'
+  ]}>삭제</button>
+  <form method="POST" action="?/update">
+    <input type="hidden" name="done" value={!todo.done} />
+    <button type="submit" aria-label={todo.done ? '미완료로 변경' : '완료로 변경'} class={[
+      'px-4 py-2 rounded-xl flex items-center gap-2',
+      todo.done
+        ? 'bg-gradient-to-r from-yellow-100 via-yellow-50 to-amber-50 text-yellow-500' // 더 옅은 노란 계열
+        : 'bg-gradient-to-r from-green-100 via-green-50 to-emerald-50 text-green-500', // 더 옅은 초록 계열
+      'font-bold text-lg',
+      'shadow',
+      'hover:scale-105 hover:-translate-y-0.5',
+      'active:scale-98',
+      'transition-all duration-200',
+      'focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-100'
+    ]}>
+      {#if todo.done}
+        <span>취소하기</span>
+      {:else}
+        <span>완료하기</span>
+      {/if}
+    </button>
+  </form>
 </div>
+</main>
+
+<dialog bind:this={deleteDialogRef} class={[
+  'm-auto', 'space-y-4',
+  'rounded-2xl shadow-2xl p-8',
+  'max-w-xs w-full',
+  'border border-pink-100 dark:border-pink-400/30',
+  'bg-white dark:bg-black'
+]} aria-modal="true">
+  <div class={[
+    'text-xl font-bold text-pink-400 dark:text-pink-200 mb-2',
+    'text-center'
+  ]}>정말 삭제하시겠습니까?</div>
+  <div class={[
+    'text-base text-gray-600 dark:text-gray-200 mb-4',
+    'text-center'
+  ]}>이 작업은 되돌릴 수 없습니다.</div>
+  <form method="POST" action="?/delete" class={['w-full']}>
+    <button type="submit" class={[
+      'w-full py-2 rounded-xl',
+      'bg-gradient-to-r from-pink-200 via-pink-100 to-rose-100', // 더 옅은 붉은 계열
+      'text-pink-400',
+      'font-bold text-lg',
+      'shadow',
+      'hover:scale-105 hover:-translate-y-0.5',
+      'active:scale-98',
+      'transition-all duration-200'
+    ]}>삭제하기</button>
+  </form>
+  <form method="dialog">
+    <button type="button" onclick={() => deleteDialogRef.close()} class={[
+      'w-full py-2 rounded-xl',
+      'bg-gray-100 dark:bg-gray-800', // 무채색 배경
+      'text-gray-500 dark:text-gray-200', // 무채색 텍스트
+      'font-bold text-lg',
+      'shadow',
+      'hover:bg-gray-200 dark:hover:bg-gray-700',
+      'hover:scale-105 hover:-translate-y-0.5',
+      'active:scale-98',
+      'transition-all duration-200'
+    ]}>취소</button>
+  </form>
+</dialog>
