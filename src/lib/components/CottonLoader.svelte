@@ -61,7 +61,7 @@
 	</div>
 	
 	<!-- 로딩 메시지 -->
-	<p class="text-gray-600 font-medium text-center animate-pulse">
+	<p class="font-medium text-center animate-pulse">
 		{message}
 	</p>
 	

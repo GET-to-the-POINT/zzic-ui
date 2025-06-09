@@ -24,7 +24,7 @@
 			<div class={[
 				'bg-red-100/50 backdrop-blur-sm',
 				'border border-red-200/50',
-				'text-red-700 p-3 rounded-2xl',
+				'error-text p-3 rounded-2xl',
 				'text-sm font-medium'
 			]}>
 				{JSON.stringify(form)}
@@ -52,7 +52,6 @@
 			</h1>
 			
 			<p class={[
-				'text-gray-600 dark:text-gray-300',
 				'font-medium'
 			]}>
 				꿈을 관리하는 달콤한 공간으로 돌아오세요 ✨
@@ -64,7 +63,6 @@
 			<div class="space-y-1">
 				<label for="email" class={[
 					'block text-sm font-medium',
-					'text-gray-700 dark:text-gray-200',
 					'mb-2'
 				]}>
 					이메일
@@ -79,7 +77,6 @@
 						'bg-white/50 backdrop-blur-sm',
 						'border-2 border-white/40',
 						'rounded-2xl',
-						'text-gray-800 placeholder-gray-500',
 						'focus:outline-none focus:border-pink-300 focus:bg-white/70',
 						'transition-all duration-300',
 						'hover:bg-white/60'
@@ -91,7 +88,6 @@
 			<div class="space-y-1">
 				<label for="password" class={[
 					'block text-sm font-medium',
-					'text-gray-700 dark:text-gray-200',
 					'mb-2'
 				]}>
 					비밀번호
@@ -105,7 +101,6 @@
 						'bg-white/50 backdrop-blur-sm',
 						'border-2 border-white/40',
 						'rounded-2xl',
-						'text-gray-800 placeholder-gray-500',
 						'focus:outline-none focus:border-pink-300 focus:bg-white/70',
 						'transition-all duration-300',
 						'hover:bg-white/60'
@@ -136,18 +131,18 @@
 
 		<!-- 회원가입 링크 -->
 		<div class="text-center pt-4">
-			<p class="text-gray-600 dark:text-gray-300 text-sm">
+			<p class="text-sm">
 				계정이 없으신가요?
 			</p>
 			<a 
 				href="/auth/sign-up" 
 				class={[
 					'inline-block mt-2 px-6 py-2',
-					'text-pink-500 dark:text-pink-400 font-medium',
+					'font-medium',
 					'bg-white/30 backdrop-blur-sm',
 					'border border-white/40',
 					'rounded-full',
-					'hover:bg-white/50 hover:text-pink-600',
+					'hover:bg-white/50',
 					'hover:scale-105 hover:-translate-y-0.5',
 					'transition-all duration-300',
 					'focus:outline-none focus:ring-2 focus:ring-pink-200'

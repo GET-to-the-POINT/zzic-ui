@@ -68,7 +68,7 @@
     'text-center'
   ]}>정말 삭제하시겠습니까?</div>
   <div class={[
-    'text-base text-gray-600 dark:text-gray-200 mb-4',
+    'text-base mb-4',
     'text-center'
   ]}>이 작업은 되돌릴 수 없습니다.</div>
   <form method="POST" action="?/delete" class={['w-full']}>
@@ -87,7 +87,6 @@
     <button type="button" onclick={() => deleteDialogRef.close()} class={[
       'w-full py-2 rounded-xl',
       'bg-gray-100 dark:bg-gray-800', // 무채색 배경
-      'text-gray-500 dark:text-gray-200', // 무채색 텍스트
       'font-bold text-lg',
       'shadow',
       'hover:bg-gray-200 dark:hover:bg-gray-700',

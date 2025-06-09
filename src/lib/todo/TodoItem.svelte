@@ -68,7 +68,7 @@
 				{todo.title}
 			</dt>
 			<dd
-				class="block text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1 truncate transition-colors duration-200"
+				class="block text-sm md:text-base mt-1 truncate transition-colors duration-200"
 			>
 				{todo.description}
 			</dd>

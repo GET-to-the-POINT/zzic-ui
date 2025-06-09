@@ -73,7 +73,7 @@
     <h2 class="text-2xl font-bold bg-gradient-to-r from-pink-400 via-pink-300 to-blue-300 bg-clip-text text-transparent tracking-tight drop-shadow select-none">
       {title}
     </h2>
-	<span class="px-3 py-1 bg-white/30 dark:bg-black/30 text-gray-700 dark:text-gray-200 rounded-full text-sm font-medium shadow-sm border border-white/20 dark:border-gray-700/20">
+	<span class="px-3 py-1 bg-white/30 dark:bg-black/30 rounded-full text-sm font-medium shadow-sm border border-white/20 dark:border-gray-700/20">
 	  {totalCount}
 	</span>
   </header>
@@ -81,7 +81,7 @@
   <!-- 투두 목록 -->
   <div class="space-y-3">
     {#if totalCount === 0}
-      <div class="text-center py-8 text-gray-400 text-base italic select-none">
+      <div class="text-center py-8 text-base italic select-none opacity-70">
         ✨ 할 일이 없어요! 새로운 투두를 추가해보세요 ✨
       </div>
     {:else}

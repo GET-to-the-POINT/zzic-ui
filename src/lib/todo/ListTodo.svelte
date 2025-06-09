@@ -23,8 +23,8 @@
 
 <section class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl">
 	<div class="flex items-center justify-between mb-6">
-		<h2 class="text-xl font-semibold text-gray-800">{title}</h2>
-		<span class="px-3 py-1 bg-white/30 text-gray-700 rounded-full text-sm font-medium">
+		<h2 class="text-xl font-semibold">{title}</h2>
+		<span class="px-3 py-1 bg-white/30 rounded-full text-sm font-medium">
 			total: {todos.length}
 		</span>
 	</div>

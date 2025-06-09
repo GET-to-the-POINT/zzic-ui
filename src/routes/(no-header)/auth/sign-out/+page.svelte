@@ -1,7 +1,5 @@
 <script>
 	import { enhance } from '$app/forms';
-	import GradientBackground from '$lib/ui/GradientBackground.svelte';
-	import FloatingHeart from '$lib/ui/FloatingHeart.svelte';
 	import Heart from '@lucide/svelte/icons/heart';
 </script>
 
@@ -19,9 +17,9 @@
 					<h1 class="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
 						로그아웃
 					</h1>
-					<p class="text-gray-600/80 leading-relaxed">
+					<p class="leading-relaxed">
 						정말로 로그아웃 하시겠습니까?<br>
-						<span class="text-sm text-pink-500/70">언제든지 다시 돌아오세요 💕</span>
+						<span class="text-sm">언제든지 다시 돌아오세요 💕</span>
 					</p>
 				</div>
 
@@ -40,8 +38,8 @@
 
 					<!-- Cancel Button -->
 					<a 
-						href="/dashboard" 
-						class="block w-full py-4 px-6 bg-white/30 text-gray-700 font-medium rounded-2xl transition-all duration-300 hover:bg-white/40 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] backdrop-blur-sm border border-white/30 text-center"
+						href="/" 
+						class="block w-full py-4 px-6 bg-white/30 font-medium rounded-2xl transition-all duration-300 hover:bg-white/40 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] backdrop-blur-sm border border-white/30 text-center"
 					>
 						취소하고 돌아가기
 					</a>
