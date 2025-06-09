@@ -1,14 +1,9 @@
 <script>
 	import HeroDescription from '$lib/landing/HeroDescription.svelte';
 	import HeroActions from '$lib/landing/HeroActions.svelte';
-	import FloatingHeart from '$lib/ui/FloatingHeart.svelte';
-	import StarDust from '$lib/ui/StarDust.svelte';
 </script>
 
 <div class='space-y-4 relative'>
-	<!-- 3D 하트 배경 -->
-	<FloatingHeart />
-	
 	<h1
 	 class={[
 		'my-20',

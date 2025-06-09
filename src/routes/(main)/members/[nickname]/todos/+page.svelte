@@ -1,6 +1,5 @@
 <script>
 	import TodoDetail from '$lib/components/sections/todo/TodoDetail.svelte';
-	import CreateTodo from '$lib/todo/CreateTodo.svelte';
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
 

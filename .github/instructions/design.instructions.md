@@ -80,7 +80,28 @@ applyTo: "**/*.svelte"
 - 스타일 중복 방지
 - 디자인 토큰 적극 활용
 - Svelte 클래스는 `class={[]}` 또는 `class={{}}` 등 clsx 호환 배열/객체 형태로만 작성한다. `class:` 디렉티브 사용 금지
-- 디자인 구현 또는 개선 후 반드시 본 파일에 변경사항, 추가 규칙, 새 패턴 등을 명령형으로 보완한다.
+- 디자인 구현 또는 개선 후 반드시 본 파일에 변경사항, 추가 규칙, 새 패턴 등을 명령형으로 보간한다.
+
+### 8.5 인증 폼 패턴 (Auth Forms)
+- 모든 인증 관련 페이지(로그인, 회원가입)는 전체 화면 배경 효과를 사용한다: `GradientBackground`, `FloatingHeart`, `SparkleParticles`
+- 메인 컨테이너는 Glass morphism 카드 스타일을 적용한다: `bg-white/20 backdrop-blur-md border border-white/30 rounded-3xl shadow-2xl`
+- 폼 컨테이너는 호버 시 미세한 스케일 효과를 적용한다: `hover:scale-[1.02] hover:shadow-3xl`
+- 아이콘 컨테이너는 그라데이션 배경과 그림자를 사용한다: `bg-gradient-to-br from-pink-200 to-purple-200 shadow-lg`
+
+### 8.6 Glass Form 입력 필드
+- 입력 필드는 반투명 배경과 백드롭 블러를 사용한다: `bg-white/50 backdrop-blur-sm`
+- 테두리는 반투명 흰색을 사용한다: `border-2 border-white/40`
+- 모서리는 둥글게 처리한다: `rounded-2xl`
+- 포커스 상태에서는 핑크 계열 테두리와 배경 불투명도를 증가시킨다: `focus:border-pink-300 focus:bg-white/70`
+- 호버 상태에서는 배경 불투명도를 증가시킨다: `hover:bg-white/60`
+- 모든 상태 변화는 부드러운 트랜지션을 적용한다: `transition-all duration-300`
+
+### 8.7 인증 버튼 스타일
+- 주요 액션 버튼은 핑크-퍼플 그라데이션을 사용한다: `bg-gradient-to-r from-pink-400 via-pink-300 to-purple-400`
+- 호버 시 그라데이션을 진하게 하고 스케일과 Y축 이동을 적용한다: `hover:from-pink-500 hover:via-pink-400 hover:to-purple-500 hover:scale-105 hover:-translate-y-1`
+- 클릭 시 스케일을 축소한다: `active:scale-98`
+- 포커스 링은 핑크 계열을 사용한다: `focus:ring-4 focus:ring-pink-200`
+- 보조 액션 링크는 Glass 스타일을 적용한다: `bg-white/30 backdrop-blur-sm border border-white/40 rounded-full`
 
 ### 8.4 Form Actions (Svelte)
 - 모든 제출 액션(폼, 버튼 등)은 반드시 Svelte의 폼 액션(use:enhance)을 사용한다.
