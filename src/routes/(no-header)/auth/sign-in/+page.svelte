@@ -100,7 +100,6 @@
 					name="password" 
 					id="password" 
 					type="password" 
-					required
 					class={[
 						'w-full px-4 py-3',
 						'bg-white/50 backdrop-blur-sm',

@@ -2,14 +2,9 @@
 	import { enhance } from '$app/forms';
 	import GradientBackground from '$lib/ui/GradientBackground.svelte';
 	import FloatingHeart from '$lib/ui/FloatingHeart.svelte';
-	import StarDust from '$lib/ui/StarDust.svelte';
 	import Heart from '@lucide/svelte/icons/heart';
 </script>
 
-<!-- Cotton Candy Background Effects -->
-<GradientBackground variant="light" />
-<FloatingHeart />
-<StarDust count={15} />
 
 <div class="min-h-screen flex items-center justify-center p-4 relative z-10">
 	<div class="w-full max-w-md">
