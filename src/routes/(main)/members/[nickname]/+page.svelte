@@ -4,7 +4,6 @@
 	import * as Form from '$lib/components/ui/form/index.js';
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
-	import TodoForm from '../TodoCreateForm.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 
 	/**

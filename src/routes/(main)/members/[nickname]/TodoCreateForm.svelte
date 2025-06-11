@@ -5,6 +5,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
+	import { page } from '$app/state';
 
 	/**
 	 * @typedef {Object} Props
@@ -15,7 +16,7 @@
 	 */
 
 	/** @type {Props} */
-	const { onSuccess, onError, children, action='?/create' } = $props();
+	const { onSuccess, onError, children, action=`/members/${page.user.nickname}/todos?/create` } = $props();
 
 	const form = superForm({}, {
 		validators: zodClient(todoFormSchema),

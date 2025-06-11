@@ -141,7 +141,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	async function updateTodo(memberId, todoId, todo) {
 		try {
 			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos/${todoId}`, {
-				method: 'PUT',
+				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(todo),
 				credentials: 'include'

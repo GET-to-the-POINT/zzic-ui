@@ -37,6 +37,19 @@
 	/* Coral destructive */
 	--destructive: light-dark(oklch(0.7 0.15 15), oklch(0.75 0.18 15));
 
+	/* Ghost button semantic colors */
+	--success: light-dark(oklch(0.7 0.08 150), oklch(0.75 0.1 150));
+	--success-foreground: light-dark(oklch(0.98 0.01 320), oklch(0.12 0.02 280));
+	
+	--warning: light-dark(oklch(0.75 0.1 60), oklch(0.8 0.12 60));
+	--warning-foreground: light-dark(oklch(0.98 0.01 320), oklch(0.12 0.02 280));
+	
+	--danger: light-dark(oklch(0.72 0.12 0), oklch(0.77 0.15 0));
+	--danger-foreground: light-dark(oklch(0.98 0.01 320), oklch(0.12 0.02 280));
+	
+	--neutral: light-dark(oklch(0.65 0.02 280), oklch(0.7 0.03 280));
+	--neutral-foreground: light-dark(oklch(0.98 0.01 320), oklch(0.12 0.02 280));
+
 	/* Soft borders and inputs */
 	--border: light-dark(oklch(0.9 0.02 320), oklch(0.3 0.02 280));
 	--input: light-dark(oklch(0.94 0.02 320), oklch(0.2 0.02 280));
@@ -80,6 +93,14 @@
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-danger: var(--danger);
+	--color-danger-foreground: var(--danger-foreground);
+	--color-neutral: var(--neutral);
+	--color-neutral-foreground: var(--neutral-foreground);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);

@@ -20,17 +20,12 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/Header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/Header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/header/NavigationSection.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/header/NavigationSection.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,16 +132,6 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="build" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -156,34 +141,20 @@
       <node-interpreter value="project" />
       <envs />
       <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
-        <browser start="true" with-js-debugger="true" url="http://zzic.xiyo.com" />
+        <browser start="true" with-js-debugger="true" url="https://zzic.xiyo.com" />
       </EXTENSION>
-      <method v="2" />
-    </configuration>
-    <configuration name="dev:insecure" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="dev:insecure" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       <item itemvalue="JavaScript Debug.dev:ssl JavaScript" />
       <item itemvalue="JavaScript Debug.dev JavaScript" />
-      <item itemvalue="npm.dev:insecure" />
-      <item itemvalue="npm.build" />
       <item itemvalue="npm.dev" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
-        <item itemvalue="npm.dev:insecure" />
-        <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
   </component>
@@ -246,6 +217,7 @@
       <workItem from="1749114322551" duration="1957000" />
       <workItem from="1749116785274" duration="4200000" />
       <workItem from="1749230774488" duration="599000" />
+      <workItem from="1749634306768" duration="3477000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
@@ -489,11 +461,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
-          <line>47</line>
-          <option name="timeStamp" value="65" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js</url>
           <line>62</line>
           <option name="timeStamp" value="70" />
@@ -502,26 +469,6 @@
           <url>file://$PROJECT_DIR$/src/lib/zzic-api/zzicClient.js</url>
           <line>63</line>
           <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/hooks.server.js</url>
-          <line>75</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
-          <line>51</line>
-          <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js</url>
-          <line>48</line>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte</url>
-          <line>27</line>
-          <option name="timeStamp" value="78" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

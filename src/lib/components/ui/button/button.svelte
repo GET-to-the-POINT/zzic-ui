@@ -13,6 +13,10 @@
 					"bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border",
 				secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
 				ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+				"ghost-success": "text-success hover:bg-success/10 hover:text-success dark:hover:bg-success/20",
+				"ghost-warning": "text-warning hover:bg-warning/10 hover:text-warning dark:hover:bg-warning/20", 
+				"ghost-danger": "text-danger hover:bg-danger/10 hover:text-danger dark:hover:bg-danger/20",
+				"ghost-neutral": "text-neutral hover:bg-neutral/10 hover:text-neutral dark:hover:bg-neutral/20",
 				link: "text-primary underline-offset-4 hover:underline",
 			},
 			size: {

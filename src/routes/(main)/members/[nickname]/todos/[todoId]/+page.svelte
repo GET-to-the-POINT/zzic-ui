@@ -20,6 +20,7 @@
 	});
 
 	// deleteForm 생성
+	let deleteDialogOpen = $state(false);
 	const deleteFormInstance = superForm(deleteForm, {
 		onResult: async ({ result }) => {
 			if (result.type === 'success' || result.type === 'redirect') {
@@ -33,63 +34,52 @@
 	// 각 폼에서 필요한 값들을 분리해서 가져오기
 	const { form: updateFormData, enhance: updateEnhance } = updateForm;
 	const { enhance: deleteEnhance, submitting: deleteSubmitting } = deleteFormInstance;
-
-	let deleteDialogOpen = $state(false);
-
-	// done 상태를 토글하는 함수
-	function toggleDone() {
-		$updateFormData.done = !$updateFormData.done;
-		// 폼을 자동으로 제출
-		updateForm.submit();
-		// 토스트 메시지
-		toast.success($updateFormData.done ? 'Todo를 완료했습니다! 🎉' : 'Todo를 미완료로 변경했습니다! 📝');
-	}
 </script>
 
 <main class={['container mx-auto', 'px-4 py-8', 'space-y-6']}>
 
-<form method="POST" action="?/update" use:updateEnhance class="space-y-4">
+	<form action="?/update" class="space-y-4" method="POST" use:updateEnhance>
 
-	<Form.Field form={updateForm} name="title" class="space-y-2">
-	<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>제목</Form.Label>
-				<Input
-					{...props}
-					type="text"
-					placeholder="제목을 입력하세요"
-					bind:value={$updateFormData.title}
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+		<Form.Field class="space-y-2" form={updateForm} name="title">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>제목</Form.Label>
+					<Input
+						{...props}
+						type="text"
+						placeholder="제목을 입력하세요"
+						bind:value={$updateFormData.title}
+					/>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
 
-	<Form.Field form={updateForm} name="description" class="space-y-2">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>설명</Form.Label>
-				<Textarea
-					{...props}
-					placeholder="설명을 입력하세요 (선택)"
-					rows={3}
-					bind:value={$updateFormData.description}
-				/>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+		<Form.Field class="space-y-2" form={updateForm} name="description">
+			<Form.Control>
+				{#snippet children({ props })}
+					<Form.Label>설명</Form.Label>
+					<Textarea
+						{...props}
+						placeholder="설명을 입력하세요 (선택)"
+						rows={3}
+						bind:value={$updateFormData.description}
+					/>
+				{/snippet}
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
 
-	<Form.Button class="w-full">
-		수정하기
-	</Form.Button>
-</form>
+		<Form.Button class="w-full">
+			수정하기
+		</Form.Button>
+	</form>
 
 
-	<div class={['flex gap-2 justify-end']}>
+	<div class={['flex gap-2 justify-between']}>
 		<Dialog.Root bind:open={deleteDialogOpen}>
 			<Dialog.Trigger>
-				<Button variant="destructive">
+				<Button variant="ghost-danger">
 					지우기
 				</Button>
 			</Dialog.Trigger>
@@ -100,9 +90,9 @@
 						이 작업은 되돌릴 수 없습니다.
 					</Dialog.Description>
 				</Dialog.Header>
-				<form method="POST" action="?/delete" use:deleteEnhance>
+				<form action="?/delete" method="POST" use:deleteEnhance>
 					<Dialog.Footer>
-						<Form.Button variant="destructive" disabled={$deleteSubmitting}>
+						<Form.Button disabled={$deleteSubmitting} variant="destructive">
 							{#if $deleteSubmitting}
 								삭제 중...
 							{:else}
@@ -113,15 +103,18 @@
 				</form>
 			</Dialog.Content>
 		</Dialog.Root>
-		<Button 
-			variant="outline"
-			onclick={toggleDone}
-		>
-			{#if $updateFormData.done}
-				<span>취소하기</span>
-			{:else}
-				<span>완료하기</span>
-			{/if}
-		</Button>
+		<form action="?/update" method="POST" use:updateEnhance>
+			<Form.Button
+				name="done"
+				value={!$updateFormData.done}
+				variant={ $updateFormData.done ? 'ghost-neutral' : 'ghost-success' }
+			>
+				{#if $updateFormData.done}
+					<span>취소하기</span>
+				{:else}
+					<span>완료하기</span>
+				{/if}
+			</Form.Button>
+		</form>
 	</div>
 </main>

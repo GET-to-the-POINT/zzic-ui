@@ -4,6 +4,7 @@
 	import HowItWorksSection from '$lib/landing/HowItWorksSection.svelte';
 	import CommunitySection from '$lib/landing/CommunitySection.svelte';
 	import CTASection from '$lib/landing/CTASection.svelte';
+	import { Button } from '$lib/components/ui/button';
 </script>
 
 <HeroSection />

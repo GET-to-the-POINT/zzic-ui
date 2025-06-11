@@ -1,11 +1,10 @@
 <script>
-	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
-	import TodoForm from '../TodoCreateForm.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import TodoCreateForm from '../members/[nickname]/TodoCreateForm.svelte';
 
 	/**
 	 * @typedef {Object} Todo
@@ -44,16 +43,16 @@
 	};
 
 	// Svelte 5에서 데이터 추출 (page.js에서 이미 배열로 추출됨)
-	let yetTodos = $derived(data?.yetTodos || []);
-	let doneTodos = $derived(data?.doneTodos || []);
-	let yetTodoPage = $derived(data?.yetTodoPage);
-	let doneTodoPage = $derived(data?.doneTodoPage);
+	let yetTodos = $derived(data?.yetTodos);
+	let doneTodos = $derived(data?.doneTodos);
+	let yetTotalElements = $derived(data?.yetTodoPage.totalElements);
+	let doneTotalElements = $derived(data?.doneTodoPage.totalElements);
 </script>
 
 <main class="space-y-6 p-4">
 	<TodoStats
-		doneTotalElements={doneTodoPage?.totalElements}
-		yetTotalElements={yetTodoPage?.totalElements}
+		doneTotalElements={doneTotalElements}
+		yetTotalElements={yetTotalElements}
 	/>
 
 	<Dialog.Root bind:open={todoCreateDialog}>
@@ -71,23 +70,25 @@
 				</Dialog.Description>
 			</Dialog.Header>
 
-			<TodoForm onSuccess={closeTodoCreateDialog}>
+			<TodoCreateForm
+				onSuccess={closeTodoCreateDialog}
+				>
 				<Dialog.Footer>
 					<Form.Button>추가하기</Form.Button>
 				</Dialog.Footer>
-			</TodoForm>
+			</TodoCreateForm>
 		</Dialog.Content>
 	</Dialog.Root>
 
 	<TodoSection
 		title="이루어갈 꿈들"
 		todos={yetTodos}
-		totalCount={yetTodoPage?.totalElements}
+		totalCount={yetTotalElements}
 	/>
 
 	<TodoSection
 		title="이루어낸 꿈들"
 		todos={doneTodos}
-		totalCount={doneTodoPage?.totalElements}
+		totalCount={doneTotalElements}
 	/>
 </main>

@@ -6,7 +6,7 @@ export const actions = {
 		const formData = await request.formData();
 		const title = formData.get('title');
 		const description = formData.get('description');
-		const done = formData.get('done') === 'true';
+		const done = formData.get('done');
 
 		const { error } = await zzic.todo.updateTodo(user.sub, parseInt(todoId), {
 			title,
