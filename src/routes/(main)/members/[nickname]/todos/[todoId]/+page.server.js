@@ -1,7 +1,7 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 
 export const actions = {
-	update: async ({ request, locals: { zzic, user }, params, url }) => {
+	update: async ({ request, locals: { zzic, user }, params }) => {
 		const { todoId } = params;
 		const formData = await request.formData();
 		const title = formData.get('title');
@@ -20,7 +20,7 @@ export const actions = {
 	},
 
 	delete: async ({ locals: { zzic, user }, params }) => {
-		const { todoId, nickname } = params;
+		const { todoId } = params;
 
 		const { error } = await zzic.todo.deleteTodo(user.sub, parseInt(todoId));
 
@@ -28,6 +28,6 @@ export const actions = {
 			return fail(400, { error: error.message || 'Todo 삭제 실패' });
 		}
 
-		throw redirect(303, `/members/${nickname}/todos`);
+		return { success: true };
 	}
 };
