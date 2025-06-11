@@ -2,36 +2,48 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
-	import { superForm } from 'sveltekit-superforms';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { toast } from 'svelte-sonner';
+	import { superForm } from 'sveltekit-superforms';
 	
 	let { data } = $props();
-	let { form } = $derived(data);
+	let { form, deleteForm } = $derived(data);
 
 	// updateForm은 초기 폼 데이터를 사용
 	const updateForm = superForm(form, {
 		onResult: async ({ result }) => {
 			if (result.type === 'success' || result.type === 'redirect') {
-				// 성공 처리
+				toast.success('Todo가 성공적으로 수정되었습니다! ✨');
 			}
 		}
 	});
 
 	// deleteForm 생성
-	const deleteFormInstance = superForm(form, {
+	const deleteFormInstance = superForm(deleteForm, {
 		onResult: async ({ result }) => {
 			if (result.type === 'success' || result.type === 'redirect') {
 				deleteDialogOpen = false;
+				// 2. 성공 토스트 표시
+				toast.success('Todo가 성공적으로 삭제되었습니다! 🗑️');
 			}
 		}
 	});
 
 	// 각 폼에서 필요한 값들을 분리해서 가져오기
 	const { form: updateFormData, enhance: updateEnhance } = updateForm;
-	const { enhance: deleteEnhance } = deleteFormInstance;
+	const { enhance: deleteEnhance, submitting: deleteSubmitting } = deleteFormInstance;
 
 	let deleteDialogOpen = $state(false);
+
+	// done 상태를 토글하는 함수
+	function toggleDone() {
+		$updateFormData.done = !$updateFormData.done;
+		// 폼을 자동으로 제출
+		updateForm.submit();
+		// 토스트 메시지
+		toast.success($updateFormData.done ? 'Todo를 완료했습니다! 🎉' : 'Todo를 미완료로 변경했습니다! 📝');
+	}
 </script>
 
 <main class={['container mx-auto', 'px-4 py-8', 'space-y-6']}>
@@ -90,24 +102,26 @@
 				</Dialog.Header>
 				<form method="POST" action="?/delete" use:deleteEnhance>
 					<Dialog.Footer>
-						<Form.Button variant="destructive">
-							정말 지우기
+						<Form.Button variant="destructive" disabled={$deleteSubmitting}>
+							{#if $deleteSubmitting}
+								삭제 중...
+							{:else}
+								정말 지우기
+							{/if}
 						</Form.Button>
 					</Dialog.Footer>
 				</form>
 			</Dialog.Content>
 		</Dialog.Root>
-		<form method="POST" action="?/update" use:enhance>
-			<input type="hidden" name="done" value={!$updateFormData.done} />
-			<Form.Button
-				variant="outline"
-			>
-				{#if $updateFormData.done}
-					<span>취소하기</span>
-				{:else}
-					<span>완료하기</span>
-				{/if}
-			</Form.Button>
-		</form>
+		<Button 
+			variant="outline"
+			onclick={toggleDone}
+		>
+			{#if $updateFormData.done}
+				<span>취소하기</span>
+			{:else}
+				<span>완료하기</span>
+			{/if}
+		</Button>
 	</div>
 </main>
