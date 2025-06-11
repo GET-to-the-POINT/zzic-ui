@@ -1,7 +1,5 @@
 <script>
-	import Calendar from '@lucide/svelte/icons/calendar';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Star from '@lucide/svelte/icons/star';
+	import * as Card from "$lib/components/ui/card/index.js";
 
 	/**
 	 * @typedef {Object} Todo
@@ -12,48 +10,39 @@
 
 	/**
 	 * @typedef {Object} Props
-	 * @property {Todo[]} yetTodos - 미완료 todo 목록
-	 * @property {Todo[]} doneTodos - 완료된 todo 목록
-	 * @property {number} [fadeDelay=1000] - fade 애니메이션 지연 시간
-	 * @property {string} [class] - 외부에서 주입받을 CSS 클래스
+	 * @property {number} yetTotalElements - 미완료 Todo 개수
+	 * @property {number} doneTotalElements - 완료된 Todo 개수
 	 */
 
 	/** @type {Props} */
-	const { yetTodos = [], doneTodos = [], fadeDelay = 1000, class: className } = $props();
+	const { yetTotalElements = 0, doneTotalElements = 0 } = $props();
 
 	// 통계 계산
-	let totalTodos = $derived(yetTodos.length + doneTodos.length);
-	let progressTodos = $derived(yetTodos.length);
-	let completedTodos = $derived(doneTodos.length);
+	let totalTodos = $derived(yetTotalElements + doneTotalElements);
+	let progressTodos = $derived(yetTotalElements);
+	let completedTodos = $derived(doneTotalElements);
 </script>
 
-<section
-	class={[
-		'bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl',
-		'grid grid-cols-3 gap-4',
-		className
-	]}
-	aria-label="투두 통계"
->
-	<dl class="space-y-1 text-center">
-		<dt class="space-y-1">
-			<Calendar class="text-primary w-full" size={36} />
-			<span class="text-xs font-medium text-primary mt-1">전체</span>
-		</dt>
-		<dd class="text-2xl font-bold text-primary">{totalTodos}</dd>
-	</dl>
-	<dl class="space-y-1 text-center">
-		<dt class="space-y-1">
-			<Clock class="text-accent w-full" size={36} />
-			<span class="text-xs font-medium text-accent mt-1">진행</span>
-		</dt>
-		<dd class="text-2xl font-bold text-accent">{progressTodos}</dd>
-	</dl>
-	<dl class="space-y-1 text-center">
-		<dt class="space-y-1">
-			<Star class="text-warning w-full" size={36} />
-			<span class="text-xs font-medium text-warning mt-1">완성</span>
-		</dt>
-		<dd class="text-2xl font-bold text-warning">{completedTodos}</dd>
-	</dl>
-</section>
+<Card.Card>
+	<Card.CardHeader>
+		<Card.CardTitle>통계</Card.CardTitle>
+	</Card.CardHeader>
+	<Card.CardContent>
+		<dl class="grid grid-cols-3 gap-4 text-center">
+			<div class="space-y-2">
+				<dt class="text-sm font-medium">전체</dt>
+				<dd class="text-2xl font-bold">{totalTodos}</dd>
+			</div>
+			
+			<div class="space-y-2">
+				<dt class="text-sm font-medium">진행</dt>
+				<dd class="text-2xl font-bold">{progressTodos}</dd>
+			</div>
+			
+			<div class="space-y-2">
+				<dt class="text-sm font-medium">완성</dt>
+				<dd class="text-2xl font-bold">{completedTodos}</dd>
+			</div>
+		</dl>
+	</Card.CardContent>
+</Card.Card>

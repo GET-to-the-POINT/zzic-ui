@@ -49,20 +49,13 @@ export async function load({ parent }) {
 		const yetTodoPromise = zzic.todo.getTodos(user.sub);
 		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
 
-		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);
-		console.log('Raw API results:', results);
+		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);		console.log('Raw API results:', results);
 
 		const [{ data: yetTodoPage }, { data: doneTodoPage }] = results;
-
-		console.log('YetTodoPage response:', yetTodoPage);
-		console.log('DoneTodoPage response:', doneTodoPage);
 
 		// 배열로 추출하여 반환
 		const yetTodos = yetTodoPage?.content || [];
 		const doneTodos = doneTodoPage?.content || [];
-
-		console.log('Extracted yetTodos:', yetTodos);
-		console.log('Extracted doneTodos:', doneTodos);
 
 		return {
 			yetTodos,

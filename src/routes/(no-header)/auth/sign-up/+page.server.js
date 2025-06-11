@@ -10,11 +10,11 @@ export const actions = {
 
 		const { error } = await zzic.auth.signUp({ email, password, confirmPassword, nickname });
 		if (error) {
-			return fail(error.status, {
+			fail(error.status, {
 				failure: error
 			});
 		}
 
-		return redirect(303, '/auth/sign/done');
+		redirect(303, '/');
 	}
 };

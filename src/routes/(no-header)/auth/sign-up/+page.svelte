@@ -6,9 +6,11 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { goto } from '$app/navigation';
+	import { celebrateSuccess } from '$lib/utils/confetti.js';
 
 	function handleSuccess() {
-		goto('/auth/sign-in');
+		celebrateSuccess();
+		goto('/');
 	}
 
 	// 클라이언트 사이드에서 form 초기화

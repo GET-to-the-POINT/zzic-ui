@@ -1,5 +1,9 @@
 <script>
 	import { enhance } from '$app/forms';
+	import * as Form from '$lib/components/ui/form';
+	import * as Card from '$lib/components/ui/card';
+	import { cn } from '$lib/utils.js';
+	import { Button } from '$lib/components/ui/button';
 
 	/**
 	 * @typedef {Object} Todo
@@ -28,51 +32,39 @@
 	/** @type {Props} */
 	const { todo, action } = $props();
 
-	let formElement;
 </script>
 
-<div
-	class={[
-		'flex items-center rounded-2xl border border-white/20 dark:border-gray-700/20 bg-white/30 dark:bg-gray-800/30 backdrop-blur-md shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl',
-		'group',
-		'h-20',
-		{ 'opacity-60': todo.done, 'hover:opacity-80': todo.done }
-	]}
-	aria-label={todo.title}
+<Card.Root
+class="flex flex-row h-16 p-0 overflow-hidden gap-0"
 >
 	<form
 		method="POST"
 		action={action.formAction}
+		class="h-full"
 		use:enhance
-		bind:this={formElement}
-		class="flex-shrink-0 h-full content-center p-4"
 	>
 		<input type="hidden" name="id" value={todo.id} />
-		<button
-			type="submit"
-			title={action.title}
-			class={[
-				'rounded-full p-2 bg-white/60 dark:bg-black/30 border border-white/30 dark:border-gray-700/30 shadow-md transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-pink-200 dark:focus:ring-pink-400',
-				action.buttonClass
-			]}
-		>
-			<action.icon class={['w-6 h-6', action.iconClass]} aria-hidden="true" />
-		</button>
+		<Form.Button variant="ghost" class="h-full rounded-tr-none rounded-br-none cursor-pointer">
+			<action.icon />
+			<span class="sr-only">{action.title}</span>
+		</Form.Button>
 	</form>
 
-	<a
+	<Button
+		variant="ghost"
 		href={`/members/${todo.userId || 'me'}/todos/${todo.id}`}
-		class="block w-full h-full content-center p-4"
+		class="flex-1 h-full flex flex-col rounded-tl-none rounded-bl-none"
 	>
-		<dl>
-			<dt
-				class="block text-lg md:text-xl font-bold bg-gradient-to-r from-pink-400 via-pink-300 to-blue-300 bg-clip-text text-transparent tracking-tight drop-shadow select-none transition-colors duration-300 truncate"
-			>
-				{todo.title}
-			</dt>
-			<dd class="block text-sm md:text-base mt-1 truncate transition-colors duration-200">
+		<h3 class={cn(
+			"font-medium text-sm leading-tight truncate",
+			todo.done && "line-through text-muted-foreground"
+		)}>
+			{todo.title}
+		</h3>
+		{#if todo.description}
+			<p class="text-xs text-muted-foreground mt-1 truncate">
 				{todo.description}
-			</dd>
-		</dl>
-	</a>
-</div>
+			</p>
+		{/if}
+	</Button>
+</Card.Root>

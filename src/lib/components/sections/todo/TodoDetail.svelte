@@ -1,5 +1,9 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
 
 	/**
 	 * @typedef {Object} TodoDetailProps
@@ -12,79 +16,29 @@
 	let { todo = { title: '', description: '' }, action, buttonText, class: className } = $props();
 </script>
 
-<form method="POST" use:enhance {action} class={['space-y-4', className]}>
-	<label
-		class={[
-			'block',
-			'font-bold text-lg md:text-xl',
-			'bg-gradient-to-r from-pink-400 via-pink-300 to-blue-300',
-			'bg-clip-text text-transparent',
-			'tracking-tight',
-			'drop-shadow',
-			'select-none',
-			'transition-colors duration-300',
-			'space-y-1'
-		]}
-	>
-		<span class="block">제목</span>
-		<input
+<form method="POST" use:enhance {action} class="space-y-4 p-6">
+	<div class="space-y-2">
+		<Label for="title">제목</Label>
+		<Input
+			id="title"
 			name="title"
 			type="text"
 			value={todo.title}
 			required
-			class={[
-				'w-full px-4 py-2 rounded-xl',
-				'bg-white/60 dark:bg-black/30',
-				'border border-gray-300 dark:border-gray-600',
-				'focus:outline-none focus:ring-2 focus:ring-pink-300 dark:focus:ring-pink-400',
-				'transition-all duration-200',
-				'text-lg'
-			]}
 		/>
-	</label>
+	</div>
 
-	<label
-		class={[
-			'block',
-			'font-bold text-lg md:text-xl',
-			'bg-gradient-to-r from-blue-400 via-pink-300 to-pink-200',
-			'bg-clip-text text-transparent',
-			'tracking-tight',
-			'drop-shadow',
-			'select-none',
-			'transition-colors duration-300',
-			'space-y-1'
-		]}
-	>
-		<span class="block">설명</span>
-		<textarea
+	<div class="space-y-2">
+		<Label for="description">설명</Label>
+		<Textarea
+			id="description"
 			name="description"
-			class={[
-				'w-full px-4 py-2 rounded-xl',
-				'bg-white/60 dark:bg-black/30',
-				'border border-gray-300 dark:border-gray-600',
-				'focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-400',
-				'transition-all duration-200',
-				'text-base',
-				'resize-none'
-			]}>{todo.description}</textarea
-		>
-	</label>
+			value={todo.description}
+			rows={3}
+		/>
+	</div>
 
-	<button
-		type="submit"
-		class={[
-			'w-full',
-			'py-2 px-4 rounded-xl',
-			'bg-gradient-to-r from-pink-300 via-pink-200 to-blue-200',
-			'text-pink-500',
-			'font-bold text-lg',
-			'shadow-md',
-			'hover:scale-105 hover:-translate-y-0.5',
-			'active:scale-98',
-			'transition-all duration-200'
-		]}
-	>
+	<Button type="submit" class="w-full">
 		{buttonText}
-	</button>
+	</Button>
 </form>

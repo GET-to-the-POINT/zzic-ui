@@ -1,108 +1,113 @@
 <script>
-	import { enhance } from '$app/forms';
-	import TodoDetail from '$lib/components/sections/todo/TodoDetail.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import * as Form from '$lib/components/ui/form/index.js';
+	import { superForm } from 'sveltekit-superforms';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	
 	let { data } = $props();
-	let { todo } = data;
+	let { form } = $derived(data);
 
-	/** @type { HTMLDialogElement } */
-	let deleteDialogRef;
-	function openDeleteDialog() {
-		deleteDialogRef.showModal();
-	}
+	// updateForm은 초기 폼 데이터를 사용
+	const updateForm = superForm(form, {
+		onResult: async ({ result }) => {
+			if (result.type === 'success' || result.type === 'redirect') {
+				// 성공 처리
+			}
+		}
+	});
+
+	// deleteForm 생성
+	const deleteFormInstance = superForm(form, {
+		onResult: async ({ result }) => {
+			if (result.type === 'success' || result.type === 'redirect') {
+				deleteDialogOpen = false;
+			}
+		}
+	});
+
+	// 각 폼에서 필요한 값들을 분리해서 가져오기
+	const { form: updateFormData, enhance: updateEnhance } = updateForm;
+	const { enhance: deleteEnhance } = deleteFormInstance;
+
+	let deleteDialogOpen = $state(false);
 </script>
 
 <main class={['container mx-auto', 'px-4 py-8', 'space-y-6']}>
-	<TodoDetail {todo} action="?/update" buttonText="수정" />
+
+<form method="POST" action="?/update" use:updateEnhance class="space-y-4">
+
+	<Form.Field form={updateForm} name="title" class="space-y-2">
+	<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>제목</Form.Label>
+				<Input
+					{...props}
+					type="text"
+					placeholder="제목을 입력하세요"
+					bind:value={$updateFormData.title}
+				/>
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field form={updateForm} name="description" class="space-y-2">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>설명</Form.Label>
+				<Textarea
+					{...props}
+					placeholder="설명을 입력하세요 (선택)"
+					rows={3}
+					bind:value={$updateFormData.description}
+				/>
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Button class="w-full">
+		수정하기
+	</Form.Button>
+</form>
+
 
 	<div class={['flex gap-2 justify-end']}>
-		<button
-			type="button"
-			onclick={openDeleteDialog}
-			class={[
-				'px-4 py-2 rounded-xl',
-				'bg-gradient-to-r from-pink-200 via-pink-100 to-rose-100', // 더 옅은 붉은 계열
-				'text-pink-400',
-				'font-bold text-lg',
-				'shadow',
-				'hover:scale-105 hover:-translate-y-0.5',
-				'active:scale-98',
-				'transition-all duration-200',
-				'focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-200'
-			]}>삭제</button
-		>
-		<form method="POST" action="?/update">
-			<input type="hidden" name="done" value={!todo.done} />
-			<button
-				type="submit"
-				aria-label={todo.done ? '미완료로 변경' : '완료로 변경'}
-				class={[
-					'px-4 py-2 rounded-xl flex items-center gap-2',
-					todo.done
-						? 'bg-gradient-to-r from-yellow-100 via-yellow-50 to-amber-50 text-yellow-500' // 더 옅은 노란 계열
-						: 'bg-gradient-to-r from-green-100 via-green-50 to-emerald-50 text-green-500', // 더 옅은 초록 계열
-					'font-bold text-lg',
-					'shadow',
-					'hover:scale-105 hover:-translate-y-0.5',
-					'active:scale-98',
-					'transition-all duration-200',
-					'focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-100'
-				]}
+		<Dialog.Root bind:open={deleteDialogOpen}>
+			<Dialog.Trigger>
+				<Button variant="destructive">
+					지우기
+				</Button>
+			</Dialog.Trigger>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>정말 지우시겠습니까?</Dialog.Title>
+					<Dialog.Description>
+						이 작업은 되돌릴 수 없습니다.
+					</Dialog.Description>
+				</Dialog.Header>
+				<form method="POST" action="?/delete" use:deleteEnhance>
+					<Dialog.Footer>
+						<Form.Button variant="destructive">
+							정말 지우기
+						</Form.Button>
+					</Dialog.Footer>
+				</form>
+			</Dialog.Content>
+		</Dialog.Root>
+		<form method="POST" action="?/update" use:enhance>
+			<input type="hidden" name="done" value={!$updateFormData.done} />
+			<Form.Button
+				variant="outline"
 			>
-				{#if todo.done}
+				{#if $updateFormData.done}
 					<span>취소하기</span>
 				{:else}
 					<span>완료하기</span>
 				{/if}
-			</button>
+			</Form.Button>
 		</form>
 	</div>
 </main>
-
-<dialog
-	bind:this={deleteDialogRef}
-	class={[
-		'm-auto',
-		'space-y-4',
-		'rounded-2xl shadow-2xl p-8',
-		'max-w-xs w-full',
-		'border border-pink-100 dark:border-pink-400/30',
-		'bg-white dark:bg-black'
-	]}
-	aria-modal="true"
->
-	<div class={['text-xl font-bold text-pink-400 dark:text-pink-200 mb-2', 'text-center']}>
-		정말 삭제하시겠습니까?
-	</div>
-	<div class={['text-base mb-4', 'text-center']}>이 작업은 되돌릴 수 없습니다.</div>
-	<form method="POST" action="?/delete" class={['w-full']}>
-		<button
-			type="submit"
-			class={[
-				'w-full py-2 rounded-xl',
-				'bg-gradient-to-r from-pink-200 via-pink-100 to-rose-100', // 더 옅은 붉은 계열
-				'text-pink-400',
-				'font-bold text-lg',
-				'shadow',
-				'hover:scale-105 hover:-translate-y-0.5',
-				'active:scale-98',
-				'transition-all duration-200'
-			]}>삭제하기</button
-		>
-	</form>
-	<form method="dialog">
-		<button
-			type="button"
-			onclick={() => deleteDialogRef.close()}
-			class={[
-				'w-full py-2 rounded-xl',
-				'bg-gray-100 dark:bg-gray-800', // 무채색 배경
-				'font-bold text-lg',
-				'shadow',
-				'hover:bg-gray-200 dark:hover:bg-gray-700',
-				'hover:scale-105 hover:-translate-y-0.5',
-				'active:scale-98',
-				'transition-all duration-200'
-			]}>취소</button
-		>
-	</form>
-</dialog>

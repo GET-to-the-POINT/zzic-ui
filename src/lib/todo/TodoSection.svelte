@@ -42,16 +42,16 @@
 		if (todo.done) {
 			return {
 				formAction: '?/undone',
-				buttonClass: 'p-2 rounded-full hover:bg-white/20 transition-all duration-200 group',
-				iconClass: 'text-green-500 group-hover:text-gray-400 transition-colors duration-200',
+				buttonClass: '',
+				iconClass: 'text-green-500',
 				title: '완료 취소',
 				icon: CheckCircle2
 			};
 		} else {
 			return {
 				formAction: '?/done',
-				buttonClass: 'p-2 rounded-full hover:bg-white/20 transition-all duration-200 group',
-				iconClass: 'text-gray-400 group-hover:text-green-500 transition-colors duration-200',
+				buttonClass: '',
+				iconClass: 'text-muted-foreground',
 				title: '완료 표시',
 				icon: Circle
 			};
@@ -62,23 +62,19 @@
 <section class={['space-y-6', className]} aria-label={title + ' 목록'}>
 	<!-- 섹션 헤더 -->
 	<header class="flex items-center justify-between mb-2">
-		<h2
-			class="text-2xl font-bold bg-gradient-to-r from-pink-400 via-pink-300 to-blue-300 bg-clip-text text-transparent tracking-tight drop-shadow select-none"
-		>
+		<h2 class="text-2xl font-bold">
 			{title}
 		</h2>
-		<span
-			class="px-3 py-1 bg-white/30 dark:bg-black/30 rounded-full text-sm font-medium shadow-sm border border-white/20 dark:border-gray-700/20"
-		>
-			{totalCount}
+		<span class="px-3 py-1 bg-muted rounded-full text-sm font-medium">
+			총 {totalCount} 개
 		</span>
 	</header>
 
 	<!-- 투두 목록 -->
 	<div class="space-y-3">
 		{#if totalCount === 0}
-			<div class="text-center py-8 text-base italic select-none opacity-70">
-				✨ 할 일이 없어요! 새로운 투두를 추가해보세요 ✨
+			<div class="text-center py-8 text-muted-foreground">
+				할 일이 없어요! 새로운 투두를 추가해보세요
 			</div>
 		{:else}
 			{#each todos as todo (todo.id)}

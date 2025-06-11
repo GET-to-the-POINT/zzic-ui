@@ -1,7 +1,10 @@
 <script>
-	import TodoDetail from '$lib/components/sections/todo/TodoDetail.svelte';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import * as Form from '$lib/components/ui/form/index.js';
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
+	import TodoForm from '../TodoCreateForm.svelte';
 
 	/**
 	 * @typedef {Object} Todo
@@ -33,6 +36,12 @@
 	/** @type {{ data: PageData }} */
 	const { data } = $props();
 
+	let todoCreateDialog = $state(false);
+
+	const closeTodoCreateDialog = () => {
+		todoCreateDialog = false;
+	};
+
 	// Svelte 5에서 데이터 추출 (page.js에서 이미 배열로 추출됨)
 	let yetTodos = $derived(data?.yetTodos || []);
 	let doneTodos = $derived(data?.doneTodos || []);
@@ -40,31 +49,47 @@
 	let doneTodoPage = $derived(data?.doneTodoPage);
 </script>
 
-<main class={['container mx-auto', 'px-4 py-8', 'space-y-6']}>
-	<TodoStats
-		{yetTodos}
-		{doneTodos}
-		fadeDelay={200}
-		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-	/>
+<main class="min-h-screen flex items-center justify-center p-4">
+	<div class="w-full max-w-2xl space-y-6">
+		<TodoStats
+			yetTotalElements={yetTodoPage?.totalElements}
+			doneTotalElements={doneTodoPage?.totalElements}
+		/>
+		
+		<Dialog.Root bind:open={todoCreateDialog}>
+			<Dialog.Trigger class="w-full">
+				<Card.Card class="p-2">
+					TODO 추가
+				</Card.Card>
+			</Dialog.Trigger>
 
-	<TodoDetail
-		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-		action="?/create"
-		buttonText="추가하기"
-	/>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>새로운 Todo 추가</Dialog.Title>
+					<Dialog.Description>
+						새로운 Todo를 추가해보세요!
+					</Dialog.Description>
+				</Dialog.Header>
 
-	<TodoSection
-		todos={yetTodos}
-		totalCount={yetTodoPage?.totalElements}
-		title="이루어갈 꿈들"
-		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-	/>
+				<TodoForm onSuccess={closeTodoCreateDialog}>
+					<Dialog.Footer>
+						<Form.Button>추가하기</Form.Button>
+					</Dialog.Footer>
+				</TodoForm>
+			</Dialog.Content>
 
-	<TodoSection
-		todos={doneTodos}
-		totalCount={doneTodoPage?.totalElements}
-		title="이루어낸 꿈들"
-		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-	/>
+		</Dialog.Root>
+
+		<TodoSection
+			todos={yetTodos}
+			totalCount={yetTodoPage?.totalElements}
+			title="이루어갈 꿈들"
+		/>
+
+		<TodoSection
+			todos={doneTodos}
+			totalCount={doneTodoPage?.totalElements}
+			title="이루어낸 꿈들"
+		/>
+	</div>
 </main>

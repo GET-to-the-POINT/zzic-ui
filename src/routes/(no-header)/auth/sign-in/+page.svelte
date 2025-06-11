@@ -5,8 +5,10 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { loginSchema } from '../schema';
 	import { goto } from '$app/navigation';
+	import { celebrateSuccess } from '$lib/utils/confetti.js';
 
 	function handleSuccess() {
+		celebrateSuccess();
 		goto('/');
 	}
 
