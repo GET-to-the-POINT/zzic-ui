@@ -1,11 +1,7 @@
 <script>
-	import DotIcon from "@lucide/svelte/icons/dot";
+	import DotIcon from '@lucide/svelte/icons/dot';
 
-	let {
-		ref = $bindable(null),
-		children,
-		...restProps
-	} = $props();
+	let { ref = $bindable(null), children, ...restProps } = $props();
 </script>
 
 <div bind:this={ref} data-slot="input-otp-separator" role="separator" {...restProps}>

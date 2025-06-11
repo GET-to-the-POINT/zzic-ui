@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request, locals: {zzic} }) => {
+	default: async ({ request, locals: { zzic } }) => {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
@@ -11,7 +11,7 @@ export const actions = {
 		const { error } = await zzic.auth.signUp({ email, password, confirmPassword, nickname });
 		if (error) {
 			return fail(error.status, {
-				failure: error,
+				failure: error
 			});
 		}
 

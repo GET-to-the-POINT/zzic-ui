@@ -5,13 +5,13 @@ export async function load({ params, parent }) {
 
 	// @ts-ignore - zzic.todo client is available from parent layout
 	const { data: todo, error } = await zzic.todo.getTodo(user.sub, parseInt(todoId));
-	
+
 	if (error || !todo) {
 		throw new Error(`Todo with id ${todoId} not found`);
 	}
 
 	return {
 		todo,
-		title: 'Todo Details',
+		title: 'Todo Details'
 	};
 }

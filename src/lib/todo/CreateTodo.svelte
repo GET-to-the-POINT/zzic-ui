@@ -34,11 +34,14 @@
 	}
 </script>
 
-<form 
+<form
 	use:enhance={handleSubmit}
-	method="POST" 
+	method="POST"
 	action={actionUrl}
-	class={['space-y-4 backdrop-blur-sm bg-white/30 rounded-3xl p-6 border border-white/40 shadow-2xl', className]}
+	class={[
+		'space-y-4 backdrop-blur-sm bg-white/30 rounded-3xl p-6 border border-white/40 shadow-2xl',
+		className
+	]}
 >
 	<input
 		type="text"

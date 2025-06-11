@@ -65,7 +65,7 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify(credentials),
+					body: JSON.stringify(credentials)
 				});
 
 				if (!response.ok) {
@@ -75,10 +75,16 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 
 				// 로그인 성공 시 서버가 Set-Cookie로 토큰을 설정했다고 가정
 				// 새 토큰으로 사용자 정보 가져오기
-				const { data: { user: signedInUser }, error: getUserError } = await auth.getUser();
+				const {
+					data: { user: signedInUser },
+					error: getUserError
+				} = await auth.getUser();
 				if (getUserError || !signedInUser) {
 					console.error('로그인 후 사용자 정보 가져오기 실패:', getUserError);
-					return { data: { user: null }, error: getUserError || { message: 'Failed to retrieve user after sign in'} };
+					return {
+						data: { user: null },
+						error: getUserError || { message: 'Failed to retrieve user after sign in' }
+					};
 				}
 
 				return { data: { user: signedInUser }, error: null };
@@ -121,7 +127,7 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 		async signOut() {
 			try {
 				await fetchFn(`${apiUrl}/auth/sign-out`, {
-					method: 'POST',
+					method: 'POST'
 				});
 
 				return { error: null };
@@ -129,7 +135,7 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 				console.error('로그아웃 실패:', error);
 				return { error: /** @type {any} */ (error) };
 			}
-		},
+		}
 	};
 
 	// 할 일 팩토리 클라이언트 생성

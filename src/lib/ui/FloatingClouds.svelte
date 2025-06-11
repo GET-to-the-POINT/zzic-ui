@@ -11,17 +11,12 @@
 	 */
 
 	/** @type {Props} */
-	const { 
-		count = 5, 
-		color = 'text-white/20',
-		minSize = 50,
-		maxSize = 110
-	} = $props();
+	const { count = 5, color = 'text-white/20', minSize = 50, maxSize = 110 } = $props();
 </script>
 
 <div class="absolute inset-0 pointer-events-none">
 	{#each Array(count) as _, i}
-		<div 
+		<div
 			class="absolute {color}"
 			style="
 				left: {10 + i * 18}%; 
@@ -38,16 +33,17 @@
 
 <style>
 	@keyframes float {
-		0%, 100% { 
-			transform: translateY(0px) rotate(0deg); 
+		0%,
+		100% {
+			transform: translateY(0px) rotate(0deg);
 			opacity: 0.7;
 		}
-		33% { 
-			transform: translateY(-12px) rotate(1.5deg); 
+		33% {
+			transform: translateY(-12px) rotate(1.5deg);
 			opacity: 0.9;
 		}
-		66% { 
-			transform: translateY(-6px) rotate(-1.5deg); 
+		66% {
+			transform: translateY(-6px) rotate(-1.5deg);
 			opacity: 0.8;
 		}
 	}

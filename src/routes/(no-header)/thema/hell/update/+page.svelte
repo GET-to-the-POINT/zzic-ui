@@ -59,121 +59,123 @@
 </div>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Noto Sans KR', sans-serif;
+	}
 
-    body {
-        background-color: #f4f4f4;
-        color: #2d3748;
-        line-height: 1.6;
-        padding: 0;
-        margin: 0;
-    }
+	body {
+		background-color: #f4f4f4;
+		color: #2d3748;
+		line-height: 1.6;
+		padding: 0;
+		margin: 0;
+	}
 
-    .wrapper {
-        display: grid;
-        place-items: center;
-        min-height: 100vh;
-        padding: 2rem;
-    }
+	.wrapper {
+		display: grid;
+		place-items: center;
+		min-height: 100vh;
+		padding: 2rem;
+	}
 
-    .container {
-        width: 100%;
-        max-width: 800px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 2rem;
-    }
+	.container {
+		width: 100%;
+		max-width: 800px;
+		background: white;
+		border-radius: 16px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		padding: 2rem;
+	}
 
-    .header {
-        background: linear-gradient(135deg, #e9d8fd, #800080);
-        color: white;
-        padding: 2rem;
-        border-radius: 12px 12px 0 0;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
+	.header {
+		background: linear-gradient(135deg, #e9d8fd, #800080);
+		color: white;
+		padding: 2rem;
+		border-radius: 12px 12px 0 0;
+		margin-bottom: 2rem;
+		text-align: center;
+	}
 
-    .header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
+	.header h1 {
+		font-size: 2.5rem;
+		margin-bottom: 0.5rem;
+	}
 
-    .update-form {
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-    }
+	.update-form {
+		background: #f8f9fa;
+		padding: 1.5rem;
+		border-radius: 12px;
+		margin-bottom: 2rem;
+	}
 
-    .input-group {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
 
-    label {
-        font-weight: 500;
-        color: #4a5568;
-    }
+	label {
+		font-weight: 500;
+		color: #4a5568;
+	}
 
-    input[type="text"] {
-        padding: 0.75rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: border-color 0.2s;
-    }
+	input[type='text'] {
+		padding: 0.75rem;
+		border: 2px solid #e2e8f0;
+		border-radius: 8px;
+		font-size: 1rem;
+		transition: border-color 0.2s;
+	}
 
-    input[type="text"]:focus {
-        outline: none;
-        border-color: #800080;
-    }
+	input[type='text']:focus {
+		outline: none;
+		border-color: #800080;
+	}
 
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: transform 0.1s, background-color 0.2s;
-    }
+	.btn {
+		padding: 0.75rem 1.5rem;
+		border: none;
+		border-radius: 8px;
+		font-weight: 500;
+		cursor: pointer;
+		transition:
+			transform 0.1s,
+			background-color 0.2s;
+	}
 
-    .btn:active {
-        transform: scale(0.98);
-    }
+	.btn:active {
+		transform: scale(0.98);
+	}
 
-    .btn-primary {
-        background-color: #800080;
-        color: white;
-    }
+	.btn-primary {
+		background-color: #800080;
+		color: white;
+	}
 
-    .btn-primary:hover {
-        background-color: #4B0082;
-    }
+	.btn-primary:hover {
+		background-color: #4b0082;
+	}
 
-    .btn-secondary {
-        background-color: #e2e8f0;
-        color: #4a5568;
-        margin-left: 1rem;
-    }
+	.btn-secondary {
+		background-color: #e2e8f0;
+		color: #4a5568;
+		margin-left: 1rem;
+	}
 
-    .btn-secondary:hover {
-        background-color: #cbd5e0;
-    }
+	.btn-secondary:hover {
+		background-color: #cbd5e0;
+	}
 
-    .btn-group {
-        display: flex;
-        justify-content: flex-start;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
+	.btn-group {
+		display: flex;
+		justify-content: flex-start;
+		gap: 1rem;
+		margin-top: 1rem;
+	}
 </style>

@@ -24,7 +24,8 @@
 		success: 'from-green-200 to-teal-100 hover:from-green-300 hover:to-teal-200',
 		warning: 'from-yellow-200 to-orange-100 hover:from-yellow-300 hover:to-orange-200',
 		danger: 'from-red-200 to-pink-200 hover:from-red-300 hover:to-pink-300',
-		ghost: 'bg-transparent border border-pink-200 text-pink-400 hover:bg-pink-50 dark:border-pink-400 dark:text-pink-200 dark:hover:bg-pink-900',
+		ghost:
+			'bg-transparent border border-pink-200 text-pink-400 hover:bg-pink-50 dark:border-pink-400 dark:text-pink-200 dark:hover:bg-pink-900'
 	};
 
 	const sizeClasses = {
@@ -33,14 +34,10 @@
 		lg: 'px-8 py-4 text-lg'
 	};
 
-	const baseClasses = 'group relative bg-gradient-to-r text-white font-bold rounded-full shadow-2xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 justify-center overflow-hidden';
+	const baseClasses =
+		'group relative bg-gradient-to-r text-white font-bold rounded-full shadow-2xl transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 justify-center overflow-hidden';
 
-	const buttonClasses = [
-		baseClasses,
-		variantClasses[variant],
-		sizeClasses[size],
-		className,
-	];
+	const buttonClasses = [baseClasses, variantClasses[variant], sizeClasses[size], className];
 </script>
 
 <svelte:element this={as} {...restProps} class={buttonClasses}>

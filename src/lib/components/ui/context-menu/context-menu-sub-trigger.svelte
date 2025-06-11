@@ -1,15 +1,9 @@
 <script>
-	import { ContextMenu as ContextMenuPrimitive } from "bits-ui";
-	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
-	import { cn } from "$lib/utils.js";
+	import { ContextMenu as ContextMenuPrimitive } from 'bits-ui';
+	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
+	import { cn } from '$lib/utils.js';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		inset,
-		children,
-		...restProps
-	} = $props();
+	let { ref = $bindable(null), class: className, inset, children, ...restProps } = $props();
 </script>
 
 <ContextMenuPrimitive.SubTrigger

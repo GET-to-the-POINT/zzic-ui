@@ -1,9 +1,8 @@
 ---
-applyTo: "**/*.css"
+applyTo: '**/*.css'
 ---
+
 v4.1
-
-
 
 Core concepts
 Theme variables
@@ -19,10 +18,11 @@ For example, you can add a new color to your project by defining a theme variabl
 app.css
 @import "tailwindcss";
 @theme {
-  --color-mint-500: oklch(0.72 0.11 178);
+--color-mint-500: oklch(0.72 0.11 178);
 }
 Now you can use utility classes like bg-mint-500, text-mint-500, or fill-mint-500 in your HTML:
 HTML
+
 <div class="bg-mint-500">
   <!-- ... -->
 </div>

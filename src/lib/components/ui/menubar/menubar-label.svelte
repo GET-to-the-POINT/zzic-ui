@@ -1,19 +1,13 @@
 <script>
-	import { cn } from "$lib/utils.js";
-	let {
-		ref = $bindable(null),
-		inset,
-		children,
-		class: className,
-		...restProps
-	} = $props();
+	import { cn } from '$lib/utils.js';
+	let { ref = $bindable(null), inset, children, class: className, ...restProps } = $props();
 </script>
 
 <div
 	bind:this={ref}
 	data-slot="menubar-label"
 	data-inset={inset}
-	class={cn("px-2 py-1.5 text-sm font-medium data-[inset]:pl-8", className)}
+	class={cn('px-2 py-1.5 text-sm font-medium data-[inset]:pl-8', className)}
 	{...restProps}
 >
 	{@render children?.()}

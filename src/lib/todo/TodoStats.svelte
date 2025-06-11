@@ -29,9 +29,9 @@
 
 <section
 	class={[
-	  'bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl',
-	  'grid grid-cols-3 gap-4',
-	  className
+		'bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl',
+		'grid grid-cols-3 gap-4',
+		className
 	]}
 	aria-label="투두 통계"
 >

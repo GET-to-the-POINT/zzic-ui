@@ -1,13 +1,8 @@
 <script>
-	import { Accordion as AccordionPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { Accordion as AccordionPrimitive } from 'bits-ui';
+	import { cn } from '$lib/utils.js';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	} = $props();
+	let { ref = $bindable(null), class: className, children, ...restProps } = $props();
 </script>
 
 <AccordionPrimitive.Content
@@ -16,7 +11,7 @@
 	class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
 	{...restProps}
 >
-	<div class={cn("pb-4 pt-0", className)}>
+	<div class={cn('pb-4 pt-0', className)}>
 		{@render children?.()}
 	</div>
 </AccordionPrimitive.Content>

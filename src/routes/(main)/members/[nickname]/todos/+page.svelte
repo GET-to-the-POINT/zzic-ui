@@ -32,7 +32,7 @@
 
 	/** @type {{ data: PageData }} */
 	const { data } = $props();
-	
+
 	// Svelte 5에서 데이터 추출 (page.js에서 이미 배열로 추출됨)
 	let yetTodos = $derived(data?.yetTodos || []);
 	let doneTodos = $derived(data?.doneTodos || []);
@@ -40,38 +40,31 @@
 	let doneTodoPage = $derived(data?.doneTodoPage);
 </script>
 
-<main class={[
-  'container mx-auto',
-  'px-4 py-8',
-  'space-y-6'
-]}>
-	<TodoStats 
-		{yetTodos} 
-		{doneTodos} 
+<main class={['container mx-auto', 'px-4 py-8', 'space-y-6']}>
+	<TodoStats
+		{yetTodos}
+		{doneTodos}
 		fadeDelay={200}
-				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-
+		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
 	/>
 
-	<TodoDetail 
+	<TodoDetail
 		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-		action="?/create" 
+		action="?/create"
 		buttonText="추가하기"
 	/>
 
-	<TodoSection 
+	<TodoSection
 		todos={yetTodos}
 		totalCount={yetTodoPage?.totalElements}
 		title="이루어갈 꿈들"
-				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-
+		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
 	/>
 
-	<TodoSection 
+	<TodoSection
 		todos={doneTodos}
 		totalCount={doneTodoPage?.totalElements}
 		title="이루어낸 꿈들"
-				class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
-
+		class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-6 shadow-xl"
 	/>
 </main>

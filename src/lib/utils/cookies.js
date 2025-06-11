@@ -29,8 +29,12 @@ export function parseSetCookieHeader(setCookieHeader) {
 
 	setCookieHeader
 		.split(/,(?=\s*[^;=\s]+=)/) // 쿠키 구분자로 분리 (날짜의 쉼표와 구분)
-		.forEach(/** @param {string} cookie */ (cookie) => {
-			const parts = cookie.trim().split(';').map(/** @param {string} p */ (p) => p.trim());
+		.forEach(
+			/** @param {string} cookie */ (cookie) => {
+				const parts = cookie
+					.trim()
+					.split(';')
+					.map(/** @param {string} p */ (p) => p.trim());
 				const [name, value] = parts[0].split('=');
 
 				if (!name) return;
@@ -68,7 +72,11 @@ export function parseSetCookieHeader(setCookieHeader) {
 							break;
 						case 'samesite': {
 							const sameSiteValue = optVal?.toLowerCase();
-						if (sameSiteValue === 'strict' || sameSiteValue === 'lax' || sameSiteValue === 'none') {
+							if (
+								sameSiteValue === 'strict' ||
+								sameSiteValue === 'lax' ||
+								sameSiteValue === 'none'
+							) {
 								options.sameSite = sameSiteValue;
 							}
 							break;
@@ -84,7 +92,8 @@ export function parseSetCookieHeader(setCookieHeader) {
 					value: value.trim(),
 					options
 				});
-		});
+			}
+		);
 
 	return results;
 }
@@ -129,12 +138,13 @@ export class ResponseCookieManager {
 		try {
 			const parsedCookies = parseSetCookieHeader(setCookieHeader);
 
-			parsedCookies.forEach(/** @param {ParsedCookie} cookie */ (cookie) => {
+			parsedCookies.forEach(
+				/** @param {ParsedCookie} cookie */ (cookie) => {
 					/** @type {any} */
 					const cookieOptions = {
 						path: cookie.options.path || '/',
 						httpOnly: cookie.options.httpOnly || false,
-					secure: cookie.options.secure || false,
+						secure: cookie.options.secure || false
 					};
 
 					// 선택적 속성들 추가
@@ -144,7 +154,8 @@ export class ResponseCookieManager {
 					if (cookie.options.domain) cookieOptions.domain = cookie.options.domain;
 
 					this.#cookies.set(cookie.name, cookie.value, cookieOptions);
-			});
+				}
+			);
 
 			return parsedCookies.length > 0;
 		} catch (error) {
@@ -158,12 +169,18 @@ export class ResponseCookieManager {
 	 * @param {Array<{name: string, value: string, options?: CookieOptions}>} cookiesToSet - 설정할 쿠키 배열
 	 */
 	setAll(cookiesToSet) {
-		cookiesToSet.forEach(/** @param {{name: string, value: string, options?: CookieOptions}} cookieItem */ ({ name, value, options = {} }) => {
-			try {
-				this.#cookies.set(name, value, { path: '/', ...options });
-			} catch (error) {
-				console.warn(`쿠키 설정 실패 (${name}):`, error);
+		cookiesToSet.forEach(
+			/** @param {{name: string, value: string, options?: CookieOptions}} cookieItem */ ({
+				name,
+				value,
+				options = {}
+			}) => {
+				try {
+					this.#cookies.set(name, value, { path: '/', ...options });
+				} catch (error) {
+					console.warn(`쿠키 설정 실패 (${name}):`, error);
+				}
 			}
-		});
+		);
 	}
 }

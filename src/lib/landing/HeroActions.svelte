@@ -9,7 +9,7 @@
 
 <div class="space-y-4">
 	<!-- 메인 버튼 -->
-	<GradientButton 
+	<GradientButton
 		as="a"
 		href="/members/me/todos"
 		variant="primary"
@@ -20,12 +20,7 @@
 		<span>일정관리 시작하기</span>
 	</GradientButton>
 	<!-- 보조 버튼 -->
-	<GlassButton 
-		size="lg"
-		onclick={onSecondaryClick}
-		variant="ghost"
-		class="size-1/2 mx-auto"
-	>
+	<GlassButton size="lg" onclick={onSecondaryClick} variant="ghost" class="size-1/2 mx-auto">
 		<Plus size={24} />
 		<span>기능 둘러보기</span>
 	</GlassButton>

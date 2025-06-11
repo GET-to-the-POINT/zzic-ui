@@ -26,7 +26,7 @@ import { createTodoClient } from './todo.js';
  */
 
 /**
- * 서버 사이드용 ZZIC 인증 클라이언트  
+ * 서버 사이드용 ZZIC 인증 클라이언트
  * @param {string} apiUrl - API 서버 URL
  * @param {Object} options - 옵션 객체
  * @param {any} [options.global={}] - 글로벌 설정

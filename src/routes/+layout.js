@@ -10,13 +10,15 @@ export const load = async ({ data, depends, fetch }) => {
 	const zzic = browser
 		? createZzicBrowserClient(PUBLIC_ZZIC_API_URL, { global: { fetch } })
 		: createZzicServerClient(PUBLIC_ZZIC_API_URL, {
-			global: { fetch },
-			cookies: {
-				getAll: () => data.cookies,
-			}
-		});
+				global: { fetch },
+				cookies: {
+					getAll: () => data.cookies
+				}
+			});
 
-	const { data: { user}} = await zzic.auth.getUser();
+	const {
+		data: { user }
+	} = await zzic.auth.getUser();
 
 	return { zzic, user };
 };

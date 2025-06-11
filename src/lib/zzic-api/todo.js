@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} TodoResponse
  * @property {number} id - Todo ID
- * @property {string} title - Todo 제목  
+ * @property {string} title - Todo 제목
  * @property {string} [description] - Todo 설명
  * @property {boolean} done - 완료 여부
  */
@@ -61,17 +61,17 @@ export function createTodoClient(apiUrl, fetchFn) {
 				url.searchParams.append(key, String(value));
 			}
 		});
-		
+
 		try {
 			const response = await fetchFn(url.toString(), {
-				credentials: 'include',
+				credentials: 'include'
 			});
-			
+
 			if (!response.ok) {
 				const error = await response.text();
 				return { data: null, error };
 			}
-			
+
 			/** @type {PageTodoResponse} */
 			const data = await response.json();
 			return { data, error: null };
@@ -89,14 +89,14 @@ export function createTodoClient(apiUrl, fetchFn) {
 	async function getTodo(memberId, todoId) {
 		try {
 			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos/${todoId}`, {
-				credentials: 'include',
+				credentials: 'include'
 			});
-			
+
 			if (!response.ok) {
 				const error = await response.text();
 				return { data: null, error };
 			}
-			
+
 			/** @type {TodoResponse} */
 			const data = await response.json();
 			return { data, error: null };
@@ -119,12 +119,12 @@ export function createTodoClient(apiUrl, fetchFn) {
 				body: JSON.stringify(todo),
 				credentials: 'include'
 			});
-			
+
 			if (response.status !== 201) {
 				const error = await response.json().catch(() => ({ message: 'Failed to create todo' }));
 				return { error };
 			}
-			
+
 			return { error: null };
 		} catch (error) {
 			return { error };
@@ -146,12 +146,12 @@ export function createTodoClient(apiUrl, fetchFn) {
 				body: JSON.stringify(todo),
 				credentials: 'include'
 			});
-			
+
 			if (response.status !== 204) {
 				const error = await response.json().catch(() => ({ message: 'Failed to update todo' }));
 				return { error };
 			}
-			
+
 			return { error: null };
 		} catch (error) {
 			return { error };
@@ -170,12 +170,12 @@ export function createTodoClient(apiUrl, fetchFn) {
 				method: 'DELETE',
 				credentials: 'include'
 			});
-			
+
 			if (response.status !== 204) {
 				const error = await response.json().catch(() => ({ message: 'Failed to delete todo' }));
 				return { error };
 			}
-			
+
 			return { error: null };
 		} catch (error) {
 			return { error };

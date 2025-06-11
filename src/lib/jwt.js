@@ -9,7 +9,7 @@
  */
 function base64UrlDecode(str) {
 	const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-	const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+	const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
 	let decoded;
 
 	if (typeof Buffer !== 'undefined' && typeof Buffer.from === 'function') {
@@ -61,8 +61,11 @@ export function parseJwtPayload(token) {
 export function getUserFromCookies(cookies) {
 	// 클라이언트: document.cookie 문자열
 	if (typeof cookies === 'string') {
-		const cookieArr = cookies.split(';').map(c => c.trim()).filter(Boolean);
-		const tokenValue = cookieArr.find(c => c.startsWith('access-token='))?.split('=')[1];
+		const cookieArr = cookies
+			.split(';')
+			.map((c) => c.trim())
+			.filter(Boolean);
+		const tokenValue = cookieArr.find((c) => c.startsWith('access-token='))?.split('=')[1];
 		if (!tokenValue) return null;
 		const payload = parseJwtPayload(tokenValue);
 		if (!payload) return null;
@@ -71,7 +74,7 @@ export function getUserFromCookies(cookies) {
 	// 서버: SvelteKit Cookies 객체
 	if (typeof cookies?.getAll === 'function') {
 		const tokenArray = cookies.getAll();
-		const tokenValue = tokenArray.find(c => c.name === 'access-token')?.value;
+		const tokenValue = tokenArray.find((c) => c.name === 'access-token')?.value;
 		if (!tokenValue) return null;
 		const payload = parseJwtPayload(tokenValue);
 		if (!payload) return null;
@@ -79,4 +82,3 @@ export function getUserFromCookies(cookies) {
 	}
 	return null;
 }
-

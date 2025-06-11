@@ -1,14 +1,14 @@
 <script>
-	import { ScrollArea as ScrollAreaPrimitive } from "bits-ui";
-	import { Scrollbar } from "./index.js";
-	import { cn } from "$lib/utils.js";
+	import { ScrollArea as ScrollAreaPrimitive } from 'bits-ui';
+	import { Scrollbar } from './index.js';
+	import { cn } from '$lib/utils.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		orientation = "vertical",
-		scrollbarXClasses = "",
-		scrollbarYClasses = "",
+		orientation = 'vertical',
+		scrollbarXClasses = '',
+		scrollbarYClasses = '',
 		children,
 		...restProps
 	} = $props();
@@ -17,7 +17,7 @@
 <ScrollAreaPrimitive.Root
 	bind:ref
 	data-slot="scroll-area"
-	class={cn("relative", className)}
+	class={cn('relative', className)}
 	{...restProps}
 >
 	<ScrollAreaPrimitive.Viewport
@@ -26,10 +26,10 @@
 	>
 		{@render children?.()}
 	</ScrollAreaPrimitive.Viewport>
-	{#if orientation === "vertical" || orientation === "both"}
+	{#if orientation === 'vertical' || orientation === 'both'}
 		<Scrollbar orientation="vertical" class={scrollbarYClasses} />
 	{/if}
-	{#if orientation === "horizontal" || orientation === "both"}
+	{#if orientation === 'horizontal' || orientation === 'both'}
 		<Scrollbar orientation="horizontal" class={scrollbarXClasses} />
 	{/if}
 	<ScrollAreaPrimitive.Corner />

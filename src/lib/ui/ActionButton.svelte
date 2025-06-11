@@ -10,7 +10,7 @@
 	 */
 
 	/** @type {Props} */
-	const { 
+	const {
 		variant = 'primary',
 		size = 'md',
 		disabled = false,
@@ -34,17 +34,12 @@
 		lg: 'p-4'
 	};
 
-	const baseClasses = 'group text-white rounded-full transition-all duration-300 transform hover:scale-110 flex items-center justify-center';
-	
+	const baseClasses =
+		'group text-white rounded-full transition-all duration-300 transform hover:scale-110 flex items-center justify-center';
+
 	const buttonClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className} ${disabled ? 'opacity-50 cursor-not-allowed transform-none hover:scale-100' : ''}`;
 </script>
 
-<button 
-	{type}
-	{disabled}
-	{onclick}
-	class={buttonClasses}
-	{...restProps}
->
+<button {type} {disabled} {onclick} class={buttonClasses} {...restProps}>
 	<slot />
 </button>

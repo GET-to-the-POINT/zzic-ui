@@ -1,12 +1,12 @@
 <script>
-	import { ContextMenu as ContextMenuPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { ContextMenu as ContextMenuPrimitive } from 'bits-ui';
+	import { cn } from '$lib/utils.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
 		inset,
-		variant = "default",
+		variant = 'default',
 		...restProps
 	} = $props();
 </script>

@@ -57,7 +57,7 @@ const zzic = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(handleAuth, authGuard, zzic );
+export const handle = sequence(handleAuth, authGuard, zzic);
 
 /**
  * 페치 핸들러 - 307 리다이렉트 시 토큰 헤더를 유지하며 재요청, 응답 쿠키를 클라이언트에 전달
@@ -65,7 +65,7 @@ export const handle = sequence(handleAuth, authGuard, zzic );
  */
 export const handleFetch = async ({ event, request, fetch }) => {
 	const newRequest = new Request(request, {
-		redirect: 'manual',
+		redirect: 'manual'
 	});
 
 	let response = await fetch(newRequest);

@@ -47,13 +47,13 @@ export async function load({ parent }) {
 
 	try {
 		const yetTodoPromise = zzic.todo.getTodos(user.sub);
-		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done : true });
+		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
 
 		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);
 		console.log('Raw API results:', results);
-		
-		const [ { data : yetTodoPage }, { data : doneTodoPage } ] = results;
-		
+
+		const [{ data: yetTodoPage }, { data: doneTodoPage }] = results;
+
 		console.log('YetTodoPage response:', yetTodoPage);
 		console.log('DoneTodoPage response:', doneTodoPage);
 
@@ -64,19 +64,19 @@ export async function load({ parent }) {
 		console.log('Extracted yetTodos:', yetTodos);
 		console.log('Extracted doneTodos:', doneTodos);
 
-		return { 
-			yetTodos, 
+		return {
+			yetTodos,
 			doneTodos,
-			yetTodoPage, 
-			doneTodoPage 
+			yetTodoPage,
+			doneTodoPage
 		};
 	} catch (error) {
 		console.error('Error loading todos:', error);
-		return { 
+		return {
 			yetTodos: [],
 			doneTodos: [],
-			yetTodoPage: { content: [], totalElements: 0 }, 
-			doneTodoPage: { content: [], totalElements: 0 } 
+			yetTodoPage: { content: [], totalElements: 0 },
+			doneTodoPage: { content: [], totalElements: 0 }
 		};
 	}
 }

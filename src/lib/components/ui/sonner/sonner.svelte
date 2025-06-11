@@ -1,6 +1,6 @@
 <script>
-	import { Toaster as Sonner } from "svelte-sonner";
-	import { mode } from "mode-watcher";
+	import { Toaster as Sonner } from 'svelte-sonner';
+	import { mode } from 'mode-watcher';
 
 	let { ...restProps } = $props();
 </script>

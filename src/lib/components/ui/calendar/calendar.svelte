@@ -1,21 +1,21 @@
 <script>
-	import { Calendar as CalendarPrimitive } from "bits-ui";
-	import * as Calendar from "./index.js";
-	import { cn } from "$lib/utils.js";
-	import { isEqualMonth } from "@internationalized/date";
+	import { Calendar as CalendarPrimitive } from 'bits-ui';
+	import * as Calendar from './index.js';
+	import { cn } from '$lib/utils.js';
+	import { isEqualMonth } from '@internationalized/date';
 	let {
 		ref = $bindable(null),
 		value = $bindable(),
 		placeholder = $bindable(),
 		class: className,
-		weekdayFormat = "short",
-		buttonVariant = "ghost",
-		captionLayout = "label",
-		locale = "en-US",
+		weekdayFormat = 'short',
+		buttonVariant = 'ghost',
+		captionLayout = 'label',
+		locale = 'en-US',
 		months: monthsProp,
 		years,
 		monthFormat: monthFormatProp,
-		yearFormat = "numeric",
+		yearFormat = 'numeric',
 		day,
 		disableDaysOutsideMonth = false,
 		...restProps
@@ -23,8 +23,8 @@
 
 	const monthFormat = $derived.by(() => {
 		if (monthFormatProp) return monthFormatProp;
-		if (captionLayout.startsWith("dropdown")) return "short";
-		return "long";
+		if (captionLayout.startsWith('dropdown')) return 'short';
+		return 'long';
 	});
 </script>
 
@@ -33,13 +33,13 @@ Discriminated Unions + Destructing (required for bindable) do not
 get along, so we shut typescript up by casting `value` to `never`.
 -->
 <CalendarPrimitive.Root
-	bind:value={value}
+	bind:value
 	bind:ref
 	bind:placeholder
 	{weekdayFormat}
 	{disableDaysOutsideMonth}
 	class={cn(
-		"bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+		'bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
 		className
 	)}
 	{locale}
@@ -86,7 +86,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 											{#if day}
 												{@render day({
 													day: date,
-													outsideMonth: !isEqualMonth(date, month.value),
+													outsideMonth: !isEqualMonth(date, month.value)
 												})}
 											{:else}
 												<Calendar.Day />

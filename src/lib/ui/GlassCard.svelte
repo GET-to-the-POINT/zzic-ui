@@ -9,7 +9,7 @@
 	 */
 
 	/** @type {Props} */
-	const { 
+	const {
 		variant = 'primary',
 		padding = 'md',
 		hover = true,
@@ -33,8 +33,10 @@
 
 	const baseClasses = 'backdrop-blur-sm shadow-2xl transition-all duration-300 rounded-3xl';
 	const borderClasses = border ? 'border border-white/40' : '';
-	const hoverClasses = hover ? 'hover:bg-white/40 hover:transform hover:scale-[1.02] hover:shadow-3xl' : '';
-	
+	const hoverClasses = hover
+		? 'hover:bg-white/40 hover:transform hover:scale-[1.02] hover:shadow-3xl'
+		: '';
+
 	const cardClasses = `${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${borderClasses} ${hoverClasses} ${className}`;
 </script>
 
