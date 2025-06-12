@@ -1,14 +1,16 @@
 /**
- * @typedef {Object} TodoResponse
+ * @typedef {Object} TodoDto
  * @property {number} id - Todo ID
  * @property {string} title - Todo 제목
  * @property {string} [description] - Todo 설명
  * @property {boolean} done - 완료 여부
+ * @property {string} [createdAt] - 생성 시간
+ * @property {string} [updatedAt] - 수정 시간
  */
 
 /**
- * @typedef {Object} PageTodoResponse
- * @property {TodoResponse[]} content - Todo 목록
+ * @typedef {Object} PageTodoDto
+ * @property {TodoDto[]} content - Todo 목록
  * @property {number} number - 현재 페이지 번호 (0부터 시작)
  * @property {number} size - 페이지 크기
  * @property {number} totalElements - 총 요소 개수
@@ -52,7 +54,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {number} [options.page] - 페이지 번호
 	 * @param {number} [options.size] - 페이지 크기
 	 * @param {string} [options.sort] - 정렬 옵션
-	 * @returns {Promise<{data: PageTodoResponse|null, error: any}>}
+	 * @returns {Promise<{data: PageTodoDto|null, error: any}>}
 	 */
 	async function getTodos(memberId, options = {}) {
 		const url = new URL(`${apiUrl}/api/members/${memberId}/todos`);
@@ -72,7 +74,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				return { data: null, error };
 			}
 
-			/** @type {PageTodoResponse} */
+			/** @type {PageTodoDto} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
@@ -84,7 +86,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * 특정 Todo 조회
 	 * @param {string} memberId - 멤버 ID
 	 * @param {number} todoId - Todo ID
-	 * @returns {Promise<{data: TodoResponse|null, error: any}>}
+	 * @returns {Promise<{data: TodoDto|null, error: any}>}
 	 */
 	async function getTodo(memberId, todoId) {
 		try {
@@ -97,7 +99,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				return { data: null, error };
 			}
 
-			/** @type {TodoResponse} */
+			/** @type {TodoDto} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {

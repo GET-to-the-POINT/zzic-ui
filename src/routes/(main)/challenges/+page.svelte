@@ -3,74 +3,8 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import Plus from '@lucide/svelte/icons/plus';
 
-	// Mock 데이터 (실제로는 +page.js나 +page.server.js에서 가져와야 함)
-	const allChallenges = [
-		{
-			id: 1,
-			title: '물 8잔 마시기',
-			description: '매일 최소 8잔의 물을 마시며 건강한 수분 섭취 습관을 만들어보세요',
-			participantCount: 124,
-			periodType: 'DAILY',
-			startDate: '2025-06-15',
-			endDate: '2025-07-15',
-			joined: false
-		},
-		{
-			id: 2, 
-			title: '아침 운동하기',
-			description: '건강한 아침을 위한 가벼운 운동 루틴을 만들어보세요',
-			participantCount: 89,
-			periodType: 'DAILY',
-			startDate: '2025-06-12',
-			endDate: '2025-07-03',
-			joined: true
-		},
-		{
-			id: 3,
-			title: '감사 일기 쓰기',
-			description: '매주 감사한 일들을 기록하며 긍정적인 마음가짐을 기르세요',
-			participantCount: 67,
-			periodType: 'WEEKLY',
-			startDate: '2025-06-16',
-			endDate: '2025-08-11',
-			joined: false
-		},
-		{
-			id: 4,
-			title: '독서하기',
-			description: '매월 새로운 책을 읽으며 지식과 교양을 쌓아보세요',
-			participantCount: 203,
-			periodType: 'MONTHLY',
-			startDate: '2025-06-01',
-			endDate: '2025-12-01',
-			joined: false
-		},
-		{
-			id: 5,
-			title: '일찍 일어나기',
-			description: '새벽 6시에 일어나서 하루를 알차게 보내는 습관을 만들어보세요',
-			participantCount: 892,
-			periodType: 'DAILY',
-			startDate: '2025-06-10',
-			endDate: '2025-07-10',
-			joined: false
-		},
-		{
-			id: 6,
-			title: '영어 공부하기',
-			description: '매주 새로운 영어 표현을 학습하며 실력을 향상시켜보세요',
-			participantCount: 2103,
-			periodType: 'WEEKLY',
-			startDate: '2025-06-03',
-			endDate: '2025-09-30',
-			joined: false
-		}
-	];
-
-	const handleJoin = (challengeId) => {
-		// 참여 완료 후 페이지 새로고침 또는 상태 업데이트
-		console.log('챌린지 참여:', challengeId);
-	};
+	const { data } = $props();
+	const allChallenges = $derived(data?.allChallenges);
 </script>
 
 <svelte:head>
@@ -109,7 +43,6 @@
 			{#each allChallenges as challenge (challenge.id)}
 				<ChallengeItem 
 					{challenge}
-					onJoin={handleJoin}
 				/>
 			{/each}
 		</div>

@@ -8,35 +8,18 @@
 	import ChallengeList from '$lib/components/sections/challenge/ChallengeList.svelte';
 
 	/**
-	 * @typedef {Object} Todo
-	 * @property {string} id - Todo ID
-	 * @property {string} title - Todo 제목
-	 * @property {string} [description] - Todo 설명
-	 * @property {boolean} done - 완료 여부
-	 * @property {string} createdAt - 생성 시간
-	 * @property {string} [updatedAt] - 수정 시간
-	 */
-
-	/**
-	 * @typedef {Object} TodoPage
-	 * @property {Array<Todo>} content - Todo 목록
-	 * @property {number} totalElements - 전체 요소 개수
-	 * @property {number} totalPages - 전체 페이지 수
-	 * @property {number} number - 현재 페이지 번호
-	 * @property {number} size - 페이지 크기
-	 */
-
-	/**
-	 * @typedef {import('$lib/zzic-api/challenge.js').ChallengeDto} Challenge
+	 * @typedef {import('$lib/zzic-api/todo.js').TodoDto} TodoDto
+	 * @typedef {import('$lib/zzic-api/todo.js').PageTodoDto} PageTodoDto
+	 * @typedef {import('$lib/zzic-api/challenge.js').ChallengeDto} ChallengeDto
 	 */
 
 	/**
 	 * @typedef {Object} PageData
-	 * @property {Array<Todo>} yetTodos - 미완료 todo 목록
-	 * @property {Array<Todo>} doneTodos - 완료된 todo 목록
-	 * @property {TodoPage} yetTodoPage - 미완료 todo 페이지 정보
-	 * @property {TodoPage} doneTodoPage - 완료된 todo 페이지 정보
-	 * @property {Array<Challenge>} challengeList - 챌린지 목록
+	 * @property {Array<TodoDto>} yetTodos - 미완료 todo 목록
+	 * @property {Array<TodoDto>} doneTodos - 완료된 todo 목록
+	 * @property {PageTodoDto} yetTodoPage - 미완료 todo 페이지 정보
+	 * @property {PageTodoDto} doneTodoPage - 완료된 todo 페이지 정보
+	 * @property {Array<ChallengeDto>} challengeList - 챌린지 목록
 	 */
 
 	/** @type {{ data: PageData }} */
@@ -47,37 +30,30 @@
 	const closeTodoCreateDialog = () => {
 		todoCreateDialog = false;
 	};
-
-	// Svelte 5에서 데이터 추출 (page.js에서 이미 배열로 추출됨)
-	let yetTodos = $derived(data?.yetTodos);
-	let doneTodos = $derived(data?.doneTodos);
-	let yetTotalElements = $derived(data?.yetTodoPage.totalElements);
-	let doneTotalElements = $derived(data?.doneTodoPage.totalElements);
-	let challenges = $derived(data?.challengeList || []);
 </script>
 
 <main class="space-y-6 p-4">
 	<TodoStats
-		doneTotalElements={doneTotalElements}
-		yetTotalElements={yetTotalElements}
+		doneTotalElements={data?.doneTodoPage.totalElements}
+		yetTotalElements={data?.yetTodoPage.totalElements}
 	/>
 
 	<ChallengeList
-		challenges={challenges}
+		challenges={data?.challengePage.content}
 	/>
 
 	<Dialog.Root bind:open={todoCreateDialog}>
 		<Dialog.Trigger class="w-full">
 			<Button variant="ghost" class="cursor-pointer w-full" disabled={false}>
-				Task 추가
+				Todo 추가
 			</Button>
 		</Dialog.Trigger>
 
 		<Dialog.Content class="" portalProps={{}}>
 			<Dialog.Header class="">
-				<Dialog.Title class="">새로운 Task 추가</Dialog.Title>
+				<Dialog.Title class="">새로운 Todo 추가</Dialog.Title>
 				<Dialog.Description class="">
-					새로운 Task를 추가해보세요!
+					새로운 Todo를 추가해보세요!
 				</Dialog.Description>
 			</Dialog.Header>
 
@@ -93,13 +69,13 @@
 
 	<TodoSection
 		title="이루어갈 꿈들"
-		todos={yetTodos}
-		totalCount={yetTotalElements}
+		todos={data?.yetTodoPage.content}
+		totalCount={data?.yetTodoPage.totalElements}
 	/>
 
 	<TodoSection
 		title="이루어낸 꿈들"
-		todos={doneTodos}
-		totalCount={doneTotalElements}
+		todos={data?.doneTodoPage.content}
+		totalCount={data?.doneTodoPage.totalElements}
 	/>
 </main>

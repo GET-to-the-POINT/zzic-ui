@@ -13,10 +13,11 @@
 	/**
 	 * @typedef {Object} Props
 	 * @property {Challenge} challenge - 챌린지 정보
+	 * @property {boolean} [isDetail=false] - 디테일 페이지 여부
 	 */
 
 	/** @type {Props} */
-	const { challenge } = $props();
+	const { challenge, isDetail = false } = $props();
 
 	/**
 	 * 날짜를 포맷팅
@@ -43,7 +44,7 @@
 	};
 </script>
 
-<Card.Root class="min-w-60 @container">
+<Card.Root class="min-w-60 @container max-w-sm">
 	<Card.Header>
 		<div class="flex items-center justify-between mb-2">
 			<Badge variant="outline">{challenge.periodType}</Badge>
@@ -60,7 +61,7 @@
 			<div class="flex flex-col items-center gap-2">
 				<Users class="w-4 h-4 text-muted-foreground" />
                 <span class="sr-only">참여자 수</span>
-				<span class="font-medium">{challenge.participantCount || 0}명</span>
+				<span class="font-medium">{challenge.participantCount}명</span>
 			</div>
 			<div class="flex flex-col items-center gap-2">
 				<Calendar class="w-4 h-4 text-muted-foreground" />
@@ -79,7 +80,7 @@
         >
             자세히
         </Button>
-        <form action={`/challenges/${challenge.id}/join`} method="POST" class="flex-1">
+        <form action={`/challenges/${challenge.id}?/join`} method="POST" class="flex-1">
             <Form.Button
                 name="challengeId"
                 value={challenge.id}

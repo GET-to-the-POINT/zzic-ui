@@ -334,7 +334,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	 * @param {number} challengeId - 챌린지 ID
 	 * @returns {Promise<{error: any}>}
 	 */
-	async function joinChallenge(challengeId) {
+	async function join(challengeId) {
 		try {
 			const response = await fetchFn(`${apiUrl}/challenge-participations/${challengeId}/join`, {
 				method: 'POST',
@@ -356,7 +356,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	 * @param {number} challengeId - 챌린지 ID
 	 * @returns {Promise<{error: any}>}
 	 */
-	async function leaveChallenge(challengeId) {
+	async function leave(challengeId) {
 		try {
 			const response = await fetchFn(`${apiUrl}/challenge-participations/${challengeId}/leave`, {
 				method: 'DELETE',
@@ -459,8 +459,8 @@ export function createChallengeClient(apiUrl, fetchFn) {
 		getCompletedChallengeTodos,
 		completeChallenge,
 		cancelCompleteChallenge,
-		joinChallenge,
-		leaveChallenge,
+		join,
+		leave,
 		createChallenge,
 		updateChallenge,
 		deleteChallenge
