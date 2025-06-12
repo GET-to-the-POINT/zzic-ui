@@ -6,14 +6,13 @@
 
 	/**
 	 * @typedef {Object} Challenge
-	 * @property {string} id - 챌린지 ID
+	 * @property {number} id - 챌린지 ID
 	 * @property {string} title - 챌린지 제목
 	 * @property {string} description - 챌린지 설명
 	 * @property {string} category - 챌린지 카테고리
 	 * @property {number} participantCount - 참여자 수
 	 * @property {number} duration - 기간 (일)
-	 * @property {any[]} tasks - 태스크 목록
-	 * @property {boolean} isActive - 활성 상태
+	 * @property {boolean} joined - 참여 여부
 	 */
 
 	/**
@@ -47,8 +46,7 @@
 		<div class="grid grid-cols-1 @[400px]:grid-cols-2 gap-4">
 			{#each displayChallenges as challenge (challenge.id)}
 				<ChallengeItem 
-					{challenge} 
-					onJoin={onJoinChallenge} 
+					{challenge}
 				/>
 			{/each}
 		</div>

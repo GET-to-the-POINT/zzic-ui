@@ -28,7 +28,15 @@ const handleAuth = async ({ event, resolve }) => {
  * @type {import('@sveltejs/kit').Handle}
  */
 const authGuard = async ({ event, resolve }) => {
-	if (!event.locals.user && event.url.pathname.startsWith('/members')) {
+	const guradPaths = [
+		'/dashboard',
+		'/settings',
+		'/profile',
+		'/members'
+	];
+	const isAuthRequired = guradPaths.some((path) => event.url.pathname.startsWith(path));
+
+	if (!event.locals.user && isAuthRequired) {
 		redirect(303, '/auth/sign-in');
 	}
 

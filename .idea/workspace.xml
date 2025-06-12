@@ -19,13 +19,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/header/NavigationSection.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/header/NavigationSection.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/members/[nickname]/todos/[todoId]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,6 +219,7 @@
       <workItem from="1749116785274" duration="4200000" />
       <workItem from="1749230774488" duration="599000" />
       <workItem from="1749634306768" duration="3477000" />
+      <workItem from="1749694135444" duration="602000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
