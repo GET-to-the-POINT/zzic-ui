@@ -1,5 +1,6 @@
 import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
+import { createChallengeClient } from './challenge.js';
 
 /**
  * @typedef {Object} SignInRequest
@@ -36,9 +37,6 @@ import { createTodoClient } from './todo.js';
 export function createZzicServerClient(apiUrl, options) {
 	const { global = {}, cookies } = options;
 	const fetchFn = /** @type {any} */ (global.fetch) || globalThis.fetch;
-
-	// 할 일 팩토리 클라이언트 생성
-	const todoClient = createTodoClient(apiUrl, fetchFn);
 
 	const auth = {
 		/**
@@ -125,5 +123,8 @@ export function createZzicServerClient(apiUrl, options) {
 		}
 	};
 
-	return { auth, todo: todoClient };
+	const todo = createTodoClient(apiUrl, fetchFn);
+	const challenge = createChallengeClient(apiUrl, fetchFn);
+
+	return { auth, todo, challenge };
 }

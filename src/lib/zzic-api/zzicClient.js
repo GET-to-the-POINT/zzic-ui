@@ -1,4 +1,5 @@
 import { getUserFromCookies } from '$lib/jwt.js';
+import { createChallengeClient } from './challenge.js';
 import { createTodoClient } from './todo.js';
 
 /**
@@ -139,7 +140,8 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 	};
 
 	// 할 일 팩토리 클라이언트 생성
-	const todoClient = createTodoClient(apiUrl, fetchFn);
+	const todo = createTodoClient(apiUrl, fetchFn);
+	const challenge = createChallengeClient(apiUrl, fetchFn);
 
-	return { auth, todo: todoClient };
+	return { auth, todo, challenge };
 }

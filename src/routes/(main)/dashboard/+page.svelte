@@ -5,7 +5,7 @@
 	import TodoStats from '$lib/todo/TodoStats.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import TodoCreateForm from '$lib/components/sections/todo/TodoCreateForm.svelte';
-	import ChallengeSimpleList from '$lib/components/sections/challenge/ChallengeSimpleList.svelte';
+	import ChallengeList from '$lib/components/sections/challenge/ChallengeList.svelte';
 
 	/**
 	 * @typedef {Object} Todo
@@ -27,11 +27,16 @@
 	 */
 
 	/**
+	 * @typedef {import('$lib/zzic-api/challenge.js').ChallengeDto} Challenge
+	 */
+
+	/**
 	 * @typedef {Object} PageData
 	 * @property {Array<Todo>} yetTodos - 미완료 todo 목록
 	 * @property {Array<Todo>} doneTodos - 완료된 todo 목록
 	 * @property {TodoPage} yetTodoPage - 미완료 todo 페이지 정보
 	 * @property {TodoPage} doneTodoPage - 완료된 todo 페이지 정보
+	 * @property {Array<Challenge>} challengeList - 챌린지 목록
 	 */
 
 	/** @type {{ data: PageData }} */
@@ -48,55 +53,7 @@
 	let doneTodos = $derived(data?.doneTodos);
 	let yetTotalElements = $derived(data?.yetTodoPage.totalElements);
 	let doneTotalElements = $derived(data?.doneTodoPage.totalElements);
-
-	// Mock 챌린지 데이터 
-	const mockChallenges = [
-		{
-			id: 1,
-			title: '30일 독서 챌린지',
-			description: '매일 최소 30분씩 독서하며 성장하는 습관을 만들어보세요',
-			category: '자기계발',
-			participantCount: 124,
-			duration: 30,
-			joined: false
-		},
-		{
-			id: 2, 
-			title: '아침 운동 21일',
-			description: '건강한 아침을 위한 가벼운 운동 루틴을 만들어보세요',
-			category: '건강',
-			participantCount: 89,
-			duration: 21,
-			joined: true
-		},
-		{
-			id: 3,
-			title: '감사 일기 쓰기',
-			description: '매일 감사한 일 3가지를 기록하며 긍정적인 마음가짐을 기르세요',
-			category: '마음챙김',
-			participantCount: 67,
-			duration: 14,
-			joined: false
-		},
-		{
-			id: 4,
-			title: '물 마시기 습관',
-			description: '하루 8잔의 물을 마시며 건강한 수분 섭취 습관을 만들어보세요',
-			category: '건강',
-			participantCount: 203,
-			duration: 7,
-			joined: false
-		}
-	];
-
-	const handleViewMore = () => {
-		window.location.href = '/challenges';
-	};
-
-	const handleJoinChallenge = (challengeId) => {
-		console.log('챌린지 참여:', challengeId);
-		// TODO: 챌린지 참여 로직
-	};
+	let challenges = $derived(data?.challengeList || []);
 </script>
 
 <main class="space-y-6 p-4">
@@ -105,31 +62,29 @@
 		yetTotalElements={yetTotalElements}
 	/>
 
-	<ChallengeSimpleList 
-		challenges={mockChallenges}
-		onViewMore={handleViewMore}
-		onJoinChallenge={handleJoinChallenge}
+	<ChallengeList
+		challenges={challenges}
 	/>
 
 	<Dialog.Root bind:open={todoCreateDialog}>
 		<Dialog.Trigger class="w-full">
-			<Button variant="ghost" class="cursor-pointer w-full">
-				TODO 추가
+			<Button variant="ghost" class="cursor-pointer w-full" disabled={false}>
+				Task 추가
 			</Button>
 		</Dialog.Trigger>
 
-		<Dialog.Content>
-			<Dialog.Header>
-				<Dialog.Title>새로운 Todo 추가</Dialog.Title>
-				<Dialog.Description>
-					새로운 Todo를 추가해보세요!
+		<Dialog.Content class="" portalProps={{}}>
+			<Dialog.Header class="">
+				<Dialog.Title class="">새로운 Task 추가</Dialog.Title>
+				<Dialog.Description class="">
+					새로운 Task를 추가해보세요!
 				</Dialog.Description>
 			</Dialog.Header>
 
 			<TodoCreateForm
 				onSuccess={closeTodoCreateDialog}
 				>
-				<Dialog.Footer>
+				<Dialog.Footer class="">
 					<Form.Button>추가하기</Form.Button>
 				</Dialog.Footer>
 			</TodoCreateForm>

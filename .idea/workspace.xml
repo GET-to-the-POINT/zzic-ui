@@ -19,14 +19,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks.server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeSimpleList.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/ui/carousel/carousel.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/ui/carousel/carousel.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/challenges/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/challenges/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Button.stories.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Button.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/ChallengeItem.stories.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/stories/ChallengeItem.stories.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Configure.mdx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Header.stories.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Header.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Page.stories.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/Page.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/accessibility.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/accessibility.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/addon-library.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/assets.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/avif-test-image.avif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/context.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/discord.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/docs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/figma-plugin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/github.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/share.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/styling.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/testing.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/theming.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/tutorials.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/assets/youtube.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/button.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/header.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stories/page.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,7 +244,7 @@
       <workItem from="1749116785274" duration="4200000" />
       <workItem from="1749230774488" duration="599000" />
       <workItem from="1749634306768" duration="3477000" />
-      <workItem from="1749694135444" duration="602000" />
+      <workItem from="1749694135444" duration="1200000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />

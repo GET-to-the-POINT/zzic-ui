@@ -6,17 +6,62 @@
  * @property {string} startDate - 시작일 (YYYY-MM-DD)
  * @property {string} endDate - 종료일 (YYYY-MM-DD)
  * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
+ * @property {boolean} [participationStatus] - 참여 상태 (인증된 사용자의 경우)
  */
 
 /**
- * @typedef {Object} ChallengeJoinedDto
+ * @typedef {Object} ChallengeDetailDto
  * @property {number} id - 챌린지 ID
  * @property {string} title - 챌린지 제목
  * @property {string} description - 챌린지 설명
  * @property {string} startDate - 시작일 (YYYY-MM-DD)
  * @property {string} endDate - 종료일 (YYYY-MM-DD)
  * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
- * @property {boolean} participationStatus - 참여 상태
+ * @property {ParticipantDto[]} participants - 참여자 목록
+ */
+
+/**
+ * @typedef {Object} ParticipantDto
+ * @property {string} id - 참여자 ID (UUID)
+ * @property {string} email - 참여자 이메일
+ * @property {string} nickname - 참여자 닉네임
+ * @property {string} joinedAt - 참여일 (ISO 8601)
+ */
+
+/**
+ * @typedef {Object} ChallengeTodoResponse
+ * @property {number} id - 챌린지 투두 ID
+ * @property {string} challengeTitle - 챌린지 제목
+ * @property {string} challengeDescription - 챌린지 설명
+ * @property {string} startDate - 시작일 (YYYY-MM-DD)
+ * @property {string} endDate - 종료일 (YYYY-MM-DD)
+ * @property {boolean} done - 완료 여부
+ * @property {boolean} isPersisted - 영속성 여부
+ * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
+ */
+
+/**
+ * @typedef {Object} PageResponse
+ * @property {number} totalElements - 전체 요소 수
+ * @property {number} totalPages - 전체 페이지 수
+ * @property {boolean} first - 첫 페이지 여부
+ * @property {boolean} last - 마지막 페이지 여부
+ * @property {number} size - 페이지 크기
+ * @property {number} number - 현재 페이지 번호
+ * @property {number} numberOfElements - 현재 페이지 요소 수
+ * @property {boolean} empty - 빈 페이지 여부
+ */
+
+/**
+ * @typedef {PageResponse & {content: ChallengeDto[]}} PageChallengeDto
+ */
+
+/**
+ * @typedef {PageResponse & {content: ChallengeDetailDto[]}} PageChallengeDetailDto
+ */
+
+/**
+ * @typedef {PageResponse & {content: ChallengeTodoResponse[]}} PageChallengeTodoResponse
  */
 
 /**
@@ -53,12 +98,23 @@
  */
 export function createChallengeClient(apiUrl, fetchFn) {
 	/**
-	 * 모든 챌린지 조회
-	 * @returns {Promise<{data: ChallengeDto[]|null, error: any}>}
+	 * 모든 챌린지 조회 (페이징 지원)
+	 * @param {Object} [options] - 조회 옵션
+	 * @param {number} [options.page=0] - 페이지 번호
+	 * @param {number} [options.size=10] - 페이지 크기
+	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @returns {Promise<{data: PageChallengeDto|null, error: any}>}
 	 */
-	async function getChallenges() {
+	async function getChallenges(options = {}) {
+		const { page = 0, size = 10, sort = 'id,desc' } = options;
+		const params = new URLSearchParams({
+			page: page.toString(),
+			size: size.toString(),
+			sort
+		});
+
 		try {
-			const response = await fetchFn(`${apiUrl}/challenges`, {
+			const response = await fetchFn(`${apiUrl}/challenges?${params}`, {
 				credentials: 'include'
 			});
 
@@ -66,7 +122,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 				return { data: null, error: { status: response.status, message: response.statusText } };
 			}
 
-			/** @type {ChallengeDto[]} */
+			/** @type {PageChallengeDto} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
@@ -98,12 +154,23 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * 사용자별 챌린지 조회 (참여 여부 포함)
-	 * @returns {Promise<{data: ChallengeJoinedDto[]|null, error: any}>}
+	 * 모든 챌린지와 참여자 조회 (페이징 지원)
+	 * @param {Object} [options] - 조회 옵션
+	 * @param {number} [options.page=0] - 페이지 번호
+	 * @param {number} [options.size=10] - 페이지 크기
+	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @returns {Promise<{data: PageChallengeDetailDto|null, error: any}>}
 	 */
-	async function getChallengesByMember() {
+	async function getChallengesWithParticipants(options = {}) {
+		const { page = 0, size = 10, sort = 'id,desc' } = options;
+		const params = new URLSearchParams({
+			page: page.toString(),
+			size: size.toString(),
+			sort
+		});
+
 		try {
-			const response = await fetchFn(`${apiUrl}/challenges/by-member`, {
+			const response = await fetchFn(`${apiUrl}/challenges/with-participants?${params}`, {
 				credentials: 'include'
 			});
 
@@ -111,11 +178,154 @@ export function createChallengeClient(apiUrl, fetchFn) {
 				return { data: null, error: { status: response.status, message: response.statusText } };
 			}
 
-			/** @type {ChallengeJoinedDto[]} */
+			/** @type {PageChallengeDetailDto} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
 			return { data: null, error };
+		}
+	}
+
+	/**
+	 * 현재 기간 챌린지 투두 조회
+	 * @param {Object} [options] - 조회 옵션
+	 * @param {number} [options.page=0] - 페이지 번호
+	 * @param {number} [options.size=10] - 페이지 크기
+	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @returns {Promise<{data: PageChallengeTodoResponse|null, error: any}>}
+	 */
+	async function getChallengeTodos(options = {}) {
+		const { page = 0, size = 10, sort = 'id,desc' } = options;
+		const params = new URLSearchParams({
+			page: page.toString(),
+			size: size.toString(),
+			sort
+		});
+
+		try {
+			const response = await fetchFn(`${apiUrl}/challenge-todos?${params}`, {
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				return { data: null, error: { status: response.status, message: response.statusText } };
+			}
+
+			/** @type {PageChallengeTodoResponse} */
+			const data = await response.json();
+			return { data, error: null };
+		} catch (error) {
+			return { data: null, error };
+		}
+	}
+
+	/**
+	 * 현재 기간 미완료 챌린지 투두 조회
+	 * @param {Object} [options] - 조회 옵션
+	 * @param {number} [options.page=0] - 페이지 번호
+	 * @param {number} [options.size=10] - 페이지 크기
+	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @returns {Promise<{data: PageChallengeTodoResponse|null, error: any}>}
+	 */
+	async function getUncompletedChallengeTodos(options = {}) {
+		const { page = 0, size = 10, sort = 'id,desc' } = options;
+		const params = new URLSearchParams({
+			page: page.toString(),
+			size: size.toString(),
+			sort
+		});
+
+		try {
+			const response = await fetchFn(`${apiUrl}/challenge-todos/uncompleted?${params}`, {
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				return { data: null, error: { status: response.status, message: response.statusText } };
+			}
+
+			/** @type {PageChallengeTodoResponse} */
+			const data = await response.json();
+			return { data, error: null };
+		} catch (error) {
+			return { data: null, error };
+		}
+	}
+
+	/**
+	 * 완료된 챌린지 투두 조회
+	 * @param {Object} [options] - 조회 옵션
+	 * @param {number} [options.page=0] - 페이지 번호
+	 * @param {number} [options.size=10] - 페이지 크기
+	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @returns {Promise<{data: PageChallengeTodoResponse|null, error: any}>}
+	 */
+	async function getCompletedChallengeTodos(options = {}) {
+		const { page = 0, size = 10, sort = 'id,desc' } = options;
+		const params = new URLSearchParams({
+			page: page.toString(),
+			size: size.toString(),
+			sort
+		});
+
+		try {
+			const response = await fetchFn(`${apiUrl}/challenge-todos/completed?${params}`, {
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				return { data: null, error: { status: response.status, message: response.statusText } };
+			}
+
+			/** @type {PageChallengeTodoResponse} */
+			const data = await response.json();
+			return { data, error: null };
+		} catch (error) {
+			return { data: null, error };
+		}
+	}
+
+	/**
+	 * 챌린지 완료 처리
+	 * @param {number} challengeId - 챌린지 ID
+	 * @returns {Promise<{error: any}>}
+	 */
+	async function completeChallenge(challengeId) {
+		try {
+			const response = await fetchFn(`${apiUrl}/challenge-todos/${challengeId}/complete`, {
+				method: 'POST',
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				return { error: { status: response.status, message: response.statusText } };
+			}
+
+			return { error: null };
+		} catch (error) {
+			return { error };
+		}
+	}
+
+	/**
+	 * 챌린지 완료 취소
+	 * @param {number} challengeId - 챌린지 ID
+	 * @returns {Promise<{error: any}>}
+	 */
+	async function cancelCompleteChallenge(challengeId) {
+		try {
+			const response = await fetchFn(`${apiUrl}/challenge-todos/${challengeId}/complete`, {
+				method: 'DELETE',
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				return { error: { status: response.status, message: response.statusText } };
+			}
+
+			return { error: null };
+		} catch (error) {
+			return { error };
 		}
 	}
 
@@ -243,7 +453,12 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	return {
 		getChallenges,
 		getChallenge,
-		getChallengesByMember,
+		getChallengesWithParticipants,
+		getChallengeTodos,
+		getUncompletedChallengeTodos,
+		getCompletedChallengeTodos,
+		completeChallenge,
+		cancelCompleteChallenge,
 		joinChallenge,
 		leaveChallenge,
 		createChallenge,

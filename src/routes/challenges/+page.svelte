@@ -7,56 +7,62 @@
 	const allChallenges = [
 		{
 			id: 1,
-			title: '30일 독서 챌린지',
-			description: '매일 최소 30분씩 독서하며 성장하는 습관을 만들어보세요',
-			category: '자기계발',
+			title: '물 8잔 마시기',
+			description: '매일 최소 8잔의 물을 마시며 건강한 수분 섭취 습관을 만들어보세요',
 			participantCount: 124,
-			duration: 30,
+			periodType: 'DAILY',
+			startDate: '2025-06-15',
+			endDate: '2025-07-15',
 			joined: false
 		},
 		{
 			id: 2, 
-			title: '아침 운동 21일',
+			title: '아침 운동하기',
 			description: '건강한 아침을 위한 가벼운 운동 루틴을 만들어보세요',
-			category: '건강',
 			participantCount: 89,
-			duration: 21,
+			periodType: 'DAILY',
+			startDate: '2025-06-12',
+			endDate: '2025-07-03',
 			joined: true
 		},
 		{
 			id: 3,
 			title: '감사 일기 쓰기',
-			description: '매일 감사한 일 3가지를 기록하며 긍정적인 마음가짐을 기르세요',
-			category: '마음챙김',
+			description: '매주 감사한 일들을 기록하며 긍정적인 마음가짐을 기르세요',
 			participantCount: 67,
-			duration: 14,
+			periodType: 'WEEKLY',
+			startDate: '2025-06-16',
+			endDate: '2025-08-11',
 			joined: false
 		},
 		{
 			id: 4,
-			title: '물 마시기 습관',
-			description: '하루 8잔의 물을 마시며 건강한 수분 섭취 습관을 만들어보세요',
-			category: '건강',
+			title: '독서하기',
+			description: '매월 새로운 책을 읽으며 지식과 교양을 쌓아보세요',
 			participantCount: 203,
-			duration: 7,
+			periodType: 'MONTHLY',
+			startDate: '2025-06-01',
+			endDate: '2025-12-01',
 			joined: false
 		},
 		{
 			id: 5,
-			title: '새벽 5시 기상하기',
-			description: '일찍 일어나서 하루를 알차게 보내는 습관을 만들어보세요',
-			category: '라이프스타일',
+			title: '일찍 일어나기',
+			description: '새벽 6시에 일어나서 하루를 알차게 보내는 습관을 만들어보세요',
 			participantCount: 892,
-			duration: 30,
+			periodType: 'DAILY',
+			startDate: '2025-06-10',
+			endDate: '2025-07-10',
 			joined: false
 		},
 		{
 			id: 6,
-			title: '영어 단어 20개 외우기',
-			description: '꾸준한 어휘력 향상을 위해 매일 새로운 영어 단어를 학습해보세요',
-			category: '공부',
+			title: '영어 공부하기',
+			description: '매주 새로운 영어 표현을 학습하며 실력을 향상시켜보세요',
 			participantCount: 2103,
-			duration: 100,
+			periodType: 'WEEKLY',
+			startDate: '2025-06-03',
+			endDate: '2025-09-30',
 			joined: false
 		}
 	];
@@ -89,13 +95,12 @@
 				</Button>
 			</div>
 			
-			<!-- 필터 및 검색 (향후 추가 예정) -->
+			<!-- 기간 필터 -->
 			<div class="flex gap-2 text-sm">
 				<span class="px-3 py-1 bg-primary text-primary-foreground rounded-full">전체</span>
-				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">건강</span>
-				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">자기계발</span>
-				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">공부</span>
-				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">운동</span>
+				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">매일</span>
+				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">매주</span>
+				<span class="px-3 py-1 bg-muted text-muted-foreground rounded-full hover:bg-muted/80 cursor-pointer">매월</span>
 			</div>
 		</div>
 
