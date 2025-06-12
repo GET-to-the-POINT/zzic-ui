@@ -13,7 +13,7 @@
 </script>
 
 <div class="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
-	<Button href="/members/me/todos" size="lg" class="gap-2">
+	<Button href="/dashboard" size="lg" class="gap-2">
 		<CheckCircle2 size={20} />
 		일정관리 시작하기
 	</Button>

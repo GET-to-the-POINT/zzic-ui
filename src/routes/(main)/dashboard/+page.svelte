@@ -4,7 +4,8 @@
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import TodoCreateForm from '../members/[nickname]/TodoCreateForm.svelte';
+	import TodoCreateForm from '$lib/components/sections/todo/TodoCreateForm.svelte';
+	import ChallengeSimpleList from '$lib/components/sections/challenge/ChallengeSimpleList.svelte';
 
 	/**
 	 * @typedef {Object} Todo
@@ -47,12 +48,72 @@
 	let doneTodos = $derived(data?.doneTodos);
 	let yetTotalElements = $derived(data?.yetTodoPage.totalElements);
 	let doneTotalElements = $derived(data?.doneTodoPage.totalElements);
+
+	// Mock 챌린지 데이터 
+	const mockChallenges = [
+		{
+			id: '1',
+			title: '30일 독서 챌린지',
+			description: '매일 최소 30분씩 독서하며 성장하는 습관을 만들어보세요',
+			category: '자기계발',
+			participantCount: 124,
+			duration: 30,
+			tasks: ['독서', '기록', '공유'],
+			isActive: true
+		},
+		{
+			id: '2', 
+			title: '아침 운동 21일',
+			description: '건강한 아침을 위한 가벼운 운동 루틴을 만들어보세요',
+			category: '건강',
+			participantCount: 89,
+			duration: 21,
+			tasks: ['스트레칭', '가벼운 운동'],
+			isActive: true
+		},
+		{
+			id: '3',
+			title: '감사 일기 쓰기',
+			description: '매일 감사한 일 3가지를 기록하며 긍정적인 마음가짐을 기르세요',
+			category: '마음챙김',
+			participantCount: 67,
+			duration: 14,
+			tasks: ['감사 일기', '성찰'],
+			isActive: true
+		},
+		{
+			id: '4',
+			title: '물 마시기 습관',
+			description: '하루 8잔의 물을 마시며 건강한 수분 섭취 습관을 만들어보세요',
+			category: '건강',
+			participantCount: 203,
+			duration: 7,
+			tasks: ['물 마시기', '기록하기'],
+			isActive: false
+		}
+	];
+
+	const handleViewMore = () => {
+		console.log('전체 챌린지 보기');
+		// TODO: 챌린지 목록 페이지로 이동
+	};
+
+	const handleJoinChallenge = (challengeId) => {
+		console.log('챌린지 참여:', challengeId);
+		// TODO: 챌린지 참여 로직
+	};
 </script>
 
 <main class="space-y-6 p-4">
 	<TodoStats
 		doneTotalElements={doneTotalElements}
 		yetTotalElements={yetTotalElements}
+	/>
+
+	<ChallengeSimpleList 
+		challenges={mockChallenges}
+		onViewMore={handleViewMore}
+		onJoinChallenge={handleJoinChallenge}
 	/>
 
 	<Dialog.Root bind:open={todoCreateDialog}>

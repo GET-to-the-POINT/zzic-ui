@@ -33,30 +33,6 @@
 	/** @type {Props} */
 	const { todos = [], title, totalCount, class: className } = $props();
 
-	/**
-	 * 투두 상태에 따른 액션 생성
-	 * @param {Todo} todo - 투두 아이템
-	 * @returns {Action} 액션 객체
-	 */
-	function createAction(todo) {
-		if (todo.done) {
-			return {
-				formAction: '?/undone',
-				buttonClass: '',
-				iconClass: 'text-green-500',
-				title: '완료 취소',
-				icon: CheckCircle2
-			};
-		} else {
-			return {
-				formAction: '?/done',
-				buttonClass: '',
-				iconClass: 'text-muted-foreground',
-				title: '완료 표시',
-				icon: Circle
-			};
-		}
-	}
 </script>
 
 <section class={['space-y-6', className]} aria-label={title + ' 목록'}>
@@ -78,7 +54,7 @@
 			</div>
 		{:else}
 			{#each todos as todo (todo.id)}
-				<TodoItem {todo} action={createAction(todo)} />
+				<TodoItem {todo} Icon={todo.done ? CheckCircle2 : Circle}/>
 			{/each}
 		{/if}
 	</div>

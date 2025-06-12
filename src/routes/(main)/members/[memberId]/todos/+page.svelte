@@ -1,10 +1,9 @@
 <script>
-	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Form from '$lib/components/ui/form/index.js';
 	import TodoSection from '$lib/todo/TodoSection.svelte';
 	import TodoStats from '$lib/todo/TodoStats.svelte';
-	import TodoForm from '../TodoCreateForm.svelte';
+	import TodoForm from '$lib/components/sections/todo/TodoCreateForm.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 
 	/**

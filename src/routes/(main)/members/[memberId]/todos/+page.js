@@ -1,3 +1,5 @@
+import { error } from '@sveltejs/kit';
+
 /**
  * @typedef {Object} Todo
  * @property {string} id - Todo ID
@@ -43,10 +45,10 @@ export async function load({ parent }) {
 	const { zzic, user } = await parent();
 
 	try {
-		const yetTodoPromise = zzic.todo.getTodos(user.sub);
+		const yetTodoPromise = zzic.todo.getTodos(user.sub, { done: false });
 		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
 
-		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);		console.log('Raw API results:', results);
+		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);
 
 		const [{ data: yetTodoPage }, { data: doneTodoPage }] = results;
 
@@ -60,13 +62,9 @@ export async function load({ parent }) {
 			yetTodoPage,
 			doneTodoPage
 		};
-	} catch (error) {
-		console.error('Error loading todos:', error);
-		return {
-			yetTodos: [],
-			doneTodos: [],
-			yetTodoPage: { content: [], totalElements: 0 },
-			doneTodoPage: { content: [], totalElements: 0 }
-		};
+	} catch (e) {
+		error(404, {
+			message: e.message || '할 일 목록을 불러오는 데 실패했습니다',
+		});
 	}
 }

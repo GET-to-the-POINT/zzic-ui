@@ -43,10 +43,10 @@ export async function load({ parent }) {
 	const { zzic, user } = await parent();
 
 	try {
-		const yetTodoPromise = zzic.todo.getTodos(user.sub);
+		const yetTodoPromise = zzic.todo.getTodos(user.sub, { done: false });
 		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
 
-		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);		console.log('Raw API results:', results);
+		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);		
 
 		const [{ data: yetTodoPage }, { data: doneTodoPage }] = results;
 
