@@ -4,6 +4,20 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	
 	const { data } = $props();
+
+	/**
+	 * 시작일과 종료일 사이의 일수를 계산
+	 * @param {string} startDate - YYYY-MM-DD 형식의 시작일
+	 * @param {string} endDate - YYYY-MM-DD 형식의 종료일
+	 * @returns {number}
+	 */
+	const calculateDays = (startDate, endDate) => {
+		const start = new Date(startDate);
+		const end = new Date(endDate);
+		const diffTime = Math.abs(end - start);
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+		return diffDays;
+	};
 </script>
 
 <div class="container mx-auto py-8 px-4">
@@ -19,7 +33,9 @@
 			<div class="grid grid-cols-3 gap-4 text-sm">
 				<div>
 					<span class="text-muted-foreground">기간</span>
-					<p class="font-medium">{data.challenge.duration}일</p>
+					<p class="font-medium">
+						{calculateDays(data.challenge.startDate, data.challenge.endDate)}일
+					</p>
 				</div>
 				<div>
 					<span class="text-muted-foreground">참여자</span>

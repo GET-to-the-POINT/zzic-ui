@@ -16,7 +16,7 @@
 	 */
 
 	/** @type {Props} */
-	const { onSuccess, onError, children, action=`/members/${page.data.user.sub}/todos` } = $props();
+	const { onSuccess, onError, children, action=`/todos` } = $props();
 
 	const form = superForm({}, {
 		validators: zodClient(todoFormSchema),

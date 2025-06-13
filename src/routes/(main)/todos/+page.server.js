@@ -3,21 +3,27 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { todoFormSchema } from '$lib/components/sections/todo/schema.js';
 
-export const actions = {
-	default: async ({ request, params, locals: { zzic } }) => {
-		const form = await superValidate(request, zod(todoFormSchema));
+export const load = async () => {
+	return {
+		form: await superValidate(zod(todoFormSchema)),
+	};
+};
 
+export const actions = {
+	default: async ({ request, locals: { zzic, user } }) => {
+		const form = await superValidate(request, zod(todoFormSchema));
+		
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 
 		const { title, description } = form.data;
-		const { error } = await zzic.todo.createTodo(params.memberId, { title, description });
-
+		const { error } = await zzic.todo.createTodo(user.sub, { title, description });
+		
 		if (error) {
 			return fail(400, { form, error: error.message || '할 일 생성 실패' });
 		}
 
 		return { form };
-	},
+	}
 };

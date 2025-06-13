@@ -22,10 +22,9 @@
 	 */
 
 	/** @type {Props} */
-	let { todo, Icon, memberId = page.data.user.sub} = $props();
+	let { todo, Icon } = $props();
 
-	const todoDetailUrl = `/members/${memberId}/todos/${todo.id}`;
-
+	const todoDetailUrl = `/todos/${todo.id}`;
 </script>
 
 <Card.Root

@@ -1,9 +1,10 @@
 <script>
-	import { Button } from '$lib/components/ui/button';
+	import * as Button from '$lib/components/ui/button/index';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import CheckCircle2 from '@lucide/svelte/icons/check-circle-2';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Wrench from '@lucide/svelte/icons/wrench';
+	import { page } from '$app/state';
 
 	let dialogOpen = $state(false);
 
@@ -13,10 +14,19 @@
 </script>
 
 <div class="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
-	<Button href="/dashboard" size="lg" class="gap-2">
+	<Button.Root href="/dashboard" size="lg" class="gap-2">
 		<CheckCircle2 size={20} />
 		일정관리 시작하기
-	</Button>
+	</Button.Root>
+
+	<Button.Root
+		href={`/todos`}
+		size="lg"
+		class="gap-2"
+	>
+		<Plus size={20} />
+		Todo 보기
+	</Button.Root>
 	
 	<Dialog.Root bind:open={dialogOpen}>
 		<Dialog.Trigger class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">

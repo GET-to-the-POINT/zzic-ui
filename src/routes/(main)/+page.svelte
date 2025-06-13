@@ -9,6 +9,6 @@
 
 <HeroSection />
 <FeaturesSection />
-<!-- <HowItWorksSection /> -->
+<HowItWorksSection />
 <CommunitySection />
-<!-- <CTASection /> -->
+<CTASection />
