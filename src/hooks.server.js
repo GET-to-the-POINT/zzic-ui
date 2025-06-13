@@ -28,13 +28,14 @@ const handleAuth = async ({ event, resolve }) => {
  * @type {import('@sveltejs/kit').Handle}
  */
 const authGuard = async ({ event, resolve }) => {
-	const guradPaths = [
+	const guardPaths = [
 		'/dashboard',
 		'/settings',
 		'/profile',
 		'/members'
 	];
-	const isAuthRequired = guradPaths.some((path) => event.url.pathname.startsWith(path));
+	const { pathname } = event.url;
+	const isAuthRequired = guardPaths.some((path) => pathname.startsWith(path));
 
 	if (!event.locals.user && isAuthRequired) {
 		redirect(303, '/auth/sign-in');
@@ -56,7 +57,7 @@ const zzic = async ({ event, resolve }) => {
 			getAll: () => event.cookies.getAll(),
 			setAll: (cookiesToSet) => {
 				cookiesToSet.forEach((cookie) => {
-					event.cookies.set(cookie.name, cookie.value, cookie.options);
+					event.cookies.set(cookie.name, cookie.value, cookie.options || {});
 				});
 			}
 		}
@@ -106,7 +107,7 @@ export const handleFetch = async ({ event, request, fetch }) => {
 				} else if (trimmedPart === 'secure') {
 					options.secure = true;
 				} else if (trimmedPart.startsWith('samesite=')) {
-					options.sameSite = part.trim().split('=')[1].toLowerCase();
+					options.sameSite = /** @type {'strict' | 'lax' | 'none'} */ (part.trim().split('=')[1].toLowerCase());
 				}
 			});
 

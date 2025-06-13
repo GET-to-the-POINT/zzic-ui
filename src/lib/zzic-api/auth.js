@@ -1,27 +1,17 @@
 /**
- * @typedef {Object} SignInRequest
- * @property {string} email - 이메일 주소
- * @property {string} password - 비밀번호
- */
-
-/**
- * @typedef {Object} SignUpRequest
- * @property {string} email - 이메일 주소
- * @property {string} password - 비밀번호
- * @property {string} nickname - 닉네임
- */
-
-/**
- * @typedef {Object} MemberMeResponse
- * @property {string} email - 사용자의 이메일 주소
- * @property {string} nickname - 사용자의 닉네임
+ * @typedef {import('./types.js').SignInRequest} SignInRequest
+ * @typedef {import('./types.js').SignUpRequest} SignUpRequest
+ * @typedef {import('./types.js').MemberMeResponse} MemberMeResponse
+ * @typedef {import('./types.js').AuthResponse} AuthResponse
+ * @typedef {import('./types.js').ApiError} ApiError
  */
 
 /**
  * 인증 클라이언트 팩토리
  * @param {string} apiUrl - API 서버 URL
  * @param {Function} fetchFn - fetch 함수
- * @param {Object} options - 추가 옵션
+ * @param {Object} [options={}] - 추가 옵션
+ * @param {Function} [options.getUserFn] - 사용자 정보 가져오기 함수
  * @returns {Object} 인증 클라이언트
  */
 export function createAuthClient(apiUrl, fetchFn, options = {}) {
@@ -68,13 +58,18 @@ export function createAuthClient(apiUrl, fetchFn, options = {}) {
 
 			if (!response.ok) {
 				const error = await response.json();
-				return { data: { user: null }, error };
+				return { data: null, error };
 			}
 
 			// 로그인 성공 후 사용자 정보 가져오기
-			return getUser();
+			const { data, error: getUserError } = await getUser();
+			if (getUserError) {
+				return {data: null, error: getUserError}
+			}
+
+			return { data, error: null };
 		} catch (error) {
-			return { data: { user: null }, error };
+			return { data: null, error };
 		}
 	}
 

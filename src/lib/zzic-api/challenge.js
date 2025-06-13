@@ -1,93 +1,17 @@
 /**
- * @typedef {Object} ChallengeDto
- * @property {number} id - 챌린지 ID
- * @property {string} title - 챌린지 제목
- * @property {string} description - 챌린지 설명
- * @property {string} startDate - 시작일 (YYYY-MM-DD)
- * @property {string} endDate - 종료일 (YYYY-MM-DD)
- * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
- * @property {boolean} [participationStatus] - 참여 상태 (인증된 사용자의 경우)
- */
-
-/**
- * @typedef {Object} ChallengeDetailDto
- * @property {number} id - 챌린지 ID
- * @property {string} title - 챌린지 제목
- * @property {string} description - 챌린지 설명
- * @property {string} startDate - 시작일 (YYYY-MM-DD)
- * @property {string} endDate - 종료일 (YYYY-MM-DD)
- * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
- * @property {ParticipantDto[]} participants - 참여자 목록
- */
-
-/**
- * @typedef {Object} ParticipantDto
- * @property {string} id - 참여자 ID (UUID)
- * @property {string} email - 참여자 이메일
- * @property {string} nickname - 참여자 닉네임
- * @property {string} joinedAt - 참여일 (ISO 8601)
- */
-
-/**
- * @typedef {Object} ChallengeTodoResponse
- * @property {number} id - 챌린지 투두 ID
- * @property {string} challengeTitle - 챌린지 제목
- * @property {string} challengeDescription - 챌린지 설명
- * @property {string} startDate - 시작일 (YYYY-MM-DD)
- * @property {string} endDate - 종료일 (YYYY-MM-DD)
- * @property {boolean} done - 완료 여부
- * @property {boolean} isPersisted - 영속성 여부
- * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
- */
-
-/**
- * @typedef {Object} PageResponse
- * @property {number} totalElements - 전체 요소 수
- * @property {number} totalPages - 전체 페이지 수
- * @property {boolean} first - 첫 페이지 여부
- * @property {boolean} last - 마지막 페이지 여부
- * @property {number} size - 페이지 크기
- * @property {number} number - 현재 페이지 번호
- * @property {number} numberOfElements - 현재 페이지 요소 수
- * @property {boolean} empty - 빈 페이지 여부
- */
-
-/**
- * @typedef {PageResponse & {content: ChallengeDto[]}} PageChallengeDto
- */
-
-/**
- * @typedef {PageResponse & {content: ChallengeDetailDto[]}} PageChallengeDetailDto
- */
-
-/**
- * @typedef {PageResponse & {content: ChallengeTodoResponse[]}} PageChallengeTodoResponse
- */
-
-/**
- * @typedef {Object} CreateChallengeCommand
- * @property {string} title - 챌린지 제목
- * @property {string} description - 챌린지 설명
- * @property {'DAILY'|'WEEKLY'|'MONTHLY'} periodType - 기간 타입
- */
-
-/**
- * @typedef {Object} UpdateChallengeCommand
- * @property {string} [title] - 챌린지 제목
- * @property {string} [description] - 챌린지 설명
- * @property {'DAILY'|'WEEKLY'|'MONTHLY'} [periodType] - 기간 타입
- */
-
-/**
- * @typedef {Object} CreateChallengeResponse
- * @property {number} challengeId - 생성된 챌린지 ID
- * @property {string} message - 응답 메시지
- */
-
-/**
- * @typedef {Object} ApiResponse
- * @property {any} data - 응답 데이터
- * @property {Object|null} error - 에러 정보
+ * @typedef {import('./types.js').ChallengeDto} ChallengeDto
+ * @typedef {import('./types.js').ChallengeDetailDto} ChallengeDetailDto
+ * @typedef {import('./types.js').ParticipantDto} ParticipantDto
+ * @typedef {import('./types.js').ChallengeTodoResponse} ChallengeTodoResponse
+ * @typedef {import('./types.js').PageResponse} PageResponse
+ * @typedef {import('./types.js').PageChallengeDto} PageChallengeDto
+ * @typedef {import('./types.js').PageChallengeDetailDto} PageChallengeDetailDto
+ * @typedef {import('./types.js').PageChallengeTodoResponse} PageChallengeTodoResponse
+ * @typedef {import('./types.js').CreateChallengeCommand} CreateChallengeCommand
+ * @typedef {import('./types.js').UpdateChallengeCommand} UpdateChallengeCommand
+ * @typedef {import('./types.js').CreateChallengeResponse} CreateChallengeResponse
+ * @typedef {import('./types.js').ApiResponse} ApiResponse
+ * @typedef {import('./types.js').ApiError} ApiError
  */
 
 /**
@@ -99,13 +23,12 @@
 export function createChallengeClient(apiUrl, fetchFn) {
 	/**
 	 * 모든 챌린지 조회 (페이징 지원)
-	 * @param {Object} [key] - 조회 키 (현재 사용되지 않음, 추후 확장 가능성)
 	 * @param {Object} [options] - 조회 옵션
 	 * @param {number} [options.page=0] - 페이지 번호
 	 * @param {number} [options.size=10] - 페이지 크기
 	 * @param {string} [options.sort='id,desc'] - 정렬 조건
 	 * @param {string} [options.enroll] - 참여 옵션 (예: 'participants')
-	 * @returns {Promise<{data: PageChallengeDto|null, error: any}>}
+	 * @returns {Promise<{data: PageChallengeDto|null, error: ApiError|null}>}
 	 */
 	async function getChallenges( key = {}, options = {}) {
 		const params = new URLSearchParams();
@@ -131,7 +54,8 @@ export function createChallengeClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				return { data: null, error: { status: response.status, message: response.statusText } };
+				const error = await response.json()
+				return { data: null, error };
 			}
 
 			/** @type {PageChallengeDto} */
@@ -145,16 +69,20 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	/**
 	 * 챌린지 상세 조회
 	 * @param {number} challengeId - 챌린지 ID
-	 * @returns {Promise<{data: ChallengeDto|null, error: any}>}
+	 * @returns {Promise<{data: ChallengeDto|null, error: ApiError|null}>}
 	 */
 	async function getChallenge(challengeId) {
 		try {
-			const response = await fetchFn(`${apiUrl}/challenges/${challengeId}`, {
+			const url = new URL(`${apiUrl}/challenges/${challengeId}`);
+			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
 
 			if (!response.ok) {
-				return { data: null, error: { status: response.status, message: response.statusText } };
+				return { 
+					data: null, 
+					error: { status: response.status, message: response.statusText } 
+				};
 			}
 
 			/** @type {ChallengeDto} */

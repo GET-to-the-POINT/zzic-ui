@@ -1,29 +1,14 @@
 import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
 import { createChallengeClient } from './challenge.js';
+import { createAuthClient } from './auth.js';
 
 /**
- * @typedef {Object} SignInRequest
- * @property {string} email - 이메일 주소
- * @property {string} password - 비밀번호
- */
-
-/**
- * @typedef {Object} SignUpRequest
- * @property {string} email - 이메일 주소
- * @property {string} password - 비밀번호
- * @property {string} nickname - 닉네임
- */
-
-/**
- * @typedef {Object} MemberMeResponse
- * @property {string} email - 사용자의 이메일 주소
- * @property {string} nickname - 사용자의 닉네임
- */
-
-/**
- * @typedef {Object} AuthResponse
- * @property {Object|null} error - 에러 정보
+ * @typedef {import('./types.js').SignInRequest} SignInRequest
+ * @typedef {import('./types.js').SignUpRequest} SignUpRequest
+ * @typedef {import('./types.js').MemberMeResponse} MemberMeResponse
+ * @typedef {import('./types.js').AuthResponse} AuthResponse
+ * @typedef {import('./types.js').ApiError} ApiError
  */
 
 /**
@@ -38,91 +23,24 @@ export function createZzicServerClient(apiUrl, options) {
 	const { global = {}, cookies } = options;
 	const fetchFn = /** @type {any} */ (global.fetch) || globalThis.fetch;
 
-	const auth = {
-		/**
-		 * 현재 사용자 정보 가져오기
-		 * @returns {Promise<AuthResponse>}
-		 */
-		async getUser() {
-			let user = getUserFromCookies(/** @type {any} */ (cookies));
+	// 서버용 사용자 정보 가져오기 함수
+	const getUserFn = () => {
+		const user = getUserFromCookies(/** @type {any} */ (cookies));
 
-			if (!user) {
-				return { data: { user: null }, error: { message: 'User not authenticated' } };
-			}
-
-			return { data: { user: /** @type {MemberMeResponse} */ (user) }, error: null };
-		},
-
-		/**
-		 * 로그인
-		 * @param {SignInRequest} credentials - 로그인 자격 증명
-		 * @returns {Promise<AuthResponse>}
-		 */
-		async signIn(credentials) {
-			try {
-				const response = await fetchFn(`${apiUrl}/auth/sign-in`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(credentials)
-				});
-
-				if (!response.ok) {
-					const error = /** @type {any} */ (await response.text());
-					return { error };
-				}
-
-				return { error: null };
-			} catch (error) {
-				return { error: /** @type {any} */ (error) };
-			}
-		},
-
-		/**
-		 * 회원가입
-		 * @param {SignUpRequest} credentials - 회원가입 자격 증명
-		 * @returns {Promise<{error: Object|null}>}
-		 */
-		async signUp(credentials) {
-			try {
-				const signUpResponse = await fetchFn(`${apiUrl}/auth/sign-up`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(credentials)
-				});
-
-				if (!signUpResponse.ok) {
-					const error = /** @type {any} */ (await signUpResponse.json());
-					return { error };
-				}
-
-				return { error: null };
-			} catch (error) {
-				return { error: /** @type {any} */ (error) };
-			}
-		},
-
-		/**
-		 * 로그아웃
-		 * @returns {Promise<{error: Object|null}>}
-		 */
-		async signOut() {
-			try {
-				await fetchFn(`${apiUrl}/auth/sign-out`, {
-					method: 'POST'
-				});
-
-				return { error: null };
-			} catch (error) {
-				console.error('서버 로그아웃 실패:', error);
-				return { error: /** @type {any} */ (error) };
-			}
+		if (!user) {
+			return { 
+				data: { user: null }, 
+				error: { status: 401, message: 'User not authenticated' } 
+			};
 		}
+
+		return { 
+			data: { user: /** @type {MemberMeResponse} */ (user) }, 
+			error: null 
+		};
 	};
 
+	const auth = createAuthClient(apiUrl, fetchFn, { getUserFn });
 	const todo = createTodoClient(apiUrl, fetchFn);
 	const challenge = createChallengeClient(apiUrl, fetchFn);
 

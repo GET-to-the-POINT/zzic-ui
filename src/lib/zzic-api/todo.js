@@ -1,42 +1,10 @@
 /**
- * @typedef {Object} TodoDto
- * @property {number} id - Todo ID
- * @property {string} title - Todo 제목
- * @property {string} [description] - Todo 설명
- * @property {boolean} done - 완료 여부
- * @property {string} [createdAt] - 생성 시간
- * @property {string} [updatedAt] - 수정 시간
- */
-
-/**
- * @typedef {Object} PageTodoDto
- * @property {TodoDto[]} content - Todo 목록
- * @property {number} number - 현재 페이지 번호 (0부터 시작)
- * @property {number} size - 페이지 크기
- * @property {number} totalElements - 총 요소 개수
- * @property {number} totalPages - 총 페이지 개수
- * @property {boolean} first - 첫 번째 페이지 여부
- * @property {boolean} last - 마지막 페이지 여부
- * @property {boolean} empty - 비어있는 페이지 여부
- */
-
-/**
- * @typedef {Object} CreateTodoRequest
- * @property {string} title - Todo 제목
- * @property {string} [description] - Todo 설명
- */
-
-/**
- * @typedef {Object} UpdateTodoRequest
- * @property {string} [title] - Todo 제목
- * @property {string} [description] - Todo 설명
- * @property {boolean} [done] - 완료 여부
- */
-
-/**
- * @typedef {Object} ApiResponse
- * @property {any} data - 응답 데이터
- * @property {Object|null} error - 에러 정보
+ * @typedef {import('./types.js').TodoDto} TodoDto
+ * @typedef {import('./types.js').PageTodoDto} PageTodoDto
+ * @typedef {import('./types.js').CreateTodoRequest} CreateTodoRequest
+ * @typedef {import('./types.js').UpdateTodoRequest} UpdateTodoRequest
+ * @typedef {import('./types.js').ApiResponse} ApiResponse
+ * @typedef {import('./types.js').ApiError} ApiError
  */
 
 /**
@@ -47,14 +15,14 @@
  */
 export function createTodoClient(apiUrl, fetchFn) {
 	/**
-	 * Todo 목록 조회
+	 * 할 일 목록 조회
 	 * @param {string} memberId - 멤버 ID
 	 * @param {Object} [options={}] - 옵션
 	 * @param {boolean} [options.done] - 완료 여부 필터
 	 * @param {number} [options.page] - 페이지 번호
 	 * @param {number} [options.size] - 페이지 크기
 	 * @param {string} [options.sort] - 정렬 옵션
-	 * @returns {Promise<{data: PageTodoDto|null, error: any}>}
+	 * @returns {Promise<{data: PageTodoDto|null, error: ApiError|null}>}
 	 */
 	async function getTodos(memberId, options = {}) {
 		const url = new URL(`${apiUrl}/api/members/${memberId}/todos`);
@@ -70,7 +38,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				const error = await response.text();
+				const error = await response.json();
 				return { data: null, error };
 			}
 
@@ -83,14 +51,15 @@ export function createTodoClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * 특정 Todo 조회
+	 * 특정 할 일 조회
 	 * @param {string} memberId - 멤버 ID
-	 * @param {number} todoId - Todo ID
-	 * @returns {Promise<{data: TodoDto|null, error: any}>}
+	 * @param {number} todoId - 할 일 ID
+	 * @returns {Promise<{data: TodoDto|null, error: ApiError|null}>}
 	 */
 	async function getTodo(memberId, todoId) {
 		try {
-			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos/${todoId}`, {
+			const url = new URL(`${apiUrl}/api/members/${memberId}/todos/${todoId}`);
+			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
 
@@ -108,14 +77,15 @@ export function createTodoClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * Todo 생성
+	 * 할 일 생성
 	 * @param {string} memberId - 멤버 ID
-	 * @param {CreateTodoRequest} todo - Todo 생성 데이터
-	 * @returns {Promise<{error: any}>}
+	 * @param {CreateTodoRequest} todo - 할 일 생성 데이터
+	 * @returns {Promise<{error: ApiError|null}>}
 	 */
 	async function createTodo(memberId, todo) {
 		try {
-			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos`, {
+			const url = new URL(`${apiUrl}/api/members/${memberId}/todos`);
+			const response = await fetchFn(url.toString(), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(todo),
@@ -134,15 +104,16 @@ export function createTodoClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * Todo 수정
+	 * 할 일 수정
 	 * @param {string} memberId - 멤버 ID
-	 * @param {number} todoId - Todo ID
-	 * @param {UpdateTodoRequest} todo - Todo 수정 데이터
-	 * @returns {Promise<{error: any}>}
+	 * @param {number} todoId - 할 일 ID
+	 * @param {UpdateTodoRequest} todo - 할 일 수정 데이터
+	 * @returns {Promise<{error: ApiError|null}>}
 	 */
 	async function updateTodo(memberId, todoId, todo) {
 		try {
-			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos/${todoId}`, {
+			const url = new URL(`${apiUrl}/api/members/${memberId}/todos/${todoId}`);
+			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(todo),
@@ -161,20 +132,21 @@ export function createTodoClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * Todo 삭제
+	 * 할 일 삭제
 	 * @param {string} memberId - 멤버 ID
-	 * @param {number} todoId - Todo ID
-	 * @returns {Promise<{error: any}>}
+	 * @param {number} todoId - 할 일 ID
+	 * @returns {Promise<{error: ApiError|null}>}
 	 */
 	async function deleteTodo(memberId, todoId) {
 		try {
-			const response = await fetchFn(`${apiUrl}/api/members/${memberId}/todos/${todoId}`, {
+			const url = new URL(`${apiUrl}/api/members/${memberId}/todos/${todoId}`);
+			const response = await fetchFn(url.toString(), {
 				method: 'DELETE',
 				credentials: 'include'
 			});
 
 			if (response.status !== 204) {
-				const error = await response.json().catch(() => ({ message: 'Failed to delete todo' }));
+				const error = await response.json();
 				return { error };
 			}
 
@@ -184,7 +156,13 @@ export function createTodoClient(apiUrl, fetchFn) {
 		}
 	}
 
-	// 레거시 호환성을 위한 alias 메서드들
+	// 레거시 호환성을 위한 alias 메서드
+	/**
+	 * 멤버의 할 일 생성 (레거시 호환성)
+	 * @param {string} memberId - 멤버 ID
+	 * @param {CreateTodoRequest} todo - 할 일 생성 데이터
+	 * @returns {Promise<{error: ApiError|null}>}
+	 */
 	async function createTodoForMember(memberId, todo) {
 		return createTodo(memberId, todo);
 	}
