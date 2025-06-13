@@ -53,7 +53,7 @@ export async function load({ parent }) {
 	try {
 		const yetTodoPromise = zzic.todo.getTodos(user.sub, { done: false });
 		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
-		const challengesPromise = zzic.challenge.getChallenges();
+		const challengesPromise = zzic.challenge.getChallenges({ userId: user.sub }, { enroll: false});
 
 		const results = await Promise.all([yetTodoPromise, doneTodoPromise, challengesPromise]);
 

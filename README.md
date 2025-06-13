@@ -1,38 +1,42 @@
-# sv
+# ZZIC
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+스마트 투두 리스트
 
-## Creating a project
+## 라우트 구조 (첫 번째 라우트 단위)
 
-If you're seeing this, you've probably already done this step. Congrats!
+### 🏠 루트 (`/`)
 
-```bash
-# create a new project in the current directory
-npx sv create
+| 경로 | 화면 기능 | 인증 필요 | 설명 |
+|------|-----------|-----------|------|
+| `/` | 랜딩 페이지 | ❌ | 메인 홈페이지, 서비스 소개, 기능 안내 |
 
-# create a new project in my-app
-npx sv create my-app
-```
+### 📊 대시보드 (`/dashboard`)
 
-## Developing
+| 경로 | 화면 기능 | 인증 필요 | 설명 |
+|------|-----------|-----------|------|
+| `/dashboard` | 대시보드 | ✅ | 개인 Todo 통계, 완료/미완료 Todo 목록, 참여 중인 챌린지 현황 |
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### 🏆 챌린지 (`/challenges`)
 
-```bash
-npm run dev
+| 경로 | 화면 기능 | 인증 필요 | 설명 |
+|------|-----------|-----------|------|
+| `/challenges` | 챌린지 목록 | ✅ | 전체 챌린지 목록 조회, 참여 가능한 챌린지 탐색 |
+| `/challenges/[challengeId]` | 챌린지 상세 | ✅ | 특정 챌린지 상세 정보, 참여/탈퇴 기능 |
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### 👥 멤버 (`/members`)
 
-## Building
+| 경로 | 화면 기능 | 인증 필요 | 설명 |
+|------|-----------|-----------|------|
+| `/members/[memberId]` | 멤버 프로필 | ✅ | 특정 멤버의 프로필 정보 조회 |
+| `/members/[memberId]/todos` | 멤버 Todo 목록 | ✅ | 특정 멤버의 Todo 목록 조회/생성 |
+| `/members/[memberId]/todos/[todoId]` | Todo 상세 | ✅ | 특정 Todo 상세 정보 및 수정 |
 
-To create a production version of your app:
+### 🔐 인증 (`/auth`)
 
-```bash
-npm run build
-```
+| 경로 | 화면 기능 | 인증 필요 | 설명 |
+|------|-----------|-----------|------|
+| `/auth/sign-in` | 로그인 | ❌ | 이메일/비밀번호 로그인 |
+| `/auth/sign-up` | 회원가입 | ❌ | 이메일/닉네임/비밀번호 회원가입 |
+| `/auth/sign-out` | 로그아웃 | ✅ | 로그아웃 처리 및 세션 종료 |
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+인증되지 않은 사용자가 보호된 경로에 접근하면 자동으로 `/auth/sign-in`으로 리다이렉트됩니다.

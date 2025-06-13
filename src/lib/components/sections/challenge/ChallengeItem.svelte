@@ -17,7 +17,7 @@
 	 */
 
 	/** @type {Props} */
-	const { challenge, isDetail = false } = $props();
+	const { challenge } = $props();
 
 	/**
 	 * 날짜를 포맷팅
@@ -80,10 +80,10 @@
         >
             자세히
         </Button>
-        <form action={`/challenges/${challenge.id}?/join`} method="POST" class="flex-1">
+        <form action={`/challenges/${challenge.id}?/enroll`} method="POST" class="flex-1">
             <Form.Button
-                name="challengeId"
-                value={challenge.id}
+                name="enroll"
+                value={!challenge.participationStatus}
                 class="w-full"
                 variant={challenge.participationStatus ? "secondary" : "default"}
                 disabled={challenge.participationStatus}

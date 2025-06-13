@@ -99,22 +99,34 @@
 export function createChallengeClient(apiUrl, fetchFn) {
 	/**
 	 * 모든 챌린지 조회 (페이징 지원)
+	 * @param {Object} [key] - 조회 키 (현재 사용되지 않음, 추후 확장 가능성)
 	 * @param {Object} [options] - 조회 옵션
 	 * @param {number} [options.page=0] - 페이지 번호
 	 * @param {number} [options.size=10] - 페이지 크기
 	 * @param {string} [options.sort='id,desc'] - 정렬 조건
+	 * @param {string} [options.enroll] - 참여 옵션 (예: 'participants')
 	 * @returns {Promise<{data: PageChallengeDto|null, error: any}>}
 	 */
-	async function getChallenges(options = {}) {
-		const { page = 0, size = 10, sort = 'id,desc' } = options;
-		const params = new URLSearchParams({
-			page: page.toString(),
-			size: size.toString(),
-			sort
+	async function getChallenges( key = {}, options = {}) {
+		const params = new URLSearchParams();
+
+		Object.entries(options).forEach(([k, v]) => {
+			if (v !== undefined && v !== null) {
+				params.append(k, v.toString());
+			}
 		});
 
+		// 나중에 join필드가 엔롤로 바뀌면 지우기
+		if (options.enroll !== undefined) {
+			params.append('join', options.enroll);
+		}
+
+		const url = new URL(apiUrl);
+		url.pathname = '/challenges';
+		url.search = params.toString();
+
 		try {
-			const response = await fetchFn(`${apiUrl}/challenges?${params}`, {
+			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
 
@@ -287,7 +299,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 
 	/**
 	 * 챌린지 완료 처리
-	 * @param {number} challengeId - 챌린지 ID
+	 * @param {string} challengeId - 챌린지 ID
 	 * @returns {Promise<{error: any}>}
 	 */
 	async function completeChallenge(challengeId) {
@@ -330,36 +342,23 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	}
 
 	/**
-	 * 챌린지 참여
-	 * @param {number} challengeId - 챌린지 ID
+	 * 챌린지 등록/해지 (통합 메서드)
+	 * @param {Object} params - 챌린지 파라미터  
+	 * @param {number} params.challengeId - 챌린지 ID
+	 * @param {Object} options - 등록 옵션
+	 * @param {boolean} options.enroll - true: 등록, false: 해지
 	 * @returns {Promise<{error: any}>}
 	 */
-	async function join(challengeId) {
+	async function enroll({ challengeId }, { enroll }) {
+		const endpoint = enroll 
+			? `${apiUrl}/challenge-participations/${challengeId}/join`
+			: `${apiUrl}/challenge-participations/${challengeId}/leave`;
+		
+		const method = enroll ? 'POST' : 'DELETE';
+
 		try {
-			const response = await fetchFn(`${apiUrl}/challenge-participations/${challengeId}/join`, {
-				method: 'POST',
-				credentials: 'include'
-			});
-
-			if (!response.ok) {
-				return { error: { status: response.status, message: response.statusText } };
-			}
-
-			return { error: null };
-		} catch (error) {
-			return { error };
-		}
-	}
-
-	/**
-	 * 챌린지 탈퇴
-	 * @param {number} challengeId - 챌린지 ID
-	 * @returns {Promise<{error: any}>}
-	 */
-	async function leave(challengeId) {
-		try {
-			const response = await fetchFn(`${apiUrl}/challenge-participations/${challengeId}/leave`, {
-				method: 'DELETE',
+			const response = await fetchFn(endpoint, {
+				method,
 				credentials: 'include'
 			});
 
@@ -459,8 +458,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 		getCompletedChallengeTodos,
 		completeChallenge,
 		cancelCompleteChallenge,
-		join,
-		leave,
+		enroll,
 		createChallenge,
 		updateChallenge,
 		deleteChallenge

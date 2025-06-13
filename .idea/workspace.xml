@@ -19,17 +19,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cbd1afb-59ca-4967-8592-35b7a351d4d5" name="Changes" comment=":recycle: 토큰 갱신 로직 추가 및 인증 가드 순서 변경">
-      <change beforePath="$PROJECT_DIR$/.github/instructions/svelte-llms.instructions.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/instructions/svelte-llms.instructions.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/instructions/svelte-llms.instructions.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeItem.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeList.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/sections/challenge/ChallengeList.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/challenge.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/challenge.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/zzic-api/todo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/challenges/[challengeId]/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/(main)/dashboard/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/challenges/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/challenges/[challengeId]/+page.server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/challenges/[challengeId]/+page.svelte" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,6 +221,7 @@
       <workItem from="1749230774488" duration="599000" />
       <workItem from="1749634306768" duration="3477000" />
       <workItem from="1749694135444" duration="1200000" />
+      <workItem from="1749774065797" duration="436000" />
     </task>
     <task id="LOCAL-00003" summary="feat: 백엔드 연결">
       <option name="closed" value="true" />
