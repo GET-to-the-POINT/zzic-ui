@@ -1,23 +1,4 @@
-/**
- * @typedef {Object} Todo
- * @property {string} id - Todo ID
- * @property {string} title - Todo 제목
- * @property {string} [description] - Todo 설명
- * @property {boolean} done - 완료 여부
- * @property {string} createdAt - 생성 시간
- * @property {string} [updatedAt] - 수정 시간
- */
-
 import { error } from '@sveltejs/kit';
-
-/**
- * @typedef {Object} TodoPage
- * @property {Array<Todo>} content - Todo 목록
- * @property {number} totalElements - 전체 요소 개수
- * @property {number} totalPages - 전체 페이지 수
- * @property {number} number - 현재 페이지 번호
- * @property {number} size - 페이지 크기
- */
 
 /**
  * @typedef {import('$lib/zzic-api/todo.js').TodoDto} TodoDto

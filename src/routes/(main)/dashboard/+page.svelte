@@ -13,16 +13,6 @@
 	 * @typedef {import('$lib/zzic-api/challenge.js').ChallengeDto} ChallengeDto
 	 */
 
-	/**
-	 * @typedef {Object} PageData
-	 * @property {Array<TodoDto>} yetTodos - 미완료 todo 목록
-	 * @property {Array<TodoDto>} doneTodos - 완료된 todo 목록
-	 * @property {PageTodoDto} yetTodoPage - 미완료 todo 페이지 정보
-	 * @property {PageTodoDto} doneTodoPage - 완료된 todo 페이지 정보
-	 * @property {Array<ChallengeDto>} challengeList - 챌린지 목록
-	 */
-
-	/** @type {{ data: PageData }} */
 	const { data } = $props();
 
 	let todoCreateDialog = $state(false);
