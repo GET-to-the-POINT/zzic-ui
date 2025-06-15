@@ -32,7 +32,7 @@ const authGuard = async ({ event, resolve }) => {
 		'/dashboard',
 		'/settings',
 		'/profile',
-		'/members'
+		'/todos'
 	];
 	const { pathname } = event.url;
 	const isAuthRequired = guardPaths.some((path) => pathname.startsWith(path));
