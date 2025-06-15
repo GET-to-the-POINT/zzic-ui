@@ -14,11 +14,6 @@
 </script>
 
 <div class="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
-	<Button.Root href="/dashboard" size="lg" class="gap-2">
-		<CheckCircle2 size={20} />
-		일정관리 시작하기
-	</Button.Root>
-
 	<Button.Root
 		href={`/todos`}
 		size="lg"
@@ -26,6 +21,15 @@
 	>
 		<Plus size={20} />
 		Todo 보기
+	</Button.Root>
+
+		<Button.Root
+		href={`/dashboard`}
+		size="lg"
+		class="gap-2"
+	>
+		<Plus size={20} />
+		대시보드 보기
 	</Button.Root>
 	
 	<Dialog.Root bind:open={dialogOpen}>
