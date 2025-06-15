@@ -9,7 +9,7 @@
 
 	function handleSuccess() {
 		celebrateSuccess();
-		goto('/');
+		goto('/', { replaceState: true });
 	}
 
 	// 클라이언트 사이드에서 form 초기화
