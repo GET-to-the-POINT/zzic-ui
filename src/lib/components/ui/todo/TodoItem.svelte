@@ -38,56 +38,51 @@
 	}
 </script>
 
-<article class={['flex']}>
-		<form action={`/todos/${todoResponse.id}?/update`} method="POST" use:enhance>
-			<button 
+<article class="card preset-tonal-surface grid grid-cols-[auto_1fr] gap-4 p-4 {todoResponse.statusId === 1 ? 'opacity-60' : ''}">
+	<form action={`/todos/${todoResponse.id}?/update`} method="POST" use:enhance>
+		<button 
 			type="submit"
 			name="statusId"
 			value={todoResponse.statusId === 1 ? 0 : 1}
-			class={['p-4 block h-full btn',
-				{"preset-tonal": todoResponse.statusId === 0,
-			"preset-tonal-success": todoResponse.statusId === 1,
-			"preset-tonal-warning": todoResponse.statusId === 2,
-		}
-			]}
-			>
-				{#if todoResponse.statusId === 1}
-					<!-- 완료 상태 -->
-					<Check size={16} class="text-success-800" />
-				{:else if todoResponse.statusId === 2}
-					<!-- 기간초과 상태 -->
-					<AlertCircle size={16} class="text-error-800" />
-				{:else}
-					<!-- 미완료 상태 (진행중) -->
-					<Square size={16} class="text-surface-800" />
-				{/if}
-			</button>
-		</form>
-
-		<!-- 제목/설명 -->
-		<button class="flex-1 text-left" onclick={showModal}>
-			<div>{todoResponse.title}</div>
-			<div>{todoResponse.description || '\u00A0'}</div>
-
-			<!-- 배지 영역 -->
-			<div class="mt-1 flex flex-wrap gap-1">
-				{#if todoResponse.priorityId != null}
-					<span class={getPriorityBadgeClass(todoResponse.priorityId)}><Flag size={12} class="mr-1" />{todoResponse.priorityName}</span>
-				{/if}
-				{#if todoResponse.categoryName}
-					<span class="badge preset-tonal-secondary">{todoResponse.categoryName}</span>
-				{/if}
-				{#if todoResponse.tags && todoResponse.tags.length > 0}
-					{#each todoResponse.tags as tag}
-						<span class="badge preset-outlined-tertiary-500"><Tag size={10} class="mr-1" />{tag}</span>
-					{/each}
-				{/if}
-				<span class="badge"><Clock size={12} class="mr-1" />{todoResponse.statusName}</span>
-				{#if todoResponse.repeatType && todoResponse.repeatType !== 'NONE'}
-					<span class="badge preset-tonal-success"><Repeat size={12} class="mr-1" />{todoResponse.repeatType}</span>
-				{/if}
-			</div>
+			class="btn-icon {todoResponse.statusId === 1 ? 'preset-tonal-success' : todoResponse.statusId === 2 ? 'preset-tonal-warning' : 'preset-tonal'}"
+		>
+			{#if todoResponse.statusId === 1}
+				<!-- 완료 상태 -->
+				<Check size={16} />
+			{:else if todoResponse.statusId === 2}
+				<!-- 기간초과 상태 -->
+				<AlertCircle size={16} />
+			{:else}
+				<!-- 미완료 상태 (진행중) -->
+				<Square size={16} />
+			{/if}
 		</button>
+	</form>
+
+	<!-- 제목/설명 -->
+	<button class="text-left space-y-2" onclick={showModal}>
+		<div class="{todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.title}</div>
+		<div class="text-surface-500 min-h-[1.25rem] {todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.description || '\u00A0'}</div>
+
+		<!-- 배지 영역 -->
+		<div class="flex flex-wrap gap-1">
+			{#if todoResponse.priorityId != null}
+				<span class={getPriorityBadgeClass(todoResponse.priorityId)}><Flag size={12} class="mr-1" />{todoResponse.priorityName}</span>
+			{/if}
+			{#if todoResponse.categoryName}
+				<span class="badge preset-tonal-secondary">{todoResponse.categoryName}</span>
+			{/if}
+			{#if todoResponse.tags && todoResponse.tags.length > 0}
+				{#each todoResponse.tags as tag}
+					<span class="badge preset-outlined-tertiary-500"><Tag size={10} class="mr-1" />{tag}</span>
+				{/each}
+			{/if}
+			<span class="badge preset-tonal-primary"><Clock size={12} class="mr-1" />{todoResponse.statusName}</span>
+			{#if todoResponse.repeatType && todoResponse.repeatType !== 'NONE'}
+				<span class="badge preset-tonal-success"><Repeat size={12} class="mr-1" />{todoResponse.repeatType}</span>
+			{/if}
+		</div>
+	</button>
 </article>
 
 <!-- TodoDetail 다이얼로그 -->
