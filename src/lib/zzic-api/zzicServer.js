@@ -2,14 +2,7 @@ import { getUserFromCookies } from '$lib/jwt.js';
 import { createTodoClient } from './todo.js';
 import { createChallengeClient } from './challenge.js';
 import { createAuthClient } from './auth.js';
-
-/**
- * @typedef {import('./types.js').SignInRequest} SignInRequest
- * @typedef {import('./types.js').SignUpRequest} SignUpRequest
- * @typedef {import('./types.js').MemberMeResponse} MemberMeResponse
- * @typedef {import('./types.js').AuthResponse} AuthResponse
- * @typedef {import('./types.js').ApiError} ApiError
- */
+import { createCategoryClient } from './category.js';
 
 /**
  * 서버 사이드용 ZZIC 인증 클라이언트
@@ -43,6 +36,7 @@ export function createZzicServerClient(apiUrl, options) {
 	const auth = createAuthClient(apiUrl, fetchFn, { getUserFn });
 	const todo = createTodoClient(apiUrl, fetchFn);
 	const challenge = createChallengeClient(apiUrl, fetchFn);
+	const category = createCategoryClient(apiUrl, fetchFn);
 
-	return { auth, todo, challenge };
+	return { auth, todo, challenge, category };
 }

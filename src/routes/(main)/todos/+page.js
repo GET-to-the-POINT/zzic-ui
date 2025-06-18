@@ -1,25 +1,6 @@
 import { error } from '@sveltejs/kit';
 
 /**
- * @typedef {Object} Todo
- * @property {string} id - Todo ID
- * @property {string} title - Todo 제목
- * @property {string} [description] - Todo 설명
- * @property {boolean} done - 완료 여부
- * @property {string} createdAt - 생성 시간
- * @property {string} [updatedAt] - 수정 시간
- */
-
-/**
- * @typedef {Object} TodoPage
- * @property {Array<Todo>} content - Todo 목록
- * @property {number} totalElements - 전체 요소 개수
- * @property {number} totalPages - 전체 페이지 수
- * @property {number} number - 현재 페이지 번호
- * @property {number} size - 페이지 크기
- */
-
-/**
  * @typedef {Object} LoadParams
  * @property {Function} parent - 부모 레이아웃 데이터 로더
  * @property {Object} params - 라우트 파라미터
@@ -30,10 +11,9 @@ import { error } from '@sveltejs/kit';
 
 /**
  * @typedef {Object} PageData
- * @property {Array<Todo>} yetTodos - 미완료 todo 목록
- * @property {Array<Todo>} doneTodos - 완료된 todo 목록
- * @property {TodoPage} yetTodoPage - 미완료 todo 페이지 데이터
- * @property {TodoPage} doneTodoPage - 완료된 todo 페이지 데이터
+ * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} todoPage - todo 페이지 데이터
+ * @property {import('$lib/zzic-api/category.js').PageCategoryResponse} categoryPage - 카테고리 페이지 데이터
+ * @property {import('$lib/zzic-api/todo.js').TodoStatisticsResponse} todoStatisticsResponse - 할 일 통계 데이터
  */
 
 /**
@@ -42,29 +22,19 @@ import { error } from '@sveltejs/kit';
  * @returns {Promise<PageData>} Todo 페이지 데이터
  */
 export async function load({ parent }) {
-	const { zzic, user } = await parent();
+	const { zzic } = await parent();
 
-	try {
-		const yetTodoPromise = zzic.todo.getTodos(user.sub, { done: false });
-		const doneTodoPromise = zzic.todo.getTodos(user.sub, { done: true });
+	const [todosResult, categoriesResult, TodoStatisticsResult] = await Promise.all([
+		zzic.todo.getTodos(),
+		zzic.category.getCategories(),
+		zzic.todo.getTodoStatistics()
+	]);
 
-		const results = await Promise.all([yetTodoPromise, doneTodoPromise]);
+	if (todosResult.error) error(todosResult.error.message);
 
-		const [{ data: yetTodoPage }, { data: doneTodoPage }] = results;
-
-		// 배열로 추출하여 반환
-		const yetTodos = yetTodoPage?.content || [];
-		const doneTodos = doneTodoPage?.content || [];
-
-		return {
-			yetTodos,
-			doneTodos,
-			yetTodoPage,
-			doneTodoPage
-		};
-	} catch (e) {
-		error(404, {
-			message: e.message || '할 일 목록을 불러오는 데 실패했습니다',
-		});
-	}
+	return {
+		todoPage: todosResult.data,
+		categoryPage: categoriesResult.data,
+		todoStatisticsResponse: TodoStatisticsResult.data
+	};
 }

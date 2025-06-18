@@ -1,29 +1,28 @@
-import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { todoFormSchema } from '$lib/components/sections/todo/schema.js';
-
-export const load = async () => {
-	return {
-		form: await superValidate(zod(todoFormSchema)),
-	};
-};
+import { fail } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ request, locals: { zzic, user } }) => {
-		const form = await superValidate(request, zod(todoFormSchema));
+	default: async ({ request, locals: { zzic } }) => {
+		const formData = await request.formData();
 		
-		if (!form.valid) {
-			return fail(400, { form });
-		}
+		const todoData = Object.fromEntries(formData.entries());
+		
+		const cleanedData = {
+			title: todoData.title,
+			description: todoData.description || undefined,
+			priority: Number(todoData.priorityId) || undefined,
+			categoryId: Number(todoData.categoryId) || undefined,
+			dueDate: todoData.dueDate || undefined,
+			tags: todoData.tags || undefined,
+			status: Number(todoData.status) || undefined,
+			repeatType: todoData.repeatType || undefined
+		};
 
-		const { title, description } = form.data;
-		const { error } = await zzic.todo.createTodo(user.sub, { title, description });
+		const { error } = await zzic.todo.createTodo(cleanedData);
 		
 		if (error) {
-			return fail(400, { form, error: error.message || '할 일 생성 실패' });
+			return fail(400, { error: error.message || '할 일 생성 실패' });
 		}
 
-		return { form };
+		return { success: true };
 	}
 };

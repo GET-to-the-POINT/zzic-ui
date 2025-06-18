@@ -1,33 +1,29 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
-	update: async ({ request, locals: { zzic, user }, params }) => {
+	update: async ({ request, locals: { zzic }, params }) => {
 		const { todoId } = params;
 		const formData = await request.formData();
-		const title = formData.get('title');
-		const description = formData.get('description');
-		const done = formData.get('done');
+		const todoData = Object.fromEntries(formData);
 
-		const { error } = await zzic.todo.updateTodo(user.sub, parseInt(todoId), {
-			title,
-			description,
-			done
-		});
+		const { error } = await zzic.todo.updateTodo({ todoId }, todoData);
 
 		if (error) {
 			return fail(400, { error: error.message || 'Todo 수정 실패' });
 		}
+
+		redirect(303, `/todos`);
 	},
 
-	delete: async ({ locals: { zzic, user }, params }) => {
-		const { todoId, nickname } = params;
+	delete: async ({ locals: { zzic }, params }) => {
+		const { todoId } = params;
 
-		const { error } = await zzic.todo.deleteTodo(user.sub, parseInt(todoId));
+		const { error } = await zzic.todo.deleteTodo({ todoId });
 
 		if (error) {
 			return fail(400, { error: error.message || 'Todo 삭제 실패' });
 		}
 
-		throw redirect(303, `/members/${nickname}/todos`);
+		throw redirect(303, `/todos`);
 	}
 };

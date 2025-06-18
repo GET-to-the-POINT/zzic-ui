@@ -1,34 +1,5 @@
 <script>
-	import * as Form from '$lib/components/ui/form/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { loginSchema } from '../schema';
-	import { goto } from '$app/navigation';
-	import { celebrateSuccess } from '$lib/utils/confetti.js';
-
-	function handleSuccess() {
-		celebrateSuccess();
-		goto('/', { replaceState: true });
-	}
-
-	// 클라이언트 사이드에서 form 초기화
-	const form = superForm(
-		{ email: '', password: '' },
-		{
-			validators: zodClient(loginSchema),
-			onResult: async ({ result }) => {
-				if (result.type === 'success' || result.type === 'redirect') {
-					handleSuccess();
-				}
-			},
-			onError: ({ result }) => {
-				console.error('Login error:', result);
-			}
-		}
-	);
-
-	const { form: formData, enhance, errors } = form;
+	import { enhance } from "$app/forms";
 </script>
 
 <div class="min-h-screen flex items-center justify-center p-4">
@@ -37,43 +8,32 @@
 			<h1 class="text-2xl font-bold">돌아오신 것을 환영합니다</h1>
 			<p class="text-muted-foreground">즐거운 경험 되세요!</p>
 		</div>
-		
-		<form method="POST" action="/auth/sign-in" use:enhance class="space-y-4">
-			<Form.Field {form} name="email">
-				<Form.Control>
-					{#snippet children({ props })}
-						<Form.Label>이메일</Form.Label>
-						<Input
-							{...props}
-							type="email"
-							placeholder="example@email.com"
-							bind:value={$formData.email}
-						/>
-					{/snippet}
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
 
-			<Form.Field {form} name="password">
-				<Form.Control>
-					{#snippet children({ props })}
-						<Form.Label>비밀번호</Form.Label>
-						<Input
-							{...props}
-							type="password"
-							placeholder="••••••••"
-							bind:value={$formData.password}
-						/>
-					{/snippet}
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Button class="w-full">
-				사인-인
-			</Form.Button>
+		<form method="POST" action="/auth/sign-in" class="space-y-4" use:enhance>
+			<div>
+				<label for="email" class="block mb-1 font-medium">이메일</label>
+				<input
+					id="email"
+					name="email"
+					type="email"
+					placeholder="example@email.com"
+					required
+					class="input w-full"
+				/>
+			</div>
+			<div>
+				<label for="password" class="block mb-1 font-medium">비밀번호</label>
+				<input
+					id="password"
+					name="password"
+					type="password"
+					placeholder="••••••••"
+					class="input w-full"
+				/>
+			</div>
+			<button type="submit" class="w-full py-2 rounded bg-primary-600 text-white font-semibold">사인-인</button>
 		</form>
-		
+
 		<div class="text-center">
 			<a href="/auth/sign-up" class="text-sm text-muted-foreground hover:underline">
 				계정이 없으신가요? 사인-업하기

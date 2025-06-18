@@ -3,6 +3,16 @@
 
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
+
 @import '@skeletonlabs/skeleton/themes/cerberus';
+@import '@skeletonlabs/skeleton/themes/mona';
+@import '@skeletonlabs/skeleton/themes/vox';
+@import '@skeletonlabs/skeleton/themes/catppuccin';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+@layer base {
+    dialog {
+        @apply max-w-full max-h-full
+    }
+}
