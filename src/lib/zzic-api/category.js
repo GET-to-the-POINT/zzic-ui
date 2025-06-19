@@ -44,27 +44,9 @@
  * @returns {Object} 클라이언트 객체
  */
 export function createCategoryClient(apiUrl, fetchFn) {
-	/**
-	 * 카테고리 목록 조회
-	 * @param {Object} [options={}] - 옵션
-	 * @param {number} [options.page] - 페이지 번호
-	 * @param {number} [options.size] - 페이지 크기
-	 * @param {string} [options.sort] - 정렬 옵션
-	 * @returns {Promise<{data: PageCategoryResponse|null, error: ApiError|null}>}
-	 */
-	async function getCategories(options = {}) {
+	async function getCategories() {
 		const url = new URL(`${apiUrl}/categories`);
-		
-		// 타입 안전성을 위해 명시적으로 처리
-		if (options.page != null) {
-			url.searchParams.append('page', String(options.page));
-		}
-		if (options.size != null) {
-			url.searchParams.append('size', String(options.size));
-		}
-		if (options.sort != null) {
-			url.searchParams.append('sort', String(options.sort));
-		}
+		url.searchParams.append('sort', 'name,desc');
 
 		try {
 			const response = await fetchFn(url.toString(), {
@@ -76,7 +58,6 @@ export function createCategoryClient(apiUrl, fetchFn) {
 				return { data: null, error };
 			}
 
-			/** @type {PageCategoryResponse} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {

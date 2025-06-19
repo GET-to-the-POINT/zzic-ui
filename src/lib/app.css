@@ -4,10 +4,11 @@
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
 
-@import '@skeletonlabs/skeleton/themes/cerberus';
+@import '@skeletonlabs/skeleton/themes/nosh';
 @import '@skeletonlabs/skeleton/themes/mona';
 @import '@skeletonlabs/skeleton/themes/vox';
 @import '@skeletonlabs/skeleton/themes/catppuccin';
+@import '@skeletonlabs/skeleton/themes/crimson';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 

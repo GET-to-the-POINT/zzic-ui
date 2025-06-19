@@ -6,10 +6,13 @@
 	import Square from '@lucide/svelte/icons/square';
 	import Tag from '@lucide/svelte/icons/tag';
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
+	
+	import { goto } from '$app/navigation';
 
 	import { enhance } from '$app/forms';
 	import TodoDetail from './TodoDetail.svelte';
-	
+	import { page } from '$app/state';
+
 	/**
 	 * @typedef {import('../../../zzic-api/todo.js').TodoResponse} TodoResponse
 	**/
@@ -36,11 +39,31 @@
 		if (priorityId === 0) return 'badge preset-filled-success-500'; // 낮음
 		return '';
 	}
+
+
+	const handleEnhance = ({ formElement, formData, action, cancel }) => {
+		return async ({ result }) => {
+			if (result.type === 'redirect') {
+				await goto(result.location, { invalidateAll: true, noScroll: true });
+			}
+		};
+	}
+
+	const action = $derived.by(() => {
+		let url = `/todos/${todoResponse.id}?/update`;
+		if (page.url.search) {
+			const params = new URLSearchParams(page.url.search);
+			url += '&' +params.toString();
+		}
+		
+		return url;
+	});
 </script>
 
-<article class="card preset-tonal-surface grid grid-cols-[auto_1fr] gap-4 p-4 {todoResponse.statusId === 1 ? 'opacity-60' : ''}">
-	<form action={`/todos/${todoResponse.id}?/update`} method="POST" use:enhance>
-		<button 
+{action}
+<article class="card preset-tonal-tertiary grid grid-cols-[auto_1fr] gap-4 p-4 {todoResponse.statusId === 1 ? 'opacity-60' : ''}">
+	<form {action} method="POST" use:enhance={handleEnhance}>
+		<button
 			type="submit"
 			name="statusId"
 			value={todoResponse.statusId === 1 ? 0 : 1}
@@ -65,7 +88,7 @@
 		<div class="text-surface-500 min-h-[1.25rem] {todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.description || '\u00A0'}</div>
 
 		<!-- 배지 영역 -->
-		<div class="flex flex-wrap gap-1">
+		<div class="flex flex-wrap gap-1 font-thin">
 			{#if todoResponse.priorityId != null}
 				<span class={getPriorityBadgeClass(todoResponse.priorityId)}><Flag size={12} class="mr-1" />{todoResponse.priorityName}</span>
 			{/if}

@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
-	update: async ({ request, locals: { zzic }, params }) => {
+	update: async ({ request, url, locals: { zzic }, params }) => {
 		const { todoId } = params;
 		const formData = await request.formData();
 		const todoData = Object.fromEntries(formData);
@@ -12,7 +12,13 @@ export const actions = {
 			return fail(400, { error: error.message || 'Todo 수정 실패' });
 		}
 
-		redirect(303, `/todos`);
+		const searchParams = new URLSearchParams(url.search);
+		searchParams.delete('/update'); // SvelteKit 액션 파라미터 제거
+		
+		const cleanSearch = searchParams.toString();
+		const redirectUrl = cleanSearch ? `/todos?${cleanSearch}` : '/todos';
+
+		return redirect(303, redirectUrl);
 	},
 
 	delete: async ({ locals: { zzic }, params }) => {

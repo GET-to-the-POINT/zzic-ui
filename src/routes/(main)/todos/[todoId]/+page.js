@@ -15,10 +15,10 @@ const deleteSchema = z.object({});
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
 	const { todoId } = params;
-	const { zzic, user } = await parent();
+	const { zzic } = await parent();
 
 	// @ts-ignore - zzic.todo client is available from parent layout
-	const { data: todo, error } = await zzic.todo.getTodo(user.sub, parseInt(todoId));
+	const { data: todo, error } = await zzic.todo.getTodo({ todoId });
 
 	if (error || !todo) {
 		throw new Error(`Todo with id ${todoId} not found`);

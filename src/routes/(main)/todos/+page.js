@@ -21,13 +21,16 @@ import { error } from '@sveltejs/kit';
  * @param {LoadParams} params - 로드 파라미터
  * @returns {Promise<PageData>} Todo 페이지 데이터
  */
-export async function load({ parent }) {
+export async function load({ parent, url }) {
 	const { zzic } = await parent();
 
-	const [todosResult, categoriesResult, TodoStatisticsResult] = await Promise.all([
-		zzic.todo.getTodos(),
+	// URL 쿼리 파라미터를 객체로 변환
+	const options = Object.fromEntries(url.searchParams);
+
+	const [todosResult, categoriesResult, todoStatisticsResult] = await Promise.all([
+		zzic.todo.getTodos(options),
 		zzic.category.getCategories(),
-		zzic.todo.getTodoStatistics()
+		zzic.todo.getTodoStatistics(),
 	]);
 
 	if (todosResult.error) error(todosResult.error.message);
@@ -35,6 +38,6 @@ export async function load({ parent }) {
 	return {
 		todoPage: todosResult.data,
 		categoryPage: categoriesResult.data,
-		todoStatisticsResponse: TodoStatisticsResult.data
+		todoStatisticsResponse: todoStatisticsResult.data
 	};
 }

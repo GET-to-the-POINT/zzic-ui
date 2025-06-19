@@ -64,8 +64,15 @@
  */
 
 /**
- * @typedef {import('./types.js').ApiResponse} ApiResponse
- * @typedef {import('./types.js').ApiError} ApiError
+ * @typedef {Object} ApiResponse
+ * @property {any} data - 응답 데이터
+ * @property {ApiError|null} error - 에러 정보
+ */
+
+/**
+ * @typedef {Object} ApiError
+ * @property {number} [status] - HTTP 상태 코드
+ * @property {string} message - 에러 메시지
  */
 
 /**
@@ -77,15 +84,17 @@
 export function createTodoClient(apiUrl, fetchFn) {
 	/**
 	 * 할 일 목록 조회
-	 * @param {string} memberId - 멤버 ID
 	 * @param {Object} [options={}] - 옵션
-	 * @param {'IN_PROGRESS'|'COMPLETED'|'OVERDUE'} [options.status] - 상태 필터
+	 * @param {'0'|'1'|'2'} [options.status] - 상태 필터 (0: 진행중, 1: 완료, 2: 지연)
+	 * @param {number} [options.categoryId] - 카테고리 ID 필터
+	 * @param {'0'|'1'|'2'} [options.priority] - 우선순위 필터 (0: 낮음, 1: 보통, 2: 높음)
+	 * @param {string} [options.search] - 검색 키워드 (제목, 설명에서 검색)
 	 * @param {number} [options.page] - 페이지 번호
 	 * @param {number} [options.size] - 페이지 크기
 	 * @param {string} [options.sort] - 정렬 옵션
 	 * @returns {Promise<{data: PageTodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodos(memberId, options = {}) {
+	async function getTodos(options = {}) {
 		const url = new URL(`${apiUrl}/todos`);
 		Object.entries(options).forEach(([key, value]) => {
 			if (value != null) {
@@ -113,11 +122,11 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 특정 할 일 조회
-	 * @param {string} memberId - 멤버 ID
-	 * @param {number} todoId - 할 일 ID
+	 * @param {Object} params - 파라미터 객체
+	 * @param {number} params.todoId - 할 일 ID
 	 * @returns {Promise<{data: TodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodo(memberId, todoId) {
+	async function getTodo({todoId}) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
 			const response = await fetchFn(url.toString(), {
@@ -166,7 +175,8 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 할 일 수정
-	 * @param {number} todoId - 할 일 ID
+	 * @param {Object} params - 파라미터 객체
+	 * @param {number} params.todoId - 할 일 ID
 	 * @param {UpdateTodoRequest} todo - 할 일 수정 데이터
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
@@ -193,7 +203,8 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 할 일 삭제
-	 * @param {number} todoId - 할 일 ID
+	 * @param {Object} params - 파라미터 객체
+	 * @param {number} params.todoId - 할 일 ID
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
 	async function deleteTodo({todoId}) {
@@ -217,10 +228,9 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 할 일 통계 조회
-	 * @param {string} memberId - 멤버 ID
 	 * @returns {Promise<{data: TodoStatisticsResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodoStatistics(memberId) {
+	async function getTodoStatistics() {
 		try {
 			const url = new URL(`${apiUrl}/todos/statistics`);
 			const response = await fetchFn(url.toString(), {
@@ -240,22 +250,10 @@ export function createTodoClient(apiUrl, fetchFn) {
 		}
 	}
 
-	// 레거시 호환성을 위한 alias 메서드
-	/**
-	 * 멤버의 할 일 생성 (레거시 호환성)
-	 * @param {string} memberId - 멤버 ID
-	 * @param {CreateTodoRequest} todo - 할 일 생성 데이터
-	 * @returns {Promise<{error: ApiError|null}>}
-	 */
-	async function createTodoForMember(memberId, todo) {
-		return createTodo(memberId, todo);
-	}
-
 	return {
 		getTodos,
 		getTodo,
 		createTodo,
-		createTodoForMember,
 		updateTodo,
 		deleteTodo,
 		getTodoStatistics

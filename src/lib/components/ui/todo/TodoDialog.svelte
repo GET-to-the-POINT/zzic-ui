@@ -13,11 +13,8 @@ export function closeTodoDialog() {
 
 <script>
   import { enhance } from '$app/forms';
-  import { X } from '@lucide/svelte';
-
-  let {
-    categories = [],
-  } = $props();
+  import X from '@lucide/svelte/icons/x';
+  import { page } from '$app/state';
 
   const priorityOptions = [
     { value: 0, label: '낮음' },
@@ -27,7 +24,7 @@ export function closeTodoDialog() {
 </script>
 
 <dialog 
-class="m-auto p-4 rounded"
+class="m-auto p-4 rounded w-sm"
   bind:this={currentDialog}
 >
   <form method="dialog" class="absolute right-4 top-4">
@@ -85,16 +82,10 @@ class="m-auto p-4 rounded"
           </label>
           <label class="gap-2 flex flex-col">
             <span>카테고리</span>
-            <select
-              name="categoryId"
-            >
-              {#if categories.length === 0}
-                <option value="">카테고리 없음</option>
-              {:else}
-                {#each categories as cat}
-                  <option value={cat.id}>{cat.name}</option>
-                {/each}
-              {/if}
+            <select name="categoryId">
+              {#each page.data.categoryPage.content as cat}
+                <option value={cat.id}>{cat.name}</option>
+              {/each}
             </select>
           </label>
 
@@ -104,6 +95,16 @@ class="m-auto p-4 rounded"
             <input
               name="dueDate"
               type="date"
+            />
+          </label>
+
+          <!-- 태그 -->
+          <label class="flex flex-col gap-2">
+            <span>태그</span>
+            <input
+              name="tags"
+              type="text"
+              placeholder="쉼표로 구분하세요"
             />
           </label>
         </div>
