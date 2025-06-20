@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation';
 
 	import { enhance } from '$app/forms';
-	import TodoDetail from './TodoDetail.svelte';
+	import TodoUpdateDialog from './TodoUpdateDialog.svelte';
 	import { page } from '$app/state';
 
 	/**
@@ -22,7 +22,7 @@
 		todoResponse,
 	} = $props();
 
-	/** @type {HTMLDialogElement} */
+	/** @type {TodoUpdateDialog} */
 	let detail;
 
 	function showModal() {
@@ -51,17 +51,19 @@
 
 	const action = $derived.by(() => {
 		let url = `/todos/${todoResponse.id}?/update`;
+		
 		if (page.url.search) {
-			const params = new URLSearchParams(page.url.search);
-			url += '&' +params.toString();
+			// page.url.search는 "?"로 시작하므로 이를 제거하고 "&"로 연결
+			url += '&' + page.url.search.substring(1);
 		}
 		
 		return url;
 	});
 </script>
 
-{action}
-<article class="card preset-tonal-tertiary grid grid-cols-[auto_1fr] gap-4 p-4 {todoResponse.statusId === 1 ? 'opacity-60' : ''}">
+<article 
+class="card preset-tonal-tertiary grid grid-cols-[auto_1fr] gap-4 p-2 {todoResponse.statusId === 1 ? 'opacity-60' : ''}"
+>
 	<form {action} method="POST" use:enhance={handleEnhance}>
 		<button
 			type="submit"
@@ -83,9 +85,9 @@
 	</form>
 
 	<!-- 제목/설명 -->
-	<button class="text-left space-y-2" onclick={showModal}>
+	<button class="text-left" onclick={showModal}>
 		<div class="{todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.title}</div>
-		<div class="text-surface-500 min-h-[1.25rem] {todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.description || '\u00A0'}</div>
+		<div class="text-surface-500 text-sm {todoResponse.statusId === 1 ? 'line-through' : ''}">{todoResponse.description || '\u00A0'}</div>
 
 		<!-- 배지 영역 -->
 		<div class="flex flex-wrap gap-1 font-thin">
@@ -108,7 +110,7 @@
 	</button>
 </article>
 
-<!-- TodoDetail 다이얼로그 -->
-<TodoDetail bind:this={detail}
+<!-- TodoUpdateDialog 다이얼로그 -->
+<TodoUpdateDialog bind:this={detail}
 	{todoResponse}
 />

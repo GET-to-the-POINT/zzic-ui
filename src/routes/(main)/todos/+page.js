@@ -14,6 +14,8 @@ import { error } from '@sveltejs/kit';
  * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} todoPage - todo 페이지 데이터
  * @property {import('$lib/zzic-api/category.js').PageCategoryResponse} categoryPage - 카테고리 페이지 데이터
  * @property {import('$lib/zzic-api/todo.js').TodoStatisticsResponse} todoStatisticsResponse - 할 일 통계 데이터
+ * @property {Object} priorityResponse - 우선순위 데이터
+ * @property {Object} tagPage - 태그 페이지 데이터
  */
 
 /**
@@ -27,10 +29,12 @@ export async function load({ parent, url }) {
 	// URL 쿼리 파라미터를 객체로 변환
 	const options = Object.fromEntries(url.searchParams);
 
-	const [todosResult, categoriesResult, todoStatisticsResult] = await Promise.all([
+	const [todosResult, categoriesResult, todoStatisticsResult, priorityResult, tagResult] = await Promise.all([
 		zzic.todo.getTodos(options),
 		zzic.category.getCategories(),
 		zzic.todo.getTodoStatistics(),
+		zzic.priority.getPriorities(),
+		zzic.tag.getTags({ size: 100 }) // 태그는 많이 가져오기
 	]);
 
 	if (todosResult.error) error(todosResult.error.message);
@@ -38,6 +42,8 @@ export async function load({ parent, url }) {
 	return {
 		todoPage: todosResult.data,
 		categoryPage: categoriesResult.data,
-		todoStatisticsResponse: todoStatisticsResult.data
+		todoStatisticsResponse: todoStatisticsResult.data,
+		priorityResponse: priorityResult.data,
+		tagPage: tagResult.data
 	};
 }

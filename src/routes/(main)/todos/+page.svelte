@@ -6,7 +6,7 @@
 	import Plus from '@lucide/svelte/icons/plus';
 
 	const { data } = $props();
-	const { todoPage, todoStatisticsResponse } = $derived(data);
+	const { todoPage, categoryPage, todoStatisticsResponse } = $derived(data);
 </script>
 
 <main class="p-4 space-y-4">
@@ -24,8 +24,6 @@
 			새 할 일
 		</button>
 	</div>
-
-	<TodoDialog />
 
 	<TodoStats {todoStatisticsResponse} />
 	<TodoFilter />

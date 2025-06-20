@@ -3,6 +3,8 @@ import { createChallengeClient } from './challenge.js';
 import { createTodoClient } from './todo.js';
 import { createAuthClient } from './auth.js';
 import { createCategoryClient } from './category.js';
+import { createPriorityClient } from './priority.js';
+import { createTagClient } from './tag.js';
 
 /**
  * 브라우저 클라이언트용 ZZIC 인증 클라이언트
@@ -28,7 +30,7 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 		}
 
 		return { 
-			data: { user: /** @type {MemberMeResponse} */ (user) }, 
+			data: { user: /** @type {any} */ (user) }, 
 			error: null 
 		};
 	};
@@ -37,6 +39,8 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 	const todo = createTodoClient(apiUrl, fetchFn);
 	const challenge = createChallengeClient(apiUrl, fetchFn);
 	const category = createCategoryClient(apiUrl, fetchFn);
+	const priority = createPriorityClient(apiUrl, fetchFn);
+	const tag = createTagClient(apiUrl, fetchFn);
 
-	return { auth, todo, challenge, category };
+	return { auth, todo, challenge, category, priority, tag };
 }
