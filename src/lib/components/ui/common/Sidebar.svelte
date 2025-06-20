@@ -1,31 +1,28 @@
 <script>
 	// Lucide Icons
-	import Home from '@lucide/svelte/icons/house';
-	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
+	import { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
+	import Calculator from '@lucide/svelte/icons/calculator';
 	import Calendar from '@lucide/svelte/icons/calendar';
+	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import Clock from '@lucide/svelte/icons/clock';
+	import Home from '@lucide/svelte/icons/house';
+	import LogOut from '@lucide/svelte/icons/log-out';
+	import Moon from '@lucide/svelte/icons/moon';
+	import Play from '@lucide/svelte/icons/play';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Settings from '@lucide/svelte/icons/settings';
+	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
+	import StickyNote from '@lucide/svelte/icons/sticky-note';
+	import Sun from '@lucide/svelte/icons/sun';
 	import Trophy from '@lucide/svelte/icons/trophy';
 	import User from '@lucide/svelte/icons/user';
-	import Search from '@lucide/svelte/icons/search';
-	import Plus from '@lucide/svelte/icons/plus';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Flame from '@lucide/svelte/icons/flame';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import Moon from '@lucide/svelte/icons/moon';
-	import Settings from '@lucide/svelte/icons/settings';
-	import LogOut from '@lucide/svelte/icons/log-out';
-	import Menu from '@lucide/svelte/icons/menu';
-	import Zap from '@lucide/svelte/icons/zap';
 	import Wrench from '@lucide/svelte/icons/wrench';
-	import StickyNote from '@lucide/svelte/icons/sticky-note';
-	import Calculator from '@lucide/svelte/icons/calculator';
-	import Play from '@lucide/svelte/icons/play';
+	import Zap from '@lucide/svelte/icons/zap';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
-	import TodoDialog, { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
+	import SignoutDialog, { openSignoutDialog } from './SignoutDialog.svelte';
+	  import { Progress } from '@skeletonlabs/skeleton-svelte';
 
-	// SvelteKit stores
-	import { page } from '$app/state';
-  let checked = $state(false);
+	let checked = $state(false);
 
   $effect(() => {
 	const mode = checked ? 'dark' : 'light';
@@ -51,24 +48,17 @@
 		onQuickAction = () => {},
 		onToggleDarkMode = () => {},
 		onSettings = () => {},
-		onLogout = () => {}
 	} = $props();
-
-	// Collapsible sections state - no longer needed with details elements
-
-	// Search state
-	let searchQuery = $state('');
 
 	// Navigation items
 	const navItems = [
-		{ id: 'dashboard', label: '대시보드', icon: Home, href: '/' },
+		{ id: 'dashboard', label: '대시보드', icon: Home, href: '/dashboard' },
 		{ id: 'todos', label: '할 일', icon: SquareCheckBig, href: '/todos' },
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
 		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
 		{ id: 'profile', label: '내 정보', icon: User, href: '/profile' }
 	];
 
-	// XP progress percentage
 	const xpProgress = $derived((user.xp / user.maxXp) * 100);
 
 	function handleNavigation(pageId) {
@@ -83,43 +73,32 @@
 		e.preventDefault();
 		openTodoDialog();
 	};
+
+	const handleSignout = (e) => {
+		e.preventDefault();
+		openSignoutDialog();
+	};
 </script>
 
-<style>
-	/* Details chevron rotation animation */
-	details[open] .details-chevron {
-		transform: rotate(180deg);
-	}
-</style>
-
-<aside class="h-screen preset-tonal-surface border-r border-surface-200-800 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none">
-	<div class="space-y-4 h-full  w-64  flex flex-col">
-		<div class="py-2 sticky preset-tonal-surface top-0 z-100 px-2 flex gap-4 justify-center-safe items-center-safe">
-		<Avatar name={user.initial} size="size-8" />
-					<!-- XP Progress -->
-			<div class="flex-1">
-				<div class="flex items-center justify-between text-xs text-surface-600-300 mb-1">
-					<span>XP {user.xp}</span>
-					<span>{user.maxXp}</span>
-				</div>
-				<div class="relative w-full overflow-hidden rounded-full preset-tonal-surface h-1">
-					<div 
-						class="h-full preset-filled-primary-500 transition-all" 
-						style="width: {xpProgress}%"
-					></div>
+<aside class="h-screen bg-surface-50-950 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none">
+	<div class="space-y-4 h-full py-2 w-64 flex flex-col">
+		<div>
+			<div class="px-2 flex items-center">
+				<Avatar name={user.initial} size="size-8" classes="mr-2" />
+				<span class="flex-1">{user.name}</span>
+			</div>
+			<div class="flex items-center-safe">
+				<span class="w-12 text-center text-sm font-mono">
+					<span class="text-xs">LV.</span><br/>{user.level}
+				</span>
+				<div class="flex-1 pr-2">
+					<div class="flex items-center justify-between text-xs text-surface-600-300 mb-1">
+						<span>XP {user.xp}</span>
+						<span>{user.maxXp}</span>
+					</div>
+					  <Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
 				</div>
 			</div>
-		</div>
-
-		<!-- Search Section -->
-		<div class="relative w-full">
-			<Search size={16} class="absolute left-4 top-1/2 transform -translate-y-1/2" />
-			<input 
-				class="pl-12 h-8 input"
-				type="text" 
-				placeholder="검색..." 
-				bind:value={searchQuery}
-			/>
 		</div>
 
 
@@ -130,7 +109,7 @@
 						href={item.href}
 						class="btn hover:preset-tonal w-full"
 					>
-						<svelte:component this={item.icon} size={16} class="mr-2" />
+						<svelte:component this={item.icon} size={16} class="mr-2 text-primary-500" />
 						<span class="flex-1 text-left">{item.label}</span>
 					</a>
 				{/each}
@@ -143,7 +122,7 @@
 			<div class="space-y-4">
 				<details open>
 					<summary class="btn w-full ">
-						<Zap size={16} class="mr-2 text-surface-600-300" />
+						<Zap size={16} class="mr-2 text-secondary-400" />
 						<span class="flex-1 text-sm font-medium text-surface-600-300">빠른 액션</span>
 						<ChevronDown size={16} class="details-chevron transition-transform" />
 					</summary>
@@ -151,19 +130,19 @@
 						<a href="/todos/new" class="btn w-full hover:preset-tonal"
 							onclick={handleNewTodo}
 						>
-							<Plus size={12} class="w-4 mr-4" />
+							<Plus size={12} class="w-4 mr-4 text-secondary-600" />
 							<span class="flex-1 text-xs">새 할일</span>
 						</a>
 						<button class="btn w-full hover:preset-tonal"
 							onclick={() => handleQuickAction('join-challenge')}
 						>
-							<Trophy size={12} class="w-4 mr-4" />
+							<Trophy size={12} class="w-4 mr-4 text-secondary-600" />
 							<span class="flex-1 text-xs">챌린지 참여</span>
 						</button>
 						<button class="btn w-full hover:preset-tonal"
 							onclick={() => handleQuickAction('focus-timer')}
 						>
-							<Clock size={12} class="w-4 mr-4" />
+							<Clock size={12} class="w-4 mr-4 text-secondary-600" />
 							<span class="flex-1 text-xs">집중 타이머</span>
 						</button>
 					</div>
@@ -172,7 +151,7 @@
 			<!-- Focus Timer Section -->
 				<details>
 					<summary class="btn w-full">
-						<Clock size={16} class="mr-2 text-surface-600-300" />
+						<Clock size={16} class="mr-2 text-secondary-400" />
 						<span class="flex-1 text-sm font-medium text-surface-600-300">집중 타이머</span>
 						<ChevronDown size={16} class="details-chevron transition-transform" />
 					</summary>
@@ -182,7 +161,7 @@
 								<div class="text-2xl font-bold text-surface-900-50 mb-1">25:00</div>
 								<div class="text-xs text-surface-600-300 mb-3">포모도로 타이머</div>
 								<button class="btn preset-filled-primary-500 w-full">
-									<Play size={16} class="mr-2" />
+									<Play size={16} class="mr-2 text-white" />
 									시작
 								</button>
 							</div>
@@ -193,17 +172,17 @@
 			<!-- Tools Section -->
 				<details>
 					<summary class="btn w-full">
-						<Wrench size={16} class="mr-2 text-surface-600-300" />
+						<Wrench size={16} class="mr-2 text-secondary-500" />
 						<span class="flex-1 text-sm font-medium text-surface-600-300">도구</span>
 						<ChevronDown size={16} class="details-chevron transition-transform" />
 					</summary>
 					<div class="space-y-1 mt-1">
 						<div class="btn w-full hover:preset-tonal">
-							<StickyNote size={12} class="w-4 mr-4" />
+							<StickyNote size={12} class="w-4 mr-4 text-warning-500" />
 							<span class="flex-1 text-xs">메모장</span>
 						</div>
 						<div class="btn w-full hover:preset-tonal">
-							<Calculator size={12} class="w-4 mr-4" />
+							<Calculator size={12} class="w-4 mr-4 text-secondary-500" />
 							<span class="flex-1 text-xs">계산기</span>
 						</div>
 					</div>
@@ -214,14 +193,20 @@
 		<hr class="hr" />
 		<div>
 			<label class="btn w-full hover:preset-tonal">
-				<Moon size={16} class="mr-2"/>
+				{#if checked}
+					<Sun size={16} class="mr-2 text-yellow-500"/>
+				{:else}
+					<Moon size={16} class="mr-2 text-purple-500"/>
+				{/if}
 				<input 
 					class="hidden"
 					type="checkbox" 
 					placeholder="검색..." 
 					bind:checked={checked}
 				/>
-				<span class="flex-1 text-sm">다크모드</span>
+				<span class="flex-1 text-sm">
+					{checked ? '라이트 모드' : '다크모드'}
+				</span>
 			</label>
 
 			<button 
@@ -234,12 +219,13 @@
 			<a 
 				href="/auth/sign-out"
 				class="btn w-full justify-start h-8 text-error-600 hover:text-error-700 hover:preset-tonal-error"
+				onclick={handleSignout}
 			>
-				<LogOut size={16} class="mr-2" />
+				<LogOut size={16} class="mr-2 text-error-500" />
 				<span class="text-sm">로그아웃</span>
 			</a>
 		</div>
 	</div>
 </aside>
 
-<TodoDialog />
+<SignoutDialog />

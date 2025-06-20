@@ -34,9 +34,9 @@
 	 * @returns {string}
 	 */
 	function getPriorityBadgeClass(priorityId) {
-		if (priorityId === 2) return 'badge preset-filled-error-500'; // 높음
-		if (priorityId === 1) return 'badge preset-filled-warning-500'; // 보통
-		if (priorityId === 0) return 'badge preset-filled-success-500'; // 낮음
+		if (priorityId === 2) return 'badge'; // 높음
+		if (priorityId === 1) return 'badge'; // 보통
+		if (priorityId === 0) return 'badge'; // 낮음
 		return '';
 	}
 
@@ -62,7 +62,7 @@
 </script>
 
 <article 
-class="card preset-tonal-tertiary grid grid-cols-[auto_1fr] gap-4 p-2 {todoResponse.statusId === 1 ? 'opacity-60' : ''}"
+class="grid grid-cols-[auto_1fr] gap-4 p-2 {todoResponse.statusId === 1 ? 'opacity-60' : ''}"
 >
 	<form {action} method="POST" use:enhance={handleEnhance}>
 		<button
@@ -95,16 +95,16 @@ class="card preset-tonal-tertiary grid grid-cols-[auto_1fr] gap-4 p-2 {todoRespo
 				<span class={getPriorityBadgeClass(todoResponse.priorityId)}><Flag size={12} class="mr-1" />{todoResponse.priorityName}</span>
 			{/if}
 			{#if todoResponse.categoryName}
-				<span class="badge preset-tonal-secondary">{todoResponse.categoryName}</span>
+				<span class="badge">{todoResponse.categoryName}</span>
 			{/if}
 			{#if todoResponse.tags && todoResponse.tags.length > 0}
 				{#each todoResponse.tags as tag}
-					<span class="badge preset-outlined-tertiary-500"><Tag size={10} class="mr-1" />{tag}</span>
+					<span class="badge"><Tag size={10} class="mr-1" />{tag}</span>
 				{/each}
 			{/if}
-			<span class="badge preset-tonal-primary"><Clock size={12} class="mr-1" />{todoResponse.statusName}</span>
+			<span class="badge"><Clock size={12} class="mr-1" />{todoResponse.statusName}</span>
 			{#if todoResponse.repeatType && todoResponse.repeatType !== 'NONE'}
-				<span class="badge preset-tonal-success"><Repeat size={12} class="mr-1" />{todoResponse.repeatType}</span>
+				<span class="badge"><Repeat size={12} class="mr-1" />{todoResponse.repeatType}</span>
 			{/if}
 		</div>
 	</button>

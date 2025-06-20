@@ -1,6 +1,9 @@
 <script>
 import { page } from '$app/state';
 import Search from '@lucide/svelte/icons/search';
+import CheckCircle from '@lucide/svelte/icons/check-circle';
+import Folder from '@lucide/svelte/icons/folder';
+import Flag from '@lucide/svelte/icons/flag';
 import { onDestroy } from 'svelte';
 
 /** @type {HTMLFormElement} */
@@ -93,7 +96,9 @@ onDestroy(() => {
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
       <!-- 상태 선택 그룹 -->
       <div class="input-group grid-cols-[auto_1fr]">
-        <div class="ig-cell preset-tonal">상태</div>
+        <div class="ig-cell preset-tonal">
+          <CheckCircle size={16} />
+        </div>
         <select
          oninput={handleSelectInput}
         name="statusId" class="ig-select" value={currentStatusId}>
@@ -106,7 +111,9 @@ onDestroy(() => {
 
       <!-- 카테고리 선택 그룹 -->
       <div class="input-group grid-cols-[auto_1fr]">
-        <div class="ig-cell preset-tonal">카테고리</div>
+        <div class="ig-cell preset-tonal">
+          <Folder size={16} />
+        </div>
         <select
           oninput={handleSelectInput}
           name="categoryId" 
@@ -122,7 +129,9 @@ onDestroy(() => {
 
       <!-- 우선순위 선택 그룹 -->
       <div class="input-group grid-cols-[auto_1fr]">
-        <div class="ig-cell preset-tonal">우선순위</div>
+        <div class="ig-cell preset-tonal">
+          <Flag size={16} />
+        </div>
         <select
           oninput={handleSelectInput}
           name="priorityId" 
@@ -138,7 +147,7 @@ onDestroy(() => {
     </div>
 
     <!-- 태그 필터 -->
-    {#if tags.length > 0}
+    <!-- {#if tags.length > 0}
       <div class="space-y-1">
         <div class="text-sm font-medium text-surface-700-300">태그</div>
         <input
@@ -159,7 +168,7 @@ onDestroy(() => {
           {/each}
         </div>
       </div>
-    {/if}
+    {/if} -->
 
     <!-- 버튼 그룹 -->
     <div class="flex gap-2 justify-between">

@@ -13,6 +13,6 @@ export const actions = {
 			});
 		}
 
-		redirect(303, '/todos');
+		redirect(303, '/dashboard');
 	}
 };

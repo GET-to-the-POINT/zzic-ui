@@ -11,16 +11,19 @@
 @import '@skeletonlabs/skeleton/themes/vox';
 @import '@skeletonlabs/skeleton/themes/catppuccin';
 @import '@skeletonlabs/skeleton/themes/crimson';
+@import '@skeletonlabs/skeleton/themes/terminus';
+@import '@skeletonlabs/skeleton/themes/vintage';
+@import '@skeletonlabs/skeleton/themes/sahara';
+@import '@skeletonlabs/skeleton/themes/wintry';
 
 @source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
-
 @layer base {
     body {
         /* Sidebar width의 공백입니다. 컴포넌트를 확인하세요 */
-        @apply ml-10;
+        @apply ml-12;
     }
 
     dialog {
