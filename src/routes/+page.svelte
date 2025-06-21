@@ -23,7 +23,7 @@
 				<h1 class="h1">목표를 현실로,<br><span class="text-primary-500">ZZIC과 함께</span></h1>
 				<p class="text-xl opacity-60 max-w-2xl mx-auto">AI 도우미, 스마트한 습관 추적, 집중 타이머까지.<br>당신의 생산성을 한 단계 끌어올리는 올인원 솔루션입니다.</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
-					<a href="/auth/sign-in" class="btn preset-tonal-primary">
+					<a href="/todos" class="btn preset-tonal-primary">
 						무료로 시작하기
 						<ArrowRight size={16} />
 					</a>

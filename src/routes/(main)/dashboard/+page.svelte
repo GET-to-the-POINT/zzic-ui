@@ -5,8 +5,8 @@
 	let { data } = $props();
 </script>
 
-<div class="space-y-4">
+<main>
 	<h1 class="h1">대시보드</h1>
 
     <TodoStats todoStatisticsResponse={data.todoStatisticsResponse} />
-</div>
+</main>

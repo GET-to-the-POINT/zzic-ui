@@ -56,6 +56,7 @@
 		{ id: 'todos', label: '할 일', icon: SquareCheckBig, href: '/todos' },
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
 		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
+		{ id: 'timer', label: '타이머', icon: Clock, href: '/timer' },
 		{ id: 'profile', label: '내 정보', icon: User, href: '/profile' }
 	];
 
@@ -137,35 +138,14 @@
 							onclick={() => handleQuickAction('join-challenge')}
 						>
 							<Trophy size={12} class="w-4 mr-4 text-secondary-600" />
-							<span class="flex-1 text-xs">챌린지 참여</span>
+							<span class="text-left flex-1 text-xs">챌린지 참여</span>
 						</button>
 						<button class="btn w-full hover:preset-tonal"
 							onclick={() => handleQuickAction('focus-timer')}
 						>
 							<Clock size={12} class="w-4 mr-4 text-secondary-600" />
-							<span class="flex-1 text-xs">집중 타이머</span>
+							<span class="text-left flex-1 text-xs">집중 타이머</span>
 						</button>
-					</div>
-				</details>
-
-			<!-- Focus Timer Section -->
-				<details>
-					<summary class="btn w-full">
-						<Clock size={16} class="mr-2 text-secondary-400" />
-						<span class="flex-1 text-sm font-medium text-surface-600-300">집중 타이머</span>
-						<ChevronDown size={16} class="details-chevron transition-transform" />
-					</summary>
-					<div class="space-y-1 mt-1">
-						<div class="p-3 preset-tonal-surface rounded-lg">
-							<div class="text-center">
-								<div class="text-2xl font-bold text-surface-900-50 mb-1">25:00</div>
-								<div class="text-xs text-surface-600-300 mb-3">포모도로 타이머</div>
-								<button class="btn preset-filled-primary-500 w-full">
-									<Play size={16} class="mr-2 text-white" />
-									시작
-								</button>
-							</div>
-						</div>
 					</div>
 				</details>
 

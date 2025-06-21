@@ -21,7 +21,7 @@
 @custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
 
 @layer base {
-    body {
+    main {
         /* Sidebar width의 공백입니다. 컴포넌트를 확인하세요 */
         @apply ml-12;
     }

@@ -14,11 +14,11 @@
 
 <div class="min-h-screen flex items-center justify-center p-4">
 	<div class="w-full max-w-md">
-		<div class="card preset-filled-surface-100-900 p-6 space-y-6">
+		<div class="card preset-filled-primary-200-800 p-6 space-y-6">
 			<!-- Header -->
-			<div class="text-center space-y-2">
+			<div class="text-center">
 				<h1 class="text-2xl font-bold">돌아오신 것을 환영합니다</h1>
-				<p class="text-secondary-500">즐거운 경험 되세요!</p>
+				<p>즐거운 경험 되세요!</p>
 			</div>
 
 			<!-- Social Login Buttons -->
