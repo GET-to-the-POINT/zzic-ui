@@ -91,22 +91,34 @@
 			<h3 class="h3">
 				{selectedDate 
 					? `${formatDate(selectedDate)} 일정` 
-					: '전체 일정'
+					: '일정 목록'
 				}
 			</h3>
-			<span class="badge preset-tonal-surface ml-auto">
-				{sortedEvents.length}개
-			</span>
+			{#if selectedDate}
+				<span class="badge preset-tonal-surface ml-auto">
+					{sortedEvents.length}개
+				</span>
+			{/if}
 		</div>
 	</header>
 	
 	<div class="p-0">
 		<div class="max-h-[600px] overflow-y-auto scrollbar-none">
-			{#if sortedEvents.length === 0}
+			{#if !selectedDate}
 				<div class="text-center py-12 px-4">
 					<Calendar class="w-12 h-12 text-surface-300-700 mx-auto mb-4" />
 					<p class="text-surface-500-400 mb-2">
-						{selectedDate ? '이 날짜에는 일정이 없습니다.' : '등록된 일정이 없습니다.'}
+						날짜를 선택해주세요
+					</p>
+					<p class="text-sm text-surface-400-600">
+						캘린더에서 날짜를 클릭하면 해당 날짜의 일정을 확인할 수 있습니다
+					</p>
+				</div>
+			{:else if sortedEvents.length === 0}
+				<div class="text-center py-12 px-4">
+					<Calendar class="w-12 h-12 text-surface-300-700 mx-auto mb-4" />
+					<p class="text-surface-500-400 mb-2">
+						이 날짜에는 일정이 없습니다
 					</p>
 					<p class="text-sm text-surface-400-600">새로운 일정을 추가해보세요!</p>
 				</div>

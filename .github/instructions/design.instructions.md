@@ -6,6 +6,7 @@ applyTo: '**/*.svelte'
 
 TODO 앱이기대문에 사용성이 띄어나야하며, 시각적으로 편안해야한다.
 bits-ui, skeleton-ui를 사용합니다.
+tailwind4 문법을 사용
 기본적으로 skeleten의 기능을 사용하고 없으면 bits-ui를 사용합니다.
 
 ## 규칙

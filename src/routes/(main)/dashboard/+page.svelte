@@ -39,27 +39,29 @@
 	function handleViewAllCalendar() {
 		goto('/calendar');
 	}
+
+	/**
+	 * @param {Date} date
+	 */
+	function handleDateClick(date) {
+		const dateStr = date.toISOString().split('T')[0];
+		goto(`/calendar?date=${dateStr}`);
+	}
 </script>
 
 <svelte:head>
 	<title>대시보드 - ZZIC</title>
 </svelte:head>
 
-<main class="space-y-6">
-	<h1 class="h1">대시보드</h1>
+<main class="space-y-4">
+	<DashboardCalendarWidget 
+		events={todoEvents}
+		onViewAll={handleViewAllCalendar}
+		onDateClick={handleDateClick}
+	/>
 
-	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-		<!-- TODO 통계 -->
-		<div class="lg:col-span-2">
-			<TodoStats todoStatisticsResponse={data.todoStatisticsResponse} />
-		</div>
-
-		<!-- 캘린더 위젯 -->
-		<div class="lg:col-span-1">
-			<DashboardCalendarWidget 
-				events={todoEvents}
-				onViewAll={handleViewAllCalendar}
-			/>
-		</div>
+	<!-- TODO 통계 -->
+	<div>
+		<TodoStats todoStatisticsResponse={data.todoStatisticsResponse} />
 	</div>
 </main>

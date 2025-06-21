@@ -2,68 +2,79 @@
 	import { onMount, onDestroy } from 'svelte';
 	import Play from '@lucide/svelte/icons/play';
 	import Pause from '@lucide/svelte/icons/pause';
-	import Square from '@lucide/svelte/icons/square';
-	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 	import Timer from '@lucide/svelte/icons/timer';
-	import Coffee from '@lucide/svelte/icons/coffee';
-	import Brain from '@lucide/svelte/icons/brain';
-	import BarChart3 from '@lucide/svelte/icons/bar-chart-3';
-	import Trophy from '@lucide/svelte/icons/trophy';
-	import Flame from '@lucide/svelte/icons/flame';
 	import Clock from '@lucide/svelte/icons/clock';
 	import Target from '@lucide/svelte/icons/target';
-	import Zap from '@lucide/svelte/icons/zap';
+	import CheckCircle from '@lucide/svelte/icons/check-circle';
+	import Circle from '@lucide/svelte/icons/circle';
 	import Volume2 from '@lucide/svelte/icons/volume-2';
 	import VolumeX from '@lucide/svelte/icons/volume-x';
-	import Bell from '@lucide/svelte/icons/bell';
+	import Calendar from '@lucide/svelte/icons/calendar';
+	import Settings from '@lucide/svelte/icons/settings';
+	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 
-	// Timer modes: 'focus', 'shortBreak', 'longBreak'
-	// Timer session: {id, type, duration, completedAt}
-	// Timer settings: {focusTime, shortBreakTime, longBreakTime, longBreakInterval, autoStartBreaks, autoStartFocus, notifications, sound, volume}
+	// 투두 리스트 데이터
+	let { data } = $props();
+	
+	/** @type {import('$lib/zzic-api/todo.js').TodoResponse[]} */
+	let todos = $derived(data.todoPage.content);
+	let categories = $derived(data.categoryPage.content);
+	let tags = $derived(data.tagPage.content);
+	
+	// 필터 업데이트 함수
+	function updateFilters(event) {
+		form.requestSubmit();
+	}
+	
+	/** @type {import('$lib/zzic-api/todo.js').TodoResponse | null} */
+	let selectedTodo = $state(null);
 
 	// 타이머 상태
 	let currentTime = $state(25 * 60); // 25분 (초 단위)
 	let initialTime = $state(25 * 60);
 	let isRunning = $state(false);
-	let currentMode = $state('focus');
+	let timerMode = $state('focus'); // 'focus', 'break'
 	let completedSessions = $state(0);
-	let activeTab = $state('timer');
 
 	// 세션 데이터
+	/** @type {Array<{id: string, type: string, duration: number, completedAt: string, todoId?: number, todoTitle?: string}>} */
 	let sessions = $state([]);
 
 	// 설정
 	let settings = $state({
 		focusTime: 25,
-		shortBreakTime: 5,
-		longBreakTime: 15,
-		longBreakInterval: 4,
+		breakTime: 5,
 		notifications: true,
 		sound: true,
 		volume: 50
 	});
 
+	/** @type {NodeJS.Timeout | null} */
 	let intervalId = null;
+	let isCompleting = $state(false);
+	let showAdvancedSettings = $state(false);
+	let inputMinutes = $state(25);
+	let inputSeconds = $state(0);
+	let isEditingInput = $state(false);
 
-	// 모드 변경 시 시간 설정
+	// 타이머 시간 설정 (완전히 새로 시작할 때만)
 	$effect(() => {
-		let duration = 0;
-		switch (currentMode) {
-			case 'focus':
-				duration = settings.focusTime * 60;
-				break;
-			case 'shortBreak':
-				duration = settings.shortBreakTime * 60;
-				break;
-			case 'longBreak':
-				duration = settings.longBreakTime * 60;
-				break;
-			default:
-				duration = settings.focusTime * 60;
-		}
-		if (!isRunning) {
+		const duration = timerMode === 'focus' ? settings.focusTime * 60 : settings.breakTime * 60;
+		if (!isRunning && currentTime === 0) {
+			// 타이머가 완료되어 0이 된 경우에만 새로운 시간으로 설정
 			currentTime = duration;
 			initialTime = duration;
+			// 인풋 값도 동기화
+			inputMinutes = Math.floor(duration / 60);
+			inputSeconds = duration % 60;
+		}
+	});
+
+	// 타이머 실행 중이거나 편집 중이 아닐 때만 input 값을 현재 시간으로 업데이트
+	$effect(() => {
+		if (!isEditingInput) {
+			inputMinutes = Math.floor(currentTime / 60);
+			inputSeconds = currentTime % 60;
 		}
 	});
 
@@ -90,32 +101,35 @@
 	});
 
 	// 세션 완료 처리
-	function handleSessionComplete() {
+	async function handleSessionComplete() {
 		isRunning = false;
 		
 		const newSession = {
 			id: Date.now().toString(),
-			type: currentMode,
+			type: timerMode,
 			duration: initialTime,
-			completedAt: new Date().toISOString()
+			completedAt: new Date().toISOString(),
+			todoId: selectedTodo?.id,
+			todoTitle: selectedTodo?.title
 		};
 		
 		sessions = [newSession, ...sessions];
 		
-		if (currentMode === 'focus') {
+		if (timerMode === 'focus' && selectedTodo) {
+			// 선택된 투두 완료 처리
+			await completeTodo(selectedTodo.id);
+			showNotification(`"${selectedTodo.title}" 완료! 🎉 휴식 시간을 가져보세요.`);
+			
+			// 투두 리스트에서 완료된 투두 제거
+			todos = todos.filter((/** @type {any} */ todo) => todo.id !== selectedTodo.id);
+			selectedTodo = null;
+			
+			// 휴식 모드로 전환
+			timerMode = 'break';
 			completedSessions = completedSessions + 1;
-			
-			// 장기 휴식 여부 결정
-			const nextBreakType = completedSessions % settings.longBreakInterval === 0 
-				? 'longBreak' 
-				: 'shortBreak';
-			
-			showNotification(`집중 세션 완료! 🎉 ${nextBreakType === 'longBreak' ? '장기' : '단기'} 휴식을 취하세요.`);
-			
-			currentMode = nextBreakType;
-		} else {
+		} else if (timerMode === 'break') {
 			showNotification('휴식 시간 완료! 💪 집중할 준비가 되셨나요?');
-			currentMode = 'focus';
+			timerMode = 'focus';
 		}
 		
 		// 사운드 재생
@@ -123,6 +137,47 @@
 			playNotificationSound();
 		}
 	}
+
+	// 투두 완료 처리
+	/**
+	 * @param {number} todoId
+	 */
+	async function completeTodo(todoId) {
+		isCompleting = true;
+		try {
+			const response = await fetch(`/api/todos/${todoId}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					status: 'COMPLETED'
+				})
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to complete todo');
+			}
+		} catch (error) {
+			console.error('Error completing todo:', error);
+			showNotification('투두 완료 처리 중 오류가 발생했습니다.');
+		} finally {
+			isCompleting = false;
+		}
+	}
+
+	// 투두 선택
+	/**
+	 * @param {import('$lib/zzic-api/todo.js').TodoResponse} todo
+	 */
+	function selectTodo(todo) {
+		if (isRunning) return; // 타이머 실행 중일 때는 선택 변경 불가
+		selectedTodo = todo;
+		timerMode = 'focus'; // 투두 선택 시 집중 모드로 설정
+	}
+
+	/** @type {HTMLFormElement} */
+	let form;
 
 	/**
 	 * 알림 표시
@@ -144,8 +199,8 @@
 
 	function playNotificationSound() {
 		try {
-			// 간단한 beep 사운드 대신 Audio API 사용
-			const AudioContextClass = window.AudioContext || window['webkitAudioContext'];
+			// @ts-ignore
+			const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 			if (!AudioContextClass) {
 				console.warn('AudioContext not supported');
 				return;
@@ -169,32 +224,33 @@
 	}
 
 	function handleStart() {
+		// 시작할 때 인풋 값으로 타이머 시간 설정
+		updateTimeFromInput();
 		isRunning = true;
+		timerMode = 'focus'; // 시작하면 바로 집중 모드
 	}
 
 	function handlePause() {
 		isRunning = false;
 	}
 
-	function handleStop() {
-		isRunning = false;
-		currentTime = initialTime;
+	function toggleAdvancedSettings() {
+		showAdvancedSettings = !showAdvancedSettings;
 	}
 
-	function handleReset() {
-		isRunning = false;
-		currentTime = initialTime;
-	}
-
-	/**
-	 * 시간 포맷팅
-	 * @param {number} seconds 초 단위 시간
-	 * @returns {string} MM:SS 형식 문자열
-	 */
-	function formatTime(seconds) {
-		const mins = Math.floor(seconds / 60);
-		const secs = seconds % 60;
-		return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+	function updateTimeFromInput() {
+		if (isRunning) return;
+		const newTime = inputMinutes * 60 + inputSeconds;
+		if (newTime > 0 && newTime <= 3600) { // 최대 1시간
+			currentTime = newTime;
+			initialTime = newTime;
+		} else {
+			// 유효하지 않은 값일 때 이전 값으로 복원
+			const mins = Math.floor(currentTime / 60);
+			const secs = currentTime % 60;
+			inputMinutes = mins;
+			inputSeconds = secs;
+		}
 	}
 
 	/**
@@ -203,6 +259,25 @@
 	 */
 	function getProgress() {
 		return ((initialTime - currentTime) / initialTime) * 100;
+	}
+
+
+	/**
+	 * 진행률 색상 가져오기 (타이머 실행 중일 때만 색상 적용)
+	 * @param {string} mode 타이머 모드
+	 * @returns {string} 색상 클래스
+	 */
+	function getProgressColor(mode) {
+		if (!isRunning) return 'text-surface-500';
+		
+		switch (mode) {
+			case 'focus':
+				return 'text-primary-500';
+			case 'break':
+				return 'text-secondary-500';
+			default:
+				return 'text-surface-500';
+		}
 	}
 
 	/**
@@ -214,48 +289,67 @@
 		switch (mode) {
 			case 'focus':
 				return '집중';
-			case 'shortBreak':
-				return '단기 휴식';
-			case 'longBreak':
-				return '장기 휴식';
+			case 'break':
+				return '휴식';
 			default:
 				return mode;
 		}
 	}
 
 	/**
-	 * 모드 프리셋 가져오기
-	 * @param {string} mode 타이머 모드
-	 * @returns {string} 모드 프리셋 클래스
+	 * 우선순위 색상 가져오기
+	 * @param {number} priority 우선순위
+	 * @returns {string} 색상 클래스
 	 */
-	function getModePreset(mode) {
-		switch (mode) {
-			case 'focus':
-				return 'preset-tonal-primary';
-			case 'shortBreak':
-				return 'preset-tonal-success';
-			case 'longBreak':
-				return 'preset-tonal-secondary';
+	function getPriorityColor(priority) {
+		switch (priority) {
+			case 0:
+				return 'text-success-500';
+			case 1:
+				return 'text-warning-500';
+			case 2:
+				return 'text-error-500';
 			default:
-				return 'preset-tonal-surface';
+				return 'text-surface-500';
 		}
 	}
 
 	/**
-	 * 진행률 색상 가져오기
-	 * @param {string} mode 타이머 모드
-	 * @returns {string} 색상 클래스
+	 * 우선순위 라벨 가져오기
+	 * @param {number} priority 우선순위
+	 * @returns {string} 우선순위 라벨
 	 */
-	function getProgressColor(mode) {
-		switch (mode) {
-			case 'focus':
-				return 'text-primary-500';
-			case 'shortBreak':
-				return 'text-success-500';
-			case 'longBreak':
-				return 'text-secondary-500';
+	function getPriorityLabel(priority) {
+		switch (priority) {
+			case 0:
+				return '낮음';
+			case 1:
+				return '보통';
+			case 2:
+				return '높음';
 			default:
-				return 'text-surface-500';
+				return '보통';
+		}
+	}
+
+	/**
+	 * 날짜 포맷팅
+	 * @param {string} dateString 날짜 문자열
+	 * @returns {string} 포맷된 날짜
+	 */
+	function formatDate(dateString) {
+		if (!dateString) return '';
+		const date = new Date(dateString);
+		const today = new Date();
+		const tomorrow = new Date(today);
+		tomorrow.setDate(tomorrow.getDate() + 1);
+		
+		if (date.toDateString() === today.toDateString()) {
+			return '오늘';
+		} else if (date.toDateString() === tomorrow.toDateString()) {
+			return '내일';
+		} else {
+			return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
 		}
 	}
 
@@ -283,273 +377,406 @@
 	});
 </script>
 
-<main class="min-h-screen">
-	<div class="max-w-6xl mx-auto px-6 py-8">
-		<!-- 헤더 -->
-		<div class="mb-8 space-y-4">
-			<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
-				<div class="w-12 h-12 rounded-lg preset-tonal-primary grid place-items-center">
-					<Timer size={24} />
+<main class="h-screen @container preset-filled-surface-50-950">
+	<div class="h-full flex flex-col @md:flex-row">
+		<!-- 투두 리스트 사이드바 -->
+		<aside class="@md:w-80 bg-surface-100-900 border-b @md:border-b-0 @md:border-r border-surface-300-700 flex flex-col">
+			<!-- 헤더 -->
+			<div class="p-4 border-b border-surface-300-700">
+				<div class="flex items-center justify-between mb-4">
+					<h2 class="text-lg font-bold flex items-center gap-2">
+						<Target size={20} />
+						할 일 목록
+					</h2>
 				</div>
-				<div>
-					<h1 class="h1">집중 타이머</h1>
-					<p class="opacity-60">포모도로 기법으로 생산성을 높여보세요</p>
-				</div>
+				
+				<!-- 필터 섹션 -->
+				<form bind:this={form} class="space-y-3" oninput={updateFilters} onreset={updateFilters}>
+					<!-- 카테고리 필터 -->
+					<fieldset>
+						<legend class="text-sm font-medium mb-2 flex w-full justify-between">
+							<span>카테고리</span>
+							<button type="reset" class="hover:preset-tonal-surface p-1 rounded" aria-label="카테고리 필터 초기화">
+								<RotateCcw size={14} />
+							</button>
+						</legend>
+						<div class="flex flex-wrap gap-1">
+							{#each categories as category (category.id)}
+								<label class="inline-flex items-center gap-2 text-xs px-2 py-1 rounded-full transition-colors cursor-pointer preset-filled-surface-200-800 hover:preset-tonal-surface has-[:checked]:preset-tonal-primary">
+									<input
+										type="radio"
+										name="categoryId"
+										class="sr-only"
+										value={category.id}
+									/>
+									{category.name}
+								</label>
+							{/each}
+						</div>
+					</fieldset>
+					
+					<!-- 태그 필터 -->
+					<fieldset>
+						<legend class="text-sm font-medium mb-2 flex w-full justify-between">
+							<span>태그</span>
+							<button type="reset" class="hover:preset-tonal-surface p-1 rounded" aria-label="태그 필터 초기화">
+								<RotateCcw size={14} />
+							</button>
+						</legend>
+						<div class="flex flex-wrap gap-1 max-h-16 overflow-y-auto scrollbar-thin scrollbar-thumb-surface-400-600 scrollbar-track-surface-200-800">
+							{#each tags as tag (tag)}
+								<label class="inline-flex items-center gap-2 text-xs px-2 py-1 rounded-full transition-colors cursor-pointer preset-filled-surface-200-800 hover:preset-tonal-surface has-[:checked]:preset-tonal-secondary">
+									<input
+										type="checkbox"
+										name="tags"
+										value={tag}
+										class="sr-only"
+									/>
+									{tag}
+								</label>
+							{/each}
+						</div>
+					</fieldset>
+				</form>
 			</div>
-		</div>
-
-		<!-- 탭 헤더 -->
-		<div class="mb-6">
-			<div class="grid grid-cols-3 gap-2 max-w-md">
-				<button 
-					class="chip {activeTab === 'timer' ? 'preset-tonal-primary' : 'preset-outlined-surface-500'}"
-					onclick={() => activeTab = 'timer'}
-				>
-					타이머
-				</button>
-				<button 
-					class="chip {activeTab === 'stats' ? 'preset-tonal-primary' : 'preset-outlined-surface-500'}"
-					onclick={() => activeTab = 'stats'}
-				>
-					통계
-				</button>
-				<button 
-					class="chip {activeTab === 'settings' ? 'preset-tonal-primary' : 'preset-outlined-surface-500'}"
-					onclick={() => activeTab = 'settings'}
-				>
-					설정
-				</button>
-			</div>
-		</div>
-
-		{#if activeTab === 'timer'}
-			<!-- 타이머 탭 -->
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				<!-- 메인 타이머 -->
-				<div class="lg:col-span-2">
-					<div class="card preset-tonal-surface p-8">
-						<div class="text-center space-y-6">
-							<!-- 모드 선택 -->
-							<div class="grid grid-cols-3 gap-2 max-w-md mx-auto">
-								{#each ['focus', 'shortBreak', 'longBreak'] as mode}
-									<button
-										class="chip {currentMode === mode ? getModePreset(mode) : 'preset-outlined-surface-500'}"
-										onclick={() => !isRunning && (currentMode = mode)}
-										disabled={isRunning}
-									>
-										{getModeLabel(mode)}
-									</button>
-								{/each}
-							</div>
-
-							<!-- 타이머 디스플레이 -->
-							<div class="relative">
-								<div class="w-64 h-64 mx-auto relative">
-									<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-										<circle
-											cx="50"
-											cy="50"
-											r="45"
-											stroke="currentColor"
-											stroke-width="2"
-											fill="none"
-											class="text-surface-200"
-										/>
-										<circle
-											cx="50"
-											cy="50"
-											r="45"
-											stroke="currentColor"
-											stroke-width="2"
-											fill="none"
-											stroke-dasharray={2 * Math.PI * 45}
-											stroke-dashoffset={2 * Math.PI * 45 * (1 - getProgress() / 100)}
-											class={getProgressColor(currentMode)}
-											stroke-linecap="round"
-										/>
-									</svg>
-									<div class="absolute inset-0 grid place-items-center">
-										<span class="text-4xl font-mono font-bold">
-											{formatTime(currentTime)}
-										</span>
+			
+			<!-- 투두 목록 -->
+			<div class="flex-1 overflow-y-auto">
+				{#if todos.length === 0}
+					<div class="text-center py-8 px-4 opacity-60 space-y-2">
+						<CheckCircle size={48} class="mx-auto opacity-30" />
+						{#if filterCategoryId || filterTags.length > 0}
+							<p>필터에 맞는 투두가 없습니다!</p>
+							<button 
+								type="button"
+								class="text-sm preset-tonal-primary px-3 py-1 rounded-full"
+								onclick={clearFilters}
+							>
+								필터 초기화
+							</button>
+						{:else}
+							<p>완료할 투두가 없습니다!</p>
+							<p class="text-sm">새로운 투두를 추가해보세요.</p>
+						{/if}
+					</div>
+				{:else}
+					<div class="space-y-1 p-2">
+						{#each todos as todo (todo.id)}
+							<button
+								class="w-full p-3 rounded-lg border border-surface-300-700 hover:preset-tonal-primary transition-colors {selectedTodo?.id === todo.id ? 'preset-tonal-primary' : 'preset-filled-surface-100-900'} {isRunning && selectedTodo?.id !== todo.id ? 'opacity-50 cursor-not-allowed' : ''}"
+								onclick={() => selectTodo(todo)}
+								disabled={isRunning && selectedTodo?.id !== todo.id}
+							>
+								<div class="grid grid-cols-[auto_1fr] gap-3 items-start text-left">
+									<Circle size={16} class="mt-0.5 opacity-60" />
+									<div class="space-y-1">
+										<h4 class="font-medium text-sm leading-tight">{todo.title}</h4>
+										{#if todo.description}
+											<p class="text-xs opacity-60 overflow-hidden text-ellipsis [-webkit-line-clamp:2] [-webkit-box-orient:vertical] [display:-webkit-box]">{todo.description}</p>
+										{/if}
+										<div class="flex flex-wrap gap-1 items-center text-xs opacity-60">
+											{#if todo.priorityId !== undefined}
+												<span class="text-xs px-2 py-1 rounded-full {getPriorityColor(todo.priorityId)}">
+													{getPriorityLabel(todo.priorityId)}
+												</span>
+											{/if}
+											{#if todo.dueDate}
+												<div class="flex items-center gap-1">
+													<Calendar size={12} />
+													<span>{formatDate(todo.dueDate)}</span>
+												</div>
+											{/if}
+											{#if todo.categoryName}
+												<span class="text-xs px-2 py-1 rounded-full preset-tonal-secondary">
+													{todo.categoryName}
+												</span>
+											{/if}
+										</div>
 									</div>
 								</div>
-							</div>
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</aside>
 
-							<!-- 컨트롤 버튼 -->
-							<div class="grid grid-cols-4 gap-2 max-w-md mx-auto">
-								{#if !isRunning}
-									<button
-										class="btn preset-tonal-primary"
-										onclick={handleStart}
-									>
-										<Play size={16} />
-										시작
-									</button>
-								{:else}
-									<button
-										class="btn preset-outlined-primary-500"
-										onclick={handlePause}
-									>
-										<Pause size={16} />
-										일시정지
-									</button>
+		<!-- 메인 타이머 영역 -->
+		<div class="flex-1 flex flex-col overflow-hidden">
+			<!-- 헤더 -->
+			<header class="p-4 border-b border-surface-300-700 bg-surface-100-900">
+				<div class="flex items-center gap-4">
+					<div class="w-12 h-12 rounded-lg preset-tonal-surface grid place-items-center">
+						<Timer size={24} />
+					</div>
+					<div class="flex-1">
+						<h1 class="text-xl font-bold">집중 타이머</h1>
+						<p class="text-sm opacity-60">투두를 선택하고 집중 타이머로 완료해보세요</p>
+					</div>
+				</div>
+			</header>
+
+			<!-- 메인 콘텐츠 -->
+			<div class="flex-1 overflow-y-auto p-6 space-y-6">
+				<!-- 선택된 투두 정보 -->
+				{#if selectedTodo}
+					<div class="card preset-tonal-primary p-4">
+						<div class="grid grid-cols-[auto_1fr] gap-3 items-start">
+							<Target size={20} class="mt-0.5" />
+							<div>
+								<h3 class="font-medium">{selectedTodo.title}</h3>
+								{#if selectedTodo.description}
+									<p class="text-sm opacity-80 mt-1">{selectedTodo.description}</p>
 								{/if}
-								
-								<button
-									class="btn preset-outlined-surface-500"
-									onclick={handleStop}
-								>
-									<Square size={16} />
-									정지
-								</button>
-								
-								<button
-									class="btn preset-outlined-surface-500"
-									onclick={handleReset}
-								>
-									<RotateCcw size={16} />
-									초기화
-								</button>
+								<div class="flex flex-wrap gap-2 items-center text-sm opacity-80 mt-2">
+									{#if selectedTodo.priorityId !== undefined}
+										<span class="text-xs px-2 py-1 rounded-full">
+											{getPriorityLabel(selectedTodo.priorityId)}
+										</span>
+									{/if}
+									{#if selectedTodo.dueDate}
+										<div class="flex items-center gap-1">
+											<Calendar size={12} />
+											<span>{formatDate(selectedTodo.dueDate)}</span>
+										</div>
+									{/if}
+									{#if selectedTodo.categoryName}
+										<span class="text-xs px-2 py-1 rounded-full">
+											{selectedTodo.categoryName}
+										</span>
+									{/if}
+								</div>
 							</div>
+						</div>
+					</div>
+				{/if}
+
+				<!-- 타이머 -->
+				<div class="card preset-tonal-surface p-8">
+					<div class="text-center space-y-6">
+						<!-- 타이머 디스플레이 -->
+						<div class="relative">
+							<div class="w-64 h-64 mx-auto relative {isRunning ? (timerMode === 'focus' ? 'bg-primary-500/10' : 'bg-secondary-500/10') : ''} rounded-full">
+								<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+									<circle
+										cx="50"
+										cy="50"
+										r="45"
+										stroke="currentColor"
+										stroke-width="2"
+										fill="none"
+										class="text-surface-200-800"
+									/>
+									<circle
+										cx="50"
+										cy="50"
+										r="45"
+										stroke="currentColor"
+										stroke-width="2"
+										fill="none"
+										stroke-dasharray={2 * Math.PI * 45}
+										stroke-dashoffset={2 * Math.PI * 45 * (1 - getProgress() / 100)}
+										class={getProgressColor(timerMode)}
+										stroke-linecap="round"
+									/>
+								</svg>					<div class="absolute inset-0 grid place-items-center">
+							<div class="text-center">
+								<input
+									type="number"
+									bind:value={inputMinutes}
+									onfocus={() => isEditingInput = true}
+									onblur={() => { isEditingInput = false; updateTimeFromInput(); }}
+									min="0"
+									max="59"
+									disabled={isRunning}
+									class="text-right text-4xl font-mono font-bold w-24 bg-transparent border-none focus:ring-2 focus:ring-transparent disabled:opacity-75 disabled:cursor-not-allowed [-webkit-appearance:none] [-moz-appearance:textfield] [appearance:none] [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:[margin:0] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:[margin:0]"
+								/>
+								<span class="text-4xl font-mono font-bold {isRunning ? 'animate-[blink_2s_step-end_infinite]' : ''}">:</span>
+								<input
+									type="number"
+									bind:value={inputSeconds}
+									onfocus={() => isEditingInput = true}
+									onblur={() => { isEditingInput = false; updateTimeFromInput(); }}
+									min="0"
+									max="59"
+									disabled={isRunning}
+									class="text-left text-4xl font-mono font-bold w-24 bg-transparent border-none focus:ring-2 focus:ring-transparent disabled:opacity-75 disabled:cursor-not-allowed [-webkit-appearance:none] [-moz-appearance:textfield] [appearance:none] [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:[margin:0] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:[margin:0]"
+								/>
+							</div>
+					</div>
+							</div>
+						</div>
+
+						<!-- 컨트롤 버튼 -->
+						<div class="max-w-xs mx-auto">
+							{#if !isRunning}
+								<button
+									class="btn preset-tonal-primary w-full"
+									onclick={handleStart}
+								>
+									<Play size={16} />
+									시작
+								</button>
+							{:else}
+								<button
+									class="btn preset-outlined-primary-500 w-full"
+									onclick={handlePause}
+								>
+									<Pause size={16} />
+									일시정지
+								</button>
+							{/if}
+						</div>
+
+						<!-- 상세 설정 토글 버튼 -->
+						<div class="text-center">
+							<button
+								class="btn preset-outlined-surface-500 text-sm px-4 py-2"
+								onclick={toggleAdvancedSettings}
+							>
+								<Settings size={16} />
+								{showAdvancedSettings ? '설정 숨기기' : '상세 설정'}
+							</button>
 						</div>
 					</div>
 				</div>
 
-				<!-- 사이드 패널 -->
-				<div class="space-y-4">
-					<!-- 오늘 통계 -->
-					<div class="card preset-tonal-surface p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-2 items-center mb-4">
-							<BarChart3 size={20} />
-							<h3 class="h5">오늘 통계</h3>
+				<!-- 오늘 통계 (상세 설정에서만 표시) -->
+				{#if showAdvancedSettings}
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<div class="card preset-tonal-success p-4">
+							<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+								<Target size={24} />
+								<div>
+									<p class="text-xl font-bold">{todaySessions.filter(s => s.type === 'focus').length}</p>
+									<p class="text-xs opacity-60">완료 세션</p>
+								</div>
+							</div>
 						</div>
-						<div class="space-y-2">
-							<div class="grid grid-cols-[1fr_auto] gap-2 items-center">
-								<span class="text-sm opacity-60">완료 세션</span>
-								<div class="grid grid-cols-[auto_auto] gap-1 items-center">
-									<Target size={16} class="text-success-500" />
-									<span class="font-medium">{todaySessions.filter(s => s.type === 'focus').length}개</span>
+
+						<div class="card preset-tonal-secondary p-4">
+							<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+								<Clock size={24} />
+								<div>
+									<p class="text-xl font-bold">{Math.floor(todayFocusTime / 60)}분</p>
+									<p class="text-xs opacity-60">집중 시간</p>
 								</div>
 							</div>
-							
-							<div class="grid grid-cols-[1fr_auto] gap-2 items-center">
-								<span class="text-sm opacity-60">집중 시간</span>
-								<div class="grid grid-cols-[auto_auto] gap-1 items-center">
-									<Clock size={16} class="text-secondary-500" />
-									<span class="font-medium">{Math.floor(todayFocusTime / 60)}분</span>
-								</div>
-							</div>
-							
-							<div class="grid grid-cols-[1fr_auto] gap-2 items-center">
-								<span class="text-sm opacity-60">연속 완료</span>
-								<div class="grid grid-cols-[auto_auto] gap-1 items-center">
-									<Flame size={16} class="text-warning-500" />
-									<span class="font-medium">{completedSessions}회</span>
+						</div>
+
+						<div class="card preset-tonal-primary p-4">
+							<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+								<CheckCircle size={24} />
+								<div>
+									<p class="text-xl font-bold">{completedSessions}</p>
+									<p class="text-xs opacity-60">연속 완료</p>
 								</div>
 							</div>
 						</div>
 					</div>
+				{/if}
 
-					<!-- 빠른 설정 -->
+				<!-- 설정 (상세 설정에서만 표시) -->
+				{#if showAdvancedSettings}
 					<div class="card preset-tonal-surface p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-2 items-center mb-4">
-							<Zap size={20} />
-							<h3 class="h5">빠른 설정</h3>
-						</div>
-						<div class="space-y-2">
-							<label class="grid grid-cols-[1fr_auto] gap-2 items-center">
-								<span class="text-sm">알림</span>
+						<h3 class="h5 mb-4">타이머 설정</h3>
+						<p class="text-sm opacity-60 mb-4">시간을 변경하려면 타이머 숫자를 클릭하거나 아래 설정을 수정하세요</p>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<label class="label">
+								<span class="label-text">집중 시간 (분)</span>
+								<input
+									class="input"
+									type="number"
+									bind:value={settings.focusTime}
+									min="1"
+									max="60"
+									disabled={isRunning}
+								/>
+							</label>
+
+							<label class="label">
+								<span class="label-text">휴식 시간 (분)</span>
+								<input
+									class="input"
+									type="number"
+									bind:value={settings.breakTime}
+									min="1"
+									max="30"
+									disabled={isRunning}
+								/>
+							</label>
+
+							<label class="grid grid-cols-[1fr_auto] gap-4 items-center">
+								<div>
+									<div class="font-medium">브라우저 알림</div>
+									<p class="text-sm opacity-60">세션 완료 시 브라우저 알림</p>
+								</div>
 								<input
 									type="checkbox"
 									class="checkbox"
 									bind:checked={settings.notifications}
 								/>
 							</label>
-							
-							<label class="grid grid-cols-[1fr_auto] gap-2 items-center">
-								<span class="text-sm">사운드</span>
+
+							<label class="grid grid-cols-[1fr_auto] gap-4 items-center">
+								<div>
+									<div class="font-medium">사운드 알림</div>
+									<p class="text-sm opacity-60">세션 완료 시 사운드 재생</p>
+								</div>
 								<input
 									type="checkbox"
 									class="checkbox"
 									bind:checked={settings.sound}
 								/>
 							</label>
+
+							{#if settings.sound}
+								<div class="md:col-span-2">
+									<label class="label">
+										<span class="label-text">볼륨</span>
+										<div class="grid grid-cols-[auto_1fr_auto_auto] gap-2 items-center">
+											<VolumeX size={16} class="opacity-60" />
+											<input
+												type="range"
+												class="input"
+												bind:value={settings.volume}
+												min="0"
+												max="100"
+												step="10"
+											/>
+											<Volume2 size={16} class="opacity-60" />
+											<span class="text-sm opacity-60 w-12">{settings.volume}%</span>
+										</div>
+									</label>
+								</div>
+							{/if}
 						</div>
 					</div>
-				</div>
-			</div>
+				{/if}
 
-		{:else if activeTab === 'stats'}
-			<!-- 통계 탭 -->
-			<div class="space-y-4">
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-					<div class="card preset-tonal-success p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
-							<Target size={32} />
-							<div>
-								<p class="text-2xl font-bold">{sessions.filter(s => s.type === 'focus').length}</p>
-								<p class="text-sm opacity-60">총 집중 세션</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="card preset-tonal-secondary p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
-							<Clock size={32} />
-							<div>
-								<p class="text-2xl font-bold">
-									{Math.floor(sessions.filter(s => s.type === 'focus').reduce((t, s) => t + s.duration, 0) / 3600)}h
-								</p>
-								<p class="text-sm opacity-60">총 집중 시간</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="card preset-tonal-warning p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
-							<Flame size={32} />
-							<div>
-								<p class="text-2xl font-bold">{completedSessions}</p>
-								<p class="text-sm opacity-60">연속 완료</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="card preset-tonal-primary p-4">
-						<div class="grid grid-cols-[auto_1fr] gap-4 items-center">
-							<Trophy size={32} />
-							<div>
-								<p class="text-2xl font-bold">{todaySessions.length}</p>
-								<p class="text-sm opacity-60">오늘 세션</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- 최근 세션 목록 -->
-				<div class="card preset-tonal-surface p-4">
-					<h3 class="h5 mb-4">최근 세션</h3>
-					{#if sessions.length === 0}
-						<div class="text-center py-8 opacity-60">
-							아직 완료된 세션이 없습니다.
-						</div>
-					{:else}
+				<!-- 최근 세션 (상세 설정에서만 표시) -->
+				{#if showAdvancedSettings && sessions.length > 0}
+					<div class="card preset-tonal-surface p-4">
+						<h3 class="h5 mb-4">최근 세션</h3>
 						<div class="space-y-2">
-							{#each sessions.slice(0, 10) as session (session.id)}
-								<div class="card preset-filled-surface-100-900 p-4 grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+							{#each sessions.slice(0, 5) as session (session.id)}
+								<div class="card preset-filled-surface-100-900 p-3 grid grid-cols-[auto_1fr_auto] gap-4 items-center">
 									<div class="w-3 h-3 rounded-full {
 										session.type === 'focus' ? 'bg-primary-500' :
-										session.type === 'shortBreak' ? 'bg-success-500' :
-										'bg-secondary-500'
+										'bg-success-500'
 									}"></div>
 									<div>
-										<span class="font-medium">{getModeLabel(session.type)}</span>
-										<span class="text-sm opacity-60 ml-2">
+										<div class="font-medium text-sm">
+											{getModeLabel(session.type)}
+											{#if session.todoTitle}
+												- {session.todoTitle}
+											{/if}
+										</div>
+										<div class="text-xs opacity-60">
 											{Math.floor(session.duration / 60)}분
-										</span>
+										</div>
 									</div>
-									<span class="text-sm opacity-60">
+									<span class="text-xs opacity-60">
 										{new Date(session.completedAt).toLocaleTimeString('ko-KR', {
 											hour: '2-digit',
 											minute: '2-digit'
@@ -558,110 +785,10 @@
 								</div>
 							{/each}
 						</div>
-					{/if}
-				</div>
-			</div>
-
-		{:else if activeTab === 'settings'}
-			<!-- 설정 탭 -->
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				<div class="card preset-tonal-surface p-4">
-					<h3 class="h5 mb-4">타이머 설정</h3>
-					<div class="space-y-4">
-						<label class="label">
-							<span class="label-text">집중 시간 (분)</span>
-							<input
-								class="input"
-								type="number"
-								bind:value={settings.focusTime}
-								min="1"
-								max="60"
-							/>
-						</label>
-
-						<label class="label">
-							<span class="label-text">단기 휴식 (분)</span>
-							<input
-								class="input"
-								type="number"
-								bind:value={settings.shortBreakTime}
-								min="1"
-								max="30"
-							/>
-						</label>
-
-						<label class="label">
-							<span class="label-text">장기 휴식 (분)</span>
-							<input
-								class="input"
-								type="number"
-								bind:value={settings.longBreakTime}
-								min="1"
-								max="60"
-							/>
-						</label>
-
-						<label class="label">
-							<span class="label-text">장기 휴식 간격 (세션)</span>
-							<input
-								class="input"
-								type="number"
-								bind:value={settings.longBreakInterval}
-								min="2"
-								max="10"
-							/>
-						</label>
 					</div>
-				</div>
-
-				<div class="card preset-tonal-surface p-4">
-					<h3 class="h5 mb-4">알림 및 자동화</h3>
-					<div class="space-y-4">
-						<label class="grid grid-cols-[1fr_auto] gap-4 items-center">
-							<div>
-								<div class="font-medium">브라우저 알림</div>
-								<p class="text-sm opacity-60">세션 완료 시 브라우저 알림</p>
-							</div>
-							<input
-								type="checkbox"
-								class="checkbox"
-								bind:checked={settings.notifications}
-							/>
-						</label>
-
-						<label class="grid grid-cols-[1fr_auto] gap-4 items-center">
-							<div>
-								<div class="font-medium">사운드 알림</div>
-								<p class="text-sm opacity-60">세션 완료 시 사운드 재생</p>
-							</div>
-							<input
-								type="checkbox"
-								class="checkbox"
-								bind:checked={settings.sound}
-							/>
-						</label>
-
-						<div class="space-y-2">
-							<label class="label">
-								<span class="label-text">볼륨</span>
-								<div class="grid grid-cols-[auto_1fr_auto_auto] gap-2 items-center">
-									<VolumeX size={16} class="opacity-60" />
-									<input
-										type="range"
-										class="input"
-										bind:value={settings.volume}
-										min="0"
-										max="100"
-										step="10"
-									/>
-									<Volume2 size={16} class="opacity-60" />
-									<span class="text-sm opacity-60 w-12">{settings.volume}%</span>
-								</div>
-							</label>
-						</div>
-					</div>
-				</div>
+				{/if}
 			</div>
-		{/if}
+		</div>
 	</div>
 </main>
+

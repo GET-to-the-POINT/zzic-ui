@@ -4,7 +4,8 @@
 	import Home from '@lucide/svelte/icons/home';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import errorImage from '$lib/assets/error.webp';
-	import notFoundImage from '$lib/assets/404.webp';
+	import img404 from '$lib/assets/404.webp';
+	import img500 from '$lib/assets/500.webp';
 
 	function goHome() {
 		goto('/');
@@ -25,8 +26,8 @@
 	<div class="space-y-6">
 		<!-- 에러 이미지 -->
 		<img 
-			src={page.status === 404 ? notFoundImage : errorImage} 
-			alt={page.status === 404 ? '페이지를 찾을 수 없습니다' : '오류가 발생했습니다'} 
+			src={page.status === 404 ? img404 : page.status === 500 ? img500 : errorImage} 
+			alt={page.status === 404 ? '페이지를 찾을 수 없습니다' : page.status === 500 ? '서버 오류가 발생했습니다' : '오류가 발생했습니다'} 
 			class="mx-auto w-1/2 max-w-sm" 
 		/>
 		
@@ -39,6 +40,17 @@
 				</h2>
 				<p class="text-surface-600-400">
 					요청하신 페이지가 존재하지 않거나 이동했을 수 있습니다.
+				</p>
+			</div>
+		{:else if page.status === 500}
+			<!-- 500 전용 컨텐츠 -->
+			<div class="text-center space-y-2">
+				<h1 class="text-4xl font-bold text-surface-900-50">500</h1>
+				<h2 class="text-xl font-semibold text-surface-700-300">
+					서버 오류가 발생했습니다
+				</h2>
+				<p class="text-surface-600-400">
+					서버에서 문제가 발생했습니다. 잠시 후 다시 시도해주세요.
 				</p>
 			</div>
 		{:else}

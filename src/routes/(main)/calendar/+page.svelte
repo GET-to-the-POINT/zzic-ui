@@ -5,6 +5,8 @@
 	import EventList from '$lib/components/calendar/EventList.svelte';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * @typedef {import('$lib/types/calendar.js').CalendarState} CalendarState
@@ -12,7 +14,7 @@
 	 */
 
 	/** @type {import('./$types').PageData} */
-	let { data } = $props();
+	let {data} = $props();
 
 	// TODO 데이터를 캘린더 이벤트로 변환하는 함수
 	/**
@@ -88,9 +90,21 @@
 	// TODO 데이터를 이벤트로 변환 - Derived value using $derived
 	const todoEvents = $derived(data.todoPage?.content ? data.todoPage.content.map(todoToEvent) : []);
 
+	// URL 쿼리 파라미터에서 초기 날짜 설정
+	function getInitialDate() {
+		const dateParam = $page.url.searchParams.get('date');
+		if (dateParam) {
+			const parsedDate = new Date(dateParam);
+			if (!isNaN(parsedDate.getTime())) {
+				return parsedDate;
+			}
+		}
+		return new Date();
+	}
+
 	// Reactive state using $state
 	let calendarState = $state({
-		currentDate: new Date(),
+		currentDate: getInitialDate(),
 		selectedDate: /** @type {Date | null} */ (null),
 		viewType: /** @type {'month' | 'week' | 'day' | 'agenda'} */ ('month'),
 		selectedEvent: /** @type {CalendarEvent | null} */ (null),
@@ -104,6 +118,27 @@
 	// TODO 데이터가 변경되면 이벤트도 업데이트
 	$effect(() => {
 		// todoEvents는 이미 $derived로 처리되므로 별다른 처리 불필요
+	});
+
+	// URL 변경 감지를 위한 reactive statement
+	$effect(() => {
+		const dateParam = $page.url.searchParams.get('date');
+		if (dateParam) {
+			const parsedDate = new Date(dateParam);
+			if (!isNaN(parsedDate.getTime())) {
+				calendarState = {
+					...calendarState,
+					selectedDate: parsedDate,
+					currentDate: new Date(parsedDate.getFullYear(), parsedDate.getMonth(), 1)
+				};
+			}
+		} else {
+			// 날짜 파라미터가 없으면 선택 해제 (초기 상태는 선택되지 않음)
+			calendarState = {
+				...calendarState,
+				selectedDate: null
+			};
+		}
 	});
 
 	// 대시보드에서 전달된 선택된 이벤트가 있는지 확인
@@ -132,13 +167,26 @@
 	 * @param {Date} date
 	 */
 	function handleDateSelect(date) {
+		const isCurrentlySelected = calendarState.selectedDate && 
+			calendarState.selectedDate.getTime() === date.getTime();
+		
+		const newSelectedDate = isCurrentlySelected ? null : date;
+		
 		calendarState = { 
 			...calendarState, 
-			selectedDate: calendarState.selectedDate && 
-				calendarState.selectedDate.getTime() === date.getTime() 
-				? null 
-				: date 
+			selectedDate: newSelectedDate
 		};
+
+		// URL 업데이트
+		const url = new URL(window.location.href);
+		if (newSelectedDate) {
+			url.searchParams.set('date', newSelectedDate.toISOString().split('T')[0]);
+		} else {
+			url.searchParams.delete('date');
+		}
+		
+		// 브라우저 히스토리 업데이트 (페이지 새로고침 없이)
+		window.history.pushState({}, '', url.toString());
 	}
 
 	function handleAddEvent() {
@@ -266,6 +314,11 @@
 			currentDate: today,
 			selectedDate: today
 		};
+		
+		// URL 업데이트
+		const url = new URL(window.location.href);
+		url.searchParams.set('date', today.toISOString().split('T')[0]);
+		window.history.pushState({}, '', url.toString());
 	}
 
 	function handleCloseDialog() {

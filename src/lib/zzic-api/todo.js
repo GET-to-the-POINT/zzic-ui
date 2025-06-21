@@ -92,12 +92,16 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {number} [options.page] - 페이지 번호
 	 * @param {number} [options.size] - 페이지 크기
 	 * @param {string} [options.sort] - 정렬 옵션
+	 * @param {string} [options.startDate] - 시작일 (YYYY-MM-DDTHH:mm:ss.sssZ)
+	 * @param {string} [options.endDate] - 종료일 (YYYY-MM-DDTHH:mm:ss.sssZ)
+	 * @param {number[]} [options.hideStatusIds] - 숨길 상태 ID들 (배열)
 	 * @returns {Promise<{data: PageTodoResponse|null, error: ApiError|null}>}
 	 */
 	async function getTodos(options = {}) {
 		const url = new URL(`${apiUrl}/todos`);
+		
 		Object.entries(options).forEach(([key, value]) => {
-			if (value != null) {
+			if (value !== undefined && value !== null) {
 				url.searchParams.append(key, String(value));
 			}
 		});
@@ -111,12 +115,12 @@ export function createTodoClient(apiUrl, fetchFn) {
 				const error = await response.json();
 				return { data: null, error };
 			}
+		/** @type {PageTodoResponse} */
+		const data = await response.json();
 
-			/** @type {PageTodoResponse} */
-			const data = await response.json();
-			return { data, error: null };
+		return { data, error: null };
 		} catch (error) {
-			return { data: null, error };
+			return { data: null, error: /** @type {any} */ (error) };
 		}
 	}
 
@@ -135,14 +139,14 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 			if (!response.ok) {
 				const error = await response.text();
-				return { data: null, error };
+				return { data: null, error: /** @type {any} */ (error) };
 			}
 
 			/** @type {TodoResponse} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
-			return { data: null, error };
+			return { data: null, error: /** @type {any} */ (error) };
 		}
 	}
 
@@ -169,7 +173,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 			return { error: null };
 		} catch (error) {
-			return { error };
+			return { error: /** @type {any} */ (error) };
 		}
 	}
 
@@ -197,7 +201,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 			return { error: null };
 		} catch (error) {
-			return { error };
+			return { error: /** @type {any} */ (error) };
 		}
 	}
 
@@ -222,7 +226,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 			return { error: null };
 		} catch (error) {
-			return { error };
+			return { error: /** @type {any} */ (error) };
 		}
 	}
 
@@ -246,7 +250,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
-			return { data: null, error };
+			return { data: null, error: /** @type {any} */ (error) };
 		}
 	}
 
