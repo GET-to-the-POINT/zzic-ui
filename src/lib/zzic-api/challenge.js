@@ -30,7 +30,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 	 * @param {string} [options.enroll] - 참여 옵션 (예: 'participants')
 	 * @returns {Promise<{data: PageChallengeDto|null, error: ApiError|null}>}
 	 */
-	async function getChallenges( key = {}, options = {}) {
+	async function getChallenges(key = {}, options = {}) {
 		const params = new URLSearchParams();
 
 		Object.entries(options).forEach(([k, v]) => {
@@ -54,7 +54,7 @@ export function createChallengeClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				const error = await response.json()
+				const error = await response.json();
 				return { data: null, error };
 			}
 
@@ -79,9 +79,9 @@ export function createChallengeClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				return { 
-					data: null, 
-					error: { status: response.status, message: response.statusText } 
+				return {
+					data: null,
+					error: { status: response.status, message: response.statusText }
 				};
 			}
 
@@ -271,17 +271,17 @@ export function createChallengeClient(apiUrl, fetchFn) {
 
 	/**
 	 * 챌린지 등록/해지 (통합 메서드)
-	 * @param {Object} params - 챌린지 파라미터  
+	 * @param {Object} params - 챌린지 파라미터
 	 * @param {number} params.challengeId - 챌린지 ID
 	 * @param {Object} options - 등록 옵션
 	 * @param {boolean} options.enroll - true: 등록, false: 해지
 	 * @returns {Promise<{error: any}>}
 	 */
 	async function enroll({ challengeId }, { enroll }) {
-		const endpoint = enroll 
+		const endpoint = enroll
 			? `${apiUrl}/challenge-participations/${challengeId}/join`
 			: `${apiUrl}/challenge-participations/${challengeId}/leave`;
-		
+
 		const method = enroll ? 'POST' : 'DELETE';
 
 		try {

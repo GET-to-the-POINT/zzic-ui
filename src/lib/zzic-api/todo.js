@@ -57,6 +57,7 @@
 
 /**
  * @typedef {Object} UpdateTodoFormFields
+ * @description FormData로 전송할 수 있는 할 일 수정 필드들의 타입 정의 (참고용)
  * @property {string} [title] - 할 일 제목
  * @property {string} [description] - 할 일 설명
  * @property {string} [statusId] - 상태 ID
@@ -168,7 +169,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				credentials: 'include'
 			});
 
-			if (response.status !== 201) {
+			if (!response.ok ) {
 				const error = await response.json().catch(() => ({ message: 'Failed to create todo' }));
 				return { error };
 			}
@@ -183,15 +184,21 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * 할 일 수정
 	 * @param {Object} params - 파라미터 객체
 	 * @param {number} params.todoId - 할 일 ID
-	 * @param {FormData} formData - 할 일 데이터 (UpdateTodoFormFields의 필드들을 포함)
+	 * @param {FormData} formData - 할 일 데이터 FormData 객체
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
 	async function updateTodo({todoId}, formData) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
+			// FormData를 application/x-www-form-urlencoded로 변환
+			const urlEncoded = new URLSearchParams();
+			for (const [key, value] of formData.entries()) {
+				urlEncoded.append(key, value);
+			}
 			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
-				body: formData,
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: urlEncoded,
 				credentials: 'include'
 			});
 

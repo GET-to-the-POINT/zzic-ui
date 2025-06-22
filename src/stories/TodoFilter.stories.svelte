@@ -1,31 +1,31 @@
 <script module>
-  import { defineMeta } from '@storybook/addon-svelte-csf';
-  import TodoFilter from '../lib/components/ui/todo/TodoFilter.svelte';
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import TodoFilter from '../lib/components/ui/todo/TodoFilter.svelte';
 
-  const { Story } = defineMeta({
-    title: 'Components/UI/Todo/TodoFilter',
-    component: TodoFilter,
-    tags: ['autodocs'],
-    argTypes: {
-      keyword: { control: 'text' },
-      status: { control: 'select', options: ['all', 'done', 'todo'] },
-      priority: { control: 'select', options: ['all', 'high', 'medium', 'low'] },
-      category: { control: 'select', options: ['all', '업무', '개인', '기타'] },
-      sort: { control: 'select', options: ['due', 'created'] },
-      onKeywordChange: { action: 'onKeywordChange' },
-      onStatusChange: { action: 'onStatusChange' },
-      onPriorityChange: { action: 'onPriorityChange' },
-      onCategoryChange: { action: 'onCategoryChange' },
-      onSortChange: { action: 'onSortChange' }
-    },
-    args: {
-      keyword: '',
-      status: 'all',
-      priority: 'all',
-      category: 'all',
-      sort: 'due',
-    }
-  });
+	const { Story } = defineMeta({
+		title: 'Components/UI/Todo/TodoFilter',
+		component: TodoFilter,
+		tags: ['autodocs'],
+		argTypes: {
+			keyword: { control: 'text' },
+			status: { control: 'select', options: ['all', 'done', 'todo'] },
+			priority: { control: 'select', options: ['all', 'high', 'medium', 'low'] },
+			category: { control: 'select', options: ['all', '업무', '개인', '기타'] },
+			sort: { control: 'select', options: ['due', 'created'] },
+			onKeywordChange: { action: 'onKeywordChange' },
+			onStatusChange: { action: 'onStatusChange' },
+			onPriorityChange: { action: 'onPriorityChange' },
+			onCategoryChange: { action: 'onCategoryChange' },
+			onSortChange: { action: 'onSortChange' }
+		},
+		args: {
+			keyword: '',
+			status: 'all',
+			priority: 'all',
+			category: 'all',
+			sort: 'due'
+		}
+	});
 </script>
 
 <!-- 기본 상태 -->

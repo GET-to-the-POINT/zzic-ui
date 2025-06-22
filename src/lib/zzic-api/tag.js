@@ -19,7 +19,7 @@ export function createTagClient(apiUrl, fetchFn) {
 		 */
 		async getTags(options = {}) {
 			const { categoryIds, page = 0, size = 100, direction = 'asc' } = options;
-			
+
 			const params = new URLSearchParams({
 				page: String(page),
 				size: String(size),
@@ -28,7 +28,7 @@ export function createTagClient(apiUrl, fetchFn) {
 
 			// categoryIds 배열 파라미터 처리
 			if (categoryIds && Array.isArray(categoryIds)) {
-				categoryIds.forEach(id => params.append('categoryIds', String(id)));
+				categoryIds.forEach((id) => params.append('categoryIds', String(id)));
 			}
 
 			try {
@@ -48,7 +48,10 @@ export function createTagClient(apiUrl, fetchFn) {
 				return { data, error: null };
 			} catch (error) {
 				console.error('태그 목록 조회 실패:', error);
-				return { data: null, error: { message: error instanceof Error ? error.message : String(error) } };
+				return {
+					data: null,
+					error: { message: error instanceof Error ? error.message : String(error) }
+				};
 			}
 		}
 	};

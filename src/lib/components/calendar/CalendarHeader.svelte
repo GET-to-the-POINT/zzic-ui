@@ -37,7 +37,7 @@
 	 */
 	function navigateDate(direction) {
 		const newDate = new Date(currentDate);
-		
+
 		switch (viewType) {
 			case 'month':
 				newDate.setMonth(currentDate.getMonth() + (direction === 'next' ? 1 : -1));
@@ -49,7 +49,7 @@
 				newDate.setDate(currentDate.getDate() + (direction === 'next' ? 1 : -1));
 				break;
 		}
-		
+
 		onDateChange(newDate);
 	}
 
@@ -74,37 +74,28 @@
 	}
 </script>
 
-<div class="flex items-center justify-between p-4 bg-surface-50-950 border-b border-surface-200-800">
+<div
+	class="flex items-center justify-between p-4 bg-surface-50-950 border-b border-surface-200-800"
+>
 	<!-- 왼쪽: 날짜 네비게이션 -->
 	<div class="flex items-center space-x-4">
 		<div class="flex items-center space-x-2">
 			<CalendarIcon class="w-5 h-5 text-primary-500" />
 			<h1 class="text-xl font-bold text-surface-900-50">캘린더</h1>
 		</div>
-		
+
 		<div class="flex items-center space-x-2">
-			<button
-				class="btn preset-outlined-surface-500"
-				onclick={() => navigateDate('prev')}
-			>
+			<button class="btn preset-outlined-surface-500" onclick={() => navigateDate('prev')}>
 				<ChevronLeft class="w-4 h-4" />
 			</button>
-			
-			<button
-				class="btn preset-outlined-surface-500 min-w-[80px]"
-				onclick={onToday}
-			>
-				오늘
-			</button>
-			
-			<button
-				class="btn preset-outlined-surface-500"
-				onclick={() => navigateDate('next')}
-			>
+
+			<button class="btn preset-outlined-surface-500 min-w-[80px]" onclick={onToday}> 오늘 </button>
+
+			<button class="btn preset-outlined-surface-500" onclick={() => navigateDate('next')}>
 				<ChevronRight class="w-4 h-4" />
 			</button>
 		</div>
-		
+
 		<div class="text-lg font-medium text-surface-700-300">
 			{getDateDisplayText()}
 		</div>
@@ -112,8 +103,8 @@
 
 	<!-- 오른쪽: 뷰 선택 및 새 이벤트 버튼 -->
 	<div class="flex items-center space-x-3">
-		<select 
-			bind:value={viewType} 
+		<select
+			bind:value={viewType}
 			onchange={(e) => onViewChange(/** @type {HTMLSelectElement} */ (e.target).value)}
 			class="select w-24"
 		>
@@ -121,11 +112,8 @@
 				<option value={view.type}>{view.label}</option>
 			{/each}
 		</select>
-		
-		<button
-			onclick={onAddEvent}
-			class="btn preset-filled-primary-500"
-		>
+
+		<button onclick={onAddEvent} class="btn preset-filled-primary-500">
 			<Plus class="w-4 h-4 mr-2" />
 			새 일정
 		</button>

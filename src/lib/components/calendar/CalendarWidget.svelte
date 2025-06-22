@@ -3,25 +3,21 @@
 	import { getMonthDays, isSameDay, getCategoryColor } from '$lib/types/calendar.js';
 
 	// Props using Svelte 5 runes
-	let {
-		events = [],
-		onEventClick = () => {},
-		onViewAll = () => {}
-	} = $props();
+	let { events = [], onEventClick = () => {}, onViewAll = () => {} } = $props();
 
 	// Reactive state using $state
 	let currentDate = $state(new Date());
-	
+
 	const today = new Date();
 	const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
 	// Derived values using $derived
 	const monthDays = $derived(getMonthDays(currentDate));
-	
+
 	// 이번 달의 다가오는 이벤트들 (최대 3개)
 	const upcomingEvents = $derived(
 		events
-			.filter(event => {
+			.filter((event) => {
 				const eventDate = new Date(event.startDate);
 				return eventDate >= today && eventDate.getMonth() === today.getMonth();
 			})
@@ -34,8 +30,9 @@
 	 * @returns {import('$lib/types/calendar.js').CalendarEvent[]}
 	 */
 	function getEventsForDate(date) {
-		return events.filter(/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) => 
-			isSameDay(new Date(event.startDate), date)
+		return events.filter(
+			/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) =>
+				isSameDay(new Date(event.startDate), date)
 		);
 	}
 
@@ -72,10 +69,7 @@
 				<Calendar class="w-5 h-5 text-primary-600" />
 				<h3 class="h3">캘린더</h3>
 			</div>
-			<button
-				class="btn btn-sm preset-tonal-primary"
-				onclick={() => onViewAll()}
-			>
+			<button class="btn btn-sm preset-tonal-primary" onclick={() => onViewAll()}>
 				전체보기
 			</button>
 		</div>
@@ -84,19 +78,13 @@
 	<div class="space-y-4">
 		<!-- 미니 캘린더 헤더 -->
 		<div class="flex items-center justify-between">
-			<button
-				class="btn btn-sm p-1"
-				onclick={() => navigateMonth('prev')}
-			>
+			<button class="btn btn-sm p-1" onclick={() => navigateMonth('prev')}>
 				<ChevronLeft class="w-4 h-4" />
 			</button>
 			<h4 class="font-medium">
 				{currentDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' })}
 			</h4>
-			<button
-				class="btn btn-sm p-1"
-				onclick={() => navigateMonth('next')}
-			>
+			<button class="btn btn-sm p-1" onclick={() => navigateMonth('next')}>
 				<ChevronRight class="w-4 h-4" />
 			</button>
 		</div>
@@ -106,7 +94,13 @@
 			<!-- 요일 헤더 -->
 			<div class="grid grid-cols-7 bg-surface-100-900 text-xs">
 				{#each weekDays as day, index}
-					<div class="p-1 text-center font-medium {index === 0 ? 'text-error-600' : index === 6 ? 'text-primary-600' : 'text-surface-700-300'}">
+					<div
+						class="p-1 text-center font-medium {index === 0
+							? 'text-error-600'
+							: index === 6
+								? 'text-primary-600'
+								: 'text-surface-700-300'}"
+					>
 						{day}
 					</div>
 				{/each}
@@ -118,10 +112,20 @@
 					{@const dayEvents = getEventsForDate(date)}
 					{@const isCurrentMonthDate = isCurrentMonth(date)}
 					{@const isTodayDate = isToday(date)}
-					
-					<div class="aspect-square p-1 border-r border-b border-surface-200-800 text-xs {!isCurrentMonthDate ? 'bg-surface-100-900/50 text-surface-400-600' : ''}">
+
+					<div
+						class="aspect-square p-1 border-r border-b border-surface-200-800 text-xs {!isCurrentMonthDate
+							? 'bg-surface-100-900/50 text-surface-400-600'
+							: ''}"
+					>
 						<div class="flex flex-col h-full">
-							<span class="text-center {isTodayDate ? 'bg-primary-600 text-white rounded-full w-5 h-5 flex items-center justify-center mx-auto' : isCurrentMonthDate ? 'text-surface-900-50' : 'text-surface-400-600'}">
+							<span
+								class="text-center {isTodayDate
+									? 'bg-primary-600 text-white rounded-full w-5 h-5 flex items-center justify-center mx-auto'
+									: isCurrentMonthDate
+										? 'text-surface-900-50'
+										: 'text-surface-400-600'}"
+							>
 								{date.getDate()}
 							</span>
 							{#if dayEvents.length > 0}
@@ -178,7 +182,10 @@
 									{event.title}
 								</p>
 								<p class="text-xs text-surface-600-400">
-									{new Date(event.startDate).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+									{new Date(event.startDate).toLocaleDateString('ko-KR', {
+										month: 'short',
+										day: 'numeric'
+									})}
 								</p>
 							</div>
 						</div>

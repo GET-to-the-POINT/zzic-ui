@@ -29,9 +29,7 @@
 	let previewContent = $state('');
 
 	// 현재 선택된 메모
-	const currentMemo = $derived(
-		memos.find(memo => memo.id === currentMemoId) || null
-	);
+	const currentMemo = $derived(memos.find((memo) => memo.id === currentMemoId) || null);
 
 	// 로컬 스토리지 키
 	const STORAGE_KEY = 'memo-app-data';
@@ -41,16 +39,16 @@
 	 */
 	function loadMemos() {
 		if (!browser) return;
-		
+
 		try {
 			const saved = localStorage.getItem(STORAGE_KEY);
 			if (saved) {
 				const parsed = JSON.parse(saved);
 				memos = parsed.memos || [];
 				currentMemoId = parsed.currentMemoId || null;
-				
+
 				// Date 객체 복원
-				memos = memos.map(memo => ({
+				memos = memos.map((memo) => ({
 					...memo,
 					createdAt: new Date(memo.createdAt),
 					updatedAt: new Date(memo.updatedAt)
@@ -66,7 +64,7 @@
 	 */
 	function saveMemos() {
 		if (!browser) return;
-		
+
 		try {
 			const dataToSave = {
 				memos,
@@ -89,7 +87,7 @@
 			createdAt: new Date(),
 			updatedAt: new Date()
 		};
-		
+
 		memos = [...memos, newMemo];
 		currentMemoId = newMemo.id;
 		isEditing = true;
@@ -103,14 +101,14 @@
 	 */
 	function deleteMemo(memoId) {
 		if (memos.length <= 1) return; // 최소 1개는 유지
-		
-		memos = memos.filter(memo => memo.id !== memoId);
-		
+
+		memos = memos.filter((memo) => memo.id !== memoId);
+
 		if (currentMemoId === memoId) {
 			currentMemoId = memos[0]?.id || null;
 			updateEditorFromMemo();
 		}
-		
+
 		saveMemos();
 	}
 
@@ -131,14 +129,14 @@
 	 */
 	function saveCurrentMemo() {
 		if (!currentMemo) return;
-		
-		const memo = memos.find(m => m.id === currentMemoId);
+
+		const memo = memos.find((m) => m.id === currentMemoId);
 		if (memo) {
 			memo.title = memoTitle.trim() || '제목 없음';
 			memo.content = editorContent;
 			memo.updatedAt = new Date();
 		}
-		
+
 		saveMemos();
 	}
 
@@ -151,7 +149,7 @@
 		if (autoSaveTimeout) {
 			clearTimeout(autoSaveTimeout);
 		}
-		
+
 		autoSaveTimeout = setTimeout(() => {
 			saveCurrentMemo();
 		}, 1000); // 1초 후 자동 저장
@@ -173,7 +171,7 @@
 	 */
 	function updatePreview() {
 		if (!browser) return;
-		
+
 		try {
 			const html = marked.parse(editorContent);
 			previewContent = DOMPurify.sanitize(html.toString());
@@ -214,7 +212,7 @@
 	// 컴포넌트 마운트시 데이터 로드
 	onMount(() => {
 		loadMemos();
-		
+
 		// 메모가 없으면 기본 메모 생성
 		if (memos.length === 0) {
 			createNewMemo();
@@ -229,9 +227,9 @@
 			}
 			saveCurrentMemo();
 		};
-		
+
 		window.addEventListener('beforeunload', handleBeforeUnload);
-		
+
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			if (autoSaveTimeout) {
@@ -252,8 +250,8 @@
 					<FileText size={20} />
 					메모장
 				</h1>
-				<button 
-					type="button" 
+				<button
+					type="button"
 					class="btn-icon preset-tonal-primary"
 					onclick={createNewMemo}
 					title="새 메모 만들기"
@@ -296,7 +294,7 @@
 
 		<!-- 하단 액션 -->
 		<div class="p-4 border-t border-surface-300-700">
-			<button 
+			<button
 				type="button"
 				class="btn preset-tonal-error w-full"
 				onclick={() => currentMemo && deleteMemo(currentMemo.id)}
@@ -334,13 +332,10 @@
 								저장
 							</button>
 						</noscript>
-						
+
 						<button
 							type="button"
-							class={[
-								'btn',
-								isEditing ? 'preset-tonal-secondary' : 'preset-tonal-primary'
-							]}
+							class={['btn', isEditing ? 'preset-tonal-secondary' : 'preset-tonal-primary']}
 							onclick={toggleMode}
 							title={isEditing ? '미리보기' : '편집'}
 						>
@@ -361,7 +356,7 @@
 				{#if isEditing}
 					<!-- 격자 배경 -->
 					<div class="absolute inset-0 opacity-10 pointer-events-none grid-background"></div>
-					
+
 					<!-- 마크다운 에디터 -->
 					<textarea
 						bind:value={editorContent}
@@ -395,11 +390,7 @@
 				<div class="text-center">
 					<FileText size={48} class="mx-auto mb-4 text-surface-400-600" />
 					<p class="text-surface-500-500 mb-4">메모를 선택하거나 새로 만들어보세요</p>
-					<button 
-						type="button" 
-						class="btn preset-filled-primary-500"
-						onclick={createNewMemo}
-					>
+					<button type="button" class="btn preset-filled-primary-500" onclick={createNewMemo}>
 						<Plus size={16} />
 						새 메모 만들기
 					</button>
@@ -412,7 +403,7 @@
 <style>
 	/* 격자 배경 스타일 */
 	.grid-background {
-		background-image: 
+		background-image:
 			linear-gradient(rgba(var(--color-surface-500) / 0.3) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(var(--color-surface-500) / 0.3) 1px, transparent 1px);
 		background-size: 24px 24px;
@@ -432,7 +423,7 @@
 		color: rgb(var(--color-surface-900) / 1);
 	}
 
-	:global([data-mode="dark"] .prose) {
+	:global([data-mode='dark'] .prose) {
 		color: rgb(var(--color-surface-100) / 1);
 	}
 
@@ -448,7 +439,7 @@
 		font-size: 0.875em;
 	}
 
-	:global([data-mode="dark"] .prose code) {
+	:global([data-mode='dark'] .prose code) {
 		background-color: rgb(var(--color-surface-800) / 1);
 	}
 
@@ -457,7 +448,7 @@
 		border: 1px solid rgb(var(--color-surface-300) / 1);
 	}
 
-	:global([data-mode="dark"] .prose pre) {
+	:global([data-mode='dark'] .prose pre) {
 		background-color: rgb(var(--color-surface-900) / 1);
 		border: 1px solid rgb(var(--color-surface-700) / 1);
 	}
@@ -469,7 +460,7 @@
 		margin: 1rem 0;
 	}
 
-	:global([data-mode="dark"] .prose blockquote) {
+	:global([data-mode='dark'] .prose blockquote) {
 		background-color: rgb(var(--color-surface-900) / 1);
 	}
 </style>

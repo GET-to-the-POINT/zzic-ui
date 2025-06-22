@@ -41,7 +41,12 @@ const testPageSchema = z.object({
 		.optional(),
 	hideStatusIds: z
 		.string()
-		.transform((str) => str.split(',').map(id => Number(id.trim())).filter(id => !isNaN(id)))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
 		.optional()
 });
 
@@ -53,7 +58,7 @@ const testPageSchema = z.object({
 function getDefaultDateRange(timeZone) {
 	const todayStart = dayjs().tz(timeZone).startOf('day');
 	const tomorrowStart = todayStart.add(1, 'day');
-	
+
 	return {
 		startDate: todayStart.utc().toISOString(),
 		endDate: tomorrowStart.utc().toISOString()
@@ -67,17 +72,17 @@ function getDefaultDateRange(timeZone) {
  */
 function getWeeklyDateRanges(timeZone) {
 	const ranges = [];
-	
+
 	for (let i = -3; i <= 3; i++) {
 		const dayStart = dayjs().tz(timeZone).add(i, 'day').startOf('day');
 		const dayEnd = dayStart.add(1, 'day');
-		
+
 		ranges.push({
 			startDate: dayStart.utc().toISOString(),
 			endDate: dayEnd.utc().toISOString()
 		});
 	}
-	
+
 	return ranges;
 }
 
@@ -92,18 +97,18 @@ export async function load({ parent, url }) {
 	// URL 검색 파라미터를 Zod로 파싱 및 검증
 	const rawParams = Object.fromEntries(url.searchParams.entries());
 	const parsedParams = testPageSchema.safeParse(rawParams);
-	
+
 	if (!parsedParams.success) {
 		// 파싱 실패시 에러 발생
-		const errorDetails = parsedParams.error.issues.map(/** @type {any} */ issue => 
-			`필드 '${issue.path.join('.')}': ${issue.message}`
-		).join(', ');
-		
+		const errorDetails = parsedParams.error.issues
+			.map(/** @type {any} */ (issue) => `필드 '${issue.path.join('.')}': ${issue.message}`)
+			.join(', ');
+
 		console.info('URL 파라미터 파싱 실패:', {
 			rawParams,
 			errors: parsedParams.error.format()
 		});
-		
+
 		error(400, `잘못된 URL 파라미터입니다. ${errorDetails}`);
 	}
 
@@ -135,14 +140,16 @@ export async function load({ parent, url }) {
 			weeklyParams.set('startDate', range.startDate);
 			weeklyParams.set('endDate', range.endDate);
 			weeklyParams.set('size', '1'); // 존재 여부만 확인하므로 1개만 요청
-			
+
 			const result = await zzic.todo.getTodos(weeklyParams);
-			
+
 			// 날짜 정보를 함께 담아서 반환
-			const date = dayjs().tz(user.timeZone).add(index - 3, 'day');
+			const date = dayjs()
+				.tz(user.timeZone)
+				.add(index - 3, 'day');
 			const dayStart = date.startOf('day');
 			const dayEnd = dayStart.add(1, 'day');
-			
+
 			return {
 				date: date.toDate(),
 				day: date.format('ddd'), // 요일 (짧은 형태)
@@ -157,6 +164,6 @@ export async function load({ parent, url }) {
 
 	return {
 		selectedDateTodos: todosResult.data,
-		weeklyTodos: weeklyTodos,
+		weeklyTodos: weeklyTodos
 	};
 }

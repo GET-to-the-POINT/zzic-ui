@@ -1,7 +1,7 @@
 <script>
-	import { enhance } from "$app/forms";
-	import LogOut from "@lucide/svelte/icons/log-out";
-	import Home from "@lucide/svelte/icons/home";
+	import { enhance } from '$app/forms';
+	import LogOut from '@lucide/svelte/icons/log-out';
+	import Home from '@lucide/svelte/icons/home';
 </script>
 
 <div class="min-h-screen flex items-center justify-center p-4">
@@ -18,7 +18,10 @@
 
 			<!-- Sign Out Form -->
 			<form method="POST" action="/auth/sign-out" class="space-y-4" use:enhance>
-				<button type="submit" class="btn preset-tonal-primary w-full flex items-center justify-center space-x-2">
+				<button
+					type="submit"
+					class="btn preset-tonal-primary w-full flex items-center justify-center space-x-2"
+				>
 					<LogOut size="16" />
 					<span>사인-아웃</span>
 				</button>
@@ -26,7 +29,10 @@
 
 			<!-- Footer Link -->
 			<div class="text-center">
-				<a href="/" class="flex items-center justify-center space-x-1 text-sm text-primary-500 hover:text-primary-600 font-medium">
+				<a
+					href="/"
+					class="flex items-center justify-center space-x-1 text-sm text-primary-500 hover:text-primary-600 font-medium"
+				>
 					<Home size="14" />
 					<span>메인으로 돌아가기</span>
 				</a>

@@ -18,9 +18,9 @@
 		const selectedDate = startDateParam ? new Date(startDateParam) : new Date();
 
 		// 백엔드에서 제공한 weeklyTodos 배열을 기준으로 캘린더 렌더링
-		return (data.weeklyTodos).map((weeklyItem) => {
+		return data.weeklyTodos.map((weeklyItem) => {
 			const itemDate = new Date(weeklyItem.date);
-	
+
 			return {
 				day: weeklyItem.day,
 				dayNumber: weeklyItem.dayNumber,
@@ -69,7 +69,7 @@
 				await invalidateAll();
 			}
 		};
-	}
+	};
 
 	/**
 	 * Todo 업데이트 액션 URL 생성
@@ -77,19 +77,19 @@
 	 */
 	function getUpdateAction(todoId) {
 		let url = `/todos/${todoId}?/update`;
-		
+
 		// startDate, endDate 파라미터 유지
 		const searchParams = new URLSearchParams();
 		const currentStartDate = page.url.searchParams.get('startDate');
 		const currentEndDate = page.url.searchParams.get('endDate');
-		
+
 		if (currentStartDate) searchParams.set('startDate', currentStartDate);
 		if (currentEndDate) searchParams.set('endDate', currentEndDate);
-		
+
 		if (searchParams.toString()) {
 			url += '&' + searchParams.toString();
 		}
-		
+
 		return url;
 	}
 </script>
@@ -104,10 +104,9 @@
 					href={dateItem.href}
 					class={[
 						'btn relative',
-						dateItem.selected 
-							? 'preset-filled-primary-500' 
-							: 'preset-filled-surface-50-950',
-						!dateItem.empty && 'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500'
+						dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+						!dateItem.empty &&
+							'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500'
 					]}
 					aria-label={dateItem.ariaLabel}
 					aria-current={dateItem.selected ? 'page' : undefined}
@@ -138,7 +137,7 @@
 		<!-- 새 할일 추가 버튼 (nojs 환경에서만 노출) -->
 		<noscript>
 			<button type="button" class="btn preset-filled-secondary-500 w-full">
-				<Plus size={16}/>
+				<Plus size={16} />
 				새 할일 추가
 			</button>
 		</noscript>
@@ -148,15 +147,23 @@
 			{#if !data?.selectedDateTodos?.empty}
 				{#each data.selectedDateTodos.content as todo (todo.id)}
 					{@const isCompleted = todo.statusId === 1}
-					<div class={['card p-4', isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500']}>
+					<div
+						class={[
+							'card p-4',
+							isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500'
+						]}
+					>
 						<div class="flex items-start gap-3">
 							<!-- 체크박스 -->
 							<form action={getUpdateAction(todo.id)} method="POST" use:enhance={handleEnhance}>
-								<button 
+								<input type="hidden" name="_method" value="PATCH" />
+								<button
 									type="submit"
 									name="statusId"
 									value={todo.statusId === 1 ? 0 : 1}
-									class="mt-1 btn-icon {isCompleted ? 'preset-filled-primary-500' : 'preset-filled-surface-500'}"
+									class="mt-1 btn-icon {isCompleted
+										? 'preset-filled-primary-500'
+										: 'preset-filled-surface-500'}"
 								>
 									{#if todo.statusId === 1}
 										<!-- 완료 상태 -->
@@ -216,5 +223,4 @@
 			{/if}
 		</div>
 	</div>
-
 </main>

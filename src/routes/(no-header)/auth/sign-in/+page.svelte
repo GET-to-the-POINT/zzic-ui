@@ -1,13 +1,13 @@
 <script>
-	import { enhance } from "$app/forms";
-	import Mail from "@lucide/svelte/icons/mail";
-	import Lock from "@lucide/svelte/icons/lock";
-	import Eye from "@lucide/svelte/icons/eye";
-	import EyeOff from "@lucide/svelte/icons/eye-off";
-	import Github from "@lucide/svelte/icons/github";
-	import HelpCircle from "@lucide/svelte/icons/help-circle";
-	import User from "@lucide/svelte/icons/user";
-	
+	import { enhance } from '$app/forms';
+	import Mail from '@lucide/svelte/icons/mail';
+	import Lock from '@lucide/svelte/icons/lock';
+	import Eye from '@lucide/svelte/icons/eye';
+	import EyeOff from '@lucide/svelte/icons/eye-off';
+	import Github from '@lucide/svelte/icons/github';
+	import HelpCircle from '@lucide/svelte/icons/help-circle';
+	import User from '@lucide/svelte/icons/user';
+
 	let showPassword = false;
 	let rememberMe = false;
 </script>
@@ -23,21 +23,13 @@
 
 			<!-- Social Login Buttons -->
 			<div class="space-y-3">
-				<button 
-					type="button" 
-					class="btn preset-tonal-surface w-full"
-					disabled
-				>
+				<button type="button" class="btn preset-tonal-surface w-full" disabled>
 					<span class="text-lg">G</span>
 					<span>Google로 계속하기</span>
 					<span class="badge preset-tonal-warning text-xs">준비중</span>
 				</button>
-				
-				<button 
-					type="button" 
-					class="btn preset-tonal-surface w-full"
-					disabled
-				>
+
+				<button type="button" class="btn preset-tonal-surface w-full" disabled>
 					<Github size="16" />
 					<span>GitHub로 계속하기</span>
 					<span class="badge preset-tonal-warning text-xs">준비중</span>
@@ -67,7 +59,7 @@
 						/>
 					</div>
 				</label>
-				
+
 				<label class="label">
 					<span class="label-text">비밀번호</span>
 					<div class="input-group grid-cols-[auto_1fr_auto]">
@@ -77,7 +69,7 @@
 						<input
 							id="password"
 							name="password"
-							type={showPassword ? "text" : "password"}
+							type={showPassword ? 'text' : 'password'}
 							placeholder="••••••••"
 							required
 							class="ig-input"
@@ -85,7 +77,7 @@
 						<button
 							type="button"
 							class="ig-btn preset-tonal"
-							onclick={() => showPassword = !showPassword}
+							onclick={() => (showPassword = !showPassword)}
 						>
 							{#if showPassword}
 								<EyeOff size="16" />
@@ -99,23 +91,17 @@
 				<!-- Remember Me & Forgot Password -->
 				<div class="grid grid-cols-[auto_1fr] gap-4">
 					<label class="flex items-center gap-2 cursor-pointer">
-						<input
-							type="checkbox"
-							bind:checked={rememberMe}
-							class="checkbox"
-						/>
+						<input type="checkbox" bind:checked={rememberMe} class="checkbox" />
 						<span class="text-sm">로그인 상태 유지</span>
 					</label>
-					
+
 					<button type="button" class="text-sm text-end opacity-60" disabled>
 						비밀번호를 잊으셨나요?
 						<span class="badge preset-tonal-warning text-xs">준비중</span>
 					</button>
 				</div>
 
-				<button type="submit" class="btn preset-tonal-primary w-full">
-					로그인
-				</button>
+				<button type="submit" class="btn preset-tonal-primary w-full"> 로그인 </button>
 			</form>
 
 			<!-- Demo Account -->
@@ -137,13 +123,17 @@
 			<!-- Footer Links -->
 			<div class="space-y-3 text-center">
 				<p class="text-sm opacity-60">
-					계정이 없으신가요? 
+					계정이 없으신가요?
 					<a href="/auth/sign-up" class="text-primary-500 hover:text-primary-600 font-medium">
 						회원가입하기
 					</a>
 				</p>
-				
-				<button type="button" class="inline-flex items-center gap-1 text-xs opacity-40 mx-auto" disabled>
+
+				<button
+					type="button"
+					class="inline-flex items-center gap-1 text-xs opacity-40 mx-auto"
+					disabled
+				>
 					<HelpCircle size="14" />
 					<span>고객지원 센터</span>
 					<span class="badge preset-tonal-warning text-xs">준비중</span>

@@ -1,49 +1,43 @@
 <script>
-	import { 
-		Calendar, 
-		Clock, 
-		Tag, 
-		AlertCircle, 
-		Edit, 
-		MoreVertical 
-	} from '@lucide/svelte/icons';
-	import { 
-		formatDate, 
-		formatTime, 
-		getCategoryColor, 
-		getPriorityColor 
+	import { Calendar, Clock, Tag, AlertCircle, Edit, MoreVertical } from '@lucide/svelte/icons';
+	import {
+		formatDate,
+		formatTime,
+		getCategoryColor,
+		getPriorityColor
 	} from '$lib/types/calendar.js';
 
 	// Props using Svelte 5 runes
-	let {
-		events,
-		selectedDate,
-		onEventEdit,
-		onEventDelete,
-		onEventClick
-	} = $props();
+	let { events, selectedDate, onEventEdit, onEventDelete, onEventClick } = $props();
 
 	// 날짜별 이벤트 필터링 - Derived value using $derived
-	const filteredEvents = $derived(selectedDate 
-		? events.filter(/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) => {
-				const eventDate = new Date(event.startDate);
-				return eventDate.getFullYear() === selectedDate.getFullYear() &&
-					   eventDate.getMonth() === selectedDate.getMonth() &&
-					   eventDate.getDate() === selectedDate.getDate();
-		  })
-		: events
+	const filteredEvents = $derived(
+		selectedDate
+			? events.filter(
+					/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) => {
+						const eventDate = new Date(event.startDate);
+						return (
+							eventDate.getFullYear() === selectedDate.getFullYear() &&
+							eventDate.getMonth() === selectedDate.getMonth() &&
+							eventDate.getDate() === selectedDate.getDate()
+						);
+					}
+				)
+			: events
 	);
 
 	// 시간순으로 정렬 - Derived value using $derived
-	const sortedEvents = $derived([...filteredEvents].sort((a, b) => {
-		if (a.isAllDay && !b.isAllDay) return -1;
-		if (!a.isAllDay && b.isAllDay) return 1;
-		if (a.isAllDay && b.isAllDay) return 0;
-		
-		const timeA = a.startTime || '00:00';
-		const timeB = b.startTime || '00:00';
-		return timeA.localeCompare(timeB);
-	}));
+	const sortedEvents = $derived(
+		[...filteredEvents].sort((a, b) => {
+			if (a.isAllDay && !b.isAllDay) return -1;
+			if (!a.isAllDay && b.isAllDay) return 1;
+			if (a.isAllDay && b.isAllDay) return 0;
+
+			const timeA = a.startTime || '00:00';
+			const timeB = b.startTime || '00:00';
+			return timeA.localeCompare(timeB);
+		})
+	);
 
 	/**
 	 * @param {string} priority
@@ -89,10 +83,7 @@
 		<div class="flex items-center space-x-2">
 			<Calendar class="w-5 h-5 text-primary-600" />
 			<h3 class="h3">
-				{selectedDate 
-					? `${formatDate(selectedDate)} 일정` 
-					: '일정 목록'
-				}
+				{selectedDate ? `${formatDate(selectedDate)} 일정` : '일정 목록'}
 			</h3>
 			{#if selectedDate}
 				<span class="badge preset-tonal-surface ml-auto">
@@ -101,15 +92,13 @@
 			{/if}
 		</div>
 	</header>
-	
+
 	<div class="p-0">
 		<div class="max-h-[600px] overflow-y-auto scrollbar-none">
 			{#if !selectedDate}
 				<div class="text-center py-12 px-4">
 					<Calendar class="w-12 h-12 text-surface-300-700 mx-auto mb-4" />
-					<p class="text-surface-500-400 mb-2">
-						날짜를 선택해주세요
-					</p>
+					<p class="text-surface-500-400 mb-2">날짜를 선택해주세요</p>
 					<p class="text-sm text-surface-400-600">
 						캘린더에서 날짜를 클릭하면 해당 날짜의 일정을 확인할 수 있습니다
 					</p>
@@ -117,9 +106,7 @@
 			{:else if sortedEvents.length === 0}
 				<div class="text-center py-12 px-4">
 					<Calendar class="w-12 h-12 text-surface-300-700 mx-auto mb-4" />
-					<p class="text-surface-500-400 mb-2">
-						이 날짜에는 일정이 없습니다
-					</p>
+					<p class="text-surface-500-400 mb-2">이 날짜에는 일정이 없습니다</p>
 					<p class="text-sm text-surface-400-600">새로운 일정을 추가해보세요!</p>
 				</div>
 			{:else}
@@ -145,12 +132,12 @@
 											<h4 class="font-medium text-surface-900-50 truncate">
 												{event.title}
 											</h4>
-											<AlertCircle 
-												class="w-4 h-4" 
-												style="color: {getPriorityColor_for_icon(event.priority)}" 
+											<AlertCircle
+												class="w-4 h-4"
+												style="color: {getPriorityColor_for_icon(event.priority)}"
 											/>
 										</div>
-										
+
 										<!-- 시간 정보 -->
 										{#if !event.isAllDay && event.startTime}
 											<div class="flex items-center space-x-4 text-sm text-surface-600-400 mb-2">
@@ -172,14 +159,18 @@
 
 										<!-- 배지들 -->
 										<div class="flex items-center space-x-2">
-											<span 
+											<span
 												class="badge text-xs px-2 py-1 rounded-full"
-												style="background-color: {getCategoryColor(event.category)}20; color: {getCategoryColor(event.category)}; border: 1px solid {getCategoryColor(event.category)}40"
+												style="background-color: {getCategoryColor(
+													event.category
+												)}20; color: {getCategoryColor(
+													event.category
+												)}; border: 1px solid {getCategoryColor(event.category)}40"
 											>
 												<Tag class="w-3 h-3 mr-1" />
 												{event.category}
 											</span>
-											
+
 											{#if event.isRecurring}
 												<span class="badge preset-outlined text-xs px-2 py-1 rounded-full">
 													반복
@@ -199,9 +190,11 @@
 										>
 											<MoreVertical class="w-4 h-4" />
 										</button>
-										
+
 										{#if openDropdown === event.id}
-											<div class="absolute right-0 top-8 z-10 bg-surface-50-950 border border-surface-200-800 rounded-lg shadow-lg py-1 min-w-[120px]">
+											<div
+												class="absolute right-0 top-8 z-10 bg-surface-50-950 border border-surface-200-800 rounded-lg shadow-lg py-1 min-w-[120px]"
+											>
 												<button
 													class="w-full px-3 py-2 text-left text-sm hover:bg-surface-100-900 flex items-center"
 													onclick={(e) => handleEdit(event, e)}
@@ -230,4 +223,4 @@
 </div>
 
 <!-- 클릭 외부 시 드롭다운 닫기 -->
-<svelte:window onclick={() => openDropdown = null} />
+<svelte:window onclick={() => (openDropdown = null)} />

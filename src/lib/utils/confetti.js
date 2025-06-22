@@ -22,7 +22,7 @@ export function celebrateSuccess() {
 		origin: { x: 0.25, y: 0.7 },
 		colors: ['#FFB6C1', '#FFE4E1', '#F0E68C', '#E6E6FA', '#98FB98']
 	});
-	
+
 	// 두 번째 폭죽 (약간의 지연)
 	setTimeout(() => {
 		confetti({

@@ -18,19 +18,19 @@ flex, 래퍼는 정말 의미가 있는 디자인에만 사용한다.
 
 skeleton의 컬러토큰을 사용합니다.
 
-Key	Accepted Values
-Property	accent, bg, border, caret, decoration, divide, fill, outline, ring, shadow, stroke, text
-Color	primary, secondary, tertiary, success, warning, error, surface
-Shade	50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
+Key Accepted Values
+Property accent, bg, border, caret, decoration, divide, fill, outline, ring, shadow, stroke, text
+Color primary, secondary, tertiary, success, warning, error, surface
+Shade 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
 
 # Presets
 
 Presets are pre-defined styles that allow you to quickly and easily style buttons, badges, cards, and more. Create by mixing Skeleton and Tailwind primitives.
 
-
 Preview
 
 Code
+
 <script lang="ts">
   import IconBookmark from '@lucide/svelte/icons/bookmark';
   const diagramCircle = 'preset-tonal w-8 aspect-square flex justify-center items-center rounded-full';
@@ -116,10 +116,10 @@ Filled
 
 preset-filled-{color}-{lightModeShade}-{darkModeShade}
 
-
 Preview
 
 Code
+
 <div class="w-full grid grid-cols-2 lg:grid-cols-4 gap-2">
   {/* Neutral */}
   <div class="preset-filled flex items-center justify-center p-4">(neutral)</div>
@@ -141,10 +141,10 @@ Tonal
 
 preset-tonal-{color}
 
-
 Preview
 
 Code
+
 <div class="w-full grid grid-cols-2 lg:grid-cols-4 gap-2">
   {/* Neutral */}
   <div class="preset-tonal flex items-center justify-center p-4">(neutral)</div>
@@ -162,10 +162,10 @@ Outlined
 
 preset-outlined-{color}-{shade}-{shade}
 
-
 Preview
 
 Code
+
 <div class="grid w-full grid-cols-2 gap-2 lg:grid-cols-4">
   {/* Neutral */}
   <div class="preset-outlined flex items-center justify-center p-4">(neutral)</div>
@@ -183,11 +183,9 @@ Code
   <div class="preset-outlined-primary-50-950 flex items-center justify-center p-4">50-950</div>
 </div>
 
-
 ## Colors
 
 Search...
-
 
 Design
 ›
@@ -285,10 +283,11 @@ Supports all standard Tailwind color utility classes using the following pattern
 
 {property}-{color}-{shade}
 
-Key	Accepted Values
-Property	accent, bg, border, caret, decoration, divide, fill, outline, ring, shadow, stroke, text
-Color	primary, secondary, tertiary, success, warning, error, surface
-Shade	50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
+Key Accepted Values
+Property accent, bg, border, caret, decoration, divide, fill, outline, ring, shadow, stroke, text
+Color primary, secondary, tertiary, success, warning, error, surface
+Shade 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
+
 <div class="bg-primary-500">...</div>
 <div class="border border-secondary-600">...</div>
 <svg class="fill-surface-950">...</svg>
@@ -298,7 +297,6 @@ Contrast Colors
 Contrast color values are available for every shade. Use these to set accessible text color and icon fill values.
 
 {property}-{color}-contrast-{shade}
-
 
 Preview
 
@@ -323,7 +321,7 @@ How Pairings Work
 Color Pairing are enabled through the use of the CSS light-dark function. For example, the text-primary-300-700 pairing will be implemnted in your CSS bundle as follows:
 
 .text-primary-300-700 {
-  color: light-dark(var(--color-primary-300), var(--color-primary-700));
+color: light-dark(var(--color-primary-300), var(--color-primary-700));
 }
 
 This roughly equivalent to the following, just more compact, and enabling support for Tailwind’s Color Scheme utilities.
@@ -377,7 +375,6 @@ Based on mode
 When to use Pairings
 
 Color Parings are useful for generating a hierarchy of visual layers, ranging from foreground to background elements. Each reuse the same color ramp but, but inverts the order when toggling from light to dark mode.
-
 
 Preview
 

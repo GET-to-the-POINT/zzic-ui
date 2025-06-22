@@ -1,5 +1,5 @@
 <script>
-	import { enhance } from "$app/forms";
+	import { enhance } from '$app/forms';
 </script>
 
 <div class="min-h-screen flex items-center justify-center p-4">
@@ -53,7 +53,9 @@
 					class="input w-full"
 				/>
 			</div>
-			<button type="submit" class="w-full py-2 rounded bg-primary-600 text-white font-semibold">사인-업</button>
+			<button type="submit" class="w-full py-2 rounded bg-primary-600 text-white font-semibold"
+				>사인-업</button
+			>
 		</form>
 		<div class="text-center">
 			<a href="/auth/sign-in" class="text-sm text-muted-foreground hover:underline">

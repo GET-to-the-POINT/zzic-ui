@@ -1,5 +1,9 @@
 import { json } from '@sveltejs/kit';
-import { saveSettingsToCookies, getSettingsFromCookies, updateSettings } from '$lib/utils/settings.js';
+import {
+	saveSettingsToCookies,
+	getSettingsFromCookies,
+	updateSettings
+} from '$lib/utils/settings.js';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, cookies }) {
@@ -13,10 +17,10 @@ export async function POST({ request, cookies }) {
 
 		// 현재 설정 가져오기
 		const currentSettings = getSettingsFromCookies(cookies);
-		
+
 		// 설정 업데이트
 		const updatedSettings = updateSettings(currentSettings, newSettings);
-		
+
 		// 쿠키에 저장
 		saveSettingsToCookies(cookies, updatedSettings);
 

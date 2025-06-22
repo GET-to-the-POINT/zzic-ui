@@ -44,7 +44,7 @@ export async function load({ parent, url }) {
 	// 기본 옵션 (전체뷰용) - 검증된 쿼리 파라미터 사용
 	const queryResult = validateAndPrepareOptions(url.searchParams);
 	const basicSearchParams = queryResult.success ? queryResult.searchParams : new URLSearchParams();
-	
+
 	// 날짜와 탭 필터는 심플뷰에서만 사용하므로 제거
 	if (basicSearchParams) {
 		basicSearchParams.delete('date');
@@ -59,7 +59,8 @@ export async function load({ parent, url }) {
 	endOfDay.setHours(23, 59, 59, 999);
 
 	const simpleParams = new URLSearchParams({
-		dueDate: currentDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
+		dueDate:
+			currentDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
 		size: '20'
 	});
 
@@ -68,9 +69,10 @@ export async function load({ parent, url }) {
 	weekStart.setDate(currentDate.getDate() - 3);
 	const weekEnd = new Date(currentDate);
 	weekEnd.setDate(currentDate.getDate() + 3);
-	
+
 	const weeklyParams = new URLSearchParams({
-		dueDateStart: weekStart.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
+		dueDateStart:
+			weekStart.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
 		dueDateEnd: weekEnd.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T23:59:59+09:00',
 		size: '100'
 	});

@@ -1,8 +1,8 @@
 <script>
 	import { X, Calendar, Clock, Tag, AlertCircle } from '@lucide/svelte/icons';
-	import { 
-		eventCategories, 
-		priorityOptions, 
+	import {
+		eventCategories,
+		priorityOptions,
 		getCategoryColor,
 		getPriorityColor
 	} from '$lib/types/calendar.js';
@@ -23,7 +23,7 @@
 
 	// Reactive state using $state
 	let dialog = $state(/** @type {HTMLDialogElement | undefined} */ (undefined));
-	
+
 	let formData = $state({
 		title: '',
 		description: '',
@@ -75,8 +75,14 @@
 		const startDate = new Date(formData.startDate);
 		const endDate = new Date(formData.endDate);
 		if (!formData.isAllDay) {
-			startDate.setHours(parseInt(formData.startTime.split(':')[0]), parseInt(formData.startTime.split(':')[1]));
-			endDate.setHours(parseInt(formData.endTime.split(':')[0]), parseInt(formData.endTime.split(':')[1]));
+			startDate.setHours(
+				parseInt(formData.startTime.split(':')[0]),
+				parseInt(formData.startTime.split(':')[1])
+			);
+			endDate.setHours(
+				parseInt(formData.endTime.split(':')[0]),
+				parseInt(formData.endTime.split(':')[1])
+			);
 		}
 		return endDate >= startDate;
 	});
@@ -86,7 +92,7 @@
 	 */
 	function handleSubmit(e) {
 		e.preventDefault();
-		
+
 		if (!isFormValid) {
 			alert('제목과 시작 날짜를 입력해주세요.');
 			return;
@@ -101,8 +107,14 @@
 		const endDate = new Date(formData.endDate || formData.startDate);
 
 		if (!formData.isAllDay) {
-			startDate.setHours(parseInt(formData.startTime.split(':')[0]), parseInt(formData.startTime.split(':')[1]));
-			endDate.setHours(parseInt(formData.endTime.split(':')[0]), parseInt(formData.endTime.split(':')[1]));
+			startDate.setHours(
+				parseInt(formData.startTime.split(':')[0]),
+				parseInt(formData.startTime.split(':')[1])
+			);
+			endDate.setHours(
+				parseInt(formData.endTime.split(':')[0]),
+				parseInt(formData.endTime.split(':')[1])
+			);
 		}
 
 		const eventData = {
@@ -151,25 +163,13 @@
 		formData.category = 'personal';
 		formData.priority = 'medium';
 		formData.isRecurring = false;
-		
+
 		onClose();
 	}
 </script>
 
-<style>
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(4px);
-	}
-	
-	dialog {
-		border: none;
-		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-	}
-</style>
-
 {#if isOpen}
-	<dialog 
+	<dialog
 		bind:this={dialog}
 		class="m-auto p-6 rounded-lg w-full max-w-lg backdrop:bg-surface-backdrop"
 		onclose={handleClose}
@@ -224,11 +224,7 @@
 				<div class="flex items-center justify-between">
 					<span class="text-sm font-medium text-surface-700-300">날짜 및 시간</span>
 					<label class="flex items-center space-x-2">
-						<input
-							type="checkbox"
-							bind:checked={formData.isAllDay}
-							class="checkbox"
-						/>
+						<input type="checkbox" bind:checked={formData.isAllDay} class="checkbox" />
 						<span class="text-sm">종일</span>
 					</label>
 				</div>
@@ -236,22 +232,13 @@
 				<!-- 시작 날짜 -->
 				<div class="input-group grid-cols-[auto_1fr]">
 					<div class="ig-cell preset-tonal">시작일 *</div>
-					<input
-						type="date"
-						bind:value={formData.startDate}
-						required
-						class="ig-input"
-					/>
+					<input type="date" bind:value={formData.startDate} required class="ig-input" />
 				</div>
 
 				<!-- 종료 날짜 -->
 				<div class="input-group grid-cols-[auto_1fr]">
 					<div class="ig-cell preset-tonal">종료일</div>
-					<input
-						type="date"
-						bind:value={formData.endDate}
-						class="ig-input"
-					/>
+					<input type="date" bind:value={formData.endDate} class="ig-input" />
 				</div>
 
 				<!-- 시간 (종일이 아닌 경우만) -->
@@ -259,23 +246,15 @@
 					<div class="grid grid-cols-2 gap-3">
 						<div class="input-group grid-cols-[auto_1fr]">
 							<div class="ig-cell preset-tonal text-xs">시작</div>
-							<input
-								type="time"
-								bind:value={formData.startTime}
-								class="ig-input"
-							/>
+							<input type="time" bind:value={formData.startTime} class="ig-input" />
 						</div>
 
 						<div class="input-group grid-cols-[auto_1fr]">
 							<div class="ig-cell preset-tonal text-xs">종료</div>
-							<input
-								type="time"
-								bind:value={formData.endTime}
-								class="ig-input"
-							/>
+							<input type="time" bind:value={formData.endTime} class="ig-input" />
 						</div>
 					</div>
-					
+
 					{#if !isEndDateAfterStart}
 						<p class="text-xs text-error-600 mt-1 flex items-center space-x-1">
 							<AlertCircle class="w-3 h-3" />
@@ -328,8 +307,8 @@
 			<!-- 버튼들 -->
 			<div class="flex justify-between pt-6 border-t border-surface-200-800">
 				{#if isEditing && onDelete}
-					<button 
-						type="button" 
+					<button
+						type="button"
 						class="btn preset-outlined-error-500 hover:preset-filled-error-500 transition-all"
 						onclick={handleDelete}
 					>
@@ -337,16 +316,18 @@
 					</button>
 				{/if}
 				<div class="flex space-x-3 {!isEditing ? 'ml-auto' : ''}">
-					<button 
-						type="button" 
-						class="btn preset-outlined hover:preset-tonal transition-all" 
+					<button
+						type="button"
+						class="btn preset-outlined hover:preset-tonal transition-all"
 						onclick={handleClose}
 					>
 						취소
 					</button>
-					<button 
-						type="submit" 
-						class="btn preset-filled-primary-500 hover:preset-filled-primary-600 transition-all {!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}"
+					<button
+						type="submit"
+						class="btn preset-filled-primary-500 hover:preset-filled-primary-600 transition-all {!isFormValid
+							? 'opacity-50 cursor-not-allowed'
+							: ''}"
 						disabled={!isFormValid}
 					>
 						{isEditing ? '수정하기' : '일정 추가'}
@@ -356,3 +337,15 @@
 		</form>
 	</dialog>
 {/if}
+
+<style>
+	dialog::backdrop {
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+	}
+
+	dialog {
+		border: none;
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	}
+</style>

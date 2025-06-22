@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
-	let {data } = $props();
+	let { data } = $props();
 
 	// TODO 데이터를 캘린더 이벤트로 변환하는 함수
 	/**
@@ -29,10 +29,10 @@
 
 	// TODO 데이터를 이벤트로 변환 (일정 표시용 - dueDate가 있는 것만)
 	let todoEvents = $derived(
-		data.todoPage?.content 
+		data.todoPage?.content
 			? data.todoPage.content
-				.filter(todo => todo.dueDate) // dueDate가 있는 것만 필터링
-				.map(todoToEvent) 
+					.filter((todo) => todo.dueDate) // dueDate가 있는 것만 필터링
+					.map(todoToEvent)
 			: []
 	);
 
@@ -54,7 +54,7 @@
 </svelte:head>
 
 <main class="space-y-4">
-	<DashboardCalendarWidget 
+	<DashboardCalendarWidget
 		events={todoEvents}
 		onViewAll={handleViewAllCalendar}
 		onDateClick={handleDateClick}

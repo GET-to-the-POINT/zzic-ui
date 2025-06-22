@@ -7,29 +7,57 @@ export const todoQuerySchema = z.object({
 	// 배열 파라미터들 - 쉼표로 구분된 문자열을 배열로 변환
 	statusIds: z
 		.string()
-		.transform((str) => str.split(',').map(id => Number(id.trim())).filter(id => !isNaN(id)))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
 		.optional(),
 	categoryIds: z
 		.string()
-		.transform((str) => str.split(',').map(id => Number(id.trim())).filter(id => !isNaN(id)))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
 		.optional(),
 	priorityIds: z
 		.string()
-		.transform((str) => str.split(',').map(id => Number(id.trim())).filter(id => !isNaN(id)))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
 		.optional(),
 	hideStatusIds: z
 		.string()
-		.transform((str) => str.split(',').map(id => Number(id.trim())).filter(id => !isNaN(id)))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
 		.optional(),
 	tags: z
 		.string()
-		.transform((str) => str.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0))
+		.transform((str) =>
+			str
+				.split(',')
+				.map((tag) => tag.trim())
+				.filter((tag) => tag.length > 0)
+		)
 		.optional(),
-	
+
 	// 단일 값 파라미터들
 	startDate: z
 		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, 'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다')
+		.regex(
+			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/,
+			'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다'
+		)
 		.refine((dateStr) => {
 			const date = new Date(dateStr);
 			return !isNaN(date.getTime());
@@ -37,7 +65,10 @@ export const todoQuerySchema = z.object({
 		.optional(),
 	endDate: z
 		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, 'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다')
+		.regex(
+			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/,
+			'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다'
+		)
 		.refine((dateStr) => {
 			const date = new Date(dateStr);
 			return !isNaN(date.getTime());
@@ -62,7 +93,10 @@ export const todoQuerySchema = z.object({
 export const simpleTodoPageSchema = z.object({
 	date: z
 		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, 'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다 (타임존 정보 필수)')
+		.regex(
+			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/,
+			'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다 (타임존 정보 필수)'
+		)
 		.refine((dateStr) => {
 			const date = new Date(dateStr);
 			return !isNaN(date.getTime());
@@ -81,39 +115,41 @@ export const simpleTodoPageSchema = z.object({
 export function validateAndPrepareOptions(searchParams, additionalOptions = {}) {
 	const rawParams = Object.fromEntries(searchParams.entries());
 	const parseResult = todoQuerySchema.safeParse(rawParams);
-	
+
 	if (!parseResult.success) {
 		return {
 			success: false,
 			error: parseResult.error
 		};
 	}
-	
+
 	// 검증된 데이터를 다시 URLSearchParams로 변환
 	const finalParams = new URLSearchParams();
-	
+
 	// 추가 옵션 먼저 추가
 	for (const [key, value] of Object.entries(additionalOptions)) {
 		if (value === undefined || value === null) continue;
-		
+
 		if (Array.isArray(value)) {
-			value.forEach(item => finalParams.append(key, String(item)));
+			value.forEach((item) => finalParams.append(key, String(item)));
 		} else {
 			finalParams.append(key, String(value));
 		}
 	}
-	
+
 	// 검증된 데이터 추가
 	for (const [key, value] of Object.entries(/** @type {any} */ (parseResult.data))) {
 		if (value === undefined || value === null) continue;
-		
+
 		if (Array.isArray(value)) {
-			/** @type {any[]} */ (value).forEach(/** @type {any} */ item => finalParams.append(key, String(item)));
+			/** @type {any[]} */ (value).forEach(
+				/** @type {any} */ (item) => finalParams.append(key, String(item))
+			);
 		} else {
 			finalParams.append(key, String(value));
 		}
 	}
-	
+
 	return {
 		success: true,
 		data: parseResult.data,

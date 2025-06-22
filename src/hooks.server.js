@@ -28,12 +28,7 @@ const handleAuth = async ({ event, resolve }) => {
  * @type {import('@sveltejs/kit').Handle}
  */
 const authGuard = async ({ event, resolve }) => {
-	const guardPaths = [
-		'/dashboard',
-		'/settings',
-		'/profile',
-		'/todos'
-	];
+	const guardPaths = ['/dashboard', '/settings', '/profile', '/todos'];
 	const { pathname } = event.url;
 	const isAuthRequired = guardPaths.some((path) => pathname.startsWith(path));
 
@@ -107,7 +102,9 @@ export const handleFetch = async ({ event, request, fetch }) => {
 				} else if (trimmedPart === 'secure') {
 					options.secure = true;
 				} else if (trimmedPart.startsWith('samesite=')) {
-					options.sameSite = /** @type {'strict' | 'lax' | 'none'} */ (part.trim().split('=')[1].toLowerCase());
+					options.sameSite = /** @type {'strict' | 'lax' | 'none'} */ (
+						part.trim().split('=')[1].toLowerCase()
+					);
 				}
 			});
 

@@ -25,7 +25,7 @@ export function createAuthClient(apiUrl, fetchFn, options = {}) {
 		if (getUserFn) {
 			return getUserFn();
 		}
-		
+
 		try {
 			const response = await fetchFn(`${apiUrl}/auth/me`, {
 				credentials: 'include'
@@ -64,7 +64,7 @@ export function createAuthClient(apiUrl, fetchFn, options = {}) {
 			// 로그인 성공 후 사용자 정보 가져오기
 			const { data, error: getUserError } = await getUser();
 			if (getUserError) {
-				return {data: null, error: getUserError}
+				return { data: null, error: getUserError };
 			}
 
 			return { data, error: null };

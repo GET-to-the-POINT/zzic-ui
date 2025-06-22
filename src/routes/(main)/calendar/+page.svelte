@@ -14,7 +14,7 @@
 	 */
 
 	/** @type {import('./$types').PageData} */
-	let {data} = $props();
+	let { data } = $props();
 
 	// TODO 데이터를 캘린더 이벤트로 변환하는 함수
 	/**
@@ -44,15 +44,17 @@
 	 */
 	function eventToTodoCreate(event) {
 		// 카테고리 찾기
-		const category = data.categoryPage?.content?.find(cat => 
-			cat.name === event.category || cat.name.toLowerCase() === event.category.toLowerCase()
+		const category = data.categoryPage?.content?.find(
+			(cat) =>
+				cat.name === event.category || cat.name.toLowerCase() === event.category.toLowerCase()
 		);
-		
-		// 우선순위 찾기  
-		const priority = /** @type {any[]} */ (data.priorityResponse)?.find(/** @param {any} pri */ (pri) => 
-			pri.name === event.priority || pri.name.toLowerCase() === event.priority.toLowerCase()
+
+		// 우선순위 찾기
+		const priority = /** @type {any[]} */ (data.priorityResponse)?.find(
+			/** @param {any} pri */ (pri) =>
+				pri.name === event.priority || pri.name.toLowerCase() === event.priority.toLowerCase()
 		);
-		
+
 		return {
 			title: event.title,
 			description: event.description || '',
@@ -69,14 +71,16 @@
 	 * @returns {Object}
 	 */
 	function eventToTodoUpdate(event) {
-		const category = data.categoryPage?.content?.find(cat => 
-			cat.name === event.category || cat.name.toLowerCase() === event.category.toLowerCase()
+		const category = data.categoryPage?.content?.find(
+			(cat) =>
+				cat.name === event.category || cat.name.toLowerCase() === event.category.toLowerCase()
 		);
-		
-		const priority = /** @type {any[]} */ (data.priorityResponse)?.find(/** @param {any} pri */ (pri) => 
-			pri.name === event.priority || pri.name.toLowerCase() === event.priority.toLowerCase()
+
+		const priority = /** @type {any[]} */ (data.priorityResponse)?.find(
+			/** @param {any} pri */ (pri) =>
+				pri.name === event.priority || pri.name.toLowerCase() === event.priority.toLowerCase()
 		);
-		
+
 		return {
 			title: event.title,
 			description: event.description || '',
@@ -167,13 +171,13 @@
 	 * @param {Date} date
 	 */
 	function handleDateSelect(date) {
-		const isCurrentlySelected = calendarState.selectedDate && 
-			calendarState.selectedDate.getTime() === date.getTime();
-		
+		const isCurrentlySelected =
+			calendarState.selectedDate && calendarState.selectedDate.getTime() === date.getTime();
+
 		const newSelectedDate = isCurrentlySelected ? null : date;
-		
-		calendarState = { 
-			...calendarState, 
+
+		calendarState = {
+			...calendarState,
 			selectedDate: newSelectedDate
 		};
 
@@ -184,17 +188,17 @@
 		} else {
 			url.searchParams.delete('date');
 		}
-		
+
 		// 브라우저 히스토리 업데이트 (페이지 새로고침 없이)
 		window.history.pushState({}, '', url.toString());
 	}
 
 	function handleAddEvent() {
-		calendarState = { 
-			...calendarState, 
-			isEventDialogOpen: true, 
+		calendarState = {
+			...calendarState,
+			isEventDialogOpen: true,
 			isEditing: false,
-			selectedEvent: null 
+			selectedEvent: null
 		};
 	}
 
@@ -202,11 +206,11 @@
 	 * @param {CalendarEvent} event
 	 */
 	function handleEventClick(event) {
-		calendarState = { 
-			...calendarState, 
+		calendarState = {
+			...calendarState,
 			selectedEvent: event,
 			isEventDialogOpen: true,
-			isEditing: true 
+			isEditing: true
 		};
 	}
 
@@ -215,7 +219,7 @@
 	 */
 	function handleEventSave(eventData) {
 		const todoData = eventToTodoCreate(eventData);
-		
+
 		// form 생성해서 submit
 		const form = document.createElement('form');
 		form.method = 'POST';
@@ -247,7 +251,7 @@
 	 */
 	function handleEventUpdate(updatedEvent) {
 		const todoData = eventToTodoUpdate(updatedEvent);
-		
+
 		// form 생성해서 submit
 		const form = document.createElement('form');
 		form.method = 'POST';
@@ -309,12 +313,12 @@
 
 	function handleToday() {
 		const today = new Date();
-		calendarState = { 
-			...calendarState, 
+		calendarState = {
+			...calendarState,
 			currentDate: today,
 			selectedDate: today
 		};
-		
+
 		// URL 업데이트
 		const url = new URL(window.location.href);
 		url.searchParams.set('date', today.toISOString().split('T')[0]);
@@ -322,11 +326,11 @@
 	}
 
 	function handleCloseDialog() {
-		calendarState = { 
-			...calendarState, 
+		calendarState = {
+			...calendarState,
 			isEventDialogOpen: false,
 			selectedEvent: null,
-			isEditing: false 
+			isEditing: false
 		};
 	}
 </script>

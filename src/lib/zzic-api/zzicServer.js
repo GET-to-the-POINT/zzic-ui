@@ -23,9 +23,9 @@ export function createZzicServerClient(apiUrl, options) {
 		const user = getUserFromCookies(/** @type {any} */ (cookies));
 
 		if (!user) {
-			return { 
-				data: { user: null }, 
-				error: { status: 401, message: 'User not authenticated' } 
+			return {
+				data: { user: null },
+				error: { status: 401, message: 'User not authenticated' }
 			};
 		}
 
@@ -35,9 +35,9 @@ export function createZzicServerClient(apiUrl, options) {
 			timeZone: 'Asia/Seoul' // 하드코딩된 타임존 - 추후 백엔드에서 제공 예정
 		};
 
-		return { 
-			data: { user: /** @type {any} */ (userWithTimeZone) }, 
-			error: null 
+		return {
+			data: { user: /** @type {any} */ (userWithTimeZone) },
+			error: null
 		};
 	};
 

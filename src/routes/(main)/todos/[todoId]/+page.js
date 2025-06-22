@@ -32,6 +32,6 @@ export async function load({ params, parent }) {
 		form,
 		deleteForm,
 		todo,
-		title: "Todo 수정",
+		title: 'Todo 수정'
 	};
 }

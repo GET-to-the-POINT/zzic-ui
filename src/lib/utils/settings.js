@@ -52,13 +52,13 @@ export function deserializeSettings(settingsString) {
  */
 export function getSettingsFromBrowser() {
 	if (typeof document === 'undefined') return { ...DEFAULT_SETTINGS };
-	
+
 	try {
 		const cookies = document.cookie.split(';');
-		const settingsCookie = cookies.find(cookie => cookie.trim().startsWith('settings='));
-		
+		const settingsCookie = cookies.find((cookie) => cookie.trim().startsWith('settings='));
+
 		if (!settingsCookie) return { ...DEFAULT_SETTINGS };
-		
+
 		const settingsValue = decodeURIComponent(settingsCookie.split('=')[1]);
 		return deserializeSettings(settingsValue);
 	} catch (error) {
@@ -73,12 +73,12 @@ export function getSettingsFromBrowser() {
  */
 export function saveSettingsToBrowser(settings) {
 	if (typeof document === 'undefined') return;
-	
+
 	try {
 		const settingsString = serializeSettings(settings);
 		const expires = new Date();
 		expires.setFullYear(expires.getFullYear() + 1); // 1년 후 만료
-		
+
 		document.cookie = `settings=${encodeURIComponent(settingsString)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
 	} catch (error) {
 		console.warn('브라우저 설정 저장 실패:', error);
@@ -110,7 +110,7 @@ export function saveSettingsToCookies(cookies, settings) {
 		const settingsString = serializeSettings(settings);
 		const expires = new Date();
 		expires.setFullYear(expires.getFullYear() + 1); // 1년 후 만료
-		
+
 		cookies.set('settings', settingsString, {
 			path: '/',
 			expires,

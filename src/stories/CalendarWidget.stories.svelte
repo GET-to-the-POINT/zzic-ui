@@ -4,8 +4,8 @@
 	import { mockEvents } from '$lib/types/calendar.js';
 </script>
 
-<Meta 
-	title="Calendar/CalendarWidget" 
+<Meta
+	title="Calendar/CalendarWidget"
 	component={CalendarWidget}
 	argTypes={{
 		events: { control: 'object' },
@@ -20,7 +20,7 @@
 	</div>
 </Template>
 
-<Story 
+<Story
 	name="기본"
 	args={{
 		events: mockEvents,
@@ -29,7 +29,7 @@
 	}}
 />
 
-<Story 
+<Story
 	name="이벤트 없음"
 	args={{
 		events: [],
@@ -38,7 +38,7 @@
 	}}
 />
 
-<Story 
+<Story
 	name="많은 이벤트"
 	args={{
 		events: [

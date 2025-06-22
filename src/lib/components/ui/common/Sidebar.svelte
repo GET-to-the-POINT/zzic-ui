@@ -24,20 +24,20 @@
 	import { Progress } from '@skeletonlabs/skeleton-svelte';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { page } from '$app/state';
-	import { 
-		getSettingsFromBrowser, 
-		saveSettingsToBrowser, 
-		updateSettings 
+	import {
+		getSettingsFromBrowser,
+		saveSettingsToBrowser,
+		updateSettings
 	} from '$lib/utils/settings.js';
 
 	let checked = $state(false);
 	let settings = $state(page.data?.settings || getSettingsFromBrowser());
-	
-  $effect(() => {
-	const mode = checked ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-mode', mode);
-    localStorage.setItem('mode', mode);
-  });
+
+	$effect(() => {
+		const mode = checked ? 'dark' : 'light';
+		document.documentElement.setAttribute('data-mode', mode);
+		localStorage.setItem('mode', mode);
+	});
 
 	// 설정이 변경될 때 쿠키에 저장
 	$effect(() => {
@@ -62,7 +62,7 @@
 		onNavigate = () => {},
 		onQuickAction = () => {},
 		onToggleDarkMode = () => {},
-		onSettings = () => {},
+		onSettings = () => {}
 	} = $props();
 
 	// Navigation items
@@ -110,13 +110,13 @@
 	const toggleFocusMode = async () => {
 		const newSettings = updateSettings(settings, { focusMode: !settings.focusMode });
 		settings = newSettings;
-		
+
 		// 서버에 설정 저장
 		try {
 			await fetch('/api/settings', {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
+					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({ settings: newSettings })
 			});
@@ -128,7 +128,9 @@
 	};
 </script>
 
-<aside class="h-screen preset-filled-surface-200-800 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none border-r border-primary-500">
+<aside
+	class="h-screen preset-filled-surface-200-800 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none border-r border-primary-500"
+>
 	<div class="space-y-4 h-full py-2 w-64 flex flex-col">
 		<div>
 			<div class="px-2 flex items-center">
@@ -137,91 +139,86 @@
 			</div>
 			<div class="flex items-center-safe">
 				<span class="w-12 text-center text-sm font-mono">
-					<span class="text-xs">LV.</span><br/>{user.level}
+					<span class="text-xs">LV.</span><br />{user.level}
 				</span>
 				<div class="flex-1 pr-2">
 					<div class="flex items-center justify-between text-xs text-surface-600-300 mb-1">
 						<span>XP {user.xp}</span>
 						<span>{user.maxXp}</span>
 					</div>
-					  <Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
+					<Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
 				</div>
 			</div>
 		</div>
 
+		<!-- Navigation Menu -->
+		<nav class="space-y-1">
+			{#each navItems as item}
+				{@const IconComponent = item.icon}
+				<a href={item.href} class="btn hover:bg-surface-800-200 w-full">
+					<IconComponent size={16} class="mr-2 text-primary-800-200" />
+					<span class="flex-1 text-left">{item.label}</span>
+				</a>
+			{/each}
+		</nav>
 
-			<!-- Navigation Menu -->
-			<nav class="space-y-1">
-				{#each navItems as item}
-					{@const IconComponent = item.icon}
-					<a 
-						href={item.href}
-						class="btn hover:bg-surface-800-200 w-full"
-					>
-						<IconComponent size={16} class="mr-2 text-primary-800-200" />
-						<span class="flex-1 text-left">{item.label}</span>
+		<!-- Separator -->
+		<hr class="hr border-primary-500" />
+
+		<!-- Quick Actions Section -->
+		<div class="space-y-4">
+			<details open>
+				<summary class="btn w-full">
+					<Zap size={16} class="mr-2 text-secondary-800-200" />
+					<span class="flex-1 text-sm font-medium">빠른 액션</span>
+					<ChevronDown
+						size={16}
+						class="details-chevron transition-transform text-secondary-800-200"
+					/>
+				</summary>
+				<div class="space-y-1 mt-1">
+					<a href="/todos/new" class="btn w-full hover:bg-surface-800-200" onclick={handleNewTodo}>
+						<Plus size={12} class="w-4 mr-4 text-secondary-800-200" />
+						<span class="flex-1 text-xs">새 할일</span>
 					</a>
-				{/each}
-			</nav>
-
-			<!-- Separator -->
-			<hr class="hr border-primary-500" />
-
-			<!-- Quick Actions Section -->
-			<div class="space-y-4">
-	<details open>
-		<summary class="btn w-full">
-			<Zap size={16} class="mr-2 text-secondary-800-200" />
-			<span class="flex-1 text-sm font-medium">빠른 액션</span>
-			<ChevronDown size={16} class="details-chevron transition-transform text-secondary-800-200" />
-		</summary>
-		<div class="space-y-1 mt-1">
-			<a href="/todos/new" class="btn w-full hover:bg-surface-800-200"
-				onclick={handleNewTodo}
-			>
-				<Plus size={12} class="w-4 mr-4 text-secondary-800-200" />
-				<span class="flex-1 text-xs">새 할일</span>
-			</a>
-			<button class="btn w-full hover:bg-surface-800-200"
-				onclick={() => handleQuickAction('join-challenge')}
-			>
-				<Trophy size={12} class="w-4 mr-4 text-secondary-800-200" />
-				<span class="text-left flex-1 text-xs">챌린지 참여</span>
-			</button>
-		</div>
-	</details>
+					<button
+						class="btn w-full hover:bg-surface-800-200"
+						onclick={() => handleQuickAction('join-challenge')}
+					>
+						<Trophy size={12} class="w-4 mr-4 text-secondary-800-200" />
+						<span class="text-left flex-1 text-xs">챌린지 참여</span>
+					</button>
+				</div>
+			</details>
 
 			<!-- Tools Section -->
-				<details open>
-					<summary class="btn w-full">
-						<Wrench size={16} class="mr-2 text-secondary-500" />
-						<span class="flex-1 text-sm font-medium text-surface-600-300">도구</span>
-						<ChevronDown size={16} class="details-chevron transition-transform" />
-					</summary>
-					<div class="space-y-1 mt-1">
-						<a href="/memo" class="btn w-full hover:bg-surface-800-200">
-							<StickyNote size={12} class="w-4 mr-4 text-warning-500" />
-							<span class="flex-1 text-xs">메모장</span>
-						</a>
-						<a href="/calculate" class="btn w-full hover:bg-surface-800-200">
-							<Calculator size={12} class="w-4 mr-4 text-secondary-500" />
-							<span class="flex-1 text-xs">계산기</span>
-						</a>
-					</div>
-				</details>
-			</div>
+			<details open>
+				<summary class="btn w-full">
+					<Wrench size={16} class="mr-2 text-secondary-500" />
+					<span class="flex-1 text-sm font-medium text-surface-600-300">도구</span>
+					<ChevronDown size={16} class="details-chevron transition-transform" />
+				</summary>
+				<div class="space-y-1 mt-1">
+					<a href="/memo" class="btn w-full hover:bg-surface-800-200">
+						<StickyNote size={12} class="w-4 mr-4 text-warning-500" />
+						<span class="flex-1 text-xs">메모장</span>
+					</a>
+					<a href="/calculate" class="btn w-full hover:bg-surface-800-200">
+						<Calculator size={12} class="w-4 mr-4 text-secondary-500" />
+						<span class="flex-1 text-xs">계산기</span>
+					</a>
+				</div>
+			</details>
+		</div>
 
 		<!-- Bottom Settings -->
 		<hr class="hr border-primary-500" />
 		<div>
-			<button 
-				class="btn w-full hover:bg-surface-800-200"
-				onclick={toggleFocusMode}
-			>
+			<button class="btn w-full hover:bg-surface-800-200" onclick={toggleFocusMode}>
 				{#if settings.focusMode}
-					<EyeOff size={16} class="mr-2 text-tertiary-500"/>
+					<EyeOff size={16} class="mr-2 text-tertiary-500" />
 				{:else}
-					<Eye size={16} class="mr-2 text-tertiary-500"/>
+					<Eye size={16} class="mr-2 text-tertiary-500" />
 				{/if}
 				<span class="flex-1 text-sm text-left">
 					{settings.focusMode ? '집중 모드 해제' : '집중 모드'}
@@ -230,29 +227,21 @@
 
 			<label class="btn w-full hover:bg-surface-800-200">
 				{#if checked}
-					<Sun size={16} class="mr-2 text-yellow-500"/>
+					<Sun size={16} class="mr-2 text-yellow-500" />
 				{:else}
-					<Moon size={16} class="mr-2 text-purple-500"/>
+					<Moon size={16} class="mr-2 text-purple-500" />
 				{/if}
-				<input 
-					class="hidden"
-					type="checkbox" 
-					placeholder="검색..." 
-					bind:checked={checked}
-				/>
+				<input class="hidden" type="checkbox" placeholder="검색..." bind:checked />
 				<span class="flex-1 text-sm">
 					{checked ? '라이트 모드' : '다크모드'}
 				</span>
 			</label>
 
-			<button 
-				class="btn w-full hover:bg-surface-800-200"
-				onclick={(e) => onSettings()}
-			>
+			<button class="btn w-full hover:bg-surface-800-200" onclick={(e) => onSettings()}>
 				<Settings size={16} class="mr-2" />
 				<span class="flex-1 text-sm text-left">설정</span>
 			</button>
-			<a 
+			<a
 				href="/auth/sign-out"
 				class="btn w-full justify-start h-8 text-error-600 hover:text-error-700 hover:bg-surface-800-200"
 				onclick={handleSignout}

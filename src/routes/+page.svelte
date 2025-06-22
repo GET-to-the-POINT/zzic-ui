@@ -20,8 +20,11 @@
 		<div class="max-w-6xl mx-auto">
 			<div class="text-center space-y-4">
 				<span class="badge preset-tonal-primary">✨ AI 기반 생산성 플랫폼</span>
-				<h1 class="h1">목표를 현실로,<br><span class="text-primary-500">ZZIC과 함께</span></h1>
-				<p class="text-xl opacity-60 max-w-2xl mx-auto">AI 도우미, 스마트한 습관 추적, 집중 타이머까지.<br>당신의 생산성을 한 단계 끌어올리는 올인원 솔루션입니다.</p>
+				<h1 class="h1">목표를 현실로,<br /><span class="text-primary-500">ZZIC과 함께</span></h1>
+				<p class="text-xl opacity-60 max-w-2xl mx-auto">
+					AI 도우미, 스마트한 습관 추적, 집중 타이머까지.<br />당신의 생산성을 한 단계 끌어올리는
+					올인원 솔루션입니다.
+				</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
 					<a href="/todos" class="btn preset-tonal-primary">
 						무료로 시작하기
@@ -74,7 +77,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- Floating badges -->
 					<div class="relative">
 						<div class="absolute -top-4 -right-4 card preset-tonal-surface p-3 animate-bounce">
@@ -100,7 +103,9 @@
 		<div class="max-w-6xl mx-auto px-6">
 			<div class="text-center mb-16 space-y-4">
 				<h2 class="h2">생산성을 높이는 <span class="text-primary-500">4가지 핵심 기능</span></h2>
-				<p class="text-xl opacity-60 max-w-2xl mx-auto">복잡한 도구는 그만. 하나의 플랫폼에서 모든 것을 해결하세요.</p>
+				<p class="text-xl opacity-60 max-w-2xl mx-auto">
+					복잡한 도구는 그만. 하나의 플랫폼에서 모든 것을 해결하세요.
+				</p>
 			</div>
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 				<div class="space-y-4">
@@ -144,7 +149,9 @@
 							</div>
 							<div>
 								<h3 class="h4 mb-2">인사이트 분석</h3>
-								<p class="opacity-60">데이터 기반으로 당신의 생산성 패턴을 파악하고 개선점을 찾아요</p>
+								<p class="opacity-60">
+									데이터 기반으로 당신의 생산성 패턴을 파악하고 개선점을 찾아요
+								</p>
 							</div>
 						</div>
 					</div>
@@ -173,7 +180,9 @@
 		<div class="max-w-6xl mx-auto px-6">
 			<div class="text-center mb-12 space-y-4">
 				<h2 class="h2 text-white">함께 성장하는 커뮤니티</h2>
-				<p class="text-xl text-white opacity-60 max-w-2xl mx-auto">전 세계 사용자들이 ZZIC과 함께 목표를 달성하고 있어요</p>
+				<p class="text-xl text-white opacity-60 max-w-2xl mx-auto">
+					전 세계 사용자들이 ZZIC과 함께 목표를 달성하고 있어요
+				</p>
 			</div>
 			<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
 				<div class="text-center text-white">
@@ -222,7 +231,9 @@
 							<Star size={16} class="text-warning-500 fill-current" />
 						{/each}
 					</div>
-					<p class="mb-4 opacity-80">"ZZIC 덕분에 업무 효율이 2배 늘었어요. AI 추천이 정말 정확해요!"</p>
+					<p class="mb-4 opacity-80">
+						"ZZIC 덕분에 업무 효율이 2배 늘었어요. AI 추천이 정말 정확해요!"
+					</p>
 					<div class="border-t pt-4">
 						<div class="font-medium">김민수</div>
 						<div class="text-sm opacity-60">프로덕트 매니저</div>
@@ -234,7 +245,9 @@
 							<Star size={16} class="text-warning-500 fill-current" />
 						{/each}
 					</div>
-					<p class="mb-4 opacity-80">"습관 추적 기능이 최고예요. 매일 운동하는 습관을 만들 수 있었어요."</p>
+					<p class="mb-4 opacity-80">
+						"습관 추적 기능이 최고예요. 매일 운동하는 습관을 만들 수 있었어요."
+					</p>
 					<div class="border-t pt-4">
 						<div class="font-medium">이지은</div>
 						<div class="text-sm opacity-60">디자이너</div>
@@ -260,7 +273,9 @@
 	<section class="py-20">
 		<div class="max-w-4xl mx-auto px-6 text-center space-y-4">
 			<h2 class="h2">오늘부터 <span class="text-primary-500">더 나은 나</span>와 만나보세요</h2>
-			<p class="text-xl opacity-60 max-w-2xl mx-auto">지금 시작하면 무료로 모든 기능을 사용할 수 있어요. 신용카드도 필요 없습니다.</p>
+			<p class="text-xl opacity-60 max-w-2xl mx-auto">
+				지금 시작하면 무료로 모든 기능을 사용할 수 있어요. 신용카드도 필요 없습니다.
+			</p>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
 				<a href="/auth/sign-in" class="btn preset-tonal-primary">
 					무료로 시작하기
@@ -311,7 +326,9 @@
 					<div class="space-y-2 opacity-60">
 						<div><a href="/help" class="hover:opacity-100 transition-opacity">도움말</a></div>
 						<div><a href="/contact" class="hover:opacity-100 transition-opacity">문의하기</a></div>
-						<div><a href="/community" class="hover:opacity-100 transition-opacity">커뮤니티</a></div>
+						<div>
+							<a href="/community" class="hover:opacity-100 transition-opacity">커뮤니티</a>
+						</div>
 					</div>
 				</div>
 				<div>

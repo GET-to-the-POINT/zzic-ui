@@ -34,11 +34,7 @@ export async function load({ parent, url }) {
 		error(400, { message: result.error.issues[0]?.message || '잘못된 파라미터입니다.' });
 	}
 
-	const [
-		todosResult,
-		categoriesResult,
-		tagResult
-	] = await Promise.all([
+	const [todosResult, categoriesResult, tagResult] = await Promise.all([
 		zzic.todo.getTodos(result.searchParams),
 		zzic.category.getCategories(),
 		zzic.tag.getTags({ size: 200 })

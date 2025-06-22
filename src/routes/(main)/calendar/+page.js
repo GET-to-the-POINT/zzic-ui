@@ -34,13 +34,14 @@ export async function load({ parent, url }) {
 		error(400, { message: result.error.issues[0]?.message || '잘못된 파라미터입니다.' });
 	}
 
-	const [todosResult, categoriesResult, todoStatisticsResult, priorityResult, tagResult] = await Promise.all([
-		zzic.todo.getTodos(result.searchParams),
-		zzic.category.getCategories(),
-		zzic.todo.getTodoStatistics(),
-		zzic.priority.getPriorities(),
-		zzic.tag.getTags({ size: 100 })
-	]);
+	const [todosResult, categoriesResult, todoStatisticsResult, priorityResult, tagResult] =
+		await Promise.all([
+			zzic.todo.getTodos(result.searchParams),
+			zzic.category.getCategories(),
+			zzic.todo.getTodoStatistics(),
+			zzic.priority.getPriorities(),
+			zzic.tag.getTags({ size: 100 })
+		]);
 
 	if (todosResult.error) error(todosResult.error.message);
 

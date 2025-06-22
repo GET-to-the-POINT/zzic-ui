@@ -12,7 +12,7 @@ export const actions = {
 		const todoData = Object.fromEntries(formData.entries());
 
 		// 빈 값들 제거
-		Object.keys(todoData).forEach(key => {
+		Object.keys(todoData).forEach((key) => {
 			if (todoData[key] === '' || todoData[key] === 'null') {
 				delete todoData[key];
 			}
@@ -39,7 +39,7 @@ export const actions = {
 		delete todoData.id;
 
 		// 빈 값들 제거
-		Object.keys(todoData).forEach(key => {
+		Object.keys(todoData).forEach((key) => {
 			if (todoData[key] === '' || todoData[key] === 'null') {
 				delete todoData[key];
 			}

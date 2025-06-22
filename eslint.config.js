@@ -1,5 +1,5 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import storybook from 'eslint-plugin-storybook';
 
 import prettier from 'eslint-config-prettier';
 import js from '@eslint/js';
@@ -11,12 +11,12 @@ const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-    includeIgnoreFile(gitignorePath),
-    js.configs.recommended,
-    ...svelte.configs['flat/recommended'],
-    prettier,
-    ...svelte.configs['flat/prettier'],
-    {
+	includeIgnoreFile(gitignorePath),
+	js.configs.recommended,
+	...svelte.configs['flat/recommended'],
+	prettier,
+	...svelte.configs['flat/prettier'],
+	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
@@ -24,5 +24,5 @@ export default [
 			}
 		}
 	},
-    ...storybook.configs["flat/recommended"]
+	...storybook.configs['flat/recommended']
 ];

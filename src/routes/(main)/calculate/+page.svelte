@@ -119,7 +119,9 @@
 		<div class="card preset-filled-surface-800-200 p-4 shadow-xl">
 			<!-- 디스플레이 -->
 			<div class="preset-filled-surface-50-950 p-4 rounded-lg mb-4">
-				<div class="text-right text-3xl font-mono text-surface-900-50 min-h-[3rem] flex items-center justify-end overflow-hidden">
+				<div
+					class="text-right text-3xl font-mono text-surface-900-50 min-h-[3rem] flex items-center justify-end overflow-hidden"
+				>
 					{displayValue}
 				</div>
 			</div>
@@ -127,25 +129,25 @@
 			<!-- 버튼 그리드 -->
 			<div class="grid grid-cols-4 gap-2">
 				<!-- 첫 번째 줄: AC, +/-, %, ÷ -->
-				<button 
+				<button
 					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
 					onclick={clearAll}
 				>
 					AC
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
 					onclick={toggleSign}
 				>
 					+/-
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
 					onclick={inputPercent}
 				>
 					%
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-primary-500 h-14 text-lg font-semibold"
 					onclick={() => inputOperation('/')}
 				>
@@ -153,25 +155,25 @@
 				</button>
 
 				<!-- 두 번째 줄: 7, 8, 9, × -->
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(7)}
 				>
 					7
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(8)}
 				>
 					8
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(9)}
 				>
 					9
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-primary-500 h-14 text-lg font-semibold"
 					onclick={() => inputOperation('*')}
 				>
@@ -179,25 +181,25 @@
 				</button>
 
 				<!-- 세 번째 줄: 4, 5, 6, - -->
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(4)}
 				>
 					4
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(5)}
 				>
 					5
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(6)}
 				>
 					6
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-primary-500 h-14 text-lg font-semibold"
 					onclick={() => inputOperation('-')}
 				>
@@ -205,25 +207,25 @@
 				</button>
 
 				<!-- 네 번째 줄: 1, 2, 3, + -->
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(1)}
 				>
 					1
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(2)}
 				>
 					2
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={() => inputNumber(3)}
 				>
 					3
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-primary-500 h-14 text-lg font-semibold"
 					onclick={() => inputOperation('+')}
 				>
@@ -231,19 +233,19 @@
 				</button>
 
 				<!-- 다섯 번째 줄: 0 (2칸), ., = -->
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold col-span-2"
 					onclick={() => inputNumber(0)}
 				>
 					0
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={inputDecimal}
 				>
 					.
 				</button>
-				<button 
+				<button
 					class="btn preset-filled-success-500 h-14 text-lg font-semibold"
 					onclick={performCalculation}
 				>

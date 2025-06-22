@@ -4,9 +4,9 @@ export const actions = {
 	update: async ({ request, url, locals: { zzic }, params }) => {
 		const { todoId } = params;
 		const formData = await request.formData();
-		const todoData = Object.fromEntries(formData);
+		// const todoData = Object.fromEntries(formData);
 
-		const { error } = await zzic.todo.updateTodo({ todoId }, todoData);
+		const { error } = await zzic.todo.updateTodo({ todoId }, formData);
 
 		if (error) {
 			return fail(400, { error: error.message || 'Todo 수정 실패' });
@@ -14,7 +14,7 @@ export const actions = {
 
 		const searchParams = new URLSearchParams(url.search);
 		searchParams.delete('/update'); // SvelteKit 액션 파라미터 제거
-		
+
 		const cleanSearch = searchParams.toString();
 		const redirectUrl = cleanSearch ? `/todos?${cleanSearch}` : '/todos';
 

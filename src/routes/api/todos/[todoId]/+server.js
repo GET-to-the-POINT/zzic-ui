@@ -7,7 +7,7 @@ export async function PATCH({ params, request, locals: { zzic } }) {
 
 	try {
 		const { error } = await zzic.todo.updateTodo(parseInt(todoId), body);
-		
+
 		if (error) {
 			return json({ error: error.message }, { status: 400 });
 		}

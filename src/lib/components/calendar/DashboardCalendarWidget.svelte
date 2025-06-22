@@ -11,19 +11,21 @@
 
 	// Reactive state using $state
 	let currentDate = $state(new Date());
-	
+
 	const today = new Date();
 	const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
 	// Derived values using $derived
 	const monthDays = $derived(getMonthDays(currentDate));
-	
+
 	// 이번 달의 일정이 있는 날짜 수
 	const monthEventCount = $derived(
-		events.filter(event => {
+		events.filter((event) => {
 			const eventDate = new Date(event.startDate);
-			return eventDate.getMonth() === currentDate.getMonth() && 
-				   eventDate.getFullYear() === currentDate.getFullYear();
+			return (
+				eventDate.getMonth() === currentDate.getMonth() &&
+				eventDate.getFullYear() === currentDate.getFullYear()
+			);
 		}).length
 	);
 
@@ -32,9 +34,7 @@
 	 * @returns {boolean}
 	 */
 	function hasEventsForDate(date) {
-		return events.some(event => 
-			isSameDay(new Date(event.startDate), date)
-		);
+		return events.some((event) => isSameDay(new Date(event.startDate), date));
 	}
 
 	/**
@@ -66,19 +66,13 @@
 <div class="space-y-4 preset-filled-surface-500">
 	<!-- 월 네비게이션 -->
 	<div class="flex items-center justify-between p-4 bg-surface-500">
-		<button
-			class="btn btn-sm preset-filled-surface-50-950"
-			onclick={() => navigateMonth('prev')}
-		>
+		<button class="btn btn-sm preset-filled-surface-50-950" onclick={() => navigateMonth('prev')}>
 			<ChevronLeft class="w-4 h-4" />
 		</button>
 		<h4 class="text-lg font-semibold">
 			{currentDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' })}
 		</h4>
-		<button
-			class="btn btn-sm preset-filled-surface-50-950"
-			onclick={() => navigateMonth('next')}
-		>
+		<button class="btn btn-sm preset-filled-surface-50-950" onclick={() => navigateMonth('next')}>
 			<ChevronRight class="w-4 h-4" />
 		</button>
 	</div>
@@ -93,29 +87,28 @@
 				</div>
 			{/each}
 		</div>
-		
+
 		<!-- 날짜 그리드 -->
 		<div class="grid grid-cols-7 gap-2">
 			{#each monthDays as date}
 				{@const hasEvents = hasEventsForDate(date)}
 				{@const isCurrentMonthDate = isCurrentMonth(date)}
 				{@const isTodayDate = isToday(date)}
-				
+
 				{#if isCurrentMonthDate}
 					<a
 						href="/calendar?date={date.toISOString().split('T')[0]}"
 						class={[
 							'btn relative no-underline',
-							isTodayDate 
-								? 'preset-filled-primary-500' 
-								: 'preset-filled-surface-50-950',
-							hasEvents && 'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500',
+							isTodayDate ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+							hasEvents &&
+								'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500'
 						]}
-						aria-label={date.toLocaleDateString('ko-KR', { 
-							weekday: 'long', 
-							year: 'numeric', 
-							month: 'long', 
-							day: 'numeric' 
+						aria-label={date.toLocaleDateString('ko-KR', {
+							weekday: 'long',
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric'
 						})}
 					>
 						<div class="flex flex-col items-center justify-center gap-1 p-2">
@@ -129,11 +122,11 @@
 					<a
 						href="/calendar?date={date.toISOString().split('T')[0]}"
 						class="btn relative opacity-50 preset-filled-surface-200-800 no-underline"
-						aria-label={date.toLocaleDateString('ko-KR', { 
-							weekday: 'long', 
-							year: 'numeric', 
-							month: 'long', 
-							day: 'numeric' 
+						aria-label={date.toLocaleDateString('ko-KR', {
+							weekday: 'long',
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric'
 						})}
 					>
 						<div class="flex flex-col items-center justify-center gap-1 p-2">

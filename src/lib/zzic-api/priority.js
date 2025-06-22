@@ -30,7 +30,10 @@ export function createPriorityClient(apiUrl, fetchFn) {
 				return { data, error: null };
 			} catch (error) {
 				console.error('우선순위 목록 조회 실패:', error);
-				return { data: null, error: { message: error instanceof Error ? error.message : String(error) } };
+				return {
+					data: null,
+					error: { message: error instanceof Error ? error.message : String(error) }
+				};
 			}
 		}
 	};

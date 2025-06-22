@@ -2,13 +2,7 @@
 	import { getMonthDays, isSameDay, getCategoryColor } from '$lib/types/calendar.js';
 
 	// Props using Svelte 5 runes
-	let {
-		currentDate,
-		events,
-		selectedDate,
-		onDateSelect,
-		onEventClick
-	} = $props();
+	let { currentDate, events, selectedDate, onDateSelect, onEventClick } = $props();
 
 	const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -21,8 +15,9 @@
 	 * @returns {import('$lib/types/calendar.js').CalendarEvent[]}
 	 */
 	function getEventsForDate(date) {
-		return events.filter(/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) => 
-			isSameDay(new Date(event.startDate), date)
+		return events.filter(
+			/** @param {import('$lib/types/calendar.js').CalendarEvent} event */ (event) =>
+				isSameDay(new Date(event.startDate), date)
 		);
 	}
 
@@ -55,7 +50,13 @@
 	<!-- 요일 헤더 -->
 	<div class="grid grid-cols-7 bg-surface-100-900 border-b border-surface-200-800">
 		{#each weekDays as day, index}
-			<div class="p-3 text-center font-medium {index === 0 ? 'text-error-600' : index === 6 ? 'text-primary-600' : 'text-surface-700-300'}">
+			<div
+				class="p-3 text-center font-medium {index === 0
+					? 'text-error-600'
+					: index === 6
+						? 'text-primary-600'
+						: 'text-surface-700-300'}"
+			>
 				{day}
 			</div>
 		{/each}
@@ -68,9 +69,13 @@
 			{@const isCurrentMonthDate = isCurrentMonth(date)}
 			{@const isTodayDate = isToday(date)}
 			{@const isSelectedDate = isSelected(date)}
-			
+
 			<div
-				class="min-h-[120px] p-2 border-r border-b border-surface-200-800 cursor-pointer transition-all duration-200 {!isCurrentMonthDate ? 'bg-surface-100-900/50 text-surface-400-600' : isSelectedDate ? 'bg-primary-100-900 border-primary-300-700 shadow-lg ring-2 ring-primary-200-800' : 'hover:bg-surface-100-900'}"
+				class="min-h-[120px] p-2 border-r border-b border-surface-200-800 cursor-pointer transition-all duration-200 {!isCurrentMonthDate
+					? 'bg-surface-100-900/50 text-surface-400-600'
+					: isSelectedDate
+						? 'bg-primary-100-900 border-primary-300-700 shadow-lg ring-2 ring-primary-200-800'
+						: 'hover:bg-surface-100-900'}"
 				onclick={() => onDateSelect(date)}
 				role="button"
 				tabindex="0"
@@ -82,7 +87,15 @@
 			>
 				<!-- 날짜 숫자 -->
 				<div class="flex items-center justify-between mb-2">
-					<span class="text-sm font-medium {isTodayDate ? 'bg-primary-600 text-white rounded-full w-6 h-6 flex items-center justify-center' : isSelectedDate ? 'bg-primary-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold' : isCurrentMonthDate ? 'text-surface-900-50' : 'text-surface-400-600'}">
+					<span
+						class="text-sm font-medium {isTodayDate
+							? 'bg-primary-600 text-white rounded-full w-6 h-6 flex items-center justify-center'
+							: isSelectedDate
+								? 'bg-primary-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold'
+								: isCurrentMonthDate
+									? 'text-surface-900-50'
+									: 'text-surface-400-600'}"
+					>
 						{date.getDate()}
 					</span>
 					{#if dayEvents.length > 3}
