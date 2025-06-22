@@ -103,11 +103,13 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {URLSearchParams} [searchParams] - URL 검색 파라미터 (그대로 전달)
 	 * @returns {Promise<{data: PageTodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodos(searchParams = new URLSearchParams()) {
+	async function getTodos(searchParams) {
 		const url = new URL(`${apiUrl}/todos`);
 		
 		// URLSearchParams를 그대로 URL에 적용
-		url.search = searchParams.toString();
+		if (searchParams) {
+			url.search = searchParams.toString();
+		}
 
 		try {
 			const response = await fetchFn(url.toString(), {
@@ -190,15 +192,9 @@ export function createTodoClient(apiUrl, fetchFn) {
 	async function updateTodo({todoId}, formData) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
-			// FormData를 application/x-www-form-urlencoded로 변환
-			const urlEncoded = new URLSearchParams();
-			for (const [key, value] of formData.entries()) {
-				urlEncoded.append(key, value);
-			}
 			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: urlEncoded,
+				body: formData,
 				credentials: 'include'
 			});
 
