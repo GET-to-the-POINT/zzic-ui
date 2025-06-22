@@ -7,13 +7,13 @@
  * @property {number} id - Todo ID
  * @property {string} title - 할일 제목
  * @property {string} [description] - 할일 설명
- * @property {number} statusId - 상태
- * @property {string} statusName - 상태
+ * @property {number} statusId - 상태 (0: 진행중, 1: 완료, 2: 지연)
+ * @property {string} statusName - 상태명
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {string} [priorityName] - 우선순위명
  * @property {number} [categoryId] - 카테고리 ID
  * @property {string} [categoryName] - 카테고리명
- * @property {string} [dueDate] - 마감일 (YYYY-MM-DD)
+ * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
  * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
  * @property {string[]} [tags] - 태그 목록
  */
@@ -35,10 +35,10 @@
  * @typedef {Object} CreateTodoRequest
  * @property {string} title - 할 일 제목
  * @property {string} [description] - 할 일 설명
- * @property {number} [status] - 상태
- * @property {number} [priority] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
+ * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
+ * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감일 (YYYY-MM-DD)
+ * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
  * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
@@ -47,20 +47,35 @@
  * @typedef {Object} UpdateTodoRequest
  * @property {string} [title] - 할 일 제목
  * @property {string} [description] - 할 일 설명
- * @property {'IN_PROGRESS'|'COMPLETED'} [status] - 상태
- * @property {number} [priority] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
+ * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
+ * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감일 (YYYY-MM-DD)
+ * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
  * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
 
 /**
+ * @typedef {Object} UpdateTodoFormFields
+ * @property {string} [title] - 할 일 제목
+ * @property {string} [description] - 할 일 설명
+ * @property {string} [statusId] - 상태 ID
+ * @property {string} [priorityId] - 우선순위 ID
+ * @property {string} [categoryId] - 카테고리 ID
+ * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
+ * @property {string} [repeatType] - 반복 유형 ('NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY')
+ * @property {string} [tags] - 태그 목록 (쉼표로 구분)
+ */
+
+/**
+ * @typedef {Object} StatisticsItem
+ * @property {string} statisticsName - 항목 이름
+ * @property {number} statisticsValue - 항목 값
+ */
+
+/**
  * @typedef {Object} TodoStatisticsResponse
- * @property {number} total - 전체 개수
- * @property {number} inProgress - 진행중 개수
- * @property {number} completed - 완료 개수
- * @property {number} overdue - 지연 개수
+ * @property {StatisticsItem[]} content - 통계 데이터 목록
  */
 
 /**
@@ -84,27 +99,14 @@
 export function createTodoClient(apiUrl, fetchFn) {
 	/**
 	 * 할 일 목록 조회
-	 * @param {Object} [options={}] - 옵션
-	 * @param {'0'|'1'|'2'} [options.status] - 상태 필터 (0: 진행중, 1: 완료, 2: 지연)
-	 * @param {number} [options.categoryId] - 카테고리 ID 필터
-	 * @param {'0'|'1'|'2'} [options.priority] - 우선순위 필터 (0: 낮음, 1: 보통, 2: 높음)
-	 * @param {string} [options.search] - 검색 키워드 (제목, 설명에서 검색)
-	 * @param {number} [options.page] - 페이지 번호
-	 * @param {number} [options.size] - 페이지 크기
-	 * @param {string} [options.sort] - 정렬 옵션
-	 * @param {string} [options.startDate] - 시작일 (YYYY-MM-DDTHH:mm:ss.sssZ)
-	 * @param {string} [options.endDate] - 종료일 (YYYY-MM-DDTHH:mm:ss.sssZ)
-	 * @param {number[]} [options.hideStatusIds] - 숨길 상태 ID들 (배열)
+	 * @param {URLSearchParams} [searchParams] - URL 검색 파라미터 (그대로 전달)
 	 * @returns {Promise<{data: PageTodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodos(options = {}) {
+	async function getTodos(searchParams = new URLSearchParams()) {
 		const url = new URL(`${apiUrl}/todos`);
 		
-		Object.entries(options).forEach(([key, value]) => {
-			if (value !== undefined && value !== null) {
-				url.searchParams.append(key, String(value));
-			}
-		});
+		// URLSearchParams를 그대로 URL에 적용
+		url.search = searchParams.toString();
 
 		try {
 			const response = await fetchFn(url.toString(), {
@@ -181,20 +183,19 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * 할 일 수정
 	 * @param {Object} params - 파라미터 객체
 	 * @param {number} params.todoId - 할 일 ID
-	 * @param {UpdateTodoRequest} todo - 할 일 수정 데이터
+	 * @param {FormData} formData - 할 일 데이터 (UpdateTodoFormFields의 필드들을 포함)
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function updateTodo({todoId}, todo) {
+	async function updateTodo({todoId}, formData) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
 			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(todo),
+				body: formData,
 				credentials: 'include'
 			});
 
-			if (response.status !== 204) {
+			if (!response.ok) {
 				const error = await response.json().catch(() => ({ message: 'Failed to update todo' }));
 				return { error };
 			}

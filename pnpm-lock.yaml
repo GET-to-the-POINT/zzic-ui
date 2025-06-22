@@ -50,6 +50,9 @@ importers:
       canvas-confetti:
         specifier: ^1.9.3
         version: 1.9.3
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       dompurify:
         specifier: ^3.2.6
         version: 3.2.6
@@ -5587,8 +5590,7 @@ snapshots:
 
   date-fns@4.1.0: {}
 
-  dayjs@1.11.13:
-    optional: true
+  dayjs@1.11.13: {}
 
   debug@4.4.1:
     dependencies:

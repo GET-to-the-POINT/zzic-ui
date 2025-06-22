@@ -11,60 +11,23 @@
 	import noHaveTodo from '$lib/assets/no-have-todo.png';
 
 	let { data } = $props();
-	
-	// TODO: [BACKEND] 이 로직은 백엔드에서 구현되어야 합니다.
-	// 현재는 프론트엔드에서 임시로 계산하고 있으나, 이는 성능과 정확성 측면에서 문제가 될 수 있습니다.
-	// 백엔드 API에서 날짜별 todo 개수 정보를 포함한 캐러셀 데이터를 직접 제공해야 합니다.
-	/**
-	 * 임시 함수: 날짜별 todo 개수를 계산합니다.
-	 * @param {any[]} todos - todo 배열
-	 * @returns {Map<string, number>} 날짜별 todo 개수 맵
-	 */
-	function calculateTodoCountsByDate(todos) {
-		const todosByDate = new Map();
-		if (todos?.length) {
-			for (const todo of todos) {
-				if (todo.dueDate) {
-					const count = todosByDate.get(todo.dueDate) || 0;
-					todosByDate.set(todo.dueDate, count + 1);
-				}
-			}
-		}
-		return todosByDate;
-	}
-	
-	// 날짜 네비게이션을 위한 데이터 생성 (오늘 기준 ±3일)
-	const today = new Date();
+
+	// 날짜 네비게이션을 위한 데이터 생성 - 백엔드 배열 기준
 	const dateNavigation = $derived.by(() => {
-		const selectedDateParam = page.url.searchParams.get('date');
-		const selectedDate = selectedDateParam ? new Date(selectedDateParam) : new Date();
-		
-		// TODO: [BACKEND] 이 계산 로직을 백엔드로 이전 후 아래 라인을 제거하세요.
-		const todoCountsByDate = calculateTodoCountsByDate(data?.weeklyTodos?.content);
-		
-		return Array.from({ length: 7 }, (_, i) => {
-			const date = new Date(today);
-			date.setDate(today.getDate() + (i - 3));
-			const isoDate = date.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00';
-			
-			// TODO: [BACKEND] 백엔드에서 empty 필드를 직접 제공하면 아래 계산 로직을 제거하세요.
-			const todoCount = todoCountsByDate.get(isoDate) || 0;
-			
+		const startDateParam = page.url.searchParams.get('startDate');
+		const selectedDate = startDateParam ? new Date(startDateParam) : new Date();
+
+		// 백엔드에서 제공한 weeklyTodos 배열을 기준으로 캘린더 렌더링
+		return (data.weeklyTodos).map((weeklyItem) => {
+			const itemDate = new Date(weeklyItem.date);
+	
 			return {
-				date,
-				day: date.toLocaleDateString('ko-KR', { weekday: 'short' }),
-				dayNumber: date.getDate(),
-				isoDate,
-				href: `?date=${encodeURIComponent(isoDate)}`,
-				ariaLabel: date.toLocaleDateString('ko-KR', { 
-					weekday: 'long', 
-					year: 'numeric', 
-					month: 'long', 
-					day: 'numeric' 
-				}),
-				selected: date.toDateString() === selectedDate.toDateString(),
-				// TODO: [BACKEND] 백엔드에서 empty 필드를 직접 제공하면 이 계산을 제거하세요.
-				empty: todoCount === 0
+				day: weeklyItem.day,
+				dayNumber: weeklyItem.dayNumber,
+				href: `?startDate=${encodeURIComponent(weeklyItem.startDate)}&endDate=${encodeURIComponent(weeklyItem.endDate)}`,
+				ariaLabel: weeklyItem.ariaLabel,
+				selected: itemDate.toDateString() === selectedDate.toDateString(),
+				empty: weeklyItem.empty !== false // empty가 명시적으로 false가 아니면 빈 것으로 처리
 			};
 		});
 	});
@@ -115,8 +78,16 @@
 	function getUpdateAction(todoId) {
 		let url = `/todos/${todoId}?/update`;
 		
-		if (page.url.search) {
-			url += '&' + page.url.search.substring(1);
+		// startDate, endDate 파라미터 유지
+		const searchParams = new URLSearchParams();
+		const currentStartDate = page.url.searchParams.get('startDate');
+		const currentEndDate = page.url.searchParams.get('endDate');
+		
+		if (currentStartDate) searchParams.set('startDate', currentStartDate);
+		if (currentEndDate) searchParams.set('endDate', currentEndDate);
+		
+		if (searchParams.toString()) {
+			url += '&' + searchParams.toString();
 		}
 		
 		return url;

@@ -29,8 +29,14 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 			};
 		}
 
+		// TODO: [BACKEND] 타임존 정보는 현재 하드코딩되어 있음. 백엔드에서 사용자별 타임존 구현 예정
+		const userWithTimeZone = {
+			...user,
+			timeZone: 'Asia/Seoul' // 하드코딩된 타임존 - 추후 백엔드에서 제공 예정
+		};
+
 		return { 
-			data: { user: /** @type {any} */ (user) }, 
+			data: { user: /** @type {any} */ (userWithTimeZone) }, 
 			error: null 
 		};
 	};

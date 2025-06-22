@@ -1,5 +1,12 @@
 import { error } from '@sveltejs/kit';
 import { z } from 'zod';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
+
+// dayjs 플러그인 초기화
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 /**
  * @typedef {Object} LoadParams
@@ -13,19 +20,24 @@ import { z } from 'zod';
 /**
  * @typedef {Object} PageData
  * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} selectedDateTodos - 선택된 날짜의 todo 데이터
- * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} weeklyTodos - 일주일간의 todo 데이터 (캐러셀용)
+ * @property {Array<import('$lib/zzic-api/todo.js').PageTodoResponse>} weeklyTodos - 일주일간의 todo 데이터 배열 (각 날짜별 존재 여부 확인용)
  */
 
-// URL 검색 파라미터 스키마 정의
-const searchParamsSchema = z.object({
-	date: z
+// 이 페이지만의 특별한 스키마 정의
+const testPageSchema = z.object({
+	startDate: z
 		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, 'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다 (타임존 정보 필수)')
 		.refine((dateStr) => {
 			const date = new Date(dateStr);
 			return !isNaN(date.getTime());
-		}, '유효하지 않은 날짜입니다')
-		.transform((dateStr) => new Date(dateStr))
+		}, '유효하지 않은 시작 날짜입니다')
+		.optional(),
+	endDate: z
+		.string()
+		.refine((dateStr) => {
+			const date = new Date(dateStr);
+			return !isNaN(date.getTime());
+		}, '유효하지 않은 종료 날짜입니다')
 		.optional(),
 	hideStatusIds: z
 		.string()
@@ -34,27 +46,40 @@ const searchParamsSchema = z.object({
 });
 
 /**
- * 날짜를 YYYY-MM-DDTHH:mm:ss+09:00 형식 문자열로 변환
- * @param {Date} date - 변환할 날짜
- * @param {string} time - 시간 부분 (기본값: '00:00:00')
- * @returns {string} ISO 8601 형식 문자열 (한국 시간대)
+ * 기본 날짜 범위를 생성합니다 (사용자 타임존 기준 오늘 00시 ~ 내일 00시를 UTC로 변환)
+ * @param {string} timeZone - 사용자 타임존 (예: 'Asia/Seoul')
+ * @returns {{ startDate: string, endDate: string }} ISO 문자열 형태의 날짜 범위
  */
-function formatDateWithTimezone(date, time = '00:00:00') {
-	const dateStr = date.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
-	return `${dateStr}T${time}+09:00`;
+function getDefaultDateRange(timeZone) {
+	const todayStart = dayjs().tz(timeZone).startOf('day');
+	const tomorrowStart = todayStart.add(1, 'day');
+	
+	return {
+		startDate: todayStart.utc().toISOString(),
+		endDate: tomorrowStart.utc().toISOString()
+	};
 }
 
-// TODO: [BACKEND] 향후 백엔드에서 날짜 캐러셀용 데이터를 직접 제공해야 합니다.
-// 백엔드 API가 준비되면 다음과 같은 구조로 데이터를 받아야 합니다:
-// {
-//   selectedDateTodos: PageTodoResponse,
-//   weeklyTodos: PageTodoResponse,
-//   dateCarousel: Array<{
-//     isoDate: string,        // YYYY-MM-DD 형식
-//     empty: boolean,         // 해당 날짜에 todo가 없는지 여부
-//     todoCount: number       // 해당 날짜의 todo 개수
-//   }>
-// }
+/**
+ * 위클리 데이터를 위한 7개 날짜 범위 생성 (3일 전 ~ 3일 후)
+ * @param {string} timeZone - 사용자 타임존
+ * @returns {Array<{startDate: string, endDate: string}>} 7개 날짜의 범위 배열
+ */
+function getWeeklyDateRanges(timeZone) {
+	const ranges = [];
+	
+	for (let i = -3; i <= 3; i++) {
+		const dayStart = dayjs().tz(timeZone).add(i, 'day').startOf('day');
+		const dayEnd = dayStart.add(1, 'day');
+		
+		ranges.push({
+			startDate: dayStart.utc().toISOString(),
+			endDate: dayEnd.utc().toISOString()
+		});
+	}
+	
+	return ranges;
+}
 
 /**
  * Todo 페이지 데이터를 로드합니다
@@ -62,21 +87,15 @@ function formatDateWithTimezone(date, time = '00:00:00') {
  * @returns {Promise<PageData>} Todo 페이지 데이터
  */
 export async function load({ parent, url }) {
-	const { zzic } = await parent();
+	const { zzic, user } = await parent();
 
 	// URL 검색 파라미터를 Zod로 파싱 및 검증
 	const rawParams = Object.fromEntries(url.searchParams.entries());
-	const parsedParams = searchParamsSchema.safeParse(rawParams);
+	const parsedParams = testPageSchema.safeParse(rawParams);
 	
-	let targetDate;
-	let hideStatusIds;
-	
-	if (parsedParams.success) {
-		targetDate = parsedParams.data.date;
-		hideStatusIds = parsedParams.data.hideStatusIds;
-	} else {
+	if (!parsedParams.success) {
 		// 파싱 실패시 에러 발생
-		const errorDetails = parsedParams.error.issues.map(issue => 
+		const errorDetails = parsedParams.error.issues.map(/** @type {any} */ issue => 
 			`필드 '${issue.path.join('.')}': ${issue.message}`
 		).join(', ');
 		
@@ -87,57 +106,57 @@ export async function load({ parent, url }) {
 		
 		error(400, `잘못된 URL 파라미터입니다. ${errorDetails}`);
 	}
-	
-	// targetDate가 없으면 오늘 날짜 사용
-	if (!targetDate) {
-		targetDate = new Date();
-	}
-	
-	// 1. 선택된 날짜의 데이터 조회를 위한 옵션
-	const targetDateStr = formatDateWithTimezone(targetDate, '00:00:00');
-	const targetDateEndStr = formatDateWithTimezone(targetDate, '23:59:59');
-	/** @type {any} */
-	let selectedDateOptions = { 
-		startDate: targetDateStr, 
-		endDate: targetDateEndStr,
-		size: 200
-	};
-	
-	// hideStatusIds가 있으면 추가
-	if (hideStatusIds && hideStatusIds.length > 0) {
-		selectedDateOptions.hideStatusIds = hideStatusIds;
+
+	// startDate와 endDate가 없으면 기본값 설정 (사용자 타임존 고려)
+	if (!url.searchParams.has('startDate') || !url.searchParams.has('endDate')) {
+		const { startDate, endDate } = getDefaultDateRange(user.timeZone);
+
+		if (!url.searchParams.has('startDate')) url.searchParams.set('startDate', startDate);
+		if (!url.searchParams.has('endDate')) url.searchParams.set('endDate', endDate);
+
+		console.info('기본 날짜 범위 설정:', {
+			startDate,
+			endDate,
+			timeZone: user.timeZone
+		});
 	}
 
-	// 2. 일주일간의 데이터 조회를 위한 옵션 (오늘 기준 앞뒤 3일)
-	const today = new Date();
-	const start = new Date(today);
-	start.setDate(today.getDate() - 3);
-	const end = new Date(today);
-	end.setDate(today.getDate() + 3);
-	
-	/** @type {any} */
-	let weeklyOptions = { 
-		startDate: formatDateWithTimezone(start, '00:00:00'), 
-		endDate: formatDateWithTimezone(end, '23:59:59'),
-		size: 200
-	};
-	
-	// hideStatusIds가 있으면 weekly 옵션에도 추가
-	if (hideStatusIds && hideStatusIds.length > 0) {
-		weeklyOptions.hideStatusIds = hideStatusIds;
-	}
+	// 수정된 검색 파라미터를 사용하여 getTodos 호출
+	const todosResult = await zzic.todo.getTodos(url.searchParams);
 
-	// 두 번의 API 호출로 각각의 데이터 조회
-	const [selectedDateResult, weeklyResult] = await Promise.all([
-		zzic.todo.getTodos(selectedDateOptions),
-		zzic.todo.getTodos(weeklyOptions),
-	]);
+	if (todosResult.error) error(todosResult.error.message);
 
-	if (selectedDateResult.error) error(selectedDateResult.error.message);
-	if (weeklyResult.error) error(weeklyResult.error.message);
+	// 위클리 데이터 생성 (7일간의 TODO 존재 여부 확인용)
+	const weeklyRanges = getWeeklyDateRanges(user.timeZone);
+	const weeklyTodos = await Promise.all(
+		weeklyRanges.map(async (range, index) => {
+			// 기존 파라미터를 복사하되, 날짜 범위와 size만 변경
+			const weeklyParams = new URLSearchParams(url.searchParams);
+			weeklyParams.set('startDate', range.startDate);
+			weeklyParams.set('endDate', range.endDate);
+			weeklyParams.set('size', '1'); // 존재 여부만 확인하므로 1개만 요청
+			
+			const result = await zzic.todo.getTodos(weeklyParams);
+			
+			// 날짜 정보를 함께 담아서 반환
+			const date = dayjs().tz(user.timeZone).add(index - 3, 'day');
+			const dayStart = date.startOf('day');
+			const dayEnd = dayStart.add(1, 'day');
+			
+			return {
+				date: date.toDate(),
+				day: date.format('ddd'), // 요일 (짧은 형태)
+				dayNumber: date.date(), // 날짜 숫자
+				startDate: dayStart.toISOString(), // 사용자 타임존 기준
+				endDate: dayEnd.toISOString(), // 사용자 타임존 기준
+				ariaLabel: date.format('YYYY년 M월 D일 dddd'),
+				...(result.error ? { empty: true } : result.data)
+			};
+		})
+	);
 
 	return {
-		selectedDateTodos: selectedDateResult.data,
-		weeklyTodos: weeklyResult.data,
+		selectedDateTodos: todosResult.data,
+		weeklyTodos: weeklyTodos,
 	};
 }

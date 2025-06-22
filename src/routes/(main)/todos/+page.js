@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { z } from 'zod';
+import { validateAndPrepareOptions, simpleTodoPageSchema } from '$lib/schemas/todo-query.js';
 
 /**
  * @typedef {Object} LoadParams
@@ -19,21 +19,11 @@ import { z } from 'zod';
  * @property {Object} tagPage - 태그 페이지 데이터
  * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} selectedDateTodos - 선택된 날짜의 todo 데이터 (심플뷰용)
  * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} weeklyTodos - 일주일간의 todo 데이터 (심플뷰용)
+ * @property {string} currentTab - 현재 탭
  */
 
-// URL 검색 파라미터 스키마 정의 (심플뷰용)
-const searchParamsSchema = z.object({
-	date: z
-		.string()
-		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/, 'YYYY-MM-DDTHH:mm:ss±HH:MM 형식이어야 합니다 (타임존 정보 필수)')
-		.refine((dateStr) => {
-			const date = new Date(dateStr);
-			return !isNaN(date.getTime());
-		}, '유효하지 않은 날짜입니다')
-		.transform((dateStr) => new Date(dateStr))
-		.optional(),
-	tab: z.enum(['full', 'simple']).optional().default('full')
-});
+// URL 검색 파라미터 스키마 정의 (심플뷰용) - 이제 공통 스키마 사용
+const searchParamsSchema = simpleTodoPageSchema;
 
 /**
  * Todo 페이지 데이터를 로드합니다 (두 버전 모두 지원)
@@ -51,10 +41,15 @@ export async function load({ parent, url }) {
 
 	const { date: selectedDate, tab } = parseResult.data;
 
-	// 기본 옵션 (전체뷰용)
-	const basicOptions = Object.fromEntries(url.searchParams);
-	delete basicOptions.date; // 날짜 필터는 심플뷰에서만 사용
-	delete basicOptions.tab;
+	// 기본 옵션 (전체뷰용) - 검증된 쿼리 파라미터 사용
+	const queryResult = validateAndPrepareOptions(url.searchParams);
+	const basicSearchParams = queryResult.success ? queryResult.searchParams : new URLSearchParams();
+	
+	// 날짜와 탭 필터는 심플뷰에서만 사용하므로 제거
+	if (basicSearchParams) {
+		basicSearchParams.delete('date');
+		basicSearchParams.delete('tab');
+	}
 
 	// 심플뷰용 옵션
 	const currentDate = selectedDate || new Date();
@@ -63,10 +58,10 @@ export async function load({ parent, url }) {
 	const endOfDay = new Date(currentDate);
 	endOfDay.setHours(23, 59, 59, 999);
 
-	const simpleOptions = {
+	const simpleParams = new URLSearchParams({
 		dueDate: currentDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
-		size: 20
-	};
+		size: '20'
+	});
 
 	// 일주일 범위 계산 (심플뷰 캐러셀용)
 	const weekStart = new Date(currentDate);
@@ -74,11 +69,11 @@ export async function load({ parent, url }) {
 	const weekEnd = new Date(currentDate);
 	weekEnd.setDate(currentDate.getDate() + 3);
 	
-	const weeklyOptions = {
+	const weeklyParams = new URLSearchParams({
 		dueDateStart: weekStart.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
 		dueDateEnd: weekEnd.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T23:59:59+09:00',
-		size: 100
-	};
+		size: '100'
+	});
 
 	const [
 		todosResult,
@@ -89,13 +84,13 @@ export async function load({ parent, url }) {
 		selectedDateTodosResult,
 		weeklyTodosResult
 	] = await Promise.all([
-		zzic.todo.getTodos(basicOptions),
+		zzic.todo.getTodos(basicSearchParams),
 		zzic.category.getCategories(),
 		zzic.todo.getTodoStatistics(),
 		zzic.priority.getPriorities(),
 		zzic.tag.getTags({ size: 100 }),
-		zzic.todo.getTodos(simpleOptions),
-		zzic.todo.getTodos(weeklyOptions)
+		zzic.todo.getTodos(simpleParams),
+		zzic.todo.getTodos(weeklyParams)
 	]);
 
 	if (todosResult.error) error(todosResult.error.message);

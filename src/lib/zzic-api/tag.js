@@ -11,19 +11,25 @@ export function createTagClient(apiUrl, fetchFn) {
 		/**
 		 * 태그 목록 조회
 		 * @param {Object} [options={}] - 조회 옵션
-		 * @param {number} [options.page=0] - 페이지 번호
+		 * @param {number[]} [options.categoryIds] - 카테고리 ID 목록 (중복 허용)
+		 * @param {number} [options.page=0] - 페이지 번호 (0부터 시작)
 		 * @param {number} [options.size=10] - 페이지 크기
-		 * @param {string} [options.direction='asc'] - 정렬 방향
+		 * @param {string} [options.direction='asc'] - 정렬 방향 (asc: 오름차순, desc: 내림차순)
 		 * @returns {Promise<Object>} 태그 목록 응답
 		 */
 		async getTags(options = {}) {
-			const { page = 0, size = 100, direction = 'asc' } = options;
+			const { categoryIds, page = 0, size = 100, direction = 'asc' } = options;
 			
 			const params = new URLSearchParams({
 				page: String(page),
 				size: String(size),
 				direction
 			});
+
+			// categoryIds 배열 파라미터 처리
+			if (categoryIds && Array.isArray(categoryIds)) {
+				categoryIds.forEach(id => params.append('categoryIds', String(id)));
+			}
 
 			try {
 				const response = await fetchFn(`${baseUrl}?${params}`, {

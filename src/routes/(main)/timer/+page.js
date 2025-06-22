@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { validateAndPrepareOptions } from '$lib/schemas/todo-query.js';
 
 /**
  * @typedef {Object} LoadParams
@@ -22,21 +23,25 @@ import { error } from '@sveltejs/kit';
 export async function load({ parent, url }) {
 	const { zzic } = await parent();
 
-	// URL 쿼리 파라미터를 옵션으로 변환
-	const options = Object.fromEntries(url.searchParams);
-	
-	// 완료된 투두 숨기기 (statusId: 2)
-	options.hideStatusIds = '2';
-    options.size = 200;
-	
+	// URL 쿼리 파라미터를 검증하고 옵션으로 변환
+	const result = validateAndPrepareOptions(url.searchParams, {
+		// 완료된 투두 숨기기 (statusId: 2)
+		hideStatusIds: [2],
+		size: 200
+	});
+
+	if (!result.success) {
+		error(400, { message: result.error.issues[0]?.message || '잘못된 파라미터입니다.' });
+	}
+
 	const [
 		todosResult,
 		categoriesResult,
 		tagResult
 	] = await Promise.all([
-		zzic.todo.getTodos(options),
+		zzic.todo.getTodos(result.searchParams),
 		zzic.category.getCategories(),
-		zzic.tag.getTags(options)
+		zzic.tag.getTags({ size: 200 })
 	]);
 
 	if (todosResult.error) {

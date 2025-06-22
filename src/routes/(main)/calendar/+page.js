@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { validateAndPrepareOptions } from '$lib/schemas/todo-query.js';
 
 /**
  * @typedef {Object} LoadParams
@@ -24,11 +25,17 @@ import { error } from '@sveltejs/kit';
 export async function load({ parent, url }) {
 	const { zzic } = await parent();
 
-	// URL 쿼리 파라미터를 객체로 변환
-	const options = Object.fromEntries(url.searchParams);
+	// URL 쿼리 파라미터를 검증하고 객체로 변환
+	const result = validateAndPrepareOptions(url.searchParams, {
+		size: 100 // 캘린더용으로 많은 데이터 가져오기
+	});
+
+	if (!result.success) {
+		error(400, { message: result.error.issues[0]?.message || '잘못된 파라미터입니다.' });
+	}
 
 	const [todosResult, categoriesResult, todoStatisticsResult, priorityResult, tagResult] = await Promise.all([
-		zzic.todo.getTodos({ ...options, size: 100 }), // 캘린더용으로 많은 데이터 가져오기
+		zzic.todo.getTodos(result.searchParams),
 		zzic.category.getCategories(),
 		zzic.todo.getTodoStatistics(),
 		zzic.priority.getPriorities(),
