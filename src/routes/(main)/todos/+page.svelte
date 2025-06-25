@@ -6,10 +6,12 @@
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
 	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
 	import X from '@lucide/svelte/icons/x';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import noHaveTodo from '$lib/assets/no-have-todo.png';
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 
 	/** @type {HTMLDialogElement} */
 	let dialog;
@@ -45,38 +47,49 @@
 	};
 </script>
 
-<!-- 메인 컨테이너 -->
-<main class="min-h-screen">
-	<!-- 상단 날짜 네비게이션 -->
-	<div class="p-4 bg-surface-500">
-		<div class="grid grid-cols-7 gap-2">
-			{#each $page.data.weeklyTodos as dateItem}
-			<form action={page.url.pathname}>
+<div class="flex justify-between items-center-safe h-24 font-semibold text-center preset-filled-surface-500">
+	<form action={page.url.pathname} >
+		<input type="hidden" name="startDate" value={page.data.weeklyTodos[0]?.startDate} />
+		<input type="hidden" name="endDate" value={page.data.weeklyTodos[0]?.endDate} />
+		<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
+		<button type="submit" class="btn-icon w-6 h-6">
+			<ChevronLeft class="w-6 h-6" />
+		</button>
+	</form>
+	<div class="flex space-x-4 items-center-safe">
+			{#each page.data.weeklyTodos as dateItem}
+			<form action={page.url.pathname} >
 				<input type="hidden" name="startDate" value={dateItem.startDate} />
 				<input type="hidden" name="endDate" value={dateItem.endDate} />
 				<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
 				<button
 					type="submit"
 					class={[
-					'btn relative w-full',
+					'btn relative h-16 w-16 flex flex-col',
 					dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
-					!dateItem.empty &&
-						'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500'
 				]}
 				>
-					<div class="flex flex-col items-center justify-center gap-1 p-2">
-						<div class="text-xs font-semibold">
-							{dateItem.day}
-						</div>
-						<div class="text-xs font-semibold">
-							{dateItem.dayNumber}
-						</div>
+					<div class="text-xs font-semibold">
+						{dateItem.day}
+					</div>
+					<div class="text-xs font-semibold">
+						{dateItem.dayNumber}
 					</div>
 				</button>
 			</form>
 			{/each}
-		</div>
-	</div>
+			</div>
+	<form action={page.url.pathname} >
+		<input type="hidden" name="startDate" value={page.data.weeklyTodos.at(-1)?.startDate} />
+		<input type="hidden" name="endDate" value={page.data.weeklyTodos.at(-1)?.endDate} />
+		<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
+		<button type="submit" class="btn-icon w-6 h-6">
+			<ChevronRight class="w-6 h-6" />
+		</button>
+	</form>
+</div>
+<!-- 메인 컨테이너 -->
+<main>
 
 	<!-- TODO 리스트 섹션 -->
 	<div class="space-y-4 p-4">
@@ -98,8 +111,8 @@
 
 		<!-- TODO 아이템들 -->
 		<div class="space-y-4">
-			{#if !$page.data?.selectedDateTodos?.empty}
-				{#each $page.data.selectedDateTodos.content as todo (todo.id)}
+			{#if !page.data?.selectedDateTodos?.empty}
+				{#each page.data.selectedDateTodos.content as todo (todo.id)}
 					{@const isCompleted = todo.statusId === 1}
 					<div
 						class={[

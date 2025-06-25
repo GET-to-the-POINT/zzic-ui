@@ -12,7 +12,13 @@ export async function load({ parent, url }) {
 	const { temporal, user, zzic } = await parent();
 	
 	const dateParam = url.searchParams.get('date');
-	
+	// date 파라미터가 있으면 검증 (잘못된 값이면 에러 발생)
+	const rawParams = Object.fromEntries(url.searchParams.entries());
+	const dateValidation = dateParamSchema.safeParse(rawParams);
+	if (!dateValidation.success) {
+		error(400, `잘못된 날짜 형식입니다: ${rawParams}. ${dateValidation.error.issues.map(issue => issue.message).join(', ')}`);
+	}
+
 	// date 파라미터가 없으면 이번 달 1일로 리디렉트
 	if (!dateParam) {
 		const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds);
@@ -25,11 +31,6 @@ export async function load({ parent, url }) {
 		redirect(303, `${url.pathname}?${urlSearchParams.toString()}`);
 	}
 
-	// date 파라미터가 있으면 검증 (잘못된 값이면 에러 발생)
-	const dateValidation = dateParamSchema.safeParse(dateParam);
-	if (!dateValidation.success) {
-		error(400, `잘못된 날짜 형식입니다: ${dateParam}. ${dateValidation.error.issues.map(issue => issue.message).join(', ')}`);
-	}
 
 	// 연도와 월 파싱 (한 번만)
 	const [year, month] = dateValidation.data.split('-').map(Number);
@@ -53,14 +54,14 @@ export async function load({ parent, url }) {
 	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds);
 	const todayPlainDate = today.toZonedDateTimeISO(user.timeZone).toPlainDate();
 
-	// 첫 주의 시작 날짜 계산 (월요일부터 시작)
+	// 첫 주의 시작 날짜 계산 (일요일부터 시작)
 	const firstWeekStart = firstDayOfMonth.subtract({ 
-		days: (firstDayOfMonth.dayOfWeek - 1) % 7 
+		days: firstDayOfMonth.dayOfWeek % 7 
 	});
 
-	// 마지막 주의 끝 날짜 계산 (일요일까지)
+	// 마지막 주의 끝 날짜 계산 (토요일까지)
 	const lastWeekEnd = lastDayOfMonth.add({ 
-		days: (7 - lastDayOfMonth.dayOfWeek) % 7 
+		days: (6 - (lastDayOfMonth.dayOfWeek % 7)) % 7 
 	});
 
 	const days = [];
@@ -98,6 +99,7 @@ export async function load({ parent, url }) {
 			const monthlyParams = new URLSearchParams(url.searchParams);
 			monthlyParams.set('startDate', dateInfo.date);
 			monthlyParams.set('endDate', dateInfo.date);
+			monthlyParams.set('hideStatusIds', '1'); // 완료된 할 일은 제외
 			monthlyParams.set('size', '1'); // 존재 여부만 확인하므로 1개만 요청
 
 			const result = await zzic.todo.getTodos(monthlyParams);

@@ -60,7 +60,7 @@ const testPageSchema = z.object({
 
 
 export async function load({ parent, url }) {
-	const { zzic, temporal } = await parent();
+	const { zzic, user, temporal } = await parent();
 	
 	const rawParams = Object.fromEntries(url.searchParams.entries());
 	const parsedParams = testPageSchema.safeParse(rawParams);
@@ -73,7 +73,10 @@ export async function load({ parent, url }) {
 		error(400, `잘못된 URL 파라미터입니다. ${errorDetails}`);
 	}
 
-	const today = Temporal.PlainDate.from(temporal.plainDate);
+	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds)
+		.toZonedDateTimeISO(user.timeZone)
+		.toPlainDate();
+
 	if (!url.searchParams.has('startDate') || !url.searchParams.has('endDate') || !url.searchParams.has('hideStatusIds')) {
 		if (!url.searchParams.has('startDate')) {
 			url.searchParams.set('startDate', today.toString()); // 오늘 날짜로 기본 설정
@@ -96,20 +99,25 @@ export async function load({ parent, url }) {
 	const todosResult = await zzic.todo.getTodos(url.searchParams);
 	if (todosResult.error) error(todosResult.error.message);
 
+	// 3일 날짜 계산 (선택된 날짜 앞뒤로 1일씩 총 3일)
 	const weeklyDates = [];
 	
-	for (let i = -3; i <= 3; i++) {
-		const date = today.add({ days: i });
-		const dayOfWeek = date.dayOfWeek; // 1=월요일, 7=일요일
-		const dayNames = ['', '월', '화', '수', '목', '금', '토', '일'];
-		const dayName = dayNames[dayOfWeek];
+	// 선택된 날짜 기준으로 앞뒤 1일씩 총 3일 생성
+	for (let i = -1; i <= 1; i++) {
+		const day = selectedDate.add({ days: i });
+		const dayOfWeek = day.dayOfWeek; // 1=월요일, 7=일요일
+		const dayNames = ['일', '월', '화', '수', '목', '금', '토', '일'];
+		const dayName = dayNames[dayOfWeek % 7];
 
 		weeklyDates.push({
-			day: dayName,
-			dayNumber: date.day,
-			startDate: date.toString(),
-			endDate: date.toString(), // 해당 날짜 하루만
-			selected: date.equals(selectedDate),
+			date: day.toString(), // YYYY-MM-DD 형식 (캘린더와 동일)
+			day: day.day, // 일 (1-31)
+			dayName: dayName, // 요일명
+			dayOfWeek: dayOfWeek, // 요일 번호 (1-7)
+			isToday: day.equals(today), // 오늘인지 여부
+			selected: day.equals(selectedDate), // 선택된 날짜인지 여부
+			startDate: day.toString(), // 기존 호환성을 위해 유지
+			endDate: day.toString(), // 기존 호환성을 위해 유지
 		});
 	}
 
@@ -130,7 +138,13 @@ export async function load({ parent, url }) {
 	);
 
 	return {
+		meta: {
+			title: '할 일',
+			description: '할 일 관리 페이지입니다.'
+		},
 		selectedDateTodos: todosResult.data,
-		weeklyTodos: weeklyTodos
+		weeklyTodos: weeklyTodos,
+		weeklyDates: weeklyDates, // 주간 날짜 정보 추가
+		selectedDate: selectedDate.toString(), // 선택된 날짜 정보 추가
 	};
 }
