@@ -67,13 +67,15 @@
 					class={[
 					'btn relative h-16 w-16 flex flex-col',
 					dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+					dateItem.empty ? '' : "before:content-[''] before:absolute before:top-1 before:right-1 before:w-2 before:h-2 before:bg-secondary-500 before:rounded-full",
+
 				]}
 				>
 					<div class="text-xs font-semibold">
-						{dateItem.day}
+						{dateItem.dayName}
 					</div>
 					<div class="text-xs font-semibold">
-						{dateItem.dayNumber}
+						{dateItem.day}
 					</div>
 				</button>
 			</form>
