@@ -267,7 +267,7 @@
 				<button
 					type="button"
 					class={[
-						'w-full p-4 text-left border-b border-surface-200-800 hover:bg-surface-200-800 transition-colors',
+						'w-full p-4 text-left border-b border-surface-200-800 transition-colors',
 						currentMemoId === memo.id ? 'bg-primary-100-900 border-primary-300-700' : ''
 					]}
 					onclick={() => selectMemo(memo.id)}

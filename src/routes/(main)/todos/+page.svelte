@@ -1,267 +1,267 @@
 <script>
-	import TodoDialog, { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
-	import TodoItem from '$lib/components/ui/todo/TodoItem.svelte';
-	import TodoFilter from '$lib/components/ui/todo/TodoFilter.svelte';
-	import TodoStats from '$lib/components/ui/todo/TodoStats.svelte';
-	import Plus from '@lucide/svelte/icons/plus';
 	import Clock from '@lucide/svelte/icons/clock';
+	import Plus from '@lucide/svelte/icons/plus';
 	import Check from '@lucide/svelte/icons/check';
 	import Square from '@lucide/svelte/icons/square';
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
 	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
+	import X from '@lucide/svelte/icons/x';
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { goto } from '$app/navigation';
 	import noHaveTodo from '$lib/assets/no-have-todo.png';
 
-	const { data } = $props();
-	const { todoPage, todoStatisticsResponse, selectedDateTodos, weeklyTodos, currentTab } =
-		$derived(data);
+	/** @type {HTMLDialogElement} */
+	let dialog;
 
-	// 탭 상태 관리
-	let activeTab = $state(currentTab || 'full');
+	const dialogShowModal = () => {
+		dialog.showModal();
+	};
 
-	// 탭 변경 함수
-	function switchTab(tab) {
-		activeTab = tab;
-		const url = new URL($page.url);
-		url.searchParams.set('tab', tab);
-		goto(url.toString(), { replaceState: true });
-	}
+	const dialogClose = () => {
+		dialog.close();
+	};
 
-	// 심플뷰용 날짜 관련 로직 (todos-test에서 가져옴)
-	function calculateTodoCountsByDate(todos) {
-		const todosByDate = new Map();
-		if (todos?.length) {
-			for (const todo of todos) {
-				if (todo.dueDate) {
-					const count = todosByDate.get(todo.dueDate) || 0;
-					todosByDate.set(todo.dueDate, count + 1);
-				}
+	/** @type {HTMLDialogElement} */
+	let createTodo;
+
+	const createTodoShowModal = () => {
+		createTodo.showModal();
+	};
+
+	const createTodoClose = () => {
+		createTodo.close();
+	};
+
+	/**
+	 * Form enhance 핸들러
+	 */
+	const handleEnhance = () => {
+		return async ({ result }) => {
+			if (result.type === 'redirect') {
+				await invalidateAll();
 			}
-		}
-		return todosByDate;
-	}
-
-	// 날짜 네비게이션 데이터
-	const today = new Date();
-	const dateNavigation = $derived.by(() => {
-		const selectedDateParam = $page.url.searchParams.get('date');
-		const selectedDate = selectedDateParam ? new Date(selectedDateParam) : new Date();
-
-		const todoCountsByDate = calculateTodoCountsByDate(weeklyTodos?.content);
-
-		return Array.from({ length: 7 }, (_, i) => {
-			const date = new Date(today);
-			date.setDate(today.getDate() + (i - 3));
-			const isoDate =
-				date.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00';
-
-			const todoCount = todoCountsByDate.get(isoDate) || 0;
-
-			return {
-				date,
-				day: date.toLocaleDateString('ko-KR', { weekday: 'short' }),
-				dayNumber: date.getDate(),
-				isoDate,
-				href: `?date=${encodeURIComponent(isoDate)}&tab=simple`,
-				ariaLabel: date.toLocaleDateString('ko-KR', {
-					weekday: 'long',
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric'
-				}),
-				selected: date.toDateString() === selectedDate.toDateString(),
-				empty: todoCount === 0
-			};
-		});
-	});
-
-	function formatDisplayDate(dateStr) {
-		try {
-			const today = new Date();
-			const dateToCompare = dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00+09:00';
-			const date = new Date(dateToCompare);
-			const diffTime = date.getTime() - today.getTime();
-			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-			if (Math.abs(diffDays) <= 7) {
-				const rtf = new Intl.RelativeTimeFormat('ko-KR', { numeric: 'auto' });
-				return rtf.format(diffDays, 'day');
-			}
-
-			return new Intl.DateTimeFormat('ko-KR', {
-				month: 'short',
-				day: 'numeric'
-			}).format(date);
-		} catch {
-			return dateStr;
-		}
-	}
-
-	function formatDateTime(dateStr) {
-		try {
-			const dateToCompare = dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00+09:00';
-			const date = new Date(dateToCompare);
-			return new Intl.DateTimeFormat('ko-KR', {
-				hour: 'numeric',
-				minute: '2-digit',
-				hour12: true
-			}).format(date);
-		} catch {
-			return '';
-		}
-	}
+		};
+	};
 </script>
 
-<main class="p-4 space-y-4">
-	<div class="flex items-center justify-between">
-		<div>
-			<h2 class="text-2xl">할 일 관리</h2>
-			<p class="text-sm">할일을 체계적으로 관리하고 반복 일정을 설정하세요</p>
+<!-- 메인 컨테이너 -->
+<main class="min-h-screen">
+	<!-- 상단 날짜 네비게이션 -->
+	<div class="p-4 bg-surface-500">
+		<div class="grid grid-cols-7 gap-2">
+			{#each $page.data.weeklyTodos as dateItem}
+			<form action={page.url.pathname}>
+				<input type="hidden" name="startDate" value={dateItem.startDate} />
+				<input type="hidden" name="endDate" value={dateItem.endDate} />
+				<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
+				<button
+					type="submit"
+					class={[
+					'btn relative w-full',
+					dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+					!dateItem.empty &&
+						'after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:h-2 after:bg-secondary-500'
+				]}
+				>
+					<div class="flex flex-col items-center justify-center gap-1 p-2">
+						<div class="text-xs font-semibold">
+							{dateItem.day}
+						</div>
+						<div class="text-xs font-semibold">
+							{dateItem.dayNumber}
+						</div>
+					</div>
+				</button>
+			</form>
+			{/each}
 		</div>
-		<button class="btn preset-filled-primary-500" onclick={openTodoDialog} type="button">
-			<Plus class="w-4 h-4 mr-2" />
-			새 할 일
-		</button>
 	</div>
 
-	<TodoDialog />
-
-	<!-- 탭 네비게이션 -->
-	<div class="border-b border-surface-300-600">
-		<nav class="flex space-x-8">
-			<button
-				class="btn {activeTab === 'full'
-					? 'border-b-2 border-primary-500 text-primary-600-300'
-					: 'text-surface-600-300 hover:text-surface-900-100'} px-0 py-3"
-				onclick={() => switchTab('full')}
-			>
-				전체 관리
+	<!-- TODO 리스트 섹션 -->
+	<div class="space-y-4 p-4">
+		<!-- 헤더 -->
+		<div class="flex items-center justify-between">
+			<h1 class="text-2xl font-bold">TODO LIST</h1>
+			<button type="button" class="btn-icon" onclick={dialogShowModal}>
+				<EllipsisVertical size={16} />
 			</button>
-			<button
-				class="btn {activeTab === 'simple'
-					? 'border-b-2 border-primary-500 text-primary-600-300'
-					: 'text-surface-600-300 hover:text-surface-900-100'} px-0 py-3"
-				onclick={() => switchTab('simple')}
-			>
-				심플 뷰
-			</button>
-		</nav>
-	</div>
-
-	<!-- 전체 관리 탭 -->
-	{#if activeTab === 'full'}
-		<div class="space-y-4">
-			<TodoStats {todoStatisticsResponse} />
-			<TodoFilter />
-
-			<div class="space-y-2">
-				{#each todoPage.content as todoResponse (todoResponse.id)}
-					<TodoItem {todoResponse} />
-				{/each}
-			</div>
 		</div>
-	{/if}
 
-	<!-- 심플 뷰 탭 -->
-	{#if activeTab === 'simple'}
+		<!-- 새 할일 추가 버튼 (nojs 환경에서만 노출) -->
+		<noscript>
+			<button type="button" class="btn preset-filled-secondary-500 w-full">
+				<Plus size={16} />
+				새 할일 추가
+			</button>
+		</noscript>
+
+		<!-- TODO 아이템들 -->
 		<div class="space-y-4">
-			<!-- 날짜 네비게이션 -->
-			<div class="preset-filled-surface-100-800 rounded-lg p-4">
-				<div class="grid grid-cols-7 gap-1">
-					{#each dateNavigation as dateItem}
-						<a
-							href={dateItem.href}
-							class="btn w-full h-16 p-2 text-center relative {dateItem.selected
-								? 'preset-filled-primary-500'
-								: 'preset-tonal-surface'} {dateItem.empty ? 'opacity-50' : ''}"
-							aria-label={dateItem.ariaLabel}
-						>
-							<div class="text-xs text-surface-600-300">{dateItem.day}</div>
-							<div class="text-lg font-medium">{dateItem.dayNumber}</div>
-							{#if !dateItem.empty}
-								<div class="absolute -top-1 -right-1 w-2 h-2 bg-primary-500 rounded-full"></div>
-							{/if}
-						</a>
-					{/each}
-				</div>
-			</div>
+			{#if !$page.data?.selectedDateTodos?.empty}
+				{#each $page.data.selectedDateTodos.content as todo (todo.id)}
+					{@const isCompleted = todo.statusId === 1}
+					<div
+						class={[
+							'card p-4',
+							isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500'
+						]}
+					>
+						<div class="flex items-start gap-3">
+							<!-- 체크박스 -->
+							<form action={`/todos/${todo.id}?/update`} method="POST" use:enhance={handleEnhance}>
+								<button
+									type="submit"
+									name="statusId"
+									value={todo.statusId === 1 ? 0 : 1}
+									class="mt-1 btn-icon {isCompleted
+										? 'preset-filled-primary-500'
+										: 'preset-filled-surface-500'}"
+								>
+									{#if todo.statusId === 1}
+										<!-- 완료 상태 -->
+										<Check size={16} />
+									{:else if todo.statusId === 2}
+										<!-- 기간초과 상태 -->
+										<AlertCircle size={16} />
+									{:else}
+										<!-- 미완료 상태 (진행중) -->
+										<Square size={16} />
+									{/if}
+								</button>
+							</form>
 
-			<!-- 선택된 날짜의 할 일 목록 -->
-			<div class="space-y-3">
-				{#if selectedDateTodos?.content?.length > 0}
-					{#each selectedDateTodos.content as todo (todo.id)}
-						<div class="preset-filled-surface-100-800 rounded-lg p-4">
-							<div class="flex items-center justify-between mb-2">
-								<div class="flex items-center space-x-3">
-									<form
-										method="post"
-										action="?/toggleComplete"
-										use:enhance={() => {
-											return async ({ update }) => {
-												await update();
-												invalidateAll();
-											};
-										}}
-									>
-										<input type="hidden" name="todoId" value={todo.id} />
-										<button type="submit" class="btn p-0">
-											{#if todo.status?.name === 'COMPLETED'}
-												<Check class="w-5 h-5 text-success-500" />
-											{:else}
-												<Square class="w-5 h-5 text-surface-500" />
-											{/if}
-										</button>
-									</form>
-									<h3
-										class="font-medium {todo.status?.name === 'COMPLETED'
-											? 'line-through text-surface-500'
-											: ''}"
-									>
+							<!-- 컨텐츠 -->
+							<div class="flex-1">
+								<!-- 제목과 설명 -->
+								<div class="mb-4">
+									<h3 class={['text-base font-semibold', isCompleted && 'line-through']}>
 										{todo.title}
 									</h3>
-								</div>
-								<button class="btn p-1">
-									<EllipsisVertical class="w-4 h-4" />
-								</button>
-							</div>
-
-							{#if todo.description}
-								<p class="text-sm text-surface-600-300 mb-3">{todo.description}</p>
-							{/if}
-
-							<div class="flex items-center justify-between text-xs">
-								<div class="flex items-center space-x-4">
-									{#if todo.priority}
-										<span class="preset-tonal-{todo.priority.colorCode} px-2 py-1 rounded text-xs">
-											{todo.priority.name}
-										</span>
-									{/if}
-									{#if todo.category}
-										<span class="preset-outlined-surface px-2 py-1 rounded text-xs">
-											{todo.category.name}
-										</span>
-									{/if}
+									<p class={['text-sm font-light mt-2', isCompleted && 'line-through']}>
+										{todo.description}
+									</p>
 								</div>
 
-								{#if todo.dueTime}
-									<div class="flex items-center space-x-1 text-surface-600-300">
-										<Clock class="w-3 h-3" />
-										<span>{formatDateTime(todo.dueTime)}</span>
-									</div>
-								{/if}
+								<!-- 태그들과 시간 -->
+								<div class="flex flex-wrap items-center gap-1.5">
+									<!-- 카테고리 -->
+									<span class="badge text-xs preset-outlined-primary-500">
+										{todo.categoryName || '미분류'}
+									</span>
+
+									<!-- 시간 -->
+									{#if todo.dueDate}
+										<div class="badge text-xs flex items-center gap-1">
+											<Clock class="w-3 h-3" />
+											{todo.dueDate} {todo.dueTime ? `, ${todo.dueTime}` : ''}
+										</div>
+									{/if}
+
+									<!-- 태그들 -->
+									{#if todo.tags}
+										{#each todo.tags as tag}
+											<span class="badge text-xs before:content-['#'] before:opacity-70">
+												{tag}
+											</span>
+										{/each}
+									{/if}
+								</div>
 							</div>
 						</div>
-					{/each}
-				{:else}
-					<div class="text-center py-12">
-						<img src={noHaveTodo} alt="할 일 없음" class="mx-auto w-32 h-32 mb-4 opacity-50" />
-						<p class="text-surface-600-300">선택한 날짜에 할 일이 없습니다</p>
 					</div>
-				{/if}
-			</div>
+				{/each}
+			{:else}
+				<img src={noHaveTodo} alt="할 일이 없습니다" class="mx-auto w-1/2" />
+			{/if}
 		</div>
-	{/if}
+	</div>
 </main>
+
+<dialog bind:this={dialog} class="w-sm bg-transparent backdrop:scale-110 m-auto backdrop:bg-black/80 backdrop:blur">
+	<form method="dialog" class="mb-4 p-4">
+		<button type="button" class="text-surface-500 btn-icon absolute top-2 right-2" onclick={dialogClose}>
+			<X size={32} />
+		</button>
+	</form>
+	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
+		<button type="button" class="justify-start btn hover:bg-surface-800-200" onclick={() => {dialogClose(); createTodoShowModal()}}>
+			<Plus size={16} />
+			새 할일 추가
+		</button>
+		<form action={`${page.url.pathname}`} method="GET" onsubmit={() => dialogClose()}>
+			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
+			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
+			{#if page.url.searchParams.get('hideStatusIds') === '1'}
+			<button
+				type="submit"
+				name="hideStatusIds"
+				value=""
+				class="justify-start btn hover:bg-surface-800-200"
+			>
+				<Check size={16} />
+				완료된 할일 표시하기
+			</button>
+			{:else}
+			<button
+				type="submit"
+				name="hideStatusIds"
+				value="1"
+				class="justify-start btn hover:bg-surface-800-200"
+			>
+				<Check size={16} />
+				완료된 할일 숨기기
+			</button>
+			{/if}
+		</form>
+	</ul>
+</dialog>
+
+<dialog bind:this={createTodo} class="w-sm bg-transparent backdrop:scale-110 m-auto backdrop:bg-black/80 backdrop:blur">
+	<form method="dialog" class="mb-4 p-4">
+		<button type="button" class="text-surface-500 btn-icon absolute top-2 right-2" onclick={createTodoClose}>
+			<X size={32} />
+		</button>
+	</form>
+	<form method="POST" action="/todos" use:enhance class="p-4 preset-filled-surface-500 w-full flex flex-col">
+		<input
+			type="text"
+			name="title"
+			placeholder="할일 제목"
+			class="input w-full mb-2"
+			required
+			autofocus
+		/>
+		<input
+			type="text"
+			name="description"
+			placeholder="할일 설명 (선택)"
+			class="input w-full mb-2"
+		/>
+		<div class="flex gap-2 mb-2">
+			<input
+				type="date"
+				name="dueDate"
+				placeholder="마감 날짜"
+				class="input flex-1"
+			/>
+			<input
+				type="time"
+				name="dueTime"
+				placeholder="마감 시간"
+				class="input flex-1"
+			/>
+		</div>
+		<button type="submit" class="btn preset-filled-primary-500 w-full">
+			<Plus size={16} />
+			새 할일 추가
+		</button>
+	</form>
+</dialog>
+
+
+<style>
+dialog::backdrop {
+	backdrop-filter: saturate(1.5);
+}
+</style>

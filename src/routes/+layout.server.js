@@ -1,10 +1,6 @@
-import { getSettingsFromCookies } from '$lib/utils/settings.js';
-
-export async function load({ cookies }) {
-	const settings = getSettingsFromCookies(cookies);
-
+export async function load({ cookies, locals }) {
 	return {
-		cookies: cookies.getAll(),
-		settings
+		temporal: locals.temporal,
+		cookies: cookies.getAll()
 	};
 }

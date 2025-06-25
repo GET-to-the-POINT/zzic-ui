@@ -1,55 +1,122 @@
-import { error } from '@sveltejs/kit';
-import { validateAndPrepareOptions } from '$lib/schemas/todo-query.js';
+import { error, redirect } from '@sveltejs/kit';
+import { Temporal } from '@js-temporal/polyfill';
+import { z } from 'zod';
 
-/**
- * @typedef {Object} LoadParams
- * @property {Function} parent - 부모 레이아웃 데이터 로더
- * @property {Object} url - URL 객체
- * @property {URLSearchParams} url.searchParams - URL 검색 파라미터
- */
+// 날짜 파라미터 검증 스키마
+const dateParamSchema = z.string().regex(/^\d{4}-\d{2}$/, '올바른 날짜 형식이 아닙니다 (YYYY-MM)').refine((value) => {
+	const [year, month] = value.split('-').map(Number);
+	return year >= 1900 && year <= 2100 && month >= 1 && month <= 12;
+}, '유효하지 않은 연도 또는 월입니다').optional();
 
-/**
- * @typedef {Object} PageData
- * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} todoPage - todo 페이지 데이터
- * @property {import('$lib/zzic-api/category.js').PageCategoryResponse} categoryPage - 카테고리 페이지 데이터
- * @property {import('$lib/zzic-api/todo.js').TodoStatisticsResponse} todoStatisticsResponse - 할 일 통계 데이터
- * @property {Object} priorityResponse - 우선순위 데이터
- * @property {Object} tagPage - 태그 페이지 데이터
- */
-
-/**
- * 캘린더 페이지 데이터를 로드합니다
- * @param {LoadParams} params - 로드 파라미터
- * @returns {Promise<PageData>} 캘린더 페이지 데이터
- */
 export async function load({ parent, url }) {
-	const { zzic } = await parent();
-
-	// URL 쿼리 파라미터를 검증하고 객체로 변환
-	const result = validateAndPrepareOptions(url.searchParams, {
-		size: 100 // 캘린더용으로 많은 데이터 가져오기
-	});
-
-	if (!result.success) {
-		error(400, { message: result.error.issues[0]?.message || '잘못된 파라미터입니다.' });
+	const { temporal, user, zzic } = await parent();
+	
+	const dateParam = url.searchParams.get('date');
+	
+	// date 파라미터가 없으면 이번 달 1일로 리디렉트
+	if (!dateParam) {
+		const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds);
+		const zonedToday = today.toZonedDateTimeISO(user.timeZone);
+		const firstDayOfMonth = zonedToday.with({ day: 1 }); // 이번 달 1일
+		
+		const yearMonth = `${firstDayOfMonth.year}-${String(firstDayOfMonth.month).padStart(2, '0')}`;
+		const urlSearchParams = new URLSearchParams();
+		urlSearchParams.set('date', yearMonth);
+		redirect(303, `${url.pathname}?${urlSearchParams.toString()}`);
 	}
 
-	const [todosResult, categoriesResult, todoStatisticsResult, priorityResult, tagResult] =
-		await Promise.all([
-			zzic.todo.getTodos(result.searchParams),
-			zzic.category.getCategories(),
-			zzic.todo.getTodoStatistics(),
-			zzic.priority.getPriorities(),
-			zzic.tag.getTags({ size: 100 })
-		]);
+	// date 파라미터가 있으면 검증 (잘못된 값이면 에러 발생)
+	const dateValidation = dateParamSchema.safeParse(dateParam);
+	if (!dateValidation.success) {
+		error(400, `잘못된 날짜 형식입니다: ${dateParam}. ${dateValidation.error.issues.map(issue => issue.message).join(', ')}`);
+	}
 
-	if (todosResult.error) error(todosResult.error.message);
+	// 연도와 월 파싱 (한 번만)
+	const [year, month] = dateValidation.data.split('-').map(Number);
+
+	const currentMonth = () => {
+		const plainDate = Temporal.PlainDate.from({ year, month, day: 1 });
+		const plainDateTime = plainDate.toPlainDateTime('00:00:00');
+		const epochMs = plainDateTime.toZonedDateTime('UTC').epochMilliseconds;
+		
+		return new Intl.DateTimeFormat('ko-KR', {
+			year: 'numeric',
+			month: 'long',
+		}).format(epochMs);
+	}
+
+	// 현재 월의 모든 날짜 계산 (첫 주와 마지막 주 포함)
+	const firstDayOfMonth = Temporal.PlainDate.from({ year, month, day: 1 });
+	const lastDayOfMonth = firstDayOfMonth.add({ months: 1 }).subtract({ days: 1 });
+	
+	// 오늘 날짜 생성 (사용자 시간대 기준)
+	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds);
+	const todayPlainDate = today.toZonedDateTimeISO(user.timeZone).toPlainDate();
+
+	// 첫 주의 시작 날짜 계산 (월요일부터 시작)
+	const firstWeekStart = firstDayOfMonth.subtract({ 
+		days: (firstDayOfMonth.dayOfWeek - 1) % 7 
+	});
+
+	// 마지막 주의 끝 날짜 계산 (일요일까지)
+	const lastWeekEnd = lastDayOfMonth.add({ 
+		days: (7 - lastDayOfMonth.dayOfWeek) % 7 
+	});
+
+	const days = [];
+	for (let day = firstWeekStart; Temporal.PlainDate.compare(day, lastWeekEnd) <= 0; day = day.add({ days: 1 })) {
+		const isCurrentMonth = day.month === month && day.year === year;
+		
+		days.push({
+			date: day.toString(), // YYYY-MM-DD 형식
+			day: day.day, // 일 (1-31)
+			isToday: day.equals(todayPlainDate), // 오늘인지 여부
+			isCurrentMonth: isCurrentMonth, // 현재 보고 있는 달인지 여부
+		});
+	}
+
+	// 이전/다음 달 날짜 계산
+	const navigation = () => {
+		const currentDate = Temporal.PlainDate.from({ year, month, day: 1 });
+
+		// 이전 달
+		const prevMonth = currentDate.subtract({ months: 1 });
+		const prevMonthParam = `${prevMonth.year}-${String(prevMonth.month).padStart(2, '0')}`;
+
+		// 다음 달
+		const nextMonth = currentDate.add({ months: 1 });
+		const nextMonthParam = `${nextMonth.year}-${String(nextMonth.month).padStart(2, '0')}`;
+		
+		return {
+			prevMonth: prevMonthParam,
+			nextMonth: nextMonthParam,
+		};
+	}
+
+	const monthlyTodos = await Promise.all(
+		days.map(async (dateInfo) => {
+			const monthlyParams = new URLSearchParams(url.searchParams);
+			monthlyParams.set('startDate', dateInfo.date);
+			monthlyParams.set('endDate', dateInfo.date);
+			monthlyParams.set('size', '1'); // 존재 여부만 확인하므로 1개만 요청
+
+			const result = await zzic.todo.getTodos(monthlyParams);
+
+			return {
+				...dateInfo,
+				...result.data
+			};
+		})
+	);
 
 	return {
-		todoPage: todosResult.data,
-		categoryPage: categoriesResult.data,
-		todoStatisticsResponse: todoStatisticsResult.data,
-		priorityResponse: priorityResult.data,
-		tagPage: tagResult.data
+		meta: {
+			title: '캘린더',
+			description: '할 일 캘린더 페이지입니다.'
+		},
+		currentMonth: currentMonth(),
+		weekDays: ['일', '월', '화', '수', '목', '금', '토'],
+		monthlyTodos,
+		navigation: navigation(),
 	};
 }

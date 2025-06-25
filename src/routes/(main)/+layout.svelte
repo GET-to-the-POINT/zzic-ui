@@ -1,7 +1,9 @@
 <script>
+	import Header from '$lib/components/ui/common/Header.svelte';
 	import Sidebar from '$lib/components/ui/common/Sidebar.svelte';
 	const { children } = $props();
 </script>
 
-<Sidebar />
+<!-- <Sidebar /> -->
+<Header />
 {@render children()}

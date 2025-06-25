@@ -12,12 +12,10 @@
 	import Calendar from '@lucide/svelte/icons/calendar';
 	import Settings from '@lucide/svelte/icons/settings';
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-
-	// 투두 리스트 데이터
-	let { data } = $props();
+	import { page } from '$app/stores';
 
 	/** @type {import('$lib/zzic-api/todo.js').TodoResponse[]} */
-	let todos = $derived(data.todoPage.content);
+	let todos = $derived($page.data.todoPage.content);
 	let categories = $derived(data.categoryPage.content);
 	let tags = $derived(data.tagPage.content);
 

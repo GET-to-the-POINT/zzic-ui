@@ -3,7 +3,17 @@ import { createZzicServerClient } from '$lib/zzic-api/zzicServer.js';
 import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 import { redirect } from '@sveltejs/kit';
 import { getUserFromCookies } from '$lib/jwt';
+import { Temporal } from '@js-temporal/polyfill';
 
+/**
+ * 인증 가드 훅 - 로그인이 필요한 페이지 접근 제어
+ * @type {import('@sveltejs/kit').Handle}
+ */
+const attachServerTime = async ({ event, resolve }) => {
+    const instant = Temporal.Now.instant();
+    event.locals.serverInstant  = instant;
+    return resolve(event);
+};
 /**
  * 인증 가드 훅 - 로그인이 필요한 페이지 접근 제어
  * @type {import('@sveltejs/kit').Handle}
@@ -18,6 +28,22 @@ const handleAuth = async ({ event, resolve }) => {
 		event.locals.user = getUserFromCookies(event.cookies);
 	} else if (accessToken && refreshToken) {
 		event.locals.user = getUserFromCookies(event.cookies);
+	}
+
+	if (event.locals.user && event.locals.serverInstant) {
+		const userTimeZone = event.locals.user.timeZone || 'Asia/Seoul'; // 기본 시간대 설정
+		const userZonedDateTime = event.locals.serverInstant.toZonedDateTimeISO(userTimeZone);
+		
+		event.locals.temporal = {
+			epochMilliseconds: event.locals.serverInstant.epochMilliseconds,
+			utcDateTime: event.locals.serverInstant.toString(),
+			plainDateTime: userZonedDateTime.toPlainDateTime().toString(),
+			plainDate: userZonedDateTime.toPlainDate().toString(),
+			plainTime: userZonedDateTime.toPlainTime().toString(),
+			year: userZonedDateTime.year,
+			month: userZonedDateTime.month,
+			day: userZonedDateTime.day,
+		};
 	}
 
 	return resolve(event);
@@ -61,7 +87,7 @@ const zzic = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle = sequence(handleAuth, authGuard, zzic);
+export const handle = sequence(attachServerTime, handleAuth, authGuard, zzic);
 
 /**
  * 페치 핸들러 - 307 리다이렉트 시 토큰 헤더를 유지하며 재요청, 응답 쿠키를 클라이언트에 전달

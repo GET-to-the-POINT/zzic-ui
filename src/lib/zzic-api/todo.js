@@ -2,6 +2,75 @@
  * Todo 도메인 타입 정의
  */
 
+import { Temporal } from '@js-temporal/polyfill';
+
+/**
+ * LocalDate, LocalTime을 Temporal로 변환하는 유틸리티 함수들
+ */
+
+/**
+ * 서버에서 받은 LocalDate 문자열(YYYY-MM-DD)을 Temporal.PlainDate로 변환
+ * @param {string} localDateStr - YYYY-MM-DD 형식의 날짜 문자열
+ * @returns {any} Temporal.PlainDate
+ */
+export function parseLocalDate(localDateStr) {
+	return Temporal.PlainDate.from(localDateStr);
+}
+
+/**
+ * 서버에서 받은 LocalTime 문자열(HH:mm 또는 HH:mm:ss)을 Temporal.PlainTime으로 변환
+ * @param {string} localTimeStr - HH:mm 또는 HH:mm:ss 형식의 시간 문자열
+ * @returns {any} Temporal.PlainTime
+ */
+export function parseLocalTime(localTimeStr) {
+	return Temporal.PlainTime.from(localTimeStr);
+}
+
+/**
+ * LocalDate와 LocalTime을 결합하여 Temporal.PlainDateTime 생성
+ * @param {string} localDateStr - YYYY-MM-DD 형식의 날짜 문자열
+ * @param {string} [localTimeStr] - HH:mm 형식의 시간 문자열 (선택적)
+ * @returns {any} Temporal.PlainDateTime
+ */
+export function combineLocalDateTime(localDateStr, localTimeStr) {
+	const date = parseLocalDate(localDateStr);
+	if (localTimeStr) {
+		const time = parseLocalTime(localTimeStr);
+		return date.toPlainDateTime(time);
+	}
+	return date.toPlainDateTime();
+}
+
+/**
+ * Temporal.PlainDate를 서버 형식(YYYY-MM-DD)으로 변환
+ * @param {any} plainDate - Temporal.PlainDate
+ * @returns {string}
+ */
+export function formatLocalDate(plainDate) {
+	return plainDate.toString();
+}
+
+/**
+ * Temporal.PlainTime을 서버 형식(HH:mm)으로 변환
+ * @param {any} plainTime - Temporal.PlainTime
+ * @returns {string}
+ */
+export function formatLocalTime(plainTime) {
+	return plainTime.toString({ smallestUnit: 'minute' });
+}
+
+/**
+ * Temporal.PlainDateTime을 LocalDate, LocalTime으로 분리
+ * @param {any} plainDateTime - Temporal.PlainDateTime
+ * @returns {{ localDate: string, localTime: string }}
+ */
+export function splitLocalDateTime(plainDateTime) {
+	return {
+		localDate: formatLocalDate(plainDateTime.toPlainDate()),
+		localTime: formatLocalTime(plainDateTime.toPlainTime())
+	};
+}
+
 /**
  * @typedef {Object} TodoResponse
  * @property {number} id - Todo ID
@@ -13,8 +82,9 @@
  * @property {string} [priorityName] - 우선순위명
  * @property {number} [categoryId] - 카테고리 ID
  * @property {string} [categoryName] - 카테고리명
- * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
+ * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [dueTime] - 마감 시간 (HH:mm)
+ * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
  * @property {string[]} [tags] - 태그 목록
  */
 
@@ -38,8 +108,9 @@
  * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
+ * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [dueTime] - 마감 시간 (HH:mm)
+ * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
 
@@ -50,8 +121,9 @@
  * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY'} [repeatType] - 반복 유형
+ * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [dueTime] - 마감 시간 (HH:mm)
+ * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
 
@@ -63,8 +135,9 @@
  * @property {string} [statusId] - 상태 ID
  * @property {string} [priorityId] - 우선순위 ID
  * @property {string} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 시각 (ISO 8601 date-time)
- * @property {string} [repeatType] - 반복 유형 ('NONE'|'DAILY'|'WEEKLY'|'MONTHLY'|'YEARLY')
+ * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [dueTime] - 마감 시간 (HH:mm)  
+ * @property {string} [repeatType] - 반복 유형 ('NONE'|'DAILY'|'WEEKLY'|'MONTHLY')
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
 
@@ -157,17 +230,15 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 할 일 생성
-	 * @param {CreateTodoRequest} todo - 할 일 생성 데이터
+	 * @param {FormData} [formData] - 생성 요청에 사용할 FormData 객체
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function createTodo(todo) {
+	async function createTodo(formData) {
 		try {
 			const url = new URL(`${apiUrl}/todos`);
-			const test = url.toString();
-			const response = await fetchFn(test, {
+			const response = await fetchFn(url.toString(), {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(todo),
+				body: formData,
 				credentials: 'include'
 			});
 

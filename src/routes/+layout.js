@@ -20,5 +20,9 @@ export const load = async ({ data, depends, fetch }) => {
 		data: { user }
 	} = await zzic.auth.getUser();
 
-	return { zzic, user };
+	return { 
+		zzic, 
+		user, 
+		temporal: data.temporal
+	};
 };

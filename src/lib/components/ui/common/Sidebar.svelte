@@ -1,15 +1,18 @@
 <script>
 	// Lucide Icons
+	import { page } from '$app/state';
 	import { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
+	import {
+		getSettingsFromBrowser,
+		saveSettingsToBrowser,
+		updateSettings
+	} from '$lib/utils/settings.js';
 	import Calculator from '@lucide/svelte/icons/calculator';
-	import Calendar from '@lucide/svelte/icons/chevron-down';
+	import { default as Calendar, default as ChevronDown } from '@lucide/svelte/icons/chevron-down';
 	import Clock from '@lucide/svelte/icons/clock';
-	import Eye from '@lucide/svelte/icons/eye';
-	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import Home from '@lucide/svelte/icons/house';
 	import LogOut from '@lucide/svelte/icons/log-out';
 	import Moon from '@lucide/svelte/icons/moon';
-	import Play from '@lucide/svelte/icons/play';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Settings from '@lucide/svelte/icons/settings';
 	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
@@ -19,16 +22,8 @@
 	import User from '@lucide/svelte/icons/user';
 	import Wrench from '@lucide/svelte/icons/wrench';
 	import Zap from '@lucide/svelte/icons/zap';
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
+	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 	import SignoutDialog, { openSignoutDialog } from './SignoutDialog.svelte';
-	import { Progress } from '@skeletonlabs/skeleton-svelte';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import { page } from '$app/state';
-	import {
-		getSettingsFromBrowser,
-		saveSettingsToBrowser,
-		updateSettings
-	} from '$lib/utils/settings.js';
 
 	let checked = $state(false);
 	let settings = $state(page.data?.settings || getSettingsFromBrowser());
@@ -129,7 +124,7 @@
 </script>
 
 <aside
-	class="h-screen preset-filled-surface-200-800 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none border-r border-primary-500"
+	class="h-screen preset-filled-surface-50-950 fixed w-fit inset-x-0 z-100 overflow-auto not-hover:w-12 select-none border-r border-primary-500"
 >
 	<div class="space-y-4 h-full py-2 w-64 flex flex-col">
 		<div>
@@ -214,16 +209,6 @@
 		<!-- Bottom Settings -->
 		<hr class="hr border-primary-500" />
 		<div>
-			<button class="btn w-full hover:bg-surface-800-200" onclick={toggleFocusMode}>
-				{#if settings.focusMode}
-					<EyeOff size={16} class="mr-2 text-tertiary-500" />
-				{:else}
-					<Eye size={16} class="mr-2 text-tertiary-500" />
-				{/if}
-				<span class="flex-1 text-sm text-left">
-					{settings.focusMode ? '집중 모드 해제' : '집중 모드'}
-				</span>
-			</button>
 
 			<label class="btn w-full hover:bg-surface-800-200">
 				{#if checked}

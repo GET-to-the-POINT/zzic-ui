@@ -1,110 +1,136 @@
 import { error } from '@sveltejs/kit';
-import { validateAndPrepareOptions, simpleTodoPageSchema } from '$lib/schemas/todo-query.js';
+import { z } from 'zod';
+import { Temporal } from '@js-temporal/polyfill';
+import { redirect } from '@sveltejs/kit';
 
-/**
- * @typedef {Object} LoadParams
- * @property {Function} parent - 부모 레이아웃 데이터 로더
- * @property {Object} params - 라우트 파라미터
- * @property {string} params.nickname - 사용자 닉네임
- * @property {Object} url - URL 객체
- * @property {URLSearchParams} url.searchParams - URL 검색 파라미터
- */
+// 이 페이지만의 특별한 스키마 정의
+const testPageSchema = z.object({
+	startDate: z
+		.string()
+		.refine((dateStr) => {
+			try {
+				Temporal.PlainDate.from(dateStr);
+				return true;
+			} catch {
+				return false;
+			}
+		}, '유효하지 않은 시작 날짜입니다')
+		.optional(),
+	endDate: z
+		.string()
+		.refine((dateStr) => {
+			try {
+				Temporal.PlainDate.from(dateStr);
+				return true;
+			} catch {
+				return false;
+			}
+		}, '유효하지 않은 종료 날짜입니다')
+		.optional(),
+	hideStatusIds: z
+		.string()
+		.transform((str) =>
+			str
+				.split(',')
+				.map((id) => Number(id.trim()))
+				.filter((id) => !isNaN(id))
+		)
+		.optional()
+}).refine((data) => {
+	// 둘 다 있으면 같은 날짜여야 하고, 둘 다 없어야 하거나
+	const hasStart = !!data.startDate;
+	const hasEnd = !!data.endDate;
+	
+	// 둘 다 없으면 OK
+	if (!hasStart && !hasEnd) {
+		return true;
+	}
+	
+	// 둘 다 있으면 같은 날짜여야 함
+	if (hasStart && hasEnd) {
+		return data.startDate === data.endDate;
+	}
+	
+	// 하나만 있으면 에러
+	return false;
+}, {
+	message: 'startDate와 endDate는 둘 다 없거나, 둘 다 있으면서 같은 날짜여야 합니다',
+	path: ['startDate', 'endDate'] // 에러가 어느 필드와 관련된지 명시
+});
 
-/**
- * @typedef {Object} PageData
- * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} todoPage - todo 페이지 데이터
- * @property {import('$lib/zzic-api/category.js').PageCategoryResponse} categoryPage - 카테고리 페이지 데이터
- * @property {import('$lib/zzic-api/todo.js').TodoStatisticsResponse} todoStatisticsResponse - 할 일 통계 데이터
- * @property {Object} priorityResponse - 우선순위 데이터
- * @property {Object} tagPage - 태그 페이지 데이터
- * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} selectedDateTodos - 선택된 날짜의 todo 데이터 (심플뷰용)
- * @property {import('$lib/zzic-api/todo.js').PageTodoResponse} weeklyTodos - 일주일간의 todo 데이터 (심플뷰용)
- * @property {string} currentTab - 현재 탭
- */
 
-// URL 검색 파라미터 스키마 정의 (심플뷰용) - 이제 공통 스키마 사용
-const searchParamsSchema = simpleTodoPageSchema;
-
-/**
- * Todo 페이지 데이터를 로드합니다 (두 버전 모두 지원)
- * @param {LoadParams} params - 로드 파라미터
- * @returns {Promise<PageData>} Todo 페이지 데이터
- */
 export async function load({ parent, url }) {
-	const { zzic } = await parent();
+	const { zzic, temporal } = await parent();
+	
+	const rawParams = Object.fromEntries(url.searchParams.entries());
+	const parsedParams = testPageSchema.safeParse(rawParams);
 
-	// URL 쿼리 파라미터 파싱
-	const parseResult = searchParamsSchema.safeParse(Object.fromEntries(url.searchParams));
-	if (!parseResult.success) {
-		error(400, { message: parseResult.error.issues[0]?.message || '잘못된 파라미터입니다.' });
+	if (!parsedParams.success) {
+		const errorDetails = parsedParams.error.issues
+			.map(/** @type {any} */ (issue) => `필드 '${issue.path.join('.')}': ${issue.message}`)
+			.join(', ');
+
+		error(400, `잘못된 URL 파라미터입니다. ${errorDetails}`);
 	}
 
-	const { date: selectedDate, tab } = parseResult.data;
+	const today = Temporal.PlainDate.from(temporal.plainDate);
+	if (!url.searchParams.has('startDate') || !url.searchParams.has('endDate') || !url.searchParams.has('hideStatusIds')) {
+		if (!url.searchParams.has('startDate')) {
+			url.searchParams.set('startDate', today.toString()); // 오늘 날짜로 기본 설정
+		}
 
-	// 기본 옵션 (전체뷰용) - 검증된 쿼리 파라미터 사용
-	const queryResult = validateAndPrepareOptions(url.searchParams);
-	const basicSearchParams = queryResult.success ? queryResult.searchParams : new URLSearchParams();
+		if (!url.searchParams.has('endDate')) {
+			url.searchParams.set('endDate', today.toString()); // 오늘 날짜로 기본 설정
+		}
 
-	// 날짜와 탭 필터는 심플뷰에서만 사용하므로 제거
-	if (basicSearchParams) {
-		basicSearchParams.delete('date');
-		basicSearchParams.delete('tab');
+		if (!url.searchParams.has('hideStatusIds')) {
+			url.searchParams.set('hideStatusIds', '1'); // 기본적으로 완료된 상태 숨기기
+		}
+
+		redirect(303, `${url.pathname}?${url.searchParams.toString()}`);
 	}
 
-	// 심플뷰용 옵션
-	const currentDate = selectedDate || new Date();
-	const startOfDay = new Date(currentDate);
-	startOfDay.setHours(0, 0, 0, 0);
-	const endOfDay = new Date(currentDate);
-	endOfDay.setHours(23, 59, 59, 999);
+	// 위 분기문에 의해서 서치파람스는 반드시 데이터가 채워진 상태로 요청이 들어온다.
+	const selectedDate = Temporal.PlainDate.from(url.searchParams.get('startDate'));
 
-	const simpleParams = new URLSearchParams({
-		dueDate:
-			currentDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
-		size: '20'
-	});
-
-	// 일주일 범위 계산 (심플뷰 캐러셀용)
-	const weekStart = new Date(currentDate);
-	weekStart.setDate(currentDate.getDate() - 3);
-	const weekEnd = new Date(currentDate);
-	weekEnd.setDate(currentDate.getDate() + 3);
-
-	const weeklyParams = new URLSearchParams({
-		dueDateStart:
-			weekStart.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T00:00:00+09:00',
-		dueDateEnd: weekEnd.toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }) + 'T23:59:59+09:00',
-		size: '100'
-	});
-
-	const [
-		todosResult,
-		categoriesResult,
-		todoStatisticsResult,
-		priorityResult,
-		tagResult,
-		selectedDateTodosResult,
-		weeklyTodosResult
-	] = await Promise.all([
-		zzic.todo.getTodos(basicSearchParams),
-		zzic.category.getCategories(),
-		zzic.todo.getTodoStatistics(),
-		zzic.priority.getPriorities(),
-		zzic.tag.getTags({ size: 100 }),
-		zzic.todo.getTodos(simpleParams),
-		zzic.todo.getTodos(weeklyParams)
-	]);
-
+	const todosResult = await zzic.todo.getTodos(url.searchParams);
 	if (todosResult.error) error(todosResult.error.message);
 
+	const weeklyDates = [];
+	
+	for (let i = -3; i <= 3; i++) {
+		const date = today.add({ days: i });
+		const dayOfWeek = date.dayOfWeek; // 1=월요일, 7=일요일
+		const dayNames = ['', '월', '화', '수', '목', '금', '토', '일'];
+		const dayName = dayNames[dayOfWeek];
+
+		weeklyDates.push({
+			day: dayName,
+			dayNumber: date.day,
+			startDate: date.toString(),
+			endDate: date.toString(), // 해당 날짜 하루만
+			selected: date.equals(selectedDate),
+		});
+	}
+
+	const weeklyTodos = await Promise.all(
+		weeklyDates.map(async (dateInfo) => {
+			const weeklyParams = new URLSearchParams(url.searchParams);
+			weeklyParams.set('startDate', dateInfo.startDate);
+			weeklyParams.set('endDate', dateInfo.endDate);
+			weeklyParams.set('size', '1'); // 존재 여부만 확인하므로 1개만 요청
+
+			const result = await zzic.todo.getTodos(weeklyParams);
+
+			return {
+				...dateInfo,
+				...result.data
+			};
+		})
+	);
+
 	return {
-		todoPage: todosResult.data,
-		categoryPage: categoriesResult.data,
-		todoStatisticsResponse: todoStatisticsResult.data,
-		priorityResponse: priorityResult.data,
-		tagPage: tagResult.data,
-		selectedDateTodos: selectedDateTodosResult.data || { content: [], totalElements: 0 },
-		weeklyTodos: weeklyTodosResult.data || { content: [], totalElements: 0 },
-		currentTab: tab || 'full'
+		selectedDateTodos: todosResult.data,
+		weeklyTodos: weeklyTodos
 	};
 }
