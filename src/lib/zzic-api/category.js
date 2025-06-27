@@ -46,7 +46,6 @@
 export function createCategoryClient(apiUrl, fetchFn) {
 	async function getCategories() {
 		const url = new URL(`${apiUrl}/categories`);
-		url.searchParams.append('sort', 'name,desc');
 
 		try {
 			const response = await fetchFn(url.toString(), {
