@@ -7,9 +7,10 @@
 
 {#snippet categoryItem(item)}
 	<div class="h-12 preset-filled-surface-500 flex justify-center">
-		<form class="flex-1 content-center" action={page.data.returnTo}>
-			<button class="w-full text-left px-4">{item.name}</button>
-		</form>
+       <form class="flex-1 content-center" action={page.data.returnTo}>
+               <input type="hidden" name="categoryId" value={item.id} />
+               <button class="w-full text-left px-4">{item.name}</button>
+       </form>
 		<button class="aspect-square btn preset-filled-warning-500">
 			<Trash2 size="32" />
 		</button>
