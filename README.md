@@ -40,3 +40,4 @@
 | `/auth/sign-out` | 로그아웃  | ✅        | 로그아웃 처리 및 세션 종료      |
 
 인증되지 않은 사용자가 보호된 경로에 접근하면 자동으로 `/auth/sign-in`으로 리다이렉트됩니다.
+\n## Testing\n\nAfter installing dependencies, you need to install the Playwright browsers once:\n\n```sh\npnpm exec playwright install\n```\n\nThen run the test suite with:\n\n```sh\npnpm test\n```\n
