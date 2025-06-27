@@ -11,7 +11,7 @@
 </script>
 
 <header class="preset-filled-primary-500 p-4 h-12 flex items-center justify-between">
-    <a href="./" class="btn-icon w-6 h-6" onclick={handleBack}>
+    <a href={page.data.referer} class="btn-icon w-6 h-6" onclick={handleBack}>
         <ChevronLeft class="w-6 h-6" />
     </a>
     <h1 class="text-2xl font-semibold uppercase">{page.data.meta?.title ?? 'header'}</h1>
