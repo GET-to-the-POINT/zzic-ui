@@ -7,8 +7,12 @@ import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 export const load = async ({ data, depends, fetch, url }) => {
 	depends('zzic:auth');
 
-    const referer = data.referer || (browser && navigation?.entries()[navigation.currentEntry?.index - 1]?.url);
-	console.log('browser referer:', referer);
+	const returnToParam = url.searchParams.get('returnTo');
+	const returnTo =
+		returnToParam ||
+		data.returnTo ||
+		(browser && navigation?.entries()[navigation.currentEntry?.index - 1]?.url);
+	console.log('browser returnTo:', returnTo);
 
 	const zzic = browser
 		? createZzicBrowserClient(PUBLIC_ZZIC_API_URL, { global: { fetch } })
@@ -23,10 +27,10 @@ export const load = async ({ data, depends, fetch, url }) => {
 		data: { user }
 	} = await zzic.auth.getUser();
 
-	return { 
-		zzic, 
-		user, 
-		referer,
+	return {
+		zzic,
+		user,
+		returnTo,
 		temporal: data.temporal
 	};
 };
