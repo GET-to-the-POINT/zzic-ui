@@ -7,12 +7,15 @@ import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 export const load = async ({ data, depends, fetch, url }) => {
 	depends('zzic:auth');
 
-	const returnToParam = url.searchParams.get('returnTo');
+	const returnToStack = url.searchParams.getAll('returnTo');
 	const returnTo =
-		returnToParam ||
+		returnToStack.at(-1) ||
 		data.returnTo ||
 		(browser && navigation?.entries()[navigation.currentEntry?.index - 1]?.url);
-	console.log('browser returnTo:', returnTo);
+
+	const returnToQueryParams = new URLSearchParams();
+	returnToStack.slice(0, -1).forEach((rt) => returnToQueryParams.append('returnTo', rt));
+	const returnToQuery = returnToQueryParams.toString();
 
 	const zzic = browser
 		? createZzicBrowserClient(PUBLIC_ZZIC_API_URL, { global: { fetch } })
@@ -31,6 +34,8 @@ export const load = async ({ data, depends, fetch, url }) => {
 		zzic,
 		user,
 		returnTo,
+		returnToStack,
+		returnToQuery,
 		temporal: data.temporal
 	};
 };
