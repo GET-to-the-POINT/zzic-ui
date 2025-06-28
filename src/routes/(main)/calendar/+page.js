@@ -21,13 +21,13 @@ export async function load({ parent, url }) {
 	const dateValidation = calendarParamSchema.safeParse(rawParams);
 	if (!dateValidation.success) {
 		const errorDetails = dateValidation.error.issues
-			.map(issue => `필드 '${issue.path.join('.')}': ${issue.message}`)
+			.map((issue) => `필드 '${issue.path.join('.')}': ${issue.message}`)
 			.join(', ');
 		error(400, `잘못된 URL 파라미터입니다. ${errorDetails}`);
 	}
 
 	const dateParam = url.searchParams.get('date');
-	
+
 	// date 파라미터가 없으면 이번 달 1일로 리디렉트
 	if (!dateParam) {
 		const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds)
@@ -48,40 +48,44 @@ export async function load({ parent, url }) {
 		const plainDate = Temporal.PlainDate.from({ year, month, day: 1 });
 		const plainDateTime = plainDate.toPlainDateTime('00:00:00');
 		const epochMs = plainDateTime.toZonedDateTime('UTC').epochMilliseconds;
-		
+
 		return new Intl.DateTimeFormat('ko-KR', {
 			year: 'numeric',
-			month: 'long',
+			month: 'long'
 		}).format(epochMs);
-	}
+	};
 
 	// 현재 월의 모든 날짜 계산 (첫 주와 마지막 주 포함)
 	const firstDayOfMonth = Temporal.PlainDate.from({ year, month, day: 1 });
 	const lastDayOfMonth = firstDayOfMonth.add({ months: 1 }).subtract({ days: 1 });
-	
+
 	// 오늘 날짜 생성 (사용자 시간대 기준)
 	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds);
 	const todayPlainDate = today.toZonedDateTimeISO(user.timeZone).toPlainDate();
 
 	// 첫 주의 시작 날짜 계산 (일요일부터 시작)
-	const firstWeekStart = firstDayOfMonth.subtract({ 
-		days: firstDayOfMonth.dayOfWeek % 7 
+	const firstWeekStart = firstDayOfMonth.subtract({
+		days: firstDayOfMonth.dayOfWeek % 7
 	});
 
 	// 마지막 주의 끝 날짜 계산 (토요일까지)
-	const lastWeekEnd = lastDayOfMonth.add({ 
-		days: (6 - (lastDayOfMonth.dayOfWeek % 7)) % 7 
+	const lastWeekEnd = lastDayOfMonth.add({
+		days: (6 - (lastDayOfMonth.dayOfWeek % 7)) % 7
 	});
 
 	const days = [];
-	for (let day = firstWeekStart; Temporal.PlainDate.compare(day, lastWeekEnd) <= 0; day = day.add({ days: 1 })) {
+	for (
+		let day = firstWeekStart;
+		Temporal.PlainDate.compare(day, lastWeekEnd) <= 0;
+		day = day.add({ days: 1 })
+	) {
 		const isCurrentMonth = day.month === month && day.year === year;
-		
+
 		days.push({
 			date: day.toString(), // YYYY-MM-DD 형식
 			day: day.day, // 일 (1-31)
 			isToday: day.equals(todayPlainDate), // 오늘인지 여부
-			isCurrentMonth: isCurrentMonth, // 현재 보고 있는 달인지 여부
+			isCurrentMonth: isCurrentMonth // 현재 보고 있는 달인지 여부
 		});
 	}
 
@@ -96,12 +100,12 @@ export async function load({ parent, url }) {
 		// 다음 달
 		const nextMonth = currentDate.add({ months: 1 });
 		const nextMonthParam = `${nextMonth.year}-${String(nextMonth.month).padStart(2, '0')}`;
-		
+
 		return {
 			prevMonth: prevMonthParam,
-			nextMonth: nextMonthParam,
+			nextMonth: nextMonthParam
 		};
-	}
+	};
 
 	const monthlyTodos = await Promise.all(
 		days.map(async (dateInfo) => {
@@ -128,6 +132,6 @@ export async function load({ parent, url }) {
 		currentMonth: currentMonth(),
 		weekDays: ['일', '월', '화', '수', '목', '금', '토'],
 		monthlyTodos,
-		navigation: navigation(),
+		navigation: navigation()
 	};
 }

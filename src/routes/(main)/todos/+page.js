@@ -5,64 +5,68 @@ import { redirect } from '@sveltejs/kit';
 import TodosContextMenu from './TodosContextMenu.svelte';
 
 // 이 페이지만의 특별한 스키마 정의
-const testPageSchema = z.object({
-	startDate: z
-		.string()
-		.refine((dateStr) => {
-			try {
-				Temporal.PlainDate.from(dateStr);
-				return true;
-			} catch {
-				return false;
-			}
-		}, '유효하지 않은 시작 날짜입니다')
-		.optional(),
-	endDate: z
-		.string()
-		.refine((dateStr) => {
-			try {
-				Temporal.PlainDate.from(dateStr);
-				return true;
-			} catch {
-				return false;
-			}
-		}, '유효하지 않은 종료 날짜입니다')
-		.optional(),
-	hideStatusIds: z
-		.string()
-		.transform((str) =>
-			str
-				.split(',')
-				.map((id) => Number(id.trim()))
-				.filter((id) => !isNaN(id))
-		)
-		.optional()
-}).refine((data) => {
-	// 둘 다 있으면 같은 날짜여야 하고, 둘 다 없어야 하거나
-	const hasStart = !!data.startDate;
-	const hasEnd = !!data.endDate;
-	
-	// 둘 다 없으면 OK
-	if (!hasStart && !hasEnd) {
-		return true;
-	}
-	
-	// 둘 다 있으면 같은 날짜여야 함
-	if (hasStart && hasEnd) {
-		return data.startDate === data.endDate;
-	}
-	
-	// 하나만 있으면 에러
-	return false;
-}, {
-	message: 'startDate와 endDate는 둘 다 없거나, 둘 다 있으면서 같은 날짜여야 합니다',
-	path: ['startDate', 'endDate'] // 에러가 어느 필드와 관련된지 명시
-});
+const testPageSchema = z
+	.object({
+		startDate: z
+			.string()
+			.refine((dateStr) => {
+				try {
+					Temporal.PlainDate.from(dateStr);
+					return true;
+				} catch {
+					return false;
+				}
+			}, '유효하지 않은 시작 날짜입니다')
+			.optional(),
+		endDate: z
+			.string()
+			.refine((dateStr) => {
+				try {
+					Temporal.PlainDate.from(dateStr);
+					return true;
+				} catch {
+					return false;
+				}
+			}, '유효하지 않은 종료 날짜입니다')
+			.optional(),
+		hideStatusIds: z
+			.string()
+			.transform((str) =>
+				str
+					.split(',')
+					.map((id) => Number(id.trim()))
+					.filter((id) => !isNaN(id))
+			)
+			.optional()
+	})
+	.refine(
+		(data) => {
+			// 둘 다 있으면 같은 날짜여야 하고, 둘 다 없어야 하거나
+			const hasStart = !!data.startDate;
+			const hasEnd = !!data.endDate;
 
+			// 둘 다 없으면 OK
+			if (!hasStart && !hasEnd) {
+				return true;
+			}
+
+			// 둘 다 있으면 같은 날짜여야 함
+			if (hasStart && hasEnd) {
+				return data.startDate === data.endDate;
+			}
+
+			// 하나만 있으면 에러
+			return false;
+		},
+		{
+			message: 'startDate와 endDate는 둘 다 없거나, 둘 다 있으면서 같은 날짜여야 합니다',
+			path: ['startDate', 'endDate'] // 에러가 어느 필드와 관련된지 명시
+		}
+	);
 
 export async function load({ parent, url }) {
 	const { zzic, user, temporal } = await parent();
-	
+
 	const rawParams = Object.fromEntries(url.searchParams.entries());
 	const parsedParams = testPageSchema.safeParse(rawParams);
 
@@ -78,7 +82,11 @@ export async function load({ parent, url }) {
 		.toZonedDateTimeISO(user.timeZone)
 		.toPlainDate();
 
-	if (!url.searchParams.has('startDate') || !url.searchParams.has('endDate') || !url.searchParams.has('hideStatusIds')) {
+	if (
+		!url.searchParams.has('startDate') ||
+		!url.searchParams.has('endDate') ||
+		!url.searchParams.has('hideStatusIds')
+	) {
 		if (!url.searchParams.has('startDate')) {
 			url.searchParams.set('startDate', today.toString()); // 오늘 날짜로 기본 설정
 		}
@@ -102,7 +110,7 @@ export async function load({ parent, url }) {
 
 	// 3일 날짜 계산 (선택된 날짜 앞뒤로 1일씩 총 3일)
 	const weeklyDates = [];
-	
+
 	// 선택된 날짜 기준으로 앞뒤 1일씩 총 3일 생성
 	for (let i = -1; i <= 1; i++) {
 		const day = selectedDate.add({ days: i });
@@ -118,7 +126,7 @@ export async function load({ parent, url }) {
 			isToday: day.equals(today), // 오늘인지 여부
 			selected: day.equals(selectedDate), // 선택된 날짜인지 여부
 			startDate: day.toString(), // 기존 호환성을 위해 유지
-			endDate: day.toString(), // 기존 호환성을 위해 유지
+			endDate: day.toString() // 기존 호환성을 위해 유지
 		});
 	}
 
@@ -147,6 +155,6 @@ export async function load({ parent, url }) {
 		weeklyTodos: weeklyTodos,
 		weeklyDates: weeklyDates, // 주간 날짜 정보 추가
 		selectedDate: selectedDate.toString(), // 선택된 날짜 정보 추가
-		contextMenu: TodosContextMenu,
+		contextMenu: TodosContextMenu
 	};
 }

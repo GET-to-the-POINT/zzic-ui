@@ -1,24 +1,29 @@
 <script>
-    const { data } = $props();
+	import { page } from '$app/state';
+	const { data } = $props();
+
+	const action = $derived(page.url.searchParams.get('redirectTo'));
 </script>
 
+<!-- 메인 컨테이너 -->
 <main class="p-4">
-    <form>
-        <fieldset>
-            <legend class="sr-only">분류 목록</legend>
-            <div class="space-y-2">
-                {#each data.categories.content as category}
-                    <label class="[&:has(input:checked)]:preset-filled-secondary-500 flex items-center gap-3 px-4 h-12 cursor-pointer preset-filled-surface-500">
-                        <input
-                            type="radio"
-                            name="category"
-                            class="hidden"
-                            value={category.id}
-                        />
-                        <span class="text-base">{category.name.replace('카테고리', '분류')}</span>
-                    </label>
-                {/each}
-            </div>
-        </fieldset>
-    </form>
+	{action}
+	<form class="space-y-4" {action}>
+	{#each data.categories.content as category (category.id)}
+		<label 
+			class="[&:has(input:checked)]:preset-filled-secondary-500 h-12 block px-4 content-center preset-filled-surface-500 hover:bg-surface-800-200"
+		>
+		<input
+			type="radio"
+			name="category"
+			class="hidden"
+			value={category.id}
+			checked={category.id === Number(page.url.searchParams.get('categoryId'))}
+		/>
+			<span class="font-semibold">
+				{category.name}
+			</span>
+		</label>
+	{/each}
+	</form>
 </main>

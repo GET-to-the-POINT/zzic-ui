@@ -30,17 +30,19 @@
 		};
 	};
 
-	const returnToTodosCreate = $derived.by(() => {
+	const redirectToTodosCreate = $derived.by(() => {
 		const pageUrl = page.url.pathname;
 		const search = page.url.search;
-		const returnTo = `?returnTo=${encodeURIComponent(pageUrl+search)}`;
+		const redirectTo = `?redirectTo=${encodeURIComponent(pageUrl + search)}`;
 
-		return '/todos/create' + (search ? returnTo : '');
+		return `/todos/create${redirectTo}`;
 	});
 </script>
 
-<div class="flex justify-between items-center-safe h-24 font-semibold text-center preset-filled-surface-500">
-	<form action={page.url.pathname} >
+<div
+	class="flex justify-between items-center-safe h-24 font-semibold text-center preset-filled-surface-500"
+>
+	<form action={page.url.pathname}>
 		<input type="hidden" name="startDate" value={page.data.weeklyTodos[0]?.startDate} />
 		<input type="hidden" name="endDate" value={page.data.weeklyTodos[0]?.endDate} />
 		<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
@@ -50,29 +52,35 @@
 	</form>
 	<div class="flex space-x-4 items-center-safe">
 		{#each page.data.weeklyTodos as dateItem}
-		<form action={page.url.pathname} >
-			<input type="hidden" name="startDate" value={dateItem.startDate} />
-			<input type="hidden" name="endDate" value={dateItem.endDate} />
-			<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
-			<button
-				type="submit"
-				class={[
-				'btn relative h-16 w-16 flex flex-col',
-				dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
-				dateItem.empty ? '' : "before:content-[''] before:absolute before:top-1 before:right-1 before:w-2 before:h-2 before:bg-secondary-500 before:rounded-full",
-			]}
-			>
-				<span class="text-xs font-semibold">
-					{dateItem.dayName}
-				</span>
-				<span class="text-xs font-semibold">
-					{dateItem.day}
-				</span>
-			</button>
-		</form>
+			<form action={page.url.pathname}>
+				<input type="hidden" name="startDate" value={dateItem.startDate} />
+				<input type="hidden" name="endDate" value={dateItem.endDate} />
+				<input
+					type="hidden"
+					name="hideStatusIds"
+					value={page.url.searchParams.get('hideStatusIds')}
+				/>
+				<button
+					type="submit"
+					class={[
+						'btn relative h-16 w-16 flex flex-col',
+						dateItem.selected ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+						dateItem.empty
+							? ''
+							: "before:content-[''] before:absolute before:top-1 before:right-1 before:w-2 before:h-2 before:bg-secondary-500 before:rounded-full"
+					]}
+				>
+					<span class="text-xs font-semibold">
+						{dateItem.dayName}
+					</span>
+					<span class="text-xs font-semibold">
+						{dateItem.day}
+					</span>
+				</button>
+			</form>
 		{/each}
 	</div>
-	<form action={page.url.pathname} >
+	<form action={page.url.pathname}>
 		<input type="hidden" name="startDate" value={page.data.weeklyTodos.at(-1)?.startDate} />
 		<input type="hidden" name="endDate" value={page.data.weeklyTodos.at(-1)?.endDate} />
 		<input type="hidden" name="hideStatusIds" value={page.url.searchParams.get('hideStatusIds')} />
@@ -98,14 +106,15 @@
 			{#if !page.data?.selectedDateTodos?.empty}
 				{#each page.data.selectedDateTodos.content as todo (todo.id)}
 					{@const isCompleted = todo.statusId === 1}
-					<div
-						class={[
-							isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500'
-						]}
-					>
+					<div class={[isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500']}>
 						<div class="flex items-start gap-2">
 							<!-- 체크박스 -->
-							<form class="pt-4 pl-4" action={`/todos/${todo.id}/update`} method="POST" use:enhance={handleEnhance}>
+							<form
+								class="pt-4 pl-4"
+								action={`/todos/${todo.id}/update`}
+								method="POST"
+								use:enhance={handleEnhance}
+							>
 								<button
 									type="submit"
 									name="statusId"
@@ -128,7 +137,10 @@
 							</form>
 
 							<!-- 컨텐츠 -->
-							<a href={`/todos/${todo.id}?redirectTo=${encodeURIComponent(page.url.pathname + page.url.search)}`} class="pl-2 py-4 pr-4 flex-1">
+							<a
+								href={`/todos/${todo.id}?redirectTo=${encodeURIComponent(page.url.pathname + page.url.search)}`}
+								class="pl-2 py-4 pr-4 flex-1"
+							>
 								<!-- 제목과 설명 -->
 								<div>
 									<h3 class={['font-semibold', isCompleted && 'line-through']}>
@@ -150,7 +162,8 @@
 									{#if todo.dueDate}
 										<div class="badge text-xs flex items-center gap-1">
 											<Clock class="w-3 h-3" />
-											{todo.dueDate} {todo.dueTime ? `, ${todo.dueTime}` : ''}
+											{todo.dueDate}
+											{todo.dueTime ? `, ${todo.dueTime}` : ''}
 										</div>
 									{/if}
 
@@ -174,15 +187,22 @@
 	</div>
 </main>
 
-<dialog bind:this={dialog} class="w-sm bg-transparent backdrop:scale-110 m-auto backdrop:bg-black/80 backdrop:blur">
+<dialog
+	bind:this={dialog}
+	class="w-sm bg-transparent backdrop:scale-110 m-auto backdrop:bg-black/80 backdrop:blur"
+>
 	<form method="dialog" class="mb-4 p-4">
-		<button type="button" class="text-surface-500 btn-icon absolute top-2 right-2" onclick={dialogClose}>
+		<button
+			type="button"
+			class="text-surface-500 btn-icon absolute top-2 right-2"
+			onclick={dialogClose}
+		>
 			<X size={32} />
 		</button>
 	</form>
 	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
 		<a
-			href={returnToTodosCreate}
+			href={redirectToTodosCreate}
 			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
 		>
 			<Plus size={16} />
@@ -192,32 +212,32 @@
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
 			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
 			{#if page.url.searchParams.get('hideStatusIds') === '1'}
-			<button
-				type="submit"
-				name="hideStatusIds"
-				value=""
-				class="justify-start btn hover:bg-surface-800-200"
-			>
-				<Check size={16} />
-				완료된 할일 표시하기
-			</button>
+				<button
+					type="submit"
+					name="hideStatusIds"
+					value=""
+					class="justify-start btn hover:bg-surface-800-200"
+				>
+					<Check size={16} />
+					완료된 할일 표시하기
+				</button>
 			{:else}
-			<button
-				type="submit"
-				name="hideStatusIds"
-				value="1"
-				class="justify-start btn hover:bg-surface-800-200"
-			>
-				<Check size={16} />
-				완료된 할일 숨기기
-			</button>
+				<button
+					type="submit"
+					name="hideStatusIds"
+					value="1"
+					class="justify-start btn hover:bg-surface-800-200"
+				>
+					<Check size={16} />
+					완료된 할일 숨기기
+				</button>
 			{/if}
 		</form>
 	</ul>
 </dialog>
 
 <style>
-dialog::backdrop {
-	backdrop-filter: saturate(1.5);
-}
+	dialog::backdrop {
+		backdrop-filter: saturate(1.5);
+	}
 </style>

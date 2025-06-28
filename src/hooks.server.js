@@ -10,9 +10,9 @@ import { Temporal } from '@js-temporal/polyfill';
  * @type {import('@sveltejs/kit').Handle}
  */
 const attachServerTime = async ({ event, resolve }) => {
-    const instant = Temporal.Now.instant();
-    event.locals.serverInstant  = instant;
-    return resolve(event);
+	const instant = Temporal.Now.instant();
+	event.locals.serverInstant = instant;
+	return resolve(event);
 };
 /**
  * 인증 가드 훅 - 로그인이 필요한 페이지 접근 제어
@@ -33,7 +33,7 @@ const handleAuth = async ({ event, resolve }) => {
 	if (event.locals.user && event.locals.serverInstant) {
 		const userTimeZone = event.locals.user.timeZone || 'Asia/Seoul'; // 기본 시간대 설정
 		const userZonedDateTime = event.locals.serverInstant.toZonedDateTimeISO(userTimeZone);
-		
+
 		event.locals.temporal = {
 			epochMilliseconds: event.locals.serverInstant.epochMilliseconds,
 			utcDateTime: event.locals.serverInstant.toString(),
@@ -42,7 +42,7 @@ const handleAuth = async ({ event, resolve }) => {
 			plainTime: userZonedDateTime.toPlainTime().toString(),
 			year: userZonedDateTime.year,
 			month: userZonedDateTime.month,
-			day: userZonedDateTime.day,
+			day: userZonedDateTime.day
 		};
 	}
 

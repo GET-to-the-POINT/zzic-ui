@@ -4,7 +4,7 @@
  */
 export async function load({ parent }) {
 	const parentData = await parent();
-	
+
 	return {
 		// 부모 데이터 전달
 		...parentData,

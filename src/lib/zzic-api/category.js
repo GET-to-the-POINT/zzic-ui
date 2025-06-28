@@ -94,13 +94,12 @@ export function createCategoryClient(apiUrl, fetchFn) {
 	 * @param {CreateCategoryRequest} category - 카테고리 생성 데이터
 	 * @returns {Promise<{data: CategoryResponse|null, error: ApiError|null}>}
 	 */
-	async function createCategory(category) {
+	async function createCategory(formData) {
 		try {
 			const url = new URL(`${apiUrl}/categories`);
 			const response = await fetchFn(url.toString(), {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(category),
+				body: formData,
 				credentials: 'include'
 			});
 

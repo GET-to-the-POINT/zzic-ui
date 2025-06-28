@@ -15,10 +15,10 @@ export async function load({ params, parent }) {
 	return {
 		meta: {
 			title: data.title,
-			description: '할일 상세 페이지입니다.',
+			description: '할일 상세 페이지입니다.'
 		},
 		todo: data,
 		formId: crypto.randomUUID(),
-		contextMenu: TodoDetailContextMenu,
+		contextMenu: TodoDetailContextMenu
 	};
 }

@@ -12,25 +12,29 @@
 	const ContextMenu = $derived(page.data?.contextMenu);
 </script>
 
-<header class={[
-	'p-4 h-12 flex items-center justify-between',
-	!(page.url.pathname.includes('update') || page.url.pathname.includes('delete')) && 'preset-filled-primary-500',
-	page.url.pathname.includes('update') && 'preset-filled-tertiary-500',
-	page.url.pathname.includes('delete') && 'preset-filled-warning-500',
-]}>
-	<a href={page.data.returnTo} class="btn-icon w-6 h-6 cursor-pointer" onclick={handleBack}>
+<header
+	class={[
+		'px-4 h-12 flex items-center justify-between',
+		!(page.url.pathname.includes('update') || page.url.pathname.includes('delete')) &&
+			'preset-filled-primary-500',
+		page.url.pathname.includes('update') && 'preset-filled-tertiary-500',
+		page.url.pathname.includes('delete') && 'preset-filled-warning-500',
+		page.url.pathname.includes('create') && 'preset-filled-tertiary-500',
+	]}
+>
+	<a href={page.data.returnTo} class="block content-center btn-icon cursor-pointer" onclick={handleBack}>
 		{#if page.data.meta?.modal}
-			<X class="w-6 h-6" />
+			<X />
 		{:else}
-		<ChevronLeft class="w-6 h-6" />
+			<ChevronLeft />
 		{/if}
 	</a>
 	<h1 class="text-2xl font-semibold uppercase">{page.data.meta?.title ?? 'header'}</h1>
 	{#if ContextMenu}
 		<ContextMenu class="w-6 h-6" />
 	{:else}
-	<button class="btn-icon w-6 h-6">
-		<Bell class="w-6 h-6" />
-	</button>
+		<button class="btn-icon w-6 h-6">
+			<Bell class="w-6 h-6" />
+		</button>
 	{/if}
 </header>

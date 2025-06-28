@@ -19,7 +19,7 @@
 
 <div class="card preset-outlined-surface-500 overflow-hidden grid grid-cols-4">
 	{#each stats as stat, i (i)}
-		<div class={`px-4 py-1 flex flex-col ${stat.colorClass}`}> 
+		<div class={`px-4 py-1 flex flex-col ${stat.colorClass}`}>
 			<span>{stat.name}</span>
 			<span>{stat.value}</span>
 		</div>

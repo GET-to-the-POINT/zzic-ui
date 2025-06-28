@@ -136,7 +136,7 @@ export function splitLocalDateTime(plainDateTime) {
  * @property {string} [priorityId] - 우선순위 ID
  * @property {string} [categoryId] - 카테고리 ID
  * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
- * @property {string} [dueTime] - 마감 시간 (HH:mm)  
+ * @property {string} [dueTime] - 마감 시간 (HH:mm)
  * @property {string} [repeatType] - 반복 유형 ('NONE'|'DAILY'|'WEEKLY'|'MONTHLY')
  * @property {string} [tags] - 태그 목록 (쉼표로 구분)
  */
@@ -178,7 +178,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 */
 	async function getTodos(searchParams) {
 		const url = new URL(`${apiUrl}/todos`);
-		
+
 		// URLSearchParams를 그대로 URL에 적용
 		if (searchParams) {
 			url.search = searchParams.toString();
@@ -193,10 +193,10 @@ export function createTodoClient(apiUrl, fetchFn) {
 				const error = await response.json();
 				return { data: null, error };
 			}
-		/** @type {PageTodoResponse} */
-		const data = await response.json();
+			/** @type {PageTodoResponse} */
+			const data = await response.json();
 
-		return { data, error: null };
+			return { data, error: null };
 		} catch (error) {
 			return { data: null, error: /** @type {any} */ (error) };
 		}
@@ -208,7 +208,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {number} params.todoId - 할 일 ID
 	 * @returns {Promise<{data: TodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodo({todoId}) {
+	async function getTodo({ todoId }) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
 			const response = await fetchFn(url.toString(), {
@@ -242,7 +242,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				credentials: 'include'
 			});
 
-			if (!response.ok ) {
+			if (!response.ok) {
 				const error = await response.json().catch(() => ({ message: 'Failed to create todo' }));
 				return { error };
 			}
@@ -260,7 +260,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {FormData} formData - 할 일 데이터 FormData 객체
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function updateTodo({todoId}, formData) {
+	async function updateTodo({ todoId }, formData) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
 			const response = await fetchFn(url.toString(), {
@@ -286,7 +286,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 	 * @param {number} params.todoId - 할 일 ID
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function deleteTodo({todoId}) {
+	async function deleteTodo({ todoId }) {
 		try {
 			const url = new URL(`${apiUrl}/todos/${todoId}`);
 			const response = await fetchFn(url.toString(), {

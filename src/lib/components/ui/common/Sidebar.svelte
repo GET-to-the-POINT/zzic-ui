@@ -209,7 +209,6 @@
 		<!-- Bottom Settings -->
 		<hr class="hr border-primary-500" />
 		<div>
-
 			<label class="btn w-full hover:bg-surface-800-200">
 				{#if checked}
 					<Sun size={16} class="mr-2 text-yellow-500" />

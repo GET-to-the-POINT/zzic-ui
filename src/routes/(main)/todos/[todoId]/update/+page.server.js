@@ -18,5 +18,5 @@ export const actions = {
 			redirect(303, redirectTo);
 		}
 		return;
-	},
+	}
 };
