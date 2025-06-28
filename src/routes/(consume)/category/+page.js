@@ -11,6 +11,7 @@ export async function load({ parent, url }) {
             title: '카테고리',
             description: '카테고리 페이지입니다.'
         },
-        categories: data
+        categories: data,
+        formId: 'category-form'
     };
 };
