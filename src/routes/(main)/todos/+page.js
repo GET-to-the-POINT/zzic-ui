@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { z } from 'zod';
 import { Temporal } from '@js-temporal/polyfill';
 import { redirect } from '@sveltejs/kit';
+import TodosContextMenu from './TodosContextMenu.svelte';
 
 // 이 페이지만의 특별한 스키마 정의
 const testPageSchema = z.object({
@@ -146,5 +147,6 @@ export async function load({ parent, url }) {
 		weeklyTodos: weeklyTodos,
 		weeklyDates: weeklyDates, // 주간 날짜 정보 추가
 		selectedDate: selectedDate.toString(), // 선택된 날짜 정보 추가
+		contextMenu: TodosContextMenu,
 	};
 }

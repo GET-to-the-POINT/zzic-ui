@@ -216,7 +216,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				const error = await response.text();
+				const error = await response.json();
 				return { data: null, error: /** @type {any} */ (error) };
 			}
 

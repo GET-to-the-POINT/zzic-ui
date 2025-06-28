@@ -1,38 +1,22 @@
 <script>
-	import Clock from '@lucide/svelte/icons/clock';
-	import Plus from '@lucide/svelte/icons/plus';
-	import Check from '@lucide/svelte/icons/check';
-	import Square from '@lucide/svelte/icons/square';
-	import AlertCircle from '@lucide/svelte/icons/alert-circle';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import X from '@lucide/svelte/icons/x';
-	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import { page } from '$app/state';
 	import noHaveTodo from '$lib/assets/no-have-todo.png';
+	import AlertCircle from '@lucide/svelte/icons/alert-circle';
+	import Check from '@lucide/svelte/icons/check';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+	import Clock from '@lucide/svelte/icons/clock';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Square from '@lucide/svelte/icons/square';
+	import X from '@lucide/svelte/icons/x';
 
 	/** @type {HTMLDialogElement} */
 	let dialog;
 
-	const dialogShowModal = () => {
-		dialog.showModal();
-	};
-
 	const dialogClose = () => {
 		dialog.close();
-	};
-
-	/** @type {HTMLDialogElement} */
-	let createTodo;
-
-	const createTodoShowModal = () => {
-		createTodo.showModal();
-	};
-
-	const createTodoClose = () => {
-		createTodo.close();
 	};
 
 	/**
@@ -40,11 +24,19 @@
 	 */
 	const handleEnhance = () => {
 		return async ({ result }) => {
-			if (result.type === 'redirect') {
+			if (result.type === 'success') {
 				await invalidateAll();
 			}
 		};
 	};
+
+	const returnToTodosCreate = $derived.by(() => {
+		const pageUrl = page.url.pathname;
+		const search = page.url.search;
+		const returnTo = `?returnTo=${encodeURIComponent(pageUrl+search)}`;
+
+		return '/todos/create' + (search ? returnTo : '');
+	});
 </script>
 
 <div class="flex justify-between items-center-safe h-24 font-semibold text-center preset-filled-surface-500">
@@ -91,17 +83,8 @@
 </div>
 <!-- 메인 컨테이너 -->
 <main>
-
 	<!-- TODO 리스트 섹션 -->
 	<div class="space-y-4 p-4">
-		<!-- 헤더 -->
-		<div class="flex items-center justify-between">
-			<h1 class="text-2xl font-bold">TODO LIST</h1>
-			<button type="button" class="btn-icon" onclick={dialogShowModal}>
-				<EllipsisVertical size={16} />
-			</button>
-		</div>
-
 		<!-- 새 할일 추가 버튼 (nojs 환경에서만 노출) -->
 		<noscript>
 			<button type="button" class="btn preset-filled-secondary-500 w-full">
@@ -117,13 +100,12 @@
 					{@const isCompleted = todo.statusId === 1}
 					<div
 						class={[
-							'card p-4',
 							isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500'
 						]}
 					>
-						<div class="flex items-start gap-3">
+						<div class="flex items-start gap-2">
 							<!-- 체크박스 -->
-							<form action={`/todos/${todo.id}?/update`} method="POST" use:enhance={handleEnhance}>
+							<form class="pt-4 pl-4" action={`/todos/${todo.id}/update`} method="POST" use:enhance={handleEnhance}>
 								<button
 									type="submit"
 									name="statusId"
@@ -146,13 +128,13 @@
 							</form>
 
 							<!-- 컨텐츠 -->
-							<div class="flex-1">
+							<a href={`/todos/${todo.id}?redirectTo=${encodeURIComponent(page.url.pathname + page.url.search)}`} class="pl-2 py-4 pr-4 flex-1">
 								<!-- 제목과 설명 -->
-								<div class="mb-4">
-									<h3 class={['text-base font-semibold', isCompleted && 'line-through']}>
+								<div>
+									<h3 class={['font-semibold', isCompleted && 'line-through']}>
 										{todo.title}
 									</h3>
-									<p class={['text-sm font-light mt-2', isCompleted && 'line-through']}>
+									<p class={['text-xs', isCompleted && 'line-through']}>
 										{todo.description}
 									</p>
 								</div>
@@ -181,7 +163,7 @@
 										{/each}
 									{/if}
 								</div>
-							</div>
+							</a>
 						</div>
 					</div>
 				{/each}
@@ -199,10 +181,13 @@
 		</button>
 	</form>
 	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
-		<button type="button" class="justify-start btn hover:bg-surface-800-200" onclick={() => {dialogClose(); createTodoShowModal()}}>
+		<a
+			href={returnToTodosCreate}
+			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+		>
 			<Plus size={16} />
 			새 할일 추가
-		</button>
+		</a>
 		<form action={`${page.url.pathname}`} method="GET" onsubmit={() => dialogClose()}>
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
 			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
@@ -230,49 +215,6 @@
 		</form>
 	</ul>
 </dialog>
-
-<dialog bind:this={createTodo} class="w-sm bg-transparent backdrop:scale-110 m-auto backdrop:bg-black/80 backdrop:blur">
-	<form method="dialog" class="mb-4 p-4">
-		<button type="button" class="text-surface-500 btn-icon absolute top-2 right-2" onclick={createTodoClose}>
-			<X size={32} />
-		</button>
-	</form>
-	<form method="POST" action="/todos" use:enhance class="p-4 preset-filled-surface-500 w-full flex flex-col">
-		<input
-			type="text"
-			name="title"
-			placeholder="할일 제목"
-			class="input w-full mb-2"
-			required
-			autofocus
-		/>
-		<input
-			type="text"
-			name="description"
-			placeholder="할일 설명 (선택)"
-			class="input w-full mb-2"
-		/>
-		<div class="flex gap-2 mb-2">
-			<input
-				type="date"
-				name="dueDate"
-				placeholder="마감 날짜"
-				class="input flex-1"
-			/>
-			<input
-				type="time"
-				name="dueTime"
-				placeholder="마감 시간"
-				class="input flex-1"
-			/>
-		</div>
-		<button type="submit" class="btn preset-filled-primary-500 w-full">
-			<Plus size={16} />
-			새 할일 추가
-		</button>
-	</form>
-</dialog>
-
 
 <style>
 dialog::backdrop {
