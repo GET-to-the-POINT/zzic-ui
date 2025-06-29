@@ -19,6 +19,7 @@
 		dialog.close();
 	};
 
+	import { toaster } from '$lib/utils/toast';
 	/**
 	 * Form enhance 핸들러
 	 */
@@ -26,6 +27,7 @@
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				await invalidateAll();
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			}
 		};
 	};

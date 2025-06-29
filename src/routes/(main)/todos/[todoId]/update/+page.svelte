@@ -22,12 +22,15 @@
 		return `${pageUrl}${search}`;
 	});
 
+	import { toaster } from '$lib/utils/toast';
 	const handleEnhance = ({ }) => {
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				invalidateAll();
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			} else if (result.type === 'redirect') {
 				await goto(result.location, { replaceState: true });
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			}
 		};
 	};

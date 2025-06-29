@@ -5,9 +5,15 @@ export async function load({parent}) {
 
 	const { zzic } = await parent();
 
-	const { data: categoryData, error: categoryError } = await zzic.category.getCategories();
-	const { data: tagData, error: tagError } = await zzic.tag.getTags();
-	const { data: priorityData, error: priorityError } = await zzic.priority.getPriorities();
+	const [
+		{ data: categoryData, error: categoryError },
+		{ data: tagData, error: tagError },
+		{ data: priorityData, error: priorityError }
+	] = await Promise.all([
+		zzic.category.getCategories(),
+		zzic.tag.getTags(),
+		zzic.priority.getPriorities()
+	]);
 
 	if (categoryError) {
 		error(500, categoryError.detail);

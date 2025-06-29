@@ -26,7 +26,7 @@
 					올인원 솔루션입니다.
 				</p>
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
-					<a href="/todos" class="btn preset-tonal-primary">
+					<a href="/dashboard" class="btn preset-tonal-primary">
 						무료로 시작하기
 						<ArrowRight size={16} />
 					</a>

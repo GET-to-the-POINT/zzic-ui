@@ -6,10 +6,18 @@ export async function load({ params, parent }) {
 	const { todoId } = params;
 	const { zzic } = await parent();
 
-	const { data: todoData, error: todoError } = await zzic.todo.getTodo({ todoId });
-	const { data: categoryData, error: categoryError } = await zzic.category.getCategories();
-	const { data: tagData, error: tagError } = await zzic.tag.getTags();
-	const { data: priorityData, error: priorityError } = await zzic.priority.getPriorities();
+	// 병렬 요청으로 병목 해결
+	const [
+		{ data: todoData, error: todoError },
+		{ data: categoryData, error: categoryError },
+		{ data: tagData, error: tagError },
+		{ data: priorityData, error: priorityError }
+	] = await Promise.all([
+		zzic.todo.getTodo({ todoId }),
+		zzic.category.getCategories(),
+		zzic.tag.getTags(),
+		zzic.priority.getPriorities()
+	]);
 
 	if (todoError) {
 		error(500, `Todo with id ${todoId} not found`);

@@ -10,9 +10,10 @@
 	import IconFolder from '@lucide/svelte/icons/folder';
 	import IconTag from '@lucide/svelte/icons/tag';
 	import IconFlag from '@lucide/svelte/icons/flag';
-    import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+	import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+	import { toaster } from '$lib/utils/toast';
 
-    let tags = $state([]);
+	let tags = $state([]);
 
 	const { data } = $props();
 
@@ -22,15 +23,17 @@
 		return `${pageUrl}${search}`;
 	});
 
-	const handleEnhance = ({ }) => {
-		return async ({ result }) => {
-			if (result.type === 'success') {
-				invalidateAll();
-			} else if (result.type === 'redirect') {
-				await goto(result.location, { replaceState: true });
-			}
-		};
+const handleEnhance = ({ }) => {
+	return async ({ result }) => {
+		if (result.type === 'success') {
+			goto('/todos', { invalidateAll: true });
+			toaster.success({ title: '할 일이 성공적으로 생성되었습니다!' });
+		} else if (result.type === 'redirect') {
+			await goto(result.location, { replaceState: true });
+			toaster.success({ title: '할 일이 성공적으로 생성되었습니다!' });
+		}
 	};
+};
 </script>
 
 <main class="p-4">
@@ -49,7 +52,6 @@
 					name="title"
 					placeholder="할일 제목"
 					required
-					autofocus
 					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
 				/>
 			</label>

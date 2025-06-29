@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { afterNavigate, goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import Check from '@lucide/svelte/icons/check';
 	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
@@ -22,13 +22,17 @@
 		dialog.close();
 	};
 
+	import { toaster } from '$lib/utils/toast';
+
 	const handleEnhance = () => {
 		return async ({ result }) => {
 			if (result.type === 'redirect') {
-				goto(result.location, { invalidateAll: true });
+				await goto(result.location, { invalidateAll: true });
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			} else if (result.type === 'success') {
 				await invalidateAll();
 				dialogClose();
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			}
 		};
 	};
