@@ -3,6 +3,16 @@
 import Gauge from '@lucide/svelte/icons/gauge';
 import Menu from '@lucide/svelte/icons/menu';
 import Plus from '@lucide/svelte/icons/plus';
+
+const search = $derived.by(() => {
+	const isModal = page.data.meta?.modal;
+	if (!isModal) {
+		return '';
+	}
+	const searchParams = new URLSearchParams();
+	searchParams.set('redirectTo', page.url.pathname + page.url.search);
+	return `?${searchParams.toString()}`;
+});
 </script>
 
 <div class="h-16"></div> <!-- Placeholder for fixed bottom navigation -->
@@ -20,7 +30,7 @@ import Plus from '@lucide/svelte/icons/plus';
 
 		<!-- 생성 -->
 		<a
-			href={`/todos/create?redirectTo=${page.url.pathname}${encodeURIComponent(page.url.search)}`}
+			href={`/todos/create${search}`}
 			class="flex-1 flex flex-col items-center justify-center"
 		>
 			<div class="preset-filled-secondary-500 rounded-full p-1">
