@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import IconPencilLine from '@lucide/svelte/icons/pencil-line';
 	import IconAlignLeft from '@lucide/svelte/icons/align-left';
@@ -10,16 +10,24 @@
 	import IconFolder from '@lucide/svelte/icons/folder';
 	import IconTag from '@lucide/svelte/icons/tag';
 	import IconFlag from '@lucide/svelte/icons/flag';
+    import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+
+    let tags = $state(data?.todo?.tags ?? []);
 
 	const { data } = $props();
 
-	// 이전 단계(목록)으로 돌아갈 URL. 이미 한 번 URL‑encoded된 값이 전달된다.
-	const action = page.url.searchParams.get('returnTo') ?? '/todos';
+	const action = $derived.by(() => {
+		const pageUrl = page.url.pathname;
+		const search = page.url.search;
+		return `${pageUrl}${search}`;
+	});
 
-	const handleEnhance = ({ action }) => {
+	const handleEnhance = ({ }) => {
 		return async ({ result }) => {
 			if (result.type === 'success') {
-				await goto(action, { replaceState: true });
+				invalidateAll();
+			} else if (result.type === 'redirect') {
+				await goto(result.location, { replaceState: true });
 			}
 		};
 	};
@@ -33,13 +41,13 @@
 			<label class="flex flex-col gap-1">
 				<span class="flex items-center gap-2">
 					<IconPencilLine class="size-5" />
-					<span>제목</span>
+					<span>할일 제목</span>
 				</span>
 				<input
 					id="todo-title"
 					type="text"
 					name="title"
-					placeholder="제목"
+					placeholder="할일 제목"
 					required
 					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
 					value={data.todo.title}
@@ -49,13 +57,13 @@
 			<label class="flex flex-col gap-1">
 				<span class="flex items-center gap-2 mb-1">
 					<IconAlignLeft class="size-5" />
-					<span>설명</span>
+					<span>할일 설명</span>
 				</span>
 				<input
 					id="todo-description"
 					type="text"
 					name="description"
-					placeholder="설명 (선택)"
+					placeholder="할일 설명 (선택)"
 					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
 					value={data.todo?.description ?? ''}
 					readonly
@@ -99,12 +107,10 @@
 				</span>
 				<select
 					name="repeatType"
-					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
-					readonly
+					class="bg-transparent border-0 ring-0"
+					disabled
 				>
-					<option value="" selected={data.todo?.repeatType === '' || !data.todo?.repeatType}
-						>반복 없음</option
-					>
+					<option value="" selected={data.todo?.repeatType === '' || !data.todo?.repeatType}>반복 없음</option>
 					<option value="NONE" selected={data.todo?.repeatType === 'NONE'}>반복 없음</option>
 					<option value="DAILY" selected={data.todo?.repeatType === 'DAILY'}>매일</option>
 					<option value="WEEKLY" selected={data.todo?.repeatType === 'WEEKLY'}>매주</option>
@@ -121,40 +127,51 @@
 					<IconFolder class="size-5" />
 					<span>분류</span>
 				</span>
-				{#if data.todo.categoryId}
-					<span>{data.todo.categoryName}</span>
-				{:else}
-					<a href="/categories/select" class="underline text-primary-600">카테고리 선택</a>
-				{/if}
+			   <select
+				   name="categoryId"
+				   required
+				   class="bg-transparent border-0 ring-0"
+				   disabled
+			   >
+				   <option value="" selected disabled>카테고리 선택</option>
+					{#each data.categories?.content ?? [] as category}
+						<option value={category.id} selected={data.todo.categoryId === category.id}>{category.name}</option>
+					{/each}
+			   </select>
 			</div>
 			<div class="flex justify-between items-center">
-				<span class="flex items-center gap-2">
+				<span class="flex items-center gap-2 shrink-0">
 					<IconTag class="size-5" />
 					<span>태그</span>
 				</span>
-				{#if data.todo.tags}
-					<span class="flex gap-2 flex-wrap">
-						{#each data.todo.tags as tag}
-							<span>{tag}</span>
-						{/each}
-					</span>
-				{:else}
-					<a href="/tags/select" class="underline text-primary-600">태그 선택</a>
-				{/if}
+				<TagsInput 
+					classes="ring-0"
+					inputClasses="text-right"
+					tagListClasses="flex flex-wrap justify-end gap-2"
+					name="tags" 
+					value={tags} 
+					onValueChange={(e) => (tags = e.value)} 
+					placeholder="꼬릿말 추가"
+					disabled
+				/>
 			</div>
-			<div class="flex justify-between items-center">
+			<label class="flex justify-between items-center">
 				<span class="flex items-center gap-2">
 					<IconFlag class="size-5" />
 					<span>중요도</span>
 				</span>
-				{#if data.todo.priorityId != null}
-					<span>
-						{data.todo.priorityName}
-					</span>
-				{:else}
-					<a href="/priority/select" class="underline text-primary-600">중요도 선택</a>
-				{/if}
-			</div>
+			   <select
+				   name="priorityId"
+				   class="bg-transparent border-0 ring-0"
+				   required
+				   disabled
+			   >
+				   <option value="" selected disabled>중요도 선택</option>
+				   {#each data.priorities?.content ?? [] as priority}
+					   <option value={priority.id} selected={data.todo.priorityId === priority.id}>{priority.name}</option>
+				   {/each}
+			   </select>
+			</label>
 		</fieldset>
 	</form>
 </main>
