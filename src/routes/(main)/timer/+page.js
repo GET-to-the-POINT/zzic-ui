@@ -45,6 +45,10 @@ export async function load({ parent, url }) {
 	}
 
 	return {
+		meta: {
+			title: '타이머',
+			description: '투두를 시간 단위로 관리할 수 있는 페이지입니다.'
+		},
 		todoPage: todosResult.data,
 		categoryPage: categoriesResult.data,
 		tagPage: tagResult.data

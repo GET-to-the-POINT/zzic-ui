@@ -7,14 +7,6 @@
 		{ name: '완료', value: 0, colorClass: 'preset-tonal-success' },
 		{ name: '전체', value: 0, colorClass: 'preset-tonal-surface' }
 	]);
-
-	$page(page, ($page) => {
-		const data = $page.data ?? {};
-		stats[0].value = data.todayTodos?.totalElements ?? 0;
-		stats[1].value = data.timeoverTodos?.totalElements ?? 0;
-		stats[2].value = data.doneTodos?.totalElements ?? 0;
-		stats[3].value = data.totalTodos?.totalElements ?? 0;
-	});
 </script>
 
 <div class="card preset-outlined-surface-500 overflow-hidden grid grid-cols-4">

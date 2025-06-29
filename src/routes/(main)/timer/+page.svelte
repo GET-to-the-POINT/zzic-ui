@@ -1,21 +1,22 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
-	import Play from '@lucide/svelte/icons/play';
-	import Pause from '@lucide/svelte/icons/pause';
-	import Timer from '@lucide/svelte/icons/timer';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Target from '@lucide/svelte/icons/target';
+	import Calendar from '@lucide/svelte/icons/calendar';
 	import CheckCircle from '@lucide/svelte/icons/check-circle';
 	import Circle from '@lucide/svelte/icons/circle';
+	import Clock from '@lucide/svelte/icons/clock';
+	import Pause from '@lucide/svelte/icons/pause';
+	import Play from '@lucide/svelte/icons/play';
+	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+	import Settings from '@lucide/svelte/icons/settings';
+	import Target from '@lucide/svelte/icons/target';
+	import Timer from '@lucide/svelte/icons/timer';
 	import Volume2 from '@lucide/svelte/icons/volume-2';
 	import VolumeX from '@lucide/svelte/icons/volume-x';
-	import Calendar from '@lucide/svelte/icons/calendar';
-	import Settings from '@lucide/svelte/icons/settings';
-	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-	import { page } from '$app/stores';
+	import { onDestroy, onMount } from 'svelte';
+
+	const { data } = $props();
 
 	/** @type {import('$lib/zzic-api/todo.js').TodoResponse[]} */
-	let todos = $derived($page.data.todoPage.content);
+	let todos = $derived(data.todoPage.content);
 	let categories = $derived(data.categoryPage.content);
 	let tags = $derived(data.tagPage.content);
 
