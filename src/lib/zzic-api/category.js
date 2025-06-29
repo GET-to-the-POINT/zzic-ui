@@ -69,7 +69,7 @@ export function createCategoryClient(apiUrl, fetchFn) {
 	 * @param {number} categoryId - 카테고리 ID
 	 * @returns {Promise<{data: CategoryResponse|null, error: ApiError|null}>}
 	 */
-	async function getCategory(categoryId) {
+	async function getCategory({ categoryId }) {
 		try {
 			const url = new URL(`${apiUrl}/categories/${categoryId}`);
 			const response = await fetchFn(url.toString(), {
@@ -150,7 +150,7 @@ export function createCategoryClient(apiUrl, fetchFn) {
 	 * @param {number} categoryId - 카테고리 ID
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function deleteCategory(categoryId) {
+	async function deleteCategory({ categoryId }) {
 		try {
 			const url = new URL(`${apiUrl}/categories/${categoryId}`);
 			const response = await fetchFn(url.toString(), {

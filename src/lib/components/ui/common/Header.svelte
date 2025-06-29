@@ -22,7 +22,7 @@
 		page.url.pathname.includes('create') && 'preset-filled-tertiary-500',
 	]}
 >
-	<a href={page.data.returnTo} class="block content-center btn-icon cursor-pointer" onclick={handleBack}>
+	<a href={page.data.returnTo} class="btn-icon cursor-pointer" onclick={handleBack}>
 		{#if page.data.meta?.modal}
 			<X />
 		{:else}
@@ -33,9 +33,9 @@
 		{page.data.meta?.title}
 	</h1>
 	{#if ContextMenu}
-		<ContextMenu class="w-6 h-6" />
+		<ContextMenu />
 	{:else}
-		<button class="btn-icon w-6 h-6">
+		<button class="btn-icon">
 			
 		</button>
 	{/if}

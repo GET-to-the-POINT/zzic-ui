@@ -56,17 +56,6 @@
 	});
 </script>
 
-<!-- 헤더 -->
-<div class="flex justify-between items-center h-16 px-4 font-semibold preset-filled-surface-500">
-	<button type="button" class="btn-icon w-8 h-8" onclick={goBack}>
-		<ArrowLeft class="w-5 h-5" />
-	</button>
-	<h1 class="text-lg font-semibold">카테고리 상세</h1>
-	<button type="button" class="btn-icon w-8 h-8" onclick={() => dialog.showModal()}>
-		<Edit class="w-5 h-5" />
-	</button>
-</div>
-
 <!-- 메인 컨테이너 -->
 <main class="p-4 space-y-6">
 	<!-- 카테고리 기본 정보 -->

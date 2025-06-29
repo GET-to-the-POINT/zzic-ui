@@ -2,9 +2,9 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import Type from '@lucide/svelte/icons/type';
+	import { toaster } from '$lib/utils/toast';
 	import AlignLeft from '@lucide/svelte/icons/align-left';
-	import Palette from '@lucide/svelte/icons/palette';
+	import Type from '@lucide/svelte/icons/type';
 
 	const { data } = $props();
 
@@ -18,8 +18,10 @@
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				await goto(`/categories`, { replaceState: true, invalidateAll: true });
+				toaster.success({ title: '카테고리가 성공적으로 생성되었습니다!' });
 			} else if (result.type === 'redirect') {
-				await goto(result.location, { replaceState: true });
+				await goto(result.location, { replaceState: true, invalidateAll: true });
+				toaster.success({ title: '카테고리가 성공적으로 생성되었습니다!' });
 			}
 		};
 	};

@@ -11,12 +11,14 @@ export async function load({ params, parent }) {
 		{ data: todoData, error: todoError },
 		{ data: categoryData, error: categoryError },
 		{ data: tagData, error: tagError },
-		{ data: priorityData, error: priorityError }
+		{ data: priorityData, error: priorityError },
+		{ data: repeatData, error: repeatError }
 	] = await Promise.all([
 		zzic.todo.getTodo({ todoId }),
 		zzic.category.getCategories(),
 		zzic.tag.getTags(),
-		zzic.priority.getPriorities()
+		zzic.priority.getPriorities(),
+		zzic.repeat.getRepeatTypes()
 	]);
 
 	if (todoError) {
@@ -27,6 +29,8 @@ export async function load({ params, parent }) {
 		error(500, tagError.detail);
 	} else if (priorityError) {
 		error(500, priorityError.detail);
+	} else if (repeatError) {
+		error(500, repeatError.detail);
 	}
 
 	return {
@@ -40,6 +44,7 @@ export async function load({ params, parent }) {
 		todo: todoData,
 		categories: categoryData,
 		tags: tagData,
-		priorities: priorityData
+		priorities: priorityData,
+		repeatTypes: repeatData
 	};
 }

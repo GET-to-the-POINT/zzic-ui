@@ -1,4 +1,6 @@
 <script>
+	import { ca } from 'zod/v4/locales';
+
 	const { data } = $props();
 </script>
 

@@ -12,6 +12,10 @@ export async function load({ parent, params }) {
 	}
 
 	return {
+		meta: {
+			title: category.name,
+			description: '분류 상세 페이지입니다.',
+		},
 		category,
 		contextMenu: CategoryDetailContextMenu
 	};

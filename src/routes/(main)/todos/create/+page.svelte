@@ -104,11 +104,9 @@ const handleEnhance = ({ }) => {
 					name="repeatType"
 					class="bg-transparent border-0 ring-0"
 				>
-					<option value="" selected>반복 없음</option>
-					<option value="NONE">반복 없음</option>
-					<option value="DAILY">매일</option>
-					<option value="WEEKLY">매주</option>
-					<option value="MONTHLY">매월</option>
+					{#each data.repeatTypes.content as repeatType}
+						<option value={repeatType.id}>{repeatType.name}</option>
+					{/each}
 				</select>
 			</label>
 		</fieldset>

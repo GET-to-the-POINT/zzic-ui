@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import ConsumeHeader from '$lib/components/ui/common/ConsumeHeader.svelte';
 	import Type from '@lucide/svelte/icons/type';
 	import AlignLeft from '@lucide/svelte/icons/align-left';
 	import Palette from '@lucide/svelte/icons/palette';
@@ -20,8 +19,6 @@
 		};
 	};
 </script>
-
-<ConsumeHeader title="카테고리 수정" formId={data.formId} />
 
 <main class="p-4">
 	<form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">

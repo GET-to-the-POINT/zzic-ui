@@ -4,6 +4,7 @@ import { createTodoClient } from './todo.js';
 import { createAuthClient } from './auth.js';
 import { createCategoryClient } from './category.js';
 import { createPriorityClient } from './priority.js';
+import { createRepeatClient } from './repeat.js';
 import { createTagClient } from './tag.js';
 
 /**
@@ -46,7 +47,8 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 	const challenge = createChallengeClient(apiUrl, fetchFn);
 	const category = createCategoryClient(apiUrl, fetchFn);
 	const priority = createPriorityClient(apiUrl, fetchFn);
+	const repeat = createRepeatClient(apiUrl, fetchFn);
 	const tag = createTagClient(apiUrl, fetchFn);
 
-	return { auth, todo, challenge, category, priority, tag };
+	return { auth, todo, challenge, category, priority, repeat, tag };
 }
