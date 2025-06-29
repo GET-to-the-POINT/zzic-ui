@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { goto, invalidate, invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import IconPencilLine from '@lucide/svelte/icons/pencil-line';
 	import IconAlignLeft from '@lucide/svelte/icons/align-left';
@@ -10,6 +10,9 @@
 	import IconFolder from '@lucide/svelte/icons/folder';
 	import IconTag from '@lucide/svelte/icons/tag';
 	import IconFlag from '@lucide/svelte/icons/flag';
+    import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+
+    let tags = $state([]);
 
 	const { data } = $props();
 
@@ -97,7 +100,7 @@
 				</span>
 				<select
 					name="repeatType"
-					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
+					class="bg-transparent border-0 ring-0"
 				>
 					<option value="" selected>반복 없음</option>
 					<option value="NONE">반복 없음</option>
@@ -116,29 +119,46 @@
 					<IconFolder class="size-5" />
 					<span>분류</span>
 				</span>
-				<a href={`/categories/select`} class="underline text-primary-600">카테고리 선택</a>
+			   <select
+				   name="categoryId"
+				   required
+				   class="bg-transparent border-0 ring-0"
+			   >
+				   <option value="" selected disabled>카테고리 선택</option>
+					{#each data.categories.content as category}
+						<option value={category.id}>{category.name}</option>
+					{/each}
+			   </select>
 			</div>
 			<div class="flex justify-between items-center">
-				<span class="flex items-center gap-2">
+				<span class="flex items-center gap-2 shrink-0">
 					<IconTag class="size-5" />
 					<span>태그</span>
 				</span>
-				<a href="/tags/select" class="underline text-primary-600">태그 선택</a>
+				<TagsInput 
+					classes="ring-0"
+					inputClasses="text-right"
+					tagListClasses="flex flex-wrap justify-end gap-2"
+					name="tags" 
+					value={tags} 
+					onValueChange={(e) => (tags = e.value)} 
+					placeholder="꼬릿말 추가" />
 			</div>
 			<label class="flex justify-between items-center">
 				<span class="flex items-center gap-2">
 					<IconFlag class="size-5" />
 					<span>중요도</span>
 				</span>
-				<select
-					name="priorityId"
-					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
-				>
-					<option value="" selected>보통</option>
-					<option value="0">낮음</option>
-					<option value="1">보통</option>
-					<option value="2">높음</option>
-				</select>
+			   <select
+				   name="priorityId"
+				   class="bg-transparent border-0 ring-0"
+				   required
+			   >
+				   <option value="" selected disabled>중요도 선택</option>
+				   {#each data.priorities?.content ?? [] as priority}
+					   <option value={priority.id}>{priority.name}</option>
+				   {/each}
+			   </select>
 			</label>
 		</fieldset>
 	</form>

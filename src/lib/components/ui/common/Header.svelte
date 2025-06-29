@@ -29,7 +29,9 @@
 			<ChevronLeft />
 		{/if}
 	</a>
-	<h1 class="text-2xl font-semibold uppercase">{page.data.meta?.title ?? 'header'}</h1>
+	<h1 class="text-2xl font-semibold uppercase">
+		{page.data.meta?.title}
+	</h1>
 	{#if ContextMenu}
 		<ContextMenu class="w-6 h-6" />
 	{:else}

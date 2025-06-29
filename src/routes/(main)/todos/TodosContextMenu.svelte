@@ -1,9 +1,11 @@
 <script>
 	import { page } from '$app/state';
-	import Check from '@lucide/svelte/icons/check';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Plus from '@lucide/svelte/icons/plus';
-	import X from '@lucide/svelte/icons/x';
+import Check from '@lucide/svelte/icons/check';
+import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
+import Plus from '@lucide/svelte/icons/plus';
+import CalendarDays from '@lucide/svelte/icons/calendar-days';
+import X from '@lucide/svelte/icons/x';
+import { afterNavigate } from '$app/navigation';
 
 	const searchParams = new URLSearchParams(page.url.search);
 	searchParams.set('returnTo', page.url.pathname);
@@ -15,9 +17,9 @@
 		dialog.showModal();
 	};
 
-	const dialogClose = () => {
+	afterNavigate(() => {
 		dialog.close();
-	};
+	});
 
 	const redirectToTodosCreate = $derived.by(() => {
 		const pageUrl = page.url.pathname;
@@ -49,7 +51,14 @@
 			<Plus size={16} />
 			새 할일 추가
 		</a>
-		<form action={`${page.url.pathname}`} onsubmit={dialogClose} class="w-full">
+	   <a
+		   href="/todos"
+		   class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+	   >
+		   <CalendarDays size={16} />
+		   오늘 보기
+	   </a>
+		<form action={`${page.url.pathname}`} class="w-full">
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
 			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
 			{#if page.url.searchParams.get('hideStatusIds') === '1'}
@@ -67,7 +76,7 @@
 					type="submit"
 					name="hideStatusIds"
 					value="1"
-					class="justify-start btn hover:bg-surface-800-200"
+					class="w-full justify-start btn hover:bg-surface-800-200"
 				>
 					<Check size={16} />
 					완료된 할일 숨기기

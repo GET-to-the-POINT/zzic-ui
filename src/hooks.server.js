@@ -31,7 +31,7 @@ const handleAuth = async ({ event, resolve }) => {
 	}
 
 	if (event.locals.user && event.locals.serverInstant) {
-		const userTimeZone = event.locals.user.timeZone || 'Asia/Seoul'; // 기본 시간대 설정
+		const userTimeZone = event.locals.user.timeZone; // 기본 시간대 설정
 		const userZonedDateTime = event.locals.serverInstant.toZonedDateTimeISO(userTimeZone);
 
 		event.locals.temporal = {

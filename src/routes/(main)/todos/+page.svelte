@@ -159,11 +159,10 @@
 									</span>
 
 									<!-- 시간 -->
-									{#if todo.dueDate}
+									{#if todo.dueTime}
 										<div class="badge text-xs flex items-center gap-1">
 											<Clock class="w-3 h-3" />
-											{todo.dueDate}
-											{todo.dueTime ? `, ${todo.dueTime}` : ''}
+											{todo.dueTime.slice(0,5)}
 										</div>
 									{/if}
 
