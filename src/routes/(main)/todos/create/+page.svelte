@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import IconPencilLine from '@lucide/svelte/icons/pencil-line';
 	import IconAlignLeft from '@lucide/svelte/icons/align-left';
