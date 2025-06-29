@@ -43,7 +43,7 @@
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
 		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
 		{ id: 'timer', label: '타이머', icon: Clock, href: '/timer' },
-		{ id: 'profile', label: '내 정보', icon: User, href: '/profile' }
+		{ id: 'profile', label: '내 정보 (준비중)', icon: User, href: '' }
 	];
 
 	const toolItems = [
@@ -123,11 +123,11 @@
 
 			<!-- 설정 -->
 			<a
-				href="/settings"
+				href=""
 				class="flex items-center h-12"
 			>
 				<Settings size={20} class="mr-3 text-surface-600-300" />
-				<span class="flex-1">설정</span>
+				<span class="flex-1">설정 (준비중)</span>
 			</a>
 
 			<!-- 로그아웃 -->
