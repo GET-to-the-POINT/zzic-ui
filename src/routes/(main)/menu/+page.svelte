@@ -53,9 +53,9 @@
 
 </script>
 
-<div class="container mx-auto px-4 py-6 max-w-md">
+<main class="p-4 space-y-4">
 	<!-- 사용자 정보 -->
-	<div class="preset-filled-surface-50-950 rounded-xl p-4 mb-6">
+	<div class="preset-filled-surface-50-950 p-4">
 		<div class="flex items-center mb-4">
 			<Avatar name={user.initial} size="size-12" classes="mr-3" />
 			<div>
@@ -73,14 +73,14 @@
 	</div>
 
 	<!-- 메인 메뉴 -->
-	<div class="space-y-4 mb-6">
-		<h3 class="text-lg font-semibold text-surface-900-50 px-2">메인 메뉴</h3>
+	<div class="preset-filled-surface-500 p-4">
+		<h2 class="text-lg font-semibold">메인 메뉴</h2>
 		<div class="space-y-2">
 			{#each navItems as item}
 				{@const IconComponent = item.icon}
 				<a
 					href={item.href}
-					class="flex items-center p-3 rounded-lg hover:bg-surface-100-800 transition-colors"
+					class="flex items-center h-12"
 				>
 					<IconComponent size={20} class="mr-3 text-primary-500" />
 					<span class="flex-1">{item.label}</span>
@@ -90,16 +90,16 @@
 	</div>
 
 	<!-- 도구 -->
-	<div class="space-y-4 mb-6">
-		<h3 class="text-lg font-semibold text-surface-900-50 px-2">도구</h3>
+	<div class="preset-filled-surface-500 p-4">
+		<h2 class="text-lg font-semibold">도구</h2>
 		<div class="space-y-2">
 			{#each toolItems as item}
 				{@const IconComponent = item.icon}
 				<a
 					href={item.href}
-					class="flex items-center p-3 rounded-lg hover:bg-surface-100-800 transition-colors"
+					class="flex items-center h-12"
 				>
-					<IconComponent size={20} class="mr-3 text-warning-500" />
+					<IconComponent size={20} class="mr-3" />
 					<span class="flex-1">{item.label}</span>
 				</a>
 			{/each}
@@ -107,15 +107,15 @@
 	</div>
 
 	<!-- 설정 -->
-	<div class="space-y-4">
-		<h3 class="text-lg font-semibold text-surface-900-50 px-2">설정</h3>
+	<div class="preset-filled-surface-500 p-4">
+		<h2 class="text-lg font-semibold">설정</h2>
 		<div class="space-y-2">
 			<!-- 다크모드 토글 -->
-			<label class="flex items-center p-3 rounded-lg hover:bg-surface-100-800 transition-colors">
+			<label class="flex items-center h-12 cursor-pointer">
 				{#if checked}
-					<Sun size={20} class="mr-3 text-yellow-500" />
+					<Sun size={20} class="mr-3" />
 				{:else}
-					<Moon size={20} class="mr-3 text-purple-500" />
+					<Moon size={20} class="mr-3" />
 				{/if}
 				<span class="flex-1">{checked ? '라이트 모드' : '다크모드'}</span>
 				<input class="hidden" type="checkbox" bind:checked />
@@ -124,7 +124,7 @@
 			<!-- 설정 -->
 			<a
 				href="/settings"
-				class="flex items-center p-3 rounded-lg hover:bg-surface-100-800 transition-colors"
+				class="flex items-center h-12"
 			>
 				<Settings size={20} class="mr-3 text-surface-600-300" />
 				<span class="flex-1">설정</span>
@@ -133,11 +133,11 @@
 			<!-- 로그아웃 -->
 			<a
 				href="/auth/sign-out"
-				class="flex items-center p-3 rounded-lg hover:bg-surface-100-800 transition-colors text-error-600"
+				class="flex items-center h-12 text-error-600"
 			>
 				<LogOut size={20} class="mr-3 text-error-500" />
 				<span class="flex-1">로그아웃</span>
 			</a>
 		</div>
 	</div>
-</div>
+</main>
