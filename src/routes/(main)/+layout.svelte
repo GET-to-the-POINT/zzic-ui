@@ -1,4 +1,5 @@
 <script>
+	import BottomNavigation from '$lib/components/ui/common/BottomNavigation.svelte';
 	import Header from '$lib/components/ui/common/Header.svelte';
 	import Sidebar from '$lib/components/ui/common/Sidebar.svelte';
 	const { children } = $props();
@@ -7,3 +8,4 @@
 <!-- <Sidebar /> -->
 <Header />
 {@render children()}
+<BottomNavigation />

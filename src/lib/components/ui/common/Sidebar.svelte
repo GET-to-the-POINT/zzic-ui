@@ -2,11 +2,6 @@
 	// Lucide Icons
 	import { page } from '$app/state';
 	import { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
-	import {
-		getSettingsFromBrowser,
-		saveSettingsToBrowser,
-		updateSettings
-	} from '$lib/utils/settings.js';
 	import Calculator from '@lucide/svelte/icons/calculator';
 	import { default as Calendar, default as ChevronDown } from '@lucide/svelte/icons/chevron-down';
 	import Clock from '@lucide/svelte/icons/clock';
@@ -26,7 +21,6 @@
 	import SignoutDialog, { openSignoutDialog } from './SignoutDialog.svelte';
 
 	let checked = $state(false);
-	let settings = $state(page.data?.settings || getSettingsFromBrowser());
 
 	$effect(() => {
 		const mode = checked ? 'dark' : 'light';
@@ -34,12 +28,6 @@
 		localStorage.setItem('mode', mode);
 	});
 
-	// 설정이 변경될 때 쿠키에 저장
-	$effect(() => {
-		if (typeof window !== 'undefined') {
-			saveSettingsToBrowser(settings);
-		}
-	});
 
 	// Props with default values
 	let {
@@ -102,25 +90,6 @@
 		openSignoutDialog();
 	};
 
-	const toggleFocusMode = async () => {
-		const newSettings = updateSettings(settings, { focusMode: !settings.focusMode });
-		settings = newSettings;
-
-		// 서버에 설정 저장
-		try {
-			await fetch('/api/settings', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ settings: newSettings })
-			});
-		} catch (error) {
-			console.warn('서버 설정 저장 실패:', error);
-			// 브라우저 로컬에는 저장
-			saveSettingsToBrowser(newSettings);
-		}
-	};
 </script>
 
 <aside
@@ -194,9 +163,9 @@
 					<ChevronDown size={16} class="details-chevron transition-transform" />
 				</summary>
 				<div class="space-y-1 mt-1">
-					<a href="/memo" class="btn w-full hover:bg-surface-800-200">
+					<a href="/note" class="btn w-full hover:bg-surface-800-200">
 						<StickyNote size={12} class="w-4 mr-4 text-warning-500" />
-						<span class="flex-1 text-xs">메모장</span>
+						<span class="flex-1 text-xs">노트</span>
 					</a>
 					<a href="/calculate" class="btn w-full hover:bg-surface-800-200">
 						<Calculator size={12} class="w-4 mr-4 text-secondary-500" />

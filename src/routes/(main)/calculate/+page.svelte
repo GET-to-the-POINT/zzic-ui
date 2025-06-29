@@ -1,5 +1,4 @@
 <script>
-	import Calculator from '@lucide/svelte/icons/calculator';
 
 	// 계산기 상태
 	let display = $state('0');
@@ -109,16 +108,11 @@
 
 <main class="p-4">
 	<div class="space-y-4">
-		<!-- 헤더 -->
-		<div class="flex items-center gap-3 mb-6">
-			<Calculator size={24} class="text-primary-500" />
-			<h1 class="text-2xl font-bold text-surface-900-50">계산기</h1>
-		</div>
 
 		<!-- 계산기 본체 -->
-		<div class="card preset-filled-surface-800-200 p-4 shadow-xl">
+		<div class="preset-filled-surface-50-950 p-4 rounded-xl">
 			<!-- 디스플레이 -->
-			<div class="preset-filled-surface-50-950 p-4 rounded-lg mb-4">
+			<div class="preset-filled-surface-100-900 p-4 rounded-lg mb-4 border border-surface-300-700">
 				<div
 					class="text-right text-3xl font-mono text-surface-900-50 min-h-[3rem] flex items-center justify-end overflow-hidden"
 				>
@@ -130,19 +124,19 @@
 			<div class="grid grid-cols-4 gap-2">
 				<!-- 첫 번째 줄: AC, +/-, %, ÷ -->
 				<button
-					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
+					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={clearAll}
 				>
 					AC
 				</button>
 				<button
-					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
+					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={toggleSign}
 				>
 					+/-
 				</button>
 				<button
-					class="btn preset-filled-secondary-500 h-14 text-lg font-semibold"
+					class="btn preset-filled-surface-200-800 h-14 text-lg font-semibold"
 					onclick={inputPercent}
 				>
 					%
@@ -246,7 +240,7 @@
 					.
 				</button>
 				<button
-					class="btn preset-filled-success-500 h-14 text-lg font-semibold"
+					class="btn preset-filled-primary-500 h-14 text-lg font-semibold"
 					onclick={performCalculation}
 				>
 					=
@@ -255,7 +249,7 @@
 		</div>
 
 		<!-- 사용법 안내 -->
-		<div class="card preset-filled-surface-800-200 p-4">
+		<div class="preset-filled-surface-50-950 p-4 rounded-xl">
 			<h3 class="text-sm font-semibold text-surface-700-300 mb-2">사용법</h3>
 			<ul class="text-xs text-surface-600-400 space-y-1">
 				<li>• 숫자를 입력하고 연산자를 선택하세요</li>

@@ -6,20 +6,32 @@ export async function load({ params, parent }) {
 	const { todoId } = params;
 	const { zzic } = await parent();
 
-	const { data, error: todoError } = await zzic.todo.getTodo({ todoId });
+	const { data: todoData, error: todoError } = await zzic.todo.getTodo({ todoId });
+	const { data: categoryData, error: categoryError } = await zzic.category.getCategories();
+	const { data: tagData, error: tagError } = await zzic.tag.getTags();
+	const { data: priorityData, error: priorityError } = await zzic.priority.getPriorities();
 
 	if (todoError) {
 		error(500, `Todo with id ${todoId} not found`);
+	} else if (categoryError) {
+		error(500, categoryError.detail);
+	} else if (tagError) {
+		error(500, tagError.detail);
+	} else if (priorityError) {
+		error(500, priorityError.detail);
 	}
 
 	return {
 		meta: {
-			title: data.title,
+			title: todoData.title,
 			description: '할일 수정 페이지입니다.',
 			modal: true
 		},
-		todo: data,
 		formId: crypto.randomUUID(),
-		contextMenu: UpdateContextMenu
+		contextMenu: UpdateContextMenu,
+		todo: todoData,
+		categories: categoryData,
+		tags: tagData,
+		priorities: priorityData
 	};
 }

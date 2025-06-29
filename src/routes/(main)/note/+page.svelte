@@ -82,8 +82,8 @@
 	function createNewMemo() {
 		const newMemo = {
 			id: crypto.randomUUID(),
-			title: `새 메모 ${memos.length + 1}`,
-			content: '# 새 메모\n\n여기에 내용을 작성하세요...',
+			title: `새 노트 ${memos.length + 1}`,
+			content: '# 새 노트\n\n여기에 내용을 작성하세요...',
 			createdAt: new Date(),
 			updatedAt: new Date()
 		};
@@ -248,13 +248,13 @@
 			<div class="flex items-center justify-between mb-4">
 				<h1 class="text-xl font-bold flex items-center gap-2">
 					<FileText size={20} />
-					메모장
+					노트
 				</h1>
 				<button
 					type="button"
 					class="btn-icon preset-tonal-primary"
 					onclick={createNewMemo}
-					title="새 메모 만들기"
+					title="새 노트 만들기"
 				>
 					<Plus size={16} />
 				</button>
@@ -299,10 +299,10 @@
 				class="btn preset-tonal-error w-full"
 				onclick={() => currentMemo && deleteMemo(currentMemo.id)}
 				disabled={memos.length <= 1}
-				title="현재 메모 삭제"
+				title="현재 노트 삭제"
 			>
 				<Trash2 size={16} />
-				메모 삭제
+				노트 삭제
 			</button>
 		</div>
 	</aside>
@@ -317,7 +317,7 @@
 						type="text"
 						bind:value={memoTitle}
 						class="input text-lg font-semibold bg-transparent border-none p-0 focus:ring-0"
-						placeholder="메모 제목을 입력하세요"
+						placeholder="노트 제목을 입력하세요"
 					/>
 					<div class="flex items-center gap-2">
 						<!-- 저장 버튼 (noscript 환경에서만 표시) -->
@@ -389,10 +389,10 @@
 			<div class="flex-1 flex items-center justify-center">
 				<div class="text-center">
 					<FileText size={48} class="mx-auto mb-4 text-surface-400-600" />
-					<p class="text-surface-500-500 mb-4">메모를 선택하거나 새로 만들어보세요</p>
+					<p class="text-surface-500-500 mb-4">노트를 선택하거나 새로 만들어보세요</p>
 					<button type="button" class="btn preset-filled-primary-500" onclick={createNewMemo}>
 						<Plus size={16} />
-						새 메모 만들기
+						새 노트 만들기
 					</button>
 				</div>
 			</div>

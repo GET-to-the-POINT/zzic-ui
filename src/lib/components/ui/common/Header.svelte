@@ -36,7 +36,7 @@
 		<ContextMenu class="w-6 h-6" />
 	{:else}
 		<button class="btn-icon w-6 h-6">
-			<Bell class="w-6 h-6" />
+			
 		</button>
 	{/if}
 </header>
