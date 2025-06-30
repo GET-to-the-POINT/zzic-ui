@@ -42,7 +42,22 @@
 <!-- Calendar Grid -->
 <div class="grid grid-cols-7 grid-rows-5">
 	{#each data.monthlyTodos as day}
-		<form
+		{@const searchParams = new URLSearchParams({startDate: day.date, endDate: day.date})}
+		<a 
+			href={`/todos/?${searchParams.toString()}`}
+			class={[
+				`btn h-16`,
+				'relative border-b-1 border-primary-500',
+				day.isToday ? 'preset-filled-primary-500' : 'preset-filled-surface-50-950',
+				day.isCurrentMonth ? '' : 'opacity-75',
+				day.empty
+					? ''
+					: "before:content-[''] before:absolute before:top-1 before:right-1 before:w-2 before:h-2 before:bg-secondary-500 before:rounded-full"
+			]}
+		>
+			{day.day}
+		</a>
+		<!-- <form
 			action={`/todos`}
 			class={[
 				'relative text-center border-b-2 border-primary-500 hover:preset-filled-surface-500',
@@ -63,6 +78,6 @@
 			>
 				{day.day}
 			</button>
-		</form>
+		</form> -->
 	{/each}
 </div>
