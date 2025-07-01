@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Testing
 
-- **Run all tests**: `pnpm test` (unit + e2e)
+- **Run all tests**: `pnpm test` (unit + e2e via npm scripts)
 - **Unit tests only**: `pnpm test:unit` (vitest)
 - **Unit tests (watch mode)**: `pnpm test:unit --watch`
 - **E2E tests only**: `pnpm test:e2e` (playwright)
@@ -55,9 +55,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Layout groups**:
   - `(main)`: Authenticated pages with Header component
   - `(no-header)`: Authentication pages without header
-- **Protected routes**: `/dashboard`, `/todos`, `/categories`, `/settings`, `/profile`
-- **Auth guard**: Automatic redirect to `/auth/sign-in` for unauthenticated users
+- **Protected routes**: `/dashboard`, `/todos`, `/categories`, `/settings`, `/profile`, `/search`, `/calendar`, `/timer`, `/menu`, `/note`, `/calculate`
+- **Auth guard**: Automatic redirect to `/auth/sign-in` for unauthenticated users (configured in `src/hooks.server.js:57`)
 - **Dynamic routes**: `/todos/[todoId]`, `/categories/[categoryId]`
+- **CRUD operations**: Each entity has dedicated create/update/delete subpages with context menus
 
 ### State Management Patterns
 
@@ -149,3 +150,9 @@ export const actions = {
 - `src/app.css`: Global styles with Skeleton themes + custom "pinky" theme
 - `src/lib/jwt.js`: JWT token utilities
 - `components.json`: shadcn-svelte component configuration
+
+## Important Development Guidelines
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
