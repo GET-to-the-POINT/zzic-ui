@@ -5,6 +5,8 @@ export const actions = {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		const password = formData.get('password');
+		const redirectTo = url.searchParams.get('redirectTo');
+		
 		const { error } = await zzic.auth.signIn({ email, password });
 
 		if (error) {
@@ -13,7 +15,6 @@ export const actions = {
 			});
 		}
 
-		const redirectTo = url.searchParams.get('redirect');
 		if (redirectTo) {
 			redirect(303, redirectTo);
 		}

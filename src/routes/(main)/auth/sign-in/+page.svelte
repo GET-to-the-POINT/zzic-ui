@@ -1,12 +1,13 @@
 <script>
 	import { enhance } from '$app/forms';
-	import Mail from '@lucide/svelte/icons/mail';
-	import Lock from '@lucide/svelte/icons/lock';
-	import User from '@lucide/svelte/icons/user';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import Lock from '@lucide/svelte/icons/lock';
+	import Mail from '@lucide/svelte/icons/mail';
+	import User from '@lucide/svelte/icons/user';
 
 	const handleEnhance = () => {
-		return ({result}) => {
+		return ({ result }) => {
 			if (result.type === 'success') {
 				goto('/dashboard', { replaceState: true, invalidateAll: true });
 			}
@@ -27,7 +28,7 @@
 
 		<!-- Body -->
 		<section>
-			<form method="POST" action="/auth/sign-in" class="space-y-4" use:enhance>
+			<form method="POST" action={page.url.pathname + page.url.search} class="space-y-4" use:enhance>
 				<label class="label">
 					<span class="label-text">이메일</span>
 					<div class="input-group grid-cols-[auto_1fr]">
@@ -79,7 +80,7 @@
 
 	<!-- Section 2: 데모 계정 -->
 	<section>
-		<form method="POST" class="preset-filled-warning-500" use:enhance={handleEnhance}>
+		<form method="POST" action={page.url.pathname + page.url.search} class="preset-filled-warning-500" use:enhance={handleEnhance}>
 			<input type="hidden" name="email" value="anon@zzic.com" />
 			<input type="hidden" name="password" value="" />
 			<button type="submit" class="card p-4 w-full text-left">
