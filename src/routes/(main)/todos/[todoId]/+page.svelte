@@ -11,10 +11,10 @@
 	import IconTag from '@lucide/svelte/icons/tag';
 	import IconFlag from '@lucide/svelte/icons/flag';
     import { TagsInput } from '@skeletonlabs/skeleton-svelte';
+	
+	const { data } = $props();
 
     let tags = $state(data?.todo?.tags ?? []);
-
-	const { data } = $props();
 
 	const action = $derived.by(() => {
 		const pageUrl = page.url.pathname;
