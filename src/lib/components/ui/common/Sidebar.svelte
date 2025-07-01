@@ -1,7 +1,5 @@
 <script>
-	// Lucide Icons
 	import { page } from '$app/state';
-	import { openTodoDialog } from '$lib/components/ui/todo/TodoDialog.svelte';
 	import Calculator from '@lucide/svelte/icons/calculator';
 	import { default as Calendar, default as ChevronDown } from '@lucide/svelte/icons/chevron-down';
 	import Clock from '@lucide/svelte/icons/clock';
@@ -18,7 +16,6 @@
 	import Wrench from '@lucide/svelte/icons/wrench';
 	import Zap from '@lucide/svelte/icons/zap';
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
-	import SignoutDialog, { openSignoutDialog } from './SignoutDialog.svelte';
 
 	let checked = $state(false);
 
@@ -61,34 +58,11 @@
 	const xpProgress = $derived((user.xp / user.maxXp) * 100);
 
 	/**
-	 * @param {string} pageId
-	 */
-	function handleNavigation(pageId) {
-		onNavigate(pageId);
-	}
-
-	/**
 	 * @param {string} actionId
 	 */
 	function handleQuickAction(actionId) {
 		onQuickAction(actionId);
 	}
-
-	/**
-	 * @param {Event} e
-	 */
-	const handleNewTodo = (e) => {
-		e.preventDefault();
-		openTodoDialog();
-	};
-
-	/**
-	 * @param {Event} e
-	 */
-	const handleSignout = (e) => {
-		e.preventDefault();
-		openSignoutDialog();
-	};
 
 </script>
 
@@ -141,7 +115,7 @@
 					/>
 				</summary>
 				<div class="space-y-1 mt-1">
-					<a href="/todos/new" class="btn w-full hover:bg-surface-800-200" onclick={handleNewTodo}>
+					<a href="/todos/new" class="btn w-full hover:bg-surface-800-200">
 						<Plus size={12} class="w-4 mr-4 text-secondary-800-200" />
 						<span class="flex-1 text-xs">새 할일</span>
 					</a>
@@ -197,7 +171,6 @@
 			<a
 				href="/auth/sign-out"
 				class="btn w-full justify-start h-8 text-error-600 hover:text-error-700 hover:bg-surface-800-200"
-				onclick={handleSignout}
 			>
 				<LogOut size={16} class="mr-2 text-error-500" />
 				<span class="text-sm">로그아웃</span>
@@ -205,5 +178,3 @@
 		</div>
 	</div>
 </aside>
-
-<SignoutDialog />

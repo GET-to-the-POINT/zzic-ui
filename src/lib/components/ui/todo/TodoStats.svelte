@@ -1,6 +1,4 @@
 <script>
-	import { page } from '$app/state';
-	// Svelte 5 룬: $state로 stats를 선언하고, $page로 page 스토어를 구독
 	let stats = $state([
 		{ name: '오늘', value: 0, colorClass: 'preset-tonal' },
 		{ name: '기간초과', value: 0, colorClass: 'preset-tonal-warning' },
