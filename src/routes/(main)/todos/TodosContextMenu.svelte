@@ -8,7 +8,7 @@ import X from '@lucide/svelte/icons/x';
 import { afterNavigate } from '$app/navigation';
 
 	const searchParams = new URLSearchParams(page.url.search);
-	searchParams.set('returnTo', page.url.pathname);
+	searchParams.set('redirectTo', page.url.pathname);
 
 	/** @type {HTMLDialogElement} */
 	let dialog;

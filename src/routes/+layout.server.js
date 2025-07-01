@@ -1,8 +1,8 @@
 export async function load({ cookies, locals, request }) {
-	const returnTo = request.headers.get('referer');
+	const redirectTo = request.headers.get('referer');
 
 	return {
-		returnTo,
+		redirectTo,
 		temporal: locals.temporal,
 		cookies: cookies.getAll()
 	};

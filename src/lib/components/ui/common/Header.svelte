@@ -22,7 +22,7 @@
 		page.url.pathname.includes('create') && 'preset-filled-tertiary-500',
 	]}
 >
-	<a href={page.data.returnTo} class="btn-icon cursor-pointer" onclick={handleBack}>
+	<a href={page.data.redirectTo} class="btn-icon cursor-pointer" onclick={handleBack}>
 		{#if page.data.meta?.modal}
 			<X />
 		{:else}

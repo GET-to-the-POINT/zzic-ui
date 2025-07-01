@@ -9,7 +9,7 @@
 	const { data } = $props();
 
 	// 이전 단계로 돌아갈 URL
-	const action = page.url.searchParams.get('returnTo') ?? `/categories/${data.category.id}`;
+	const action = page.url.searchParams.get('redirectTo') ?? `/categories/${data.category.id}`;
 
 	const handleEnhance = () => {
 		return async ({ result }) => {

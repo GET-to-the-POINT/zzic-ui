@@ -16,7 +16,7 @@
 		dialog.close();
 	};
 
-	const returnToCategoryUpdate = $derived.by(() => {
+	const redirectToCategoryUpdate = $derived.by(() => {
 		const redirectTo = page.url.searchParams.get('redirectTo');
 		if (redirectTo) {
 			return `/categories/${page.data.category.id}/update?redirectTo=${encodeURIComponent(redirectTo)}`;
@@ -24,7 +24,7 @@
 		return `/categories/${page.data.category.id}/update`;
 	});
 
-	const returnToCategoryDelete = $derived.by(() => {
+	const redirectToCategoryDelete = $derived.by(() => {
 		const redirectTo = page.url.searchParams.get('redirectTo');
 		if (redirectTo) {
 			return `/categories/${page.data.category.id}/delete?redirectTo=${encodeURIComponent(redirectTo)}`;
@@ -49,7 +49,7 @@
 	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col gap-2">
 		<!-- 수정하기 -->
 		<a
-			href={returnToCategoryUpdate}
+			href={redirectToCategoryUpdate}
 			class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
 		>
 			<Edit size={16} />
@@ -58,7 +58,7 @@
 
 		<!-- 삭제하기 -->
 		<a
-			href={returnToCategoryDelete}
+			href={redirectToCategoryDelete}
 			class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2 text-error-500"
 		>
 			<Trash2 size={16} />

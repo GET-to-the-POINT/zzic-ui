@@ -7,6 +7,7 @@
 	import Home from '@lucide/svelte/icons/house';
 	import LogOut from '@lucide/svelte/icons/log-out';
 	import Moon from '@lucide/svelte/icons/moon';
+	import Search from '@lucide/svelte/icons/search';
 	import Settings from '@lucide/svelte/icons/settings';
 	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
 	import StickyNote from '@lucide/svelte/icons/sticky-note';
@@ -41,6 +42,7 @@
 	const navItems = [
 		{ id: 'dashboard', label: '대시보드', icon: Home, href: '/dashboard' },
 		{ id: 'todos', label: '할 일', icon: SquareCheckBig, href: '/todos' },
+		{ id: 'search', label: '검색', icon: Search, href: '/search' },
 		{ id: 'categories', label: '분류', icon: Folder, href: '/categories' },
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
 		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },

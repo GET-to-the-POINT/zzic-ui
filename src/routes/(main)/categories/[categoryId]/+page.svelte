@@ -20,9 +20,9 @@
 	 * 뒤로가기 핸들러
 	 */
 	const goBack = () => {
-		const returnTo = page.url.searchParams.get('returnTo');
-		if (returnTo) {
-			goto(returnTo);
+		const redirectTo = page.url.searchParams.get('redirectTo');
+		if (redirectTo) {
+			goto(redirectTo);
 		} else {
 			goto('/categories');
 		}
@@ -39,20 +39,20 @@
 		};
 	};
 
-	const returnToCategoryUpdate = $derived.by(() => {
+	const redirectToCategoryUpdate = $derived.by(() => {
 		const pageUrl = page.url.pathname;
 		const search = page.url.search;
-		const returnTo = `?returnTo=${encodeURIComponent(pageUrl + search)}`;
+		const redirectTo = `?redirectTo=${encodeURIComponent(pageUrl + search)}`;
 
-		return `/categories/${data.category.id}/update` + (search ? returnTo : '');
+		return `/categories/${data.category.id}/update` + (search ? redirectTo : '');
 	});
 
-	const returnToCategoryDelete = $derived.by(() => {
+	const redirectToCategoryDelete = $derived.by(() => {
 		const pageUrl = page.url.pathname;
 		const search = page.url.search;
-		const returnTo = `?returnTo=${encodeURIComponent(pageUrl + search)}`;
+		const redirectTo = `?redirectTo=${encodeURIComponent(pageUrl + search)}`;
 
-		return `/categories/${data.category.id}/delete` + (search ? returnTo : '');
+		return `/categories/${data.category.id}/delete` + (search ? redirectTo : '');
 	});
 </script>
 
@@ -121,14 +121,14 @@
 	</form>
 	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
 		<a
-			href={returnToCategoryUpdate}
+			href={redirectToCategoryUpdate}
 			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
 		>
 			<Edit size={16} />
 			카테고리 수정
 		</a>
 		<a
-			href={returnToCategoryDelete}
+			href={redirectToCategoryDelete}
 			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2 text-error-500"
 		>
 			<Trash2 size={16} />

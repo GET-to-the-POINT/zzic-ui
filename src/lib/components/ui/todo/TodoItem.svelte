@@ -1,119 +1,103 @@
 <script>
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+	import { toaster } from '$lib/utils/toast';
+	import AlertCircle from '@lucide/svelte/icons/alert-circle';
 	import Check from '@lucide/svelte/icons/check';
 	import Clock from '@lucide/svelte/icons/clock';
-	import Flag from '@lucide/svelte/icons/flag';
-	import Repeat from '@lucide/svelte/icons/repeat';
 	import Square from '@lucide/svelte/icons/square';
-	import Tag from '@lucide/svelte/icons/tag';
-	import AlertCircle from '@lucide/svelte/icons/alert-circle';
-
-	import { goto } from '$app/navigation';
-
-	import { enhance } from '$app/forms';
-	import TodoUpdateDialog from './TodoUpdateDialog.svelte';
-	import { page } from '$app/state';
 
 	/**
 	 * @typedef {import('../../../zzic-api/todo.js').TodoResponse} TodoResponse
-	 **/
+	 */
 
-	/** @type {{ todoResponse: TodoResponse }} */
-	let { todoResponse } = $props();
-
-	/** @type {TodoUpdateDialog} */
-	let detail;
-
-	function showModal() {
-		detail.showModal();
-	}
+	/** @type {{ todo: TodoResponse }} */
+	let { todo } = $props();
 
 	/**
-	 * @param {number} priorityId
-	 * @returns {string}
+	 * Form enhance 핸들러
 	 */
-	function getPriorityBadgeClass(priorityId) {
-		if (priorityId === 2) return 'badge'; // 높음
-		if (priorityId === 1) return 'badge'; // 보통
-		if (priorityId === 0) return 'badge'; // 낮음
-		return '';
-	}
-
-	const handleEnhance = ({ formElement, formData, action, cancel }) => {
-		return async ({ result }) => {
-			if (result.type === 'redirect') {
-				await goto(result.location, { invalidateAll: true, noScroll: true });
+	const handleEnhance = () => {
+		return async (/** @type {any} */ { result }) => {
+			if (result.type === 'success') {
+				await invalidateAll();
+				toaster.success({ title: '할 일이 성공적으로 업데이트되었습니다!' });
 			}
 		};
 	};
 
-	const action = $derived.by(() => {
-		let url = `/todos/${todoResponse.id}?/update`;
-
-		if (page.url.search) {
-			// page.url.search는 "?"로 시작하므로 이를 제거하고 "&"로 연결
-			url += '&' + page.url.search.substring(1);
-		}
-
-		return url;
-	});
+	const isCompleted = $derived(todo.statusId === 1);
 </script>
 
-<article
-	class="grid grid-cols-[auto_1fr] gap-4 p-2 {todoResponse.statusId === 1 ? 'opacity-60' : ''}"
->
-	<form {action} method="POST" use:enhance={handleEnhance}>
-		<button
-			type="submit"
-			name="statusId"
-			value={todoResponse.statusId === 1 ? 0 : 1}
-			class="btn-icon {todoResponse.statusId === 1
-				? 'preset-tonal-success'
-				: todoResponse.statusId === 2
-					? 'preset-tonal-warning'
-					: 'preset-tonal'}"
+<div class={[isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500']}>
+	<div class="flex items-start gap-2">
+		<!-- 체크박스 -->
+		<form
+			class="pt-4 pl-4"
+			action={`/todos/${todo.id}/update`}
+			method="POST"
+			use:enhance={handleEnhance}
 		>
-			{#if todoResponse.statusId === 1}
-				<!-- 완료 상태 -->
-				<Check size={16} />
-			{:else if todoResponse.statusId === 2}
-				<!-- 기간초과 상태 -->
-				<AlertCircle size={16} />
-			{:else}
-				<!-- 미완료 상태 (진행중) -->
-				<Square size={16} />
-			{/if}
-		</button>
-	</form>
+			<button
+				type="submit"
+				name="statusId"
+				value={todo.statusId === 1 ? 0 : 1}
+				class="mt-1 btn-icon {isCompleted
+					? 'preset-filled-primary-500'
+					: 'preset-filled-surface-500'}"
+			>
+				{#if todo.statusId === 1}
+					<!-- 완료 상태 -->
+					<Check size={16} />
+				{:else if todo.statusId === 2}
+					<!-- 기간초과 상태 -->
+					<AlertCircle size={16} />
+				{:else}
+					<!-- 미완료 상태 (진행중) -->
+					<Square size={16} />
+				{/if}
+			</button>
+		</form>
 
-	<!-- 제목/설명 -->
-	<button class="text-left" onclick={showModal}>
-		<div class={todoResponse.statusId === 1 ? 'line-through' : ''}>{todoResponse.title}</div>
-		<div class="text-surface-500 text-sm {todoResponse.statusId === 1 ? 'line-through' : ''}">
-			{todoResponse.description || '\u00A0'}
-		</div>
+		<!-- 컨텐츠 -->
+		<a
+			href={`/todos/${todo.id}`}
+			class="pl-2 py-4 pr-4 flex-1"
+		>
+			<!-- 제목과 설명 -->
+			<div>
+				<h3 class={['font-semibold', isCompleted && 'line-through']}>
+					{todo.title}
+				</h3>
+				<p class={['text-xs', isCompleted && 'line-through']}>
+					{todo.description}
+				</p>
+			</div>
 
-		<!-- 배지 영역 -->
-		<div class="flex flex-wrap gap-1 font-thin">
-			{#if todoResponse.priorityId != null}
-				<span class={getPriorityBadgeClass(todoResponse.priorityId)}
-					><Flag size={12} class="mr-1" />{todoResponse.priorityName}</span
-				>
-			{/if}
-			{#if todoResponse.categoryName}
-				<span class="badge">{todoResponse.categoryName}</span>
-			{/if}
-			{#if todoResponse.tags && todoResponse.tags.length > 0}
-				{#each todoResponse.tags as tag}
-					<span class="badge"><Tag size={10} class="mr-1" />{tag}</span>
-				{/each}
-			{/if}
-			<span class="badge"><Clock size={12} class="mr-1" />{todoResponse.statusName}</span>
-			{#if todoResponse.repeatType && todoResponse.repeatType !== 'NONE'}
-				<span class="badge"><Repeat size={12} class="mr-1" />{todoResponse.repeatType}</span>
-			{/if}
-		</div>
-	</button>
-</article>
+			<!-- 태그들과 시간 -->
+			<div class="flex flex-wrap items-center gap-1.5">
+				<!-- 카테고리 -->
+				<span class="badge text-xs preset-outlined-primary-500">
+					{todo.categoryName || '미분류'}
+				</span>
 
-<!-- TodoUpdateDialog 다이얼로그 -->
-<TodoUpdateDialog bind:this={detail} {todoResponse} />
+				<!-- 시간 -->
+				{#if todo.dueTime}
+					<div class="badge text-xs flex items-center gap-1">
+						<Clock class="w-3 h-3" />
+						{todo.dueTime.slice(0,5)}
+					</div>
+				{/if}
+
+				<!-- 태그들 -->
+				{#if todo.tags}
+					{#each todo.tags as tag}
+						<span class="badge text-xs before:content-['#'] before:opacity-70">
+							{tag}
+						</span>
+					{/each}
+				{/if}
+			</div>
+		</a>
+	</div>
+</div>

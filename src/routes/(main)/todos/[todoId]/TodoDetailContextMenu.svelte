@@ -9,7 +9,7 @@
 	import X from '@lucide/svelte/icons/x';
 
 	const searchParams = new URLSearchParams(page.url.search);
-	searchParams.set('returnTo', page.url.pathname);
+	searchParams.set('redirectTo', page.url.pathname);
 
 	/** @type {HTMLDialogElement} */
 	let dialog;

@@ -54,7 +54,7 @@ const handleAuth = async ({ event, resolve }) => {
  * @type {import('@sveltejs/kit').Handle}
  */
 const authGuard = async ({ event, resolve }) => {
-	const guardPaths = ['/dashboard', '/settings', '/profile', '/todos', '/categories'];
+	const guardPaths = ['/search', '/dashboard', '/settings', '/profile', '/todos', '/categories'];
 	const { pathname } = event.url;
 	const isAuthRequired = guardPaths.some((path) => pathname.startsWith(path));
 

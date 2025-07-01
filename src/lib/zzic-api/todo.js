@@ -190,7 +190,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			});
 
 			if (!response.ok) {
-				const error = await response.json();
+				const error = await response.text();
 				return { data: null, error };
 			}
 			/** @type {PageTodoResponse} */
