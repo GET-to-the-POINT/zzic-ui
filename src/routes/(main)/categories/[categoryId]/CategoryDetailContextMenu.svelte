@@ -1,9 +1,10 @@
 <script>
-	import { page } from '$app/state';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Edit from '@lucide/svelte/icons/edit';
-	import Trash2 from '@lucide/svelte/icons/trash-2';
-	import X from '@lucide/svelte/icons/x';
+import { page } from '$app/state';
+import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
+import Edit from '@lucide/svelte/icons/edit';
+import List from '@lucide/svelte/icons/list';
+import Trash2 from '@lucide/svelte/icons/trash-2';
+import X from '@lucide/svelte/icons/x';
 
 	/** @type {HTMLDialogElement} */
 	let dialog;
@@ -54,6 +55,15 @@
 		>
 			<Edit size={16} />
 			카테고리 수정
+		</a>
+
+		<!-- 목록으로 -->
+		<a
+			href="/categories"
+			class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+		>
+			<List size={16} />
+			카테고리 목록
 		</a>
 
 		<!-- 삭제하기 -->
