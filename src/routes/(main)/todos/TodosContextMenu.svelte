@@ -4,6 +4,7 @@ import Check from '@lucide/svelte/icons/check';
 import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
 import Plus from '@lucide/svelte/icons/plus';
 import CalendarDays from '@lucide/svelte/icons/calendar-days';
+import Search from '@lucide/svelte/icons/search';
 import X from '@lucide/svelte/icons/x';
 import { afterNavigate } from '$app/navigation';
 
@@ -57,6 +58,13 @@ import { afterNavigate } from '$app/navigation';
 	   >
 		   <CalendarDays size={16} />
 		   오늘 보기
+	   </a>
+	   <a
+		   href="/search"
+		   class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+	   >
+		   <Search size={16} />
+		   검색
 	   </a>
 		<form action={`${page.url.pathname}`} class="w-full">
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
