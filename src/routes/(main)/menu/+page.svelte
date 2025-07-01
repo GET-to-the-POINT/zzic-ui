@@ -19,18 +19,32 @@
 	let { data } = $props();
 	let checked = $state(false);
 
-	const user = {
-		name: data?.user?.nickname,
-		initial: data?.user?.nickname ?? '김',
-		level: data?.user?.level ?? 15,
-		xp: data?.user?.xp ?? 2350,
-		maxXp: data?.user?.maxXp ?? 3000,
-		streak: data?.user?.streak ?? 7,
-		todayCompleted: data?.user?.todayCompleted ?? 3,
-		totalTodos: data?.user?.totalTodos ?? 156
+	// 사용자 기본 정보는 기존 data.user에서 가져옴
+	const userInfo = {
+		name: data?.user?.nickname || '사용자',
+		initial: data?.user?.nickname?.[0] || '사',
+		email: data?.user?.email
 	};
 
-	const xpProgress = $derived((user.xp / user.maxXp) * 100);
+	// 경험치 정보는 API에서 가져온 데이터 사용 (fallback 포함)
+	const experienceInfo = {
+		level: data?.memberExperience?.currentLevel ?? 1,
+		levelName: data?.memberExperience?.levelName ?? '초보자',
+		currentExp: data?.memberExperience?.currentExp ?? 0,
+		currentLevelProgress: data?.memberExperience?.currentLevelProgress ?? 0,
+		currentLevelTotal: data?.memberExperience?.currentLevelTotal ?? 100,
+		expToNextLevel: data?.memberExperience?.expToNextLevel ?? 100
+	};
+
+	// 임시 데이터 (추후 별도 API로 분리 예정)
+	const statsInfo = {
+		streak: 7,
+		todayCompleted: 3,
+		totalTodos: 156
+	};
+
+	// 경험치 진행률 계산
+	const xpProgress = $derived((experienceInfo.currentLevelProgress / experienceInfo.currentLevelTotal) * 100);
 
 	$effect(() => {
 		const mode = checked ? 'dark' : 'light';
@@ -47,7 +61,7 @@
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
 		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
 		{ id: 'timer', label: '타이머', icon: Clock, href: '/timer' },
-		{ id: 'profile', label: '내 정보 (준비중)', icon: User, href: '' }
+		{ id: 'profile', label: '내 정보 (준비중)', icon: User, href: '/profile' }
 	];
 
 	const toolItems = [
@@ -61,16 +75,18 @@
 	<!-- 사용자 정보 -->
 	<div class="preset-filled-surface-50-950 p-4">
 		<div class="flex items-center mb-4">
-			<Avatar name={user.initial} size="size-12" classes="mr-3" />
+			<Avatar name={userInfo.initial} size="size-12" classes="mr-3" />
 			<div>
-				<h2 class="font-semibold text-lg">{user.name}</h2>
-				<p class="text-sm text-surface-600-300">레벨 {user.level}</p>
+				<h2 class="font-semibold text-lg">{userInfo.name}</h2>
+				<p class="text-sm text-surface-600-300">
+					레벨 {experienceInfo.level} - {experienceInfo.levelName}
+				</p>
 			</div>
 		</div>
 		<div class="space-y-2">
 			<div class="flex items-center justify-between text-xs text-surface-600-300">
-				<span>XP {user.xp}</span>
-				<span>{user.maxXp}</span>
+				<span>XP {experienceInfo.currentExp}</span>
+				<span>다음 레벨까지 {experienceInfo.expToNextLevel}</span>
 			</div>
 			<Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
 		</div>
@@ -127,7 +143,7 @@
 
 			<!-- 설정 -->
 			<a
-				href=""
+				href="/settings"
 				class="flex items-center h-12"
 			>
 				<Settings size={20} class="mr-3 text-surface-600-300" />

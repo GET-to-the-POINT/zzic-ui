@@ -329,12 +329,52 @@ export function createTodoClient(apiUrl, fetchFn) {
 		}
 	}
 
+	/**
+	 * 월별 캘린더 Todo 현황 조회
+	 * @param {number} year - 연도
+	 * @param {number} month - 월
+	 * @param {URLSearchParams} [searchParams] - 추가 검색 파라미터
+	 * @returns {Promise<{data: PageCalendarTodoStatusResponse|null, error: ApiError|null}>}
+	 */
+	async function getMonthlyCalendarTodos(year, month, searchParams) {
+		try {
+			const url = new URL(`${apiUrl}/todos/calendar/monthly`);
+			url.searchParams.set('year', year.toString());
+			url.searchParams.set('month', month.toString());
+			
+			// 추가 파라미터가 있으면 병합
+			if (searchParams) {
+				for (const [key, value] of searchParams.entries()) {
+					if (key !== 'year' && key !== 'month') {
+						url.searchParams.set(key, value);
+					}
+				}
+			}
+
+			const response = await fetchFn(url.toString(), {
+				credentials: 'include'
+			});
+
+			if (!response.ok) {
+				const error = await response.json();
+				return { data: null, error };
+			}
+
+			/** @type {PageCalendarTodoStatusResponse} */
+			const data = await response.json();
+			return { data, error: null };
+		} catch (error) {
+			return { data: null, error: /** @type {any} */ (error) };
+		}
+	}
+
 	return {
 		getTodos,
 		getTodo,
 		createTodo,
 		updateTodo,
 		deleteTodo,
-		getTodoStatistics
+		getTodoStatistics,
+		getMonthlyCalendarTodos
 	};
 }

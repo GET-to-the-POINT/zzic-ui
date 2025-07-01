@@ -6,6 +6,7 @@ import { createCategoryClient } from './category.js';
 import { createPriorityClient } from './priority.js';
 import { createRepeatClient } from './repeat.js';
 import { createTagClient } from './tag.js';
+import { createMemberClient } from './member.js';
 
 /**
  * 브라우저 클라이언트용 ZZIC 인증 클라이언트
@@ -30,14 +31,8 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 			};
 		}
 
-		// TODO: [BACKEND] 타임존 정보는 현재 하드코딩되어 있음. 백엔드에서 사용자별 타임존 구현 예정
-		const userWithTimeZone = {
-			...user,
-			timeZone: 'Asia/Seoul' // 하드코딩된 타임존 - 추후 백엔드에서 제공 예정
-		};
-
 		return {
-			data: { user: /** @type {any} */ (userWithTimeZone) },
+			data: { user },
 			error: null
 		};
 	};
@@ -49,6 +44,7 @@ export function createZzicBrowserClient(apiUrl, options = {}) {
 	const priority = createPriorityClient(apiUrl, fetchFn);
 	const repeat = createRepeatClient(apiUrl, fetchFn);
 	const tag = createTagClient(apiUrl, fetchFn);
+	const member = createMemberClient(apiUrl, fetchFn);
 
-	return { auth, todo, challenge, category, priority, repeat, tag };
+	return { auth, todo, challenge, category, priority, repeat, tag, member };
 }
