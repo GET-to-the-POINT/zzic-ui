@@ -9,7 +9,7 @@
 	let { todoPage } = $props();
 </script>
 
-<div class="space-y-2">
+<div class="space-y-4">
 	{#if todoPage.numberOfElements > 0}
 		{#each todoPage.content as todo (todo.id)}
 			<TodoItem {todo} />
