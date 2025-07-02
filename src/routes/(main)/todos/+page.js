@@ -4,7 +4,6 @@ import { Temporal } from '@js-temporal/polyfill';
 import { redirect } from '@sveltejs/kit';
 import TodosContextMenu from './TodosContextMenu.svelte';
 
-// 이 페이지만의 특별한 스키마 정의
 const testPageSchema = z
 	.object({
 		startDate: z
@@ -37,7 +36,8 @@ const testPageSchema = z
 					.map((id) => Number(id.trim()))
 					.filter((id) => !isNaN(id))
 			)
-			.optional()
+			.optional(),
+		categoryId: z.string().optional()
 	})
 	.refine(
 		(data) => {
@@ -105,8 +105,24 @@ export async function load({ parent, url }) {
 	// 위 분기문에 의해서 서치파람스는 반드시 데이터가 채워진 상태로 요청이 들어온다.
 	const selectedDate = Temporal.PlainDate.from(url.searchParams.get('startDate'));
 
-	const todosResult = await zzic.todo.getTodos(url.searchParams);
-	if (todosResult.error) error(todosResult.error.message);
+	const categoryId = url.searchParams.get('categoryId');
+	const todoPromise = zzic.todo.getTodos(url.searchParams);
+
+	let categoryPromise = Promise.resolve({ data: null, error: null });
+	if (categoryId) {
+		categoryPromise = zzic.category.getCategory({ categoryId });
+	}
+
+	const [
+		{ data: todos, error: todosError },
+		{ data: category, error: categoryError }
+	] = await Promise.all([
+		todoPromise,
+		categoryPromise
+	]);
+
+	if (todosError) error(todosError.message)
+	else if (categoryError) error(categoryError.message);
 
 	// 3일 날짜 계산 (선택된 날짜 앞뒤로 1일씩 총 3일)
 	const weeklyDates = [];
@@ -148,10 +164,10 @@ export async function load({ parent, url }) {
 
 	return {
 		meta: {
-			title: '할 일',
-			description: '할 일 관리 페이지입니다.'
+			title: `할일 : ${category ? category.name : '전체'}`,
+			description: '할일 관리 페이지입니다.'
 		},
-		selectedDateTodos: todosResult.data,
+		selectedDateTodos: todos,
 		weeklyTodos: weeklyTodos,
 		weeklyDates: weeklyDates, // 주간 날짜 정보 추가
 		selectedDate: selectedDate.toString(), // 선택된 날짜 정보 추가

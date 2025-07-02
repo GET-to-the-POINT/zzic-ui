@@ -1,7 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import Edit from '@lucide/svelte/icons/edit';
 	import Palette from '@lucide/svelte/icons/palette';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
@@ -14,29 +12,6 @@
 
 	const dialogClose = () => {
 		dialog.close();
-	};
-
-	/**
-	 * 뒤로가기 핸들러
-	 */
-	const goBack = () => {
-		const redirectTo = page.url.searchParams.get('redirectTo');
-		if (redirectTo) {
-			goto(redirectTo);
-		} else {
-			goto('/categories');
-		}
-	};
-
-	/**
-	 * Form enhance 핸들러
-	 */
-	const handleEnhance = () => {
-		return async ({ result }) => {
-			if (result.type === 'success') {
-				goBack();
-			}
-		};
 	};
 
 	const redirectToCategoryUpdate = $derived.by(() => {
