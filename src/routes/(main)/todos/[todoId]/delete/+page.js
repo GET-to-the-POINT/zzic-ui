@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import DeleteTodoContextMenu from './DeleteContextMenu.svelte';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params, parent }) {
+export async function load({ params, parent, url }) {
 	const { todoId } = params;
-	const { zzic } = await parent();
+	const { zzic } = await requireAuth(parent, url);
 
 	const { data, error: todoError } = await zzic.todo.getTodo({ todoId });
 

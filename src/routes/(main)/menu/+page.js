@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 
 /**
  * @type {import('./$types').PageLoad}
  */
-export async function load({ parent }) {
-	const { user, settings, zzic } = await parent();
+export async function load({ parent, url }) {
+	const { user, settings, zzic } = await requireAuth(parent, url);
 
 	const { data: memberExperience, error: memberError } = await zzic.member.getMemberExperience({ memberId: user.sub });
 

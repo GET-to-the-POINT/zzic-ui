@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import { validateAndPrepareOptions } from '$lib/schemas/todo-query.js';
 
 /**
@@ -21,7 +22,7 @@ import { validateAndPrepareOptions } from '$lib/schemas/todo-query.js';
  * @returns {Promise<PageData>} Timer 페이지 데이터
  */
 export async function load({ parent, url }) {
-	const { zzic } = await parent();
+	const { zzic } = await requireAuth(parent, url);
 
 	// URL 쿼리 파라미터를 검증하고 옵션으로 변환
 	const result = validateAndPrepareOptions(url.searchParams, {

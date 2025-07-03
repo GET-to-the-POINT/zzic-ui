@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import ContextMenu from './CreateContextMenu.svelte';
 
-export async function load({parent}) {
-
-	const { zzic } = await parent();
+export async function load({ parent, url }) {
+	const { zzic } = await requireAuth(parent, url);
 
 	const [
 		{ data: categoryData, error: categoryError },

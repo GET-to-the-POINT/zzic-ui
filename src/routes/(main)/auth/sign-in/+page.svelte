@@ -9,7 +9,10 @@
 	const handleEnhance = () => {
 		return ({ result }) => {
 			if (result.type === 'success') {
-				goto('/dashboard', { replaceState: true, invalidateAll: true });
+				// redirectTo 파라미터가 있으면 해당 페이지로, 없으면 대시보드로
+				const redirectTo = page.url.searchParams.get('redirectTo');
+				const destination = redirectTo ? decodeURIComponent(redirectTo) : '/dashboard';
+				goto(destination, { replaceState: true, invalidateAll: true });
 			}
 			else if (result.type === 'redirect') {
 				goto(result.location, { replaceState: true, invalidateAll: true });

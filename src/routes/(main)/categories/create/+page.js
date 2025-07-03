@@ -1,6 +1,8 @@
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import CreateContextMenu from './CreateContextMenu.svelte';
 
-export async function load() {
+export async function load({ parent, url }) {
+	await requireAuth(parent, url);
 	return {
 		meta: {
 			title: '카테고리 생성',

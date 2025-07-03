@@ -1,7 +1,7 @@
 <script>
-	import BottomNavigation from '$lib/components/ui/common/BottomNavigation.svelte';
-	import Header from '$lib/components/ui/common/Header.svelte';
-	import Sidebar from '$lib/components/ui/common/Sidebar.svelte';
+	import BottomNavigation from '$lib/components/widgets/navigation/BottomNavigation.svelte';
+	import Header from '$lib/components/widgets/navigation/Header.svelte';
+	import Sidebar from '$lib/components/widgets/navigation/Sidebar.svelte';
 	const { children } = $props();
 </script>
 

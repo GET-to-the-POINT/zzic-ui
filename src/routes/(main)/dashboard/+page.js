@@ -1,7 +1,8 @@
 import { Temporal } from '@js-temporal/polyfill';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 
-export async function load({ parent , url}) {
-	const { zzic, temporal, user } = await parent();
+export async function load({ parent, url }) {
+	const { zzic, temporal, user } = await requireAuth(parent, url);
 
 
 	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds)

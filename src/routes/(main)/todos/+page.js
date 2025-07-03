@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { z } from 'zod';
 import { Temporal } from '@js-temporal/polyfill';
 import { redirect } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import TodosContextMenu from './TodosContextMenu.svelte';
 
 const testPageSchema = z
@@ -64,7 +65,7 @@ const testPageSchema = z
 	);
 
 export async function load({ parent, url }) {
-	const { zzic, user, temporal } = await parent();
+	const { zzic, user, temporal } = await requireAuth(parent, url);
 
 	const rawParams = Object.fromEntries(url.searchParams.entries());
 	const parsedParams = testPageSchema.safeParse(rawParams);

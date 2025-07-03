@@ -1,5 +1,5 @@
 <script>
-	import TodoItem from '$lib/components/ui/todo/TodoItem.svelte';
+	import TodoItem from '$lib/components/widgets/todos/TodoItem.svelte';
 	import { page } from '$app/state';
 </script>
 

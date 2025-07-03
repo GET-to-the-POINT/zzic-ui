@@ -1,5 +1,6 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { error, redirect } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import { z } from 'zod';
 
 // 년월 파라미터 검증 스키마
@@ -15,7 +16,7 @@ const calendarParamSchema = z.object({
 });
 
 export async function load({ parent, url }) {
-	const { temporal, user, zzic } = await parent();
+	const { temporal, user, zzic } = await requireAuth(parent, url);
 
 	const rawParams = Object.fromEntries(url.searchParams.entries());
 	const dateValidation = calendarParamSchema.safeParse(rawParams);

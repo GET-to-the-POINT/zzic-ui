@@ -1,6 +1,6 @@
 <script>
-	import TodoStats from '$lib/components/ui/todo/TodoStats.svelte';
-	import CalendarComponent from '$lib/components/ui/common/CalendarComponent.svelte';
+	import TodoStats from '$lib/components/widgets/dashboard/TodoStatsWidget.svelte';
+	import CalendarComponent from '$lib/components/widgets/calendar/CalendarWidget.svelte';
 
 	const { data } = $props();
 </script>

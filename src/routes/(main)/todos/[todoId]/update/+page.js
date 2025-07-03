@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
+import { requireAuth } from '$lib/utils/auth-guard.js';
 import UpdateContextMenu from './UpdateContextMenu.svelte';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params, parent }) {
+export async function load({ params, parent, url }) {
 	const { todoId } = params;
-	const { zzic } = await parent();
+	const { zzic } = await requireAuth(parent, url);
 
 	// 병렬 요청으로 병목 해결
 	const [

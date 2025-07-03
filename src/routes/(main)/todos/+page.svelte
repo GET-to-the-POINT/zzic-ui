@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import TodoList from '$lib/components/ui/todo/TodoList.svelte';
+	import TodoList from '$lib/components/widgets/todos/TodoListWidget.svelte';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 </script>

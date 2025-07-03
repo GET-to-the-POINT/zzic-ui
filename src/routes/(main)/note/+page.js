@@ -1,7 +1,10 @@
+import { requireAuth } from '$lib/utils/auth-guard.js';
+
 /**
  * @type {import('./$types').PageLoad}
  */
-export async function load() {
+export async function load({ parent, url }) {
+	await requireAuth(parent, url);
 	return {
 		meta: {
 			title: '노트',
