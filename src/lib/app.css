@@ -15,6 +15,7 @@
 @import '@skeletonlabs/skeleton/themes/vintage';
 @import '@skeletonlabs/skeleton/themes/sahara';
 @import '@skeletonlabs/skeleton/themes/wintry';
+@import '@skeletonlabs/skeleton/themes/rose';
 
 @source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
 

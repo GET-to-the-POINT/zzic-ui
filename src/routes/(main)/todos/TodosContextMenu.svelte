@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/state';
+import { page } from '$app/state';
 import Check from '@lucide/svelte/icons/check';
 import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
 import Plus from '@lucide/svelte/icons/plus';

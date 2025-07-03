@@ -1,4 +1,3 @@
-import { generateCalendarData, getCurrentYearMonth } from '$lib/utils/calendar.js';
 import { Temporal } from '@js-temporal/polyfill';
 
 export async function load({ parent, url }) {
@@ -44,17 +43,6 @@ export async function load({ parent, url }) {
 		totalTodosPromise
 	]);
 
-	// 캘린더 데이터 생성 (현재 월)
-	const { year, month } = getCurrentYearMonth(null, temporal, user);
-	const calendarData = await generateCalendarData({
-		year,
-		month,
-		temporal,
-		user,
-		zzic,
-		urlSearchParams: url.searchParams
-	});
-
 	return {
 		meta: {
 			title: '대시보드',
@@ -63,7 +51,6 @@ export async function load({ parent, url }) {
 		todayTodos: todayTodos.data,
 		timeoverTodos: timeoverTodos.data,
 		doneTodos: doneTodos.data,
-		totalTodos: totalTodos.data,
-		calendar: calendarData
+		totalTodos: totalTodos.data
 	};
 }

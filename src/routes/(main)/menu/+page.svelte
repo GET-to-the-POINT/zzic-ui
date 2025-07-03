@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/state';
 	import Calculator from '@lucide/svelte/icons/calculator';
 	import Calendar from '@lucide/svelte/icons/calendar';
 	import Clock from '@lucide/svelte/icons/clock';
@@ -36,13 +35,6 @@
 		expToNextLevel: data?.memberExperience?.expToNextLevel ?? 100
 	};
 
-	// 임시 데이터 (추후 별도 API로 분리 예정)
-	const statsInfo = {
-		streak: 7,
-		todayCompleted: 3,
-		totalTodos: 156
-	};
-
 	// 경험치 진행률 계산
 	const xpProgress = $derived((experienceInfo.currentLevelProgress / experienceInfo.currentLevelTotal) * 100);
 
@@ -73,7 +65,7 @@
 
 <main class="p-4 space-y-4">
 	<!-- 사용자 정보 -->
-	<div class="preset-filled-surface-50-950 p-4">
+	<div class="card preset-filled-surface-50-950 p-4">
 		<div class="flex items-center mb-4">
 			<Avatar name={userInfo.initial} size="size-12" classes="mr-3" />
 			<div>
@@ -93,7 +85,7 @@
 	</div>
 
 	<!-- 메인 메뉴 -->
-	<div class="preset-filled-surface-500 p-4">
+	<div class="card preset-filled-surface-50-950 p-4">
 		<h2 class="text-lg font-semibold">메인 메뉴</h2>
 		<div class="space-y-2">
 			{#each navItems as item}
@@ -110,7 +102,7 @@
 	</div>
 
 	<!-- 도구 -->
-	<div class="preset-filled-surface-500 p-4">
+	<div class="card preset-filled-surface-50-950 p-4">
 		<h2 class="text-lg font-semibold">도구</h2>
 		<div class="space-y-2">
 			{#each toolItems as item}
@@ -127,7 +119,7 @@
 	</div>
 
 	<!-- 설정 -->
-	<div class="preset-filled-surface-500 p-4">
+	<div class="card preset-filled-surface-50-950 p-4">
 		<h2 class="text-lg font-semibold">설정</h2>
 		<div class="space-y-2">
 			<!-- 다크모드 토글 -->

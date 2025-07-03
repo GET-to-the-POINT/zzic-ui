@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import IconSearch from '@lucide/svelte/icons/Search';
+	import IconSearch from '@lucide/svelte/icons/search';
 	import TodoList from '$lib/components/ui/todo/TodoList.svelte';
 
 	const { data } = $props();

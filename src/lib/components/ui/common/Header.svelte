@@ -1,6 +1,5 @@
 <script>
 	import { page } from '$app/state';
-	import Bell from '@lucide/svelte/icons/bell';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import X from '@lucide/svelte/icons/x';
 
@@ -15,7 +14,7 @@
 <header
 	class={[
 		'sticky top-0 z-50 px-4 h-12 flex items-center justify-between',
-		!(page.url.pathname.includes('update') || page.url.pathname.includes('delete')) &&
+		!(page.url.pathname.includes('create') || page.url.pathname.includes('update') || page.url.pathname.includes('delete')) &&
 			'preset-filled-primary-500',
 		page.url.pathname.includes('update') && 'preset-filled-tertiary-500',
 		page.url.pathname.includes('delete') && 'preset-filled-warning-500',
@@ -36,7 +35,7 @@
 		<ContextMenu />
 	{:else}
 		<button class="btn-icon">
-			
+			<!-- dummy -->
 		</button>
 	{/if}
 </header>
