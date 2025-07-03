@@ -25,8 +25,8 @@ export async function load({ parent, url }) {
 
 	// URL 쿼리 파라미터를 검증하고 옵션으로 변환
 	const result = validateAndPrepareOptions(url.searchParams, {
-		// 완료된 투두 숨기기 (statusId: 2)
-		hideStatusIds: [2],
+		// 진행중인 투두만 조회 (완료된 투두 제외)
+		complete: false,
 		size: 200
 	});
 

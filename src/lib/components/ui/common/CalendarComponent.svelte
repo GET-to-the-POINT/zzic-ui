@@ -3,7 +3,7 @@
 	import { Temporal } from '@js-temporal/polyfill';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import { SvelteSet } from 'svelte/reactivity';
+	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 	
 	const today = $derived.by(() => {
 		return Temporal.Instant.fromEpochMilliseconds(page.data.temporal.epochMilliseconds)

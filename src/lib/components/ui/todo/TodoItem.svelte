@@ -43,7 +43,7 @@
 		};
 	};
 
-	const isCompleted = $derived(todo.statusId === 1);
+	const isCompleted = $derived(todo.complete);
 
 	// 터치 이벤트 핸들러
 	const handleTouchStart = (/** @type {TouchEvent} */ e) => {
@@ -261,7 +261,7 @@
 	onclick={handleClickOutside}
 />
 
-<div class="relative overflow-hidden">
+<div class="card relative overflow-hidden">
 	<!-- 왼쪽 스와이프 액션 버튼들 (수정/삭제) -->
 	<div class="absolute top-0 right-0 h-full flex">
 		<!-- 수정 버튼 -->
@@ -302,7 +302,7 @@
 		bind:this={containerElement}
 		class={[
 			'transition-transform duration-200 ease-out',
-			isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-500'
+			isCompleted ? 'preset-filled-primary-50-950' : 'preset-filled-surface-50-950'
 		]}
 		style="transform: translateX({translateX}px)"
 		ontouchstart={handleTouchStart}
@@ -324,13 +324,13 @@
 			>
 				<button
 					type="submit"
-					name="statusId"
-					value={todo.statusId === 1 ? 0 : 1}
+					name="complete"
+					value={(!todo.complete).toString()}
 					class="mt-1 btn-icon {isCompleted
 						? 'preset-filled-primary-500'
-						: 'preset-filled-surface-500'}"
+						: 'preset-filled-surface-50-950'}"
 				>
-					{#if todo.statusId === 1}
+					{#if todo.complete}
 						<!-- 완료 상태 -->
 						<Check size={16} />
 					{:else}
@@ -372,10 +372,10 @@
 					</span>
 
 					<!-- 시간 -->
-					{#if todo.dueTime}
+					{#if todo.time}
 						<div class="badge text-xs flex items-center gap-1">
 							<Clock class="w-3 h-3" />
-							{todo.dueTime.slice(0,5)}
+							{todo.time.slice(0,5)}
 						</div>
 					{/if}
 

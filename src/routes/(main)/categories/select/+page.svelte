@@ -11,7 +11,7 @@
 	<form class="space-y-4" {action}>
 	{#each data.categories.content as category (category.id)}
 		<label 
-			class="[&:has(input:checked)]:preset-filled-secondary-500 h-12 block px-4 content-center preset-filled-surface-500 hover:bg-surface-800-200"
+			class="[&:has(input:checked)]:preset-filled-secondary-500 h-12 block px-4 content-center preset-filled-surface-50-950 hover:bg-surface-800-200"
 		>
 		<input
 			type="radio"

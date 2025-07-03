@@ -44,7 +44,7 @@ import { afterNavigate } from '$app/navigation';
 			<X size={32} />
 		</button>
 	</form>
-	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
+	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col">
 		<a
 			href={redirectToTodosCreate}
 			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
@@ -69,10 +69,10 @@ import { afterNavigate } from '$app/navigation';
 		<form action={`${page.url.pathname}`} class="w-full">
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
 			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
-			{#if page.url.searchParams.get('hideStatusIds') === '1'}
+			{#if page.url.searchParams.get('complete') === 'false'}
 				<button
 					type="submit"
-					name="hideStatusIds"
+					name="complete"
 					value=""
 					class="w-full justify-start btn hover:bg-surface-800-200"
 				>
@@ -82,8 +82,8 @@ import { afterNavigate } from '$app/navigation';
 			{:else}
 				<button
 					type="submit"
-					name="hideStatusIds"
-					value="1"
+					name="complete"
+					value="false"
 					class="w-full justify-start btn hover:bg-surface-800-200"
 				>
 					<Check size={16} />

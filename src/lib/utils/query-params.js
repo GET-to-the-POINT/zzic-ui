@@ -14,7 +14,7 @@ export function parseSearchParams(searchParams, arrayFields = {}) {
 
 	// 기본 배열 필드 설정
 	const defaultArrayFields = {
-		numbers: ['statusIds', 'categoryIds', 'priorityIds', 'hideStatusIds'],
+		numbers: ['categoryIds', 'priorityIds'],
 		strings: ['tags']
 	};
 

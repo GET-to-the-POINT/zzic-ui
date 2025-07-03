@@ -25,7 +25,7 @@
 <div class={compact ? 'text-sm' : ''}>
 	{#if showNavigation}
 		<!-- Date Picker Container -->
-		<div class="flex items-center justify-between px-4 h-12 preset-filled-surface-500">
+		<div class="flex items-center justify-between px-4 h-12 preset-filled-surface-50-950">
 			<button
 				type="button"
 				onclick={handlePrevMonth}

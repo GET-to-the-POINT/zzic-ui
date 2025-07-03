@@ -39,7 +39,7 @@
 <main class="p-4">
 	<form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
 		<!-- 제목/설명 그룹 -->
-		<fieldset class="preset-filled-surface-500 flex flex-col p-4 gap-4">
+		<fieldset class="card preset-filled-surface-50-950 flex flex-col p-4 gap-4">
 			<legend class="sr-only">할 일 기본 정보</legend>
 			<label class="flex flex-col gap-1">
 				<span class="flex items-center gap-2">
@@ -73,7 +73,7 @@
 		</fieldset>
 
 		<!-- 시간 관련 그룹: 날짜, 시간, 반복 -->
-		<fieldset class="preset-filled-surface-500 flex flex-col p-4 gap-4">
+		<fieldset class="card preset-filled-surface-50-950 flex flex-col p-4 gap-4">
 			<legend class="sr-only">날짜 및 반복</legend>
 			<label class="flex justify-between items-center">
 				<span class="flex items-center gap-2">
@@ -116,7 +116,7 @@
 		</fieldset>
 
 		<!-- 분류 관련 그룹: 카테고리, 태그, 중요도 -->
-		<fieldset class="preset-filled-surface-500 flex flex-col p-4 gap-4">
+		<fieldset class="card preset-filled-surface-50-950 flex flex-col p-4 gap-4">
 			<legend class="sr-only">분류 및 중요도</legend>
 			<div class="flex justify-between items-center">
 				<span class="flex items-center gap-2">

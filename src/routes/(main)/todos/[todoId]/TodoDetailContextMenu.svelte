@@ -51,7 +51,7 @@
 			<X size={32} />
 		</button>
 	</form>
-	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col gap-2">
+	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col gap-2">
 		<!-- 완료하기 -->
 		<form
 			action={`/todos/${page.params.todoId}/update`}
@@ -62,10 +62,10 @@
 			<button
 				type="submit"
 				class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
-				name="statusId"
-				value={page.data.todo.statusId !== 1 ? 1 : 0}
+				name="complete"
+				value={(!page.data.todo.complete).toString()}
 			>
-				{#if page.data.todo.statusId !== 1}
+				{#if !page.data.todo.complete}
 					<Check size={16} />
 					완료하기
 				{:else}

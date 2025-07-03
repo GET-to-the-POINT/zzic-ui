@@ -4,16 +4,16 @@ import { z } from 'zod';
  * Todo 목록 조회를 위한 공통 쿼리 파라미터 스키마
  */
 export const todoQuerySchema = z.object({
-	// 배열 파라미터들 - 쉼표로 구분된 문자열을 배열로 변환
-	statusIds: z
+	// 완료 상태 필터
+	complete: z
 		.string()
-		.transform((str) =>
-			str
-				.split(',')
-				.map((id) => Number(id.trim()))
-				.filter((id) => !isNaN(id))
-		)
+		.transform((str) => {
+			if (str === 'true') return true;
+			if (str === 'false') return false;
+			return undefined;
+		})
 		.optional(),
+	// 배열 파라미터들 - 쉼표로 구분된 문자열을 배열로 변환
 	categoryIds: z
 		.string()
 		.transform((str) =>
@@ -24,15 +24,6 @@ export const todoQuerySchema = z.object({
 		)
 		.optional(),
 	priorityIds: z
-		.string()
-		.transform((str) =>
-			str
-				.split(',')
-				.map((id) => Number(id.trim()))
-				.filter((id) => !isNaN(id))
-		)
-		.optional(),
-	hideStatusIds: z
 		.string()
 		.transform((str) =>
 			str

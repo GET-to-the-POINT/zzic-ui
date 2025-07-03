@@ -8,7 +8,7 @@
 <main class="p-4 space-y-4">
 	<a
 		href={`/todos`}
-		class="h-12 block px-4 content-center preset-filled-surface-500 hover:bg-surface-800-200"
+		class="h-12 block px-4 content-center preset-filled-surface-50-950 hover:bg-surface-800-200"
 	>
 		<span class="font-semibold">
 			전체
@@ -19,7 +19,7 @@
 		{searchParam.set('categoryId', category.id)}
 		<a
 			href={`/todos${searchParam.toString() ? `?${searchParam.toString()}` : ''}`}
-			class="h-12 block px-4 content-center preset-filled-surface-500 hover:bg-surface-800-200"
+			class="h-12 block px-4 content-center preset-filled-surface-50-950 hover:bg-surface-800-200"
 		>
 			<span class="font-semibold">
 				{category.name}

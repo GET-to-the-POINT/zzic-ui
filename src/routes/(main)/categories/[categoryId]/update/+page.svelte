@@ -23,7 +23,7 @@
 <main class="p-4">
 	<form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
 		<!-- 기본 정보 그룹 -->
-		<fieldset class="preset-filled-surface-500 flex flex-col p-4 gap-4">
+		<fieldset class="preset-filled-surface-50-950 flex flex-col p-4 gap-4">
 			<legend class="sr-only">카테고리 기본 정보</legend>
 			<label class="flex flex-col gap-1">
 				<span class="flex items-center gap-2">
@@ -58,7 +58,7 @@
 		</fieldset>
 
 		<!-- 색상 설정 그룹 -->
-		<fieldset class="preset-filled-surface-500 flex flex-col p-4 gap-4">
+		<fieldset class="preset-filled-surface-50-950 flex flex-col p-4 gap-4">
 			<legend class="sr-only">카테고리 색상</legend>
 			<label class="flex justify-between items-center">
 				<span class="flex items-center gap-2">

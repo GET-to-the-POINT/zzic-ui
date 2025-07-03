@@ -1,5 +1,3 @@
-import { createZzicServerClient } from '$lib/zzic-api/zzicServer.js';
-import { PUBLIC_ZZIC_API_URL } from '$env/static/public';
 import { error } from '@sveltejs/kit';
 
 /**

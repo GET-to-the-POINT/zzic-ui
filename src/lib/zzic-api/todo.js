@@ -73,18 +73,20 @@ export function splitLocalDateTime(plainDateTime) {
 
 /**
  * @typedef {Object} TodoResponse
- * @property {number} id - Todo ID
+ * @property {string} id - Todo ID (가상 투두의 경우 '원본ID:반복순서' 형식)
  * @property {string} title - 할일 제목
  * @property {string} [description] - 할일 설명
- * @property {number} statusId - 상태 (0: 진행중, 1: 완료, 2: 지연)
- * @property {string} statusName - 상태명
+ * @property {boolean} complete - 완료 여부 (true: 완료, false: 미완료)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {string} [priorityName] - 우선순위명
  * @property {number} [categoryId] - 카테고리 ID
  * @property {string} [categoryName] - 카테고리명
- * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
- * @property {string} [dueTime] - 마감 시간 (HH:mm)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
+ * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [time] - 마감 시간 (HH:mm)
+ * @property {number} [repeatType] - 반복 유형 (0: 반복 안함, 1: 데일리, 2: 위클리, 3: 먼슬리, 4: 이얼리)
+ * @property {number} [repeatInterval] - 반복 간격 (일 단위)
+ * @property {number[]} [daysOfWeek] - 매주 반복 시 선택된 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+ * @property {string} [repeatEndDate] - 반복 종료일
  * @property {string[]} [tags] - 태그 목록
  */
 
@@ -105,26 +107,26 @@ export function splitLocalDateTime(plainDateTime) {
  * @typedef {Object} CreateTodoRequest
  * @property {string} title - 할 일 제목
  * @property {string} [description] - 할 일 설명
- * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
+ * @property {boolean} [complete] - 완료 여부 (true: 완료, false: 미완료)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
- * @property {string} [dueTime] - 마감 시간 (HH:mm)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
- * @property {string} [tags] - 태그 목록 (쉼표로 구분)
+ * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [time] - 마감 시간 (HH:mm)
+ * @property {number} [repeatType] - 반복 유형 (0: 반복 안함, 1: 데일리, 2: 위클리, 3: 먼슬리, 4: 이얼리)
+ * @property {string[]} [tags] - 태그 목록
  */
 
 /**
  * @typedef {Object} UpdateTodoRequest
  * @property {string} [title] - 할 일 제목
  * @property {string} [description] - 할 일 설명
- * @property {number} [statusId] - 상태 (0: 진행중, 1: 완료)
+ * @property {boolean} [complete] - 완료 여부 (true: 완료, false: 미완료)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {number} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
- * @property {string} [dueTime] - 마감 시간 (HH:mm)
- * @property {'NONE'|'DAILY'|'WEEKLY'|'MONTHLY'} [repeatType] - 반복 유형
- * @property {string} [tags] - 태그 목록 (쉼표로 구분)
+ * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [time] - 마감 시간 (HH:mm)
+ * @property {number} [repeatType] - 반복 유형 (0: 반복 안함, 1: 데일리, 2: 위클리, 3: 먼슬리, 4: 이얼리)
+ * @property {string[]} [tags] - 태그 목록
  */
 
 /**
@@ -132,13 +134,13 @@ export function splitLocalDateTime(plainDateTime) {
  * @description FormData로 전송할 수 있는 할 일 수정 필드들의 타입 정의 (참고용)
  * @property {string} [title] - 할 일 제목
  * @property {string} [description] - 할 일 설명
- * @property {string} [statusId] - 상태 ID
+ * @property {string} [complete] - 완료 여부 ("true" 또는 "false")
  * @property {string} [priorityId] - 우선순위 ID
  * @property {string} [categoryId] - 카테고리 ID
- * @property {string} [dueDate] - 마감 날짜 (YYYY-MM-DD)
- * @property {string} [dueTime] - 마감 시간 (HH:mm)
- * @property {string} [repeatType] - 반복 유형 ('NONE'|'DAILY'|'WEEKLY'|'MONTHLY')
- * @property {string} [tags] - 태그 목록 (쉼표로 구분)
+ * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
+ * @property {string} [time] - 마감 시간 (HH:mm)
+ * @property {string} [repeatType] - 반복 유형 (0|1|2|3|4)
+ * @property {string[]} [tags] - 태그 목록
  */
 
 /**
@@ -150,6 +152,12 @@ export function splitLocalDateTime(plainDateTime) {
 /**
  * @typedef {Object} TodoStatisticsResponse
  * @property {StatisticsItem[]} content - 통계 데이터 목록
+ */
+
+/**
+ * @typedef {Object} CalendarTodoStatusResponse
+ * @property {string} date - 날짜 (YYYY-MM-DD)
+ * @property {boolean} hasTodo - 해당 날짜에 Todo 존재 여부
  */
 
 /**
@@ -331,24 +339,14 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 월별 캘린더 Todo 현황 조회
-	 * @param {number} year - 연도
-	 * @param {number} month - 월
-	 * @param {URLSearchParams} [searchParams] - 추가 검색 파라미터
-	 * @returns {Promise<{data: PageCalendarTodoStatusResponse|null, error: ApiError|null}>}
+	 * @param {URLSearchParams} searchParams - year, month가 포함된 검색 파라미터
+	 * @returns {Promise<{data: CalendarTodoStatusResponse[]|null, error: ApiError|null}>}
 	 */
-	async function getMonthlyCalendarTodos(year, month, searchParams) {
+	async function getMonthlyCalendarTodos(searchParams) {
 		try {
 			const url = new URL(`${apiUrl}/todos/calendar/monthly`);
-			url.searchParams.set('year', year.toString());
-			url.searchParams.set('month', month.toString());
-			
-			// 추가 파라미터가 있으면 병합
 			if (searchParams) {
-				for (const [key, value] of searchParams.entries()) {
-					if (key !== 'year' && key !== 'month') {
-						url.searchParams.set(key, value);
-					}
-				}
+				url.search = searchParams.toString();
 			}
 
 			const response = await fetchFn(url.toString(), {
@@ -360,7 +358,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				return { data: null, error };
 			}
 
-			/** @type {PageCalendarTodoStatusResponse} */
+			/** @type {CalendarTodoStatusResponse[]} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {

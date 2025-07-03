@@ -39,7 +39,7 @@
 
 	<form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
 		<!-- 카테고리 정보 확인 -->
-		<fieldset class="preset-filled-surface-500 p-4">
+		<fieldset class="preset-filled-surface-50-950 p-4">
 			<legend class="sr-only">삭제할 카테고리 정보</legend>
 			<div class="space-y-3">
 				<h3 class="font-semibold">삭제할 카테고리</h3>

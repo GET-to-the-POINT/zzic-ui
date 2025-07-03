@@ -6,7 +6,7 @@
 </script>
 
 <main class="p-4">
-	<div class="p-4 preset-filled-surface-500 space-y-4">
+	<div class="p-4 preset-filled-surface-50-950 space-y-4">
 		<!-- Header -->
 		<header class="text-center">
 			<h1 class="text-2xl font-bold">새로운 시작을 축하합니다</h1>

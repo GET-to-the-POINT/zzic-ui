@@ -34,7 +34,7 @@
 <!-- 메인 컨테이너 -->
 <main class="p-4 space-y-6">
 	<!-- 카테고리 기본 정보 -->
-	<div class="preset-filled-surface-500 p-6 space-y-4">
+	<div class="preset-filled-surface-50-950 p-6 space-y-4">
 		<div>
 			<h2 class="text-xl font-semibold mb-2">{data.category.name}</h2>
 			{#if data.category.description}
@@ -73,7 +73,7 @@
 	</div>
 
 	<!-- 연관된 할일들 (추후 구현) -->
-	<div class="preset-filled-surface-500 p-6">
+	<div class="preset-filled-surface-50-950 p-6">
 		<h3 class="text-lg font-semibold mb-4">이 카테고리의 할일</h3>
 		<div class="text-center py-8 text-surface-600-300">
 			<p>이 카테고리에 속한 할일들이 여기에 표시됩니다.</p>
@@ -94,7 +94,7 @@
 			<X size={32} />
 		</button>
 	</form>
-	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col">
+	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col">
 		<a
 			href={redirectToCategoryUpdate}
 			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"

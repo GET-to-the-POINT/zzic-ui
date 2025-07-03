@@ -47,7 +47,7 @@ import X from '@lucide/svelte/icons/x';
 			<X size={32} />
 		</button>
 	</form>
-	<ul class="p-4 preset-filled-surface-500 w-full flex flex-col gap-2">
+	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col gap-2">
 		<!-- 수정하기 -->
 		<a
 			href={redirectToCategoryUpdate}

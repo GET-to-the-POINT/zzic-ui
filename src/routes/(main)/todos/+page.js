@@ -28,14 +28,13 @@ const testPageSchema = z
 				}
 			}, '유효하지 않은 종료 날짜입니다')
 			.optional(),
-		hideStatusIds: z
+		complete: z
 			.string()
-			.transform((str) =>
-				str
-					.split(',')
-					.map((id) => Number(id.trim()))
-					.filter((id) => !isNaN(id))
-			)
+			.transform((str) => {
+				if (str === 'true') return true;
+				if (str === 'false') return false;
+				return undefined;
+			})
 			.optional(),
 		categoryId: z.string().optional()
 	})
@@ -85,7 +84,7 @@ export async function load({ parent, url }) {
 	if (
 		!url.searchParams.has('startDate') ||
 		!url.searchParams.has('endDate') ||
-		!url.searchParams.has('hideStatusIds')
+		!url.searchParams.has('complete')
 	) {
 		if (!url.searchParams.has('startDate')) {
 			url.searchParams.set('startDate', today.toString()); // 오늘 날짜로 기본 설정
@@ -95,15 +94,19 @@ export async function load({ parent, url }) {
 			url.searchParams.set('endDate', today.toString()); // 오늘 날짜로 기본 설정
 		}
 
-		if (!url.searchParams.has('hideStatusIds')) {
-			url.searchParams.set('hideStatusIds', '1'); // 기본적으로 완료된 상태 숨기기
+		if (!url.searchParams.has('complete')) {
+			url.searchParams.set('complete', 'false'); // 기본적으로 진행중인 할일 보기
 		}
 
 		redirect(303, `${url.pathname}?${url.searchParams.toString()}`);
 	}
 
 	// 위 분기문에 의해서 서치파람스는 반드시 데이터가 채워진 상태로 요청이 들어온다.
-	const selectedDate = Temporal.PlainDate.from(url.searchParams.get('startDate'));
+	const startDateParam = url.searchParams.get('startDate');
+	if (!startDateParam) {
+		error(400, 'startDate 파라미터가 필요합니다.');
+	}
+	const selectedDate = Temporal.PlainDate.from(startDateParam);
 
 	const categoryId = url.searchParams.get('categoryId');
 	const todoPromise = zzic.todo.getTodos(url.searchParams);
@@ -121,8 +124,8 @@ export async function load({ parent, url }) {
 		categoryPromise
 	]);
 
-	if (todosError) error(todosError.message)
-	else if (categoryError) error(categoryError.message);
+	if (todosError) error(500, String(todosError));
+	if (categoryError) error(500, String(categoryError));
 
 	// 3일 날짜 계산 (선택된 날짜 앞뒤로 1일씩 총 3일)
 	const weeklyDates = [];
@@ -164,7 +167,7 @@ export async function load({ parent, url }) {
 
 	return {
 		meta: {
-			title: `할일 : ${category ? category.name : '전체'}`,
+			title: `할일 : ${/** @type {any} */(category)?.name || '전체'}`,
 			description: '할일 관리 페이지입니다.'
 		},
 		selectedDateTodos: todos,

@@ -1,31 +1,45 @@
 import { Temporal } from '@js-temporal/polyfill';
 
-export async function load({ parent, url }) {
+export async function load({ parent , url}) {
 	const { zzic, temporal, user } = await parent();
+
 
 	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds)
 		.toZonedDateTimeISO(user.timeZone)
 		.toPlainDate();
 
+	// 현재 날짜를 사용자 타임존으로 변환
+	const currentPlainDate = () => {
+		const yearMonth = url.searchParams.get('yearMonth');
+
+		if (yearMonth) {
+			// URL에 yearMonth가 있으면 해당 년월의 1일 사용
+			const [year, month] = yearMonth.split('-').map(Number);
+			return Temporal.PlainDate.from({ year, month, day: 1 });
+		} else {
+			return today;
+		}
+	};
+
 	const todayTodosPromise = zzic.todo.getTodos(
 		new URLSearchParams({
 			startDate: today.toString(),
 			endDate: today.toString(),
-			hideStatusIds: '1', // 완료된 상태 숨기기
+			complete: 'false', // 진행중인 할일만 조회
 			size: '1' // 오늘 할 일도 존재 여부만 확인
 		})
 	);
 
 	const timeoverTodosPromise = zzic.todo.getTodos(
 		new URLSearchParams({
-			statusIds: '2',
+			// 시간 지난 할일은 별도 API나 필터가 필요할 수 있음
 			size: '1' // 시간 지난 할 일도 존재 여부만 확인
 		})
 	);
 
 	const doneTodosPromise = zzic.todo.getTodos(
 		new URLSearchParams({
-			statusIds: '1', // 완료된 상태 숨기기
+			complete: 'true', // 완료된 할일만 조회
 			size: '1' // 완료된 할 일도 존재 여부만 확인
 		})
 	);
@@ -36,11 +50,19 @@ export async function load({ parent, url }) {
 		})
 	);
 
-	const [todayTodos, timeoverTodos, doneTodos, totalTodos] = await Promise.all([
+	const currentDate = currentPlainDate();
+	const searchParams = new URLSearchParams({
+		year: currentDate.year.toString(),
+		month: currentDate.month.toString()
+	});
+	const calendarTodosPromise = zzic.todo.getMonthlyCalendarTodos(searchParams);
+
+	const [todayTodos, timeoverTodos, doneTodos, totalTodos, calendarTodos] = await Promise.all([
 		todayTodosPromise,
 		timeoverTodosPromise,
 		doneTodosPromise,
-		totalTodosPromise
+		totalTodosPromise,
+		calendarTodosPromise
 	]);
 
 	return {
@@ -51,6 +73,7 @@ export async function load({ parent, url }) {
 		todayTodos: todayTodos.data,
 		timeoverTodos: timeoverTodos.data,
 		doneTodos: doneTodos.data,
-		totalTodos: totalTodos.data
+		totalTodos: totalTodos.data,
+		calendarTodos: calendarTodos.data
 	};
 }

@@ -13,7 +13,7 @@
 	};
 </script>
 
-<section class="p-4 preset-filled-surface-500">
+<section class="p-4 preset-filled-surface-50-950">
 	<form class="space-y-4" data-sveltekit-keepfocus data-sveltekit-replacestate bind:this={form} oninput={handleInput}>
 		<label class="label">
 			<div class="input-group grid-cols-[auto_1fr]">
