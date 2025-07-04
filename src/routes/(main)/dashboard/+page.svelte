@@ -1,8 +1,7 @@
 <script>
-	import TodoStats from '$lib/components/widgets/dashboard/TodoStatsWidget.svelte';
 	import CalendarComponent from '$lib/components/widgets/calendar/CalendarWidget.svelte';
-
-	const { data } = $props();
+	import NoteLinkWidget from '$lib/components/widgets/dashboard/NoteLinkWidget.svelte';
+	import TodoLinkWidget from '$lib/components/widgets/dashboard/TodoLinkWidget.svelte';
 </script>
 
 <svelte:head>
@@ -10,11 +9,12 @@
 </svelte:head>
 
 <main class="p-4 space-y-4">
-	<!-- 할일 통계 -->
-	<section class="card p-4 space-y-4 preset-filled-surface-50-950">
-		<h2 class="text-lg font-semibold mb-4">할일 통계</h2>
-		<TodoStats />
-	</section>
-
+	<!-- 링크 위젯 그리드 -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		<TodoLinkWidget />
+		<NoteLinkWidget />
+	</div>
+	
+	<!-- 캘린더 위젯 -->
 	<CalendarComponent />
 </main>

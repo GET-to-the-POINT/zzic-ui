@@ -57,7 +57,7 @@
 	];
 
 	const toolItems = [
-		{ id: 'note', label: '노트', icon: StickyNote, href: '/note' },
+		{ id: 'note', label: '노트', icon: StickyNote, href: '/notes' },
 		{ id: 'calculate', label: '계산기', icon: Calculator, href: '/calculate' }
 	];
 

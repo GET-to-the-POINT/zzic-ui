@@ -55,7 +55,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Layout groups**:
   - `(main)`: Authenticated pages with Header component
   - `(no-header)`: Authentication pages without header
-- **Protected routes**: `/dashboard`, `/todos`, `/categories`, `/settings`, `/profile`, `/search`, `/calendar`, `/timer`, `/menu`, `/note`, `/calculate`
+- **Protected routes**: `/dashboard`, `/todos`, `/categories`, `/settings`, `/profile`, `/search`, `/calendar`, `/timer`, `/menu`, `/notes`, `/calculate`
 - **Auth guard**: Automatic redirect to `/auth/sign-in` for unauthenticated users (configured in `src/hooks.server.js:57`)
 - **Dynamic routes**: `/todos/[todoId]`, `/categories/[categoryId]`
 - **CRUD operations**: Each entity has dedicated create/update/delete subpages with context menus

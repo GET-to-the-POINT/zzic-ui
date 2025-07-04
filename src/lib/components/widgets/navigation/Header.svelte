@@ -15,7 +15,7 @@
 	class={[
 		'sticky top-0 z-50 px-4 h-12 flex items-center justify-between',
 		!(page.url.pathname.includes('create') || page.url.pathname.includes('update') || page.url.pathname.includes('delete')) &&
-			'preset-filled-primary-500',
+			'preset-filled-primary-50-950',
 		page.url.pathname.includes('update') && 'preset-filled-tertiary-500',
 		page.url.pathname.includes('delete') && 'preset-filled-warning-500',
 		page.url.pathname.includes('create') && 'preset-filled-tertiary-500',

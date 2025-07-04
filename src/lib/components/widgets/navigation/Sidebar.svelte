@@ -137,7 +137,7 @@
 					<ChevronDown size={16} class="details-chevron transition-transform" />
 				</summary>
 				<div class="space-y-1 mt-1">
-					<a href="/note" class="btn w-full hover:bg-surface-800-200">
+					<a href="/notes" class="btn w-full hover:bg-surface-800-200">
 						<StickyNote size={12} class="w-4 mr-4 text-warning-500" />
 						<span class="flex-1 text-xs">노트</span>
 					</a>

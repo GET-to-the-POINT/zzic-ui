@@ -12,6 +12,8 @@
 	import Timer from '@lucide/svelte/icons/timer';
 	import Users from '@lucide/svelte/icons/users';
 	import Zap from '@lucide/svelte/icons/zap';
+
+	const { data } = $props();
 </script>
 
 <div class="min-h-screen">
