@@ -30,7 +30,7 @@
 			<X size={32} />
 		</button>
 	</form>
-	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col gap-2">
+	<ul class="card p-4 preset-filled-surface-50-950 w-full flex flex-col gap-2">
 		<!-- 수정하기 -->
 		<a
 			href={`/notes/${page.params.noteId}/update${page.url.search}`}

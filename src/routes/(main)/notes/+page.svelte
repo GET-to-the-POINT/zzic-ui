@@ -61,26 +61,6 @@
 		}
 	}
 
-	/**
-	 * 로컬 스토리지에 메모 데이터 저장
-	 */
-	function saveMemos() {
-		if (!browser) return;
-
-		try {
-			const dataToSave = {
-				memos,
-				currentMemoId: null
-			};
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-		} catch (error) {
-			console.error('메모 데이터 저장 실패:', error);
-		}
-	}
-
-
-
-
 	// 컴포넌트 마운트시 데이터 로드
 	onMount(() => {
 		loadMemos();
