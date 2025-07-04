@@ -28,7 +28,8 @@
 export function createMemberClient(apiUrl, fetchFn) {
 	/**
 	 * 회원 레벨/경험치 정보 조회
-	 * @param {string} memberId - 회원 ID
+	 * @param {Object} params - 파라미터 객체
+	 * @param {string} params.memberId - 회원 ID
 	 * @returns {Promise<{data: MemberLevelResponse|null, error: any}>}
 	 */
 	async function getMemberExperience({memberId}) {

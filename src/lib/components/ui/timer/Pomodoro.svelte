@@ -11,10 +11,8 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	
-	// 시계 컴포넌트들
-	import DigitalClock from './clocks/DigitalClock.svelte';
-	import ProgressClock from './clocks/ProgressClock.svelte';
-	import AnalogClock from './clocks/AnalogClock.svelte';
+	// 시계 캐러셀 컴포넌트
+	import ClockCarousel from './ClockCarousel.svelte';
 
 	// Props 선언 (Svelte 5)
 	let { class: className = '' } = $props();
@@ -81,72 +79,15 @@
 		'stroke-secondary-500'
 	);
 	
-	// 시계 타입 상태
-	const clockTypes = ['digital', 'progress', 'analog'];
-	let currentClockType = $state(1); // 기본값: progress
-	
-	// 스와이프 관련 상태
-	let touchStartX = 0;
-	let isDragging = $state(false);
-	let dragOffset = $state(0);
-	
-	// 스와이프 핸들러
-	function handleTouchStart(e) {
-		touchStartX = e.touches[0].clientX;
-		isDragging = true;
-	}
-	
-	function handleTouchMove(e) {
-		if (!isDragging) return;
-		const currentX = e.touches[0].clientX;
-		dragOffset = currentX - touchStartX;
-	}
-	
-	function handleTouchEnd() {
-		if (!isDragging) return;
-		
-		// 50px 이상 스와이프하면 시계 타입 변경
-		if (Math.abs(dragOffset) > 50) {
-			if (dragOffset > 0) {
-				// 오른쪽 스와이프 - 이전 시계
-				currentClockType = (currentClockType - 1 + clockTypes.length) % clockTypes.length;
-			} else {
-				// 왼쪽 스와이프 - 다음 시계
-				currentClockType = (currentClockType + 1) % clockTypes.length;
-			}
-		}
-		
-		isDragging = false;
-		dragOffset = 0;
-	}
-	
-	// 마우스 이벤트 핸들러 (데스크톱 지원)
-	function handleMouseDown(e) {
-		touchStartX = e.clientX;
-		isDragging = true;
-	}
-	
-	function handleMouseMove(e) {
-		if (!isDragging) return;
-		dragOffset = e.clientX - touchStartX;
-	}
-	
-	function handleMouseUp() {
-		handleTouchEnd();
-	}
+	// 현재 세션 타입에 따른 총 시간 (분)
+	let totalMinutes = $derived(
+		currentType === SessionType.WORK ? 25 :
+		currentType === SessionType.SHORT_BREAK ? 5 : 15
+	);
 
 	onMount(() => {
 		// 알림 권한 요청
 		requestNotificationPermission();
-		
-		// 마우스 이벤트 리스너 추가
-		document.addEventListener('mouseup', handleMouseUp);
-		document.addEventListener('mouseleave', handleMouseUp);
-		
-		return () => {
-			document.removeEventListener('mouseup', handleMouseUp);
-			document.removeEventListener('mouseleave', handleMouseUp);
-		};
 	});
 </script>
 
@@ -187,64 +128,14 @@
 			</div>
 		</div>
 
-		<!-- 시계 디스플레이 영역 (스와이프 가능) -->
-		<div 
-			class="relative overflow-hidden cursor-grab active:cursor-grabbing select-none h-[320px]"
-			role="region"
-			aria-label="시계 디스플레이"
-			ontouchstart={handleTouchStart}
-			ontouchmove={handleTouchMove}
-			ontouchend={handleTouchEnd}
-			onmousedown={handleMouseDown}
-			onmousemove={handleMouseMove}
-		>
-			<!-- 캐러셀 컨테이너 -->
-			<div 
-				class="flex transition-transform duration-300 ease-out"
-				style="transform: translateX(calc(-{currentClockType * 100}% + {isDragging ? dragOffset : 0}px))"
-			>
-				<!-- 디지털 시계 -->
-				<div class="w-full flex-shrink-0 flex items-center justify-center">
-					<DigitalClock 
-						time={formattedTime}
-						colonVisible={colonVisible}
-						size="text-7xl"
-					/>
-				</div>
-				
-				<!-- 프로그레스 시계 -->
-				<div class="w-full flex-shrink-0 flex items-center justify-center">
-					<ProgressClock 
-						time={formattedTime}
-						colonVisible={colonVisible}
-						progress={progress}
-						progressColor={progressColor}
-						size={280}
-					/>
-				</div>
-				
-				<!-- 아날로그 시계 -->
-				<div class="w-full flex-shrink-0 flex items-center justify-center">
-					<AnalogClock 
-						time={formattedTime}
-						progress={progress}
-						totalMinutes={currentType === SessionType.WORK ? 25 : currentType === SessionType.SHORT_BREAK ? 5 : 15}
-						size={280}
-					/>
-				</div>
-			</div>
-			
-			<!-- 시계 타입 인디케이터 -->
-			<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-				{#each clockTypes as type, i}
-					<button
-						class="w-2 h-2 rounded-full transition-all {i === currentClockType ? 'w-6 bg-primary-500' : 'bg-surface-400'}"
-						onclick={() => currentClockType = i}
-						aria-label="{type} 시계"
-					></button>
-				{/each}
-			</div>
-		</div>
+		<!-- 시계 캐러셀 -->
+		<ClockCarousel 
+			time={formattedTime}
+			{colonVisible}
+			{progress}
+			{progressColor}
+			{totalMinutes}
+		/>
 
 		<!-- 상태 메시지 -->
 		{#if currentState === PomodoroState.COMPLETED}
@@ -258,11 +149,21 @@
 
 	<!-- 카드 액션 (푸터) -->
 	<footer class="p-6 pt-0">
-		<div class="flex items-center justify-center gap-3">
+		<div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+			<button
+				type="button"
+				class="btn preset-ghost-surface flex items-center justify-center gap-2"
+				onclick={() => pomodoroService.reset()}
+				aria-label="타이머 리셋"
+			>
+				<RotateCcw size={20} />
+				<span>리셋</span>
+			</button>
+
 			{#if currentState === PomodoroState.IDLE || currentState === PomodoroState.PAUSED}
 				<button
 					type="button"
-					class="btn preset-tonal-primary flex items-center gap-2"
+					class="btn preset-tonal-primary flex items-center justify-center gap-2"
 					onclick={() => pomodoroService.start()}
 					aria-label="타이머 시작"
 				>
@@ -272,7 +173,7 @@
 			{:else if currentState === PomodoroState.RUNNING}
 				<button
 					type="button"
-					class="btn preset-tonal-warning flex items-center gap-2"
+					class="btn preset-tonal-warning flex items-center justify-center gap-2"
 					onclick={() => pomodoroService.pause()}
 					aria-label="타이머 일시정지"
 				>
@@ -283,22 +184,12 @@
 
 			<button
 				type="button"
-				class="btn preset-ghost-surface flex items-center gap-2"
+				class="btn preset-ghost-surface flex items-center justify-center gap-2"
 				onclick={() => pomodoroService.skip()}
 				aria-label="다음 세션"
 			>
 				<SkipForward size={20} />
 				<span>건너뛰기</span>
-			</button>
-
-			<button
-				type="button"
-				class="btn preset-ghost-surface flex items-center gap-2"
-				onclick={() => pomodoroService.reset()}
-				aria-label="타이머 리셋"
-			>
-				<RotateCcw size={20} />
-				<span>리셋</span>
 			</button>
 		</div>
 	</footer>

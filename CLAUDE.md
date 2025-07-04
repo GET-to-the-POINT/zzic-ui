@@ -50,6 +50,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - Server: `createZzicServerClient()` from `$lib/zzic-api/zzicServer.js`
 - **API modules**: Modular structure (`auth.js`, `todo.js`, `category.js`, etc.)
 
+#### Important API Design Rules:
+- **No client-side auth validation**: All API requests assume authentication is already validated by server hooks
+- **Server knows current user**: The backend API automatically knows the current user from JWT tokens, so member ID is not needed for "current user" endpoints
+- **Consistent error handling**: All API clients return `{data, error}` structure
+
 ### Routing & Layout Structure
 
 - **Layout groups**:

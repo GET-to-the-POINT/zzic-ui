@@ -7,7 +7,7 @@
 		progressColor = 'stroke-primary-500',
 		size = 280,
 		strokeWidth = 8,
-		textSize = 'text-5xl',
+		textSize = 'text-4xl',
 		class: className = ''
 	} = $props();
 	
@@ -47,10 +47,12 @@
 	</svg>
 	<!-- 타이머 표시 -->
 	<div class="absolute inset-0 flex items-center justify-center">
-		<div class="{textSize} font-mono font-bold text-center">
-			<span>{minutes}</span>
+		<div class="{textSize} font-mono font-bold text-center tracking-tighter">
+			<span>{minutes[0]}</span>
+			<span>{minutes[1]}</span>
 			<span class="transition-opacity duration-100 {colonVisible ? 'opacity-100' : 'opacity-20'}">:</span>
-			<span>{seconds}</span>
+			<span>{seconds[0]}</span>
+			<span>{seconds[1]}</span>
 		</div>
 	</div>
 </div>

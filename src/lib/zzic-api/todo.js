@@ -113,6 +113,10 @@ export function splitLocalDateTime(plainDateTime) {
  * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
  * @property {string} [time] - 마감 시간 (HH:mm)
  * @property {number} [repeatType] - 반복 유형 (0: 반복 안함, 1: 데일리, 2: 위클리, 3: 먼슬리, 4: 이얼리)
+ * @property {number} [repeatInterval] - 반복 간격 (일 단위)
+ * @property {number[]} [daysOfWeek] - 매주 반복 시 선택된 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+ * @property {string} [repeatStartDate] - 반복 시작일 (YYYY-MM-DD)
+ * @property {string} [repeatEndDate] - 반복 종료일 (YYYY-MM-DD)
  * @property {string[]} [tags] - 태그 목록
  */
 
@@ -126,6 +130,10 @@ export function splitLocalDateTime(plainDateTime) {
  * @property {string} [date] - 마감 날짜 (YYYY-MM-DD)
  * @property {string} [time] - 마감 시간 (HH:mm)
  * @property {number} [repeatType] - 반복 유형 (0: 반복 안함, 1: 데일리, 2: 위클리, 3: 먼슬리, 4: 이얼리)
+ * @property {number} [repeatInterval] - 반복 간격 (일 단위)
+ * @property {number[]} [daysOfWeek] - 매주 반복 시 선택된 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+ * @property {string} [repeatStartDate] - 반복 시작일 (YYYY-MM-DD)
+ * @property {string} [repeatEndDate] - 반복 종료일 (YYYY-MM-DD)
  * @property {string[]} [tags] - 태그 목록
  */
 
@@ -158,6 +166,18 @@ export function splitLocalDateTime(plainDateTime) {
  * @typedef {Object} CalendarTodoStatusResponse
  * @property {string} date - 날짜 (YYYY-MM-DD)
  * @property {boolean} hasTodo - 해당 날짜에 Todo 존재 여부
+ */
+
+/**
+ * @typedef {Object} DeleteTodoRequest
+ * @property {boolean} deleteAll - 전체 삭제 여부 (true: 원본 포함 전체 삭제, false: 해당 날짜만 숨김)
+ */
+
+/**
+ * @typedef {Object} TodoStatistics
+ * @property {number} total - 전체 개수
+ * @property {number} inProgress - 진행중 개수
+ * @property {number} completed - 완료 개수
  */
 
 /**
@@ -213,12 +233,19 @@ export function createTodoClient(apiUrl, fetchFn) {
 	/**
 	 * 특정 할 일 조회
 	 * @param {Object} params - 파라미터 객체
-	 * @param {number} params.todoId - 할 일 ID
+	 * @param {number|string} params.todoId - 할 일 ID (반복 투두의 경우 'id:daysDifference' 형식)
+	 * @param {number} [params.daysDifference] - 반복 투두의 날짜 차이
 	 * @returns {Promise<{data: TodoResponse|null, error: ApiError|null}>}
 	 */
-	async function getTodo({ todoId }) {
+	async function getTodo({ todoId, daysDifference }) {
 		try {
-			const url = new URL(`${apiUrl}/todos/${todoId}`);
+			let url;
+			if (daysDifference !== undefined) {
+				url = new URL(`${apiUrl}/todos/${todoId}:${daysDifference}`);
+			} else {
+				url = new URL(`${apiUrl}/todos/${todoId}`);
+			}
+			
 			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
@@ -264,13 +291,20 @@ export function createTodoClient(apiUrl, fetchFn) {
 	/**
 	 * 할 일 수정
 	 * @param {Object} params - 파라미터 객체
-	 * @param {number} params.todoId - 할 일 ID
+	 * @param {number|string} params.todoId - 할 일 ID (반복 투두의 경우 'id:daysDifference' 형식)
+	 * @param {number} [params.daysDifference] - 반복 투두의 날짜 차이
 	 * @param {FormData} formData - 할 일 데이터 FormData 객체
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function updateTodo({ todoId }, formData) {
+	async function updateTodo({ todoId, daysDifference }, formData) {
 		try {
-			const url = new URL(`${apiUrl}/todos/${todoId}`);
+			let url;
+			if (daysDifference !== undefined) {
+				url = new URL(`${apiUrl}/todos/${todoId}:${daysDifference}`);
+			} else {
+				url = new URL(`${apiUrl}/todos/${todoId}`);
+			}
+			
 			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
 				body: formData,
@@ -291,14 +325,27 @@ export function createTodoClient(apiUrl, fetchFn) {
 	/**
 	 * 할 일 삭제
 	 * @param {Object} params - 파라미터 객체
-	 * @param {number} params.todoId - 할 일 ID
+	 * @param {number|string} params.todoId - 할 일 ID (반복 투두의 경우 'id:daysDifference' 형식)
+	 * @param {number} [params.daysDifference] - 반복 투두의 날짜 차이
+	 * @param {boolean} [params.deleteAll] - 전체 삭제 여부 (true: 원본 포함 전체 삭제, false: 해당 날짜만 숨김)
 	 * @returns {Promise<{error: ApiError|null}>}
 	 */
-	async function deleteTodo({ todoId }) {
+	async function deleteTodo({ todoId, daysDifference, deleteAll = false }) {
 		try {
-			const url = new URL(`${apiUrl}/todos/${todoId}`);
+			let url;
+			if (daysDifference !== undefined) {
+				url = new URL(`${apiUrl}/todos/${todoId}:${daysDifference}`);
+			} else {
+				url = new URL(`${apiUrl}/todos/${todoId}`);
+			}
+			
+			// FormData 생성하여 deleteAll 파라미터 추가
+			const formData = new FormData();
+			formData.append('deleteAll', deleteAll.toString());
+			
 			const response = await fetchFn(url.toString(), {
 				method: 'DELETE',
+				body: formData,
 				credentials: 'include'
 			});
 
@@ -315,11 +362,16 @@ export function createTodoClient(apiUrl, fetchFn) {
 
 	/**
 	 * 할 일 통계 조회
-	 * @returns {Promise<{data: TodoStatisticsResponse|null, error: ApiError|null}>}
+	 * @param {string} [date] - 조회할 날짜 (YYYY-MM-DD)
+	 * @returns {Promise<{data: TodoStatistics|null, error: ApiError|null}>}
 	 */
-	async function getTodoStatistics() {
+	async function getTodoStatistics(date) {
 		try {
 			const url = new URL(`${apiUrl}/todos/statistics`);
+			if (date) {
+				url.searchParams.append('date', date);
+			}
+			
 			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
@@ -329,7 +381,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 				return { data: null, error };
 			}
 
-			/** @type {TodoStatisticsResponse} */
+			/** @type {TodoStatistics} */
 			const data = await response.json();
 			return { data, error: null };
 		} catch (error) {
