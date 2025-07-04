@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 
 /**
  * 타이머 상태를 나타내는 enum
@@ -210,12 +210,14 @@ export class PomodoroTimer {
 			return;
 		}
 
-		const duration = this._getDurationForType(this.currentType);
+		const duration = this.getDurationForType(this.currentType);
 		
 		this.currentTimer = new Timer({
 			duration,
 			type: this.currentType,
-			onComplete: (data) => this._handleSessionComplete(data),
+			onComplete: (data) => {
+				this._handleSessionComplete(data);
+			},
 			onTick: this.onTick
 		});
 
@@ -264,7 +266,7 @@ export class PomodoroTimer {
 	}
 
 	/**
-	 * 세션 완료 처리
+	 * 내부 세션 완료 처리
 	 * @private
 	 */
 	_handleSessionComplete(data) {
@@ -303,9 +305,8 @@ export class PomodoroTimer {
 
 	/**
 	 * 타입별 지속 시간 반환
-	 * @private
 	 */
-	_getDurationForType(type) {
+	getDurationForType(type) {
 		switch (type) {
 			case TimerType.POMODORO:
 				return this.pomodoroDuration;

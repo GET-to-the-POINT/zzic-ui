@@ -20,58 +20,66 @@
 	};
 </script>
 
-<main class="p-4">
+<main class="p-4 space-y-4">
 	<form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
-		<!-- 기본 정보 그룹 -->
-		<fieldset class="preset-filled-surface-50-950 flex flex-col p-4 gap-4">
-			<legend class="sr-only">카테고리 기본 정보</legend>
-			<label class="flex flex-col gap-1">
-				<span class="flex items-center gap-2">
-					<Type class="size-5" />
-					<span>카테고리 이름</span>
-				</span>
-				<input
-					id="category-name"
-					type="text"
-					name="name"
-					placeholder="카테고리 이름"
-					value={data.category.name}
-					required
-					autofocus
-					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
-				/>
-			</label>
-			<label class="flex flex-col gap-1">
-				<span class="flex items-center gap-2 mb-1">
-					<AlignLeft class="size-5" />
-					<span>설명</span>
-				</span>
-				<input
-					id="category-description"
-					type="text"
-					name="description"
-					placeholder="카테고리 설명 (선택)"
-					value={data.category.description || ''}
-					class="bg-transparent border-0 focus:ring-0 focus:outline-none px-0"
-				/>
-			</label>
-		</fieldset>
+		<!-- 기본 정보 카드 -->
+		<div class="card preset-filled-surface-50-950 p-6">
+			<h2 class="text-lg font-semibold mb-4">기본 정보</h2>
+			<div class="space-y-6">
+				<!-- 카테고리 이름 -->
+				<label class="block">
+					<span class="flex items-center gap-2 text-sm font-medium mb-2">
+						<Type size={16} />
+						<span>카테고리 이름</span>
+					</span>
+					<input
+						id="category-name"
+						type="text"
+						name="name"
+						placeholder="예: 업무, 개인, 학습"
+						value={data.category.name}
+						required
+						autofocus
+						class="input preset-tonal-surface"
+					/>
+				</label>
+				
+				<!-- 설명 -->
+				<label class="block">
+					<span class="flex items-center gap-2 text-sm font-medium mb-2">
+						<AlignLeft size={16} />
+						<span>설명 (선택)</span>
+					</span>
+					<textarea
+						id="category-description"
+						name="description"
+						placeholder="이 카테고리에 대한 간단한 설명을 입력하세요"
+						value={data.category.description || ''}
+						rows="3"
+						class="textarea preset-tonal-surface"
+					></textarea>
+				</label>
+			</div>
+		</div>
 
-		<!-- 색상 설정 그룹 -->
-		<fieldset class="preset-filled-surface-50-950 flex flex-col p-4 gap-4">
-			<legend class="sr-only">카테고리 색상</legend>
-			<label class="flex justify-between items-center">
-				<span class="flex items-center gap-2">
-					<Palette class="size-5" />
-					<span>색상</span>
+		<!-- 색상 설정 카드 -->
+		<div class="card preset-filled-surface-50-950 p-6">
+			<h2 class="text-lg font-semibold mb-4">스타일 설정</h2>
+			<label class="flex items-center justify-between">
+				<span class="flex items-center gap-2 text-sm font-medium">
+					<Palette size={16} />
+					<span>카테고리 색상</span>
 				</span>
-				<input
-					type="color"
-					name="color"
-					value={data.category.color || '#6b7280'}
-					class="w-12 h-8 rounded border border-surface-300-700 bg-transparent cursor-pointer"
-				/>
+				<div class="flex items-center gap-3">
+					<input
+						type="color"
+						name="color"
+						value={data.category.color || '#6b7280'}
+						class="w-16 h-10 rounded-lg border-2 border-surface-300-700 cursor-pointer"
+					/>
+					<span class="text-sm text-surface-600-300">{data.category.color || '#6b7280'}</span>
+				</div>
 			</label>
-		</fieldset>
+		</div>
 	</form>
 </main>

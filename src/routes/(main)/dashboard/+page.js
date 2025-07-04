@@ -4,7 +4,6 @@ import { requireAuth } from '$lib/utils/auth-guard.js';
 export async function load({ parent, url }) {
 	const { zzic, temporal, user } = await requireAuth(parent, url);
 
-
 	const today = Temporal.Instant.fromEpochMilliseconds(temporal.epochMilliseconds)
 		.toZonedDateTimeISO(user.timeZone)
 		.toPlainDate();
@@ -57,13 +56,17 @@ export async function load({ parent, url }) {
 		month: currentDate.month.toString()
 	});
 	const calendarTodosPromise = zzic.todo.getMonthlyCalendarTodos(searchParams);
+	
+	// 사용자 경험치 정보 가져오기
+	const memberExperiencePromise = zzic.member.getMemberExperience({ memberId: user.sub });
 
-	const [todayTodos, timeoverTodos, doneTodos, totalTodos, calendarTodos] = await Promise.all([
+	const [todayTodos, timeoverTodos, doneTodos, totalTodos, calendarTodos, memberExperience] = await Promise.all([
 		todayTodosPromise,
 		timeoverTodosPromise,
 		doneTodosPromise,
 		totalTodosPromise,
-		calendarTodosPromise
+		calendarTodosPromise,
+		memberExperiencePromise
 	]);
 
 	return {
@@ -71,6 +74,8 @@ export async function load({ parent, url }) {
 			title: '대시보드',
 			description: '오늘의 할 일과 주간 계획을 확인하세요.'
 		},
+		user,
+		memberExperience: memberExperience.data,
 		todayTodos: todayTodos.data,
 		timeoverTodos: timeoverTodos.data,
 		doneTodos: doneTodos.data,

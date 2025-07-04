@@ -13,30 +13,10 @@
 	import Sun from '@lucide/svelte/icons/sun';
 	import Trophy from '@lucide/svelte/icons/trophy';
 	import User from '@lucide/svelte/icons/user';
-	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
+	import UserInfoWidget from '$lib/components/widgets/user/UserInfoWidget.svelte';
 
 	let { data } = $props();
 	let checked = $state(false);
-
-	// 사용자 기본 정보는 기존 data.user에서 가져옴
-	const userInfo = {
-		name: data?.user?.nickname || '사용자',
-		initial: data?.user?.nickname?.[0] || '사',
-		email: data?.user?.email
-	};
-
-	// 경험치 정보는 API에서 가져온 데이터 사용 (fallback 포함)
-	const experienceInfo = {
-		level: data?.memberExperience?.currentLevel ?? 1,
-		levelName: data?.memberExperience?.levelName ?? '초보자',
-		currentExp: data?.memberExperience?.currentExp ?? 0,
-		currentLevelProgress: data?.memberExperience?.currentLevelProgress ?? 0,
-		currentLevelTotal: data?.memberExperience?.currentLevelTotal ?? 100,
-		expToNextLevel: data?.memberExperience?.expToNextLevel ?? 100
-	};
-
-	// 경험치 진행률 계산
-	const xpProgress = $derived((experienceInfo.currentLevelProgress / experienceInfo.currentLevelTotal) * 100);
 
 	$effect(() => {
 		const mode = checked ? 'dark' : 'light';
@@ -64,25 +44,8 @@
 </script>
 
 <main class="p-4 space-y-4">
-	<!-- 사용자 정보 -->
-	<div class="card preset-filled-surface-50-950 p-4">
-		<div class="flex items-center mb-4">
-			<Avatar name={userInfo.initial} size="size-12" classes="mr-3" />
-			<div>
-				<h2 class="font-semibold text-lg">{userInfo.name}</h2>
-				<p class="text-sm text-surface-600-300">
-					레벨 {experienceInfo.level} - {experienceInfo.levelName}
-				</p>
-			</div>
-		</div>
-		<div class="space-y-2">
-			<div class="flex items-center justify-between text-xs text-surface-600-300">
-				<span>XP {experienceInfo.currentExp}</span>
-				<span>다음 레벨까지 {experienceInfo.expToNextLevel}</span>
-			</div>
-			<Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
-		</div>
-	</div>
+	<!-- 사용자 정보 위젯 -->
+	<UserInfoWidget />
 
 	<!-- 메인 메뉴 -->
 	<div class="card preset-filled-surface-50-950 p-4">

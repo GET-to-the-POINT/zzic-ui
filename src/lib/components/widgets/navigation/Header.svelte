@@ -21,14 +21,20 @@
 		page.url.pathname.includes('create') && 'preset-filled-tertiary-500',
 	]}
 >
-	<a href={page.data.redirectTo} class="btn-icon cursor-pointer" onclick={handleBack}>
-		{#if page.data.meta?.modal}
-			<X />
-		{:else}
-			<ChevronLeft />
-		{/if}
-	</a>
-	<h1 class="text-2xl font-semibold uppercase">
+	{#if page.url.pathname === '/dashboard'}
+		<div class="btn-icon">
+			<!-- 대시보드에서는 빈 공간 -->
+		</div>
+	{:else}
+		<a href={page.data.redirectTo} class="btn-icon cursor-pointer" onclick={handleBack}>
+			{#if page.data.meta?.modal}
+				<X />
+			{:else}
+				<ChevronLeft />
+			{/if}
+		</a>
+	{/if}
+	<h1 class="text-2xl font-semibold uppercase" title={page.data.meta?.description}>
 		{page.data.meta?.title}
 	</h1>
 	{#if ContextMenu}

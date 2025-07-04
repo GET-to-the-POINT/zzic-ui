@@ -83,6 +83,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Context menus**: Each major feature area has dedicated context menu components
 - **Progressive enhancement**: Forms work without JavaScript, enhanced with client-side
 
+### Page Component Structure
+
+**IMPORTANT**: All `+page.svelte` files MUST follow this structure:
+- **Root element**: Always start with a `<main>` tag
+- **No attributes on main**: The `<main>` tag must have NO attributes (no classes, no styles)
+- **Layout styling**: All page layout/styling is handled by parent layouts
+- **Content only**: The `<main>` tag should only contain the page's actual content
+
+```svelte
+<!-- CORRECT -->
+<main>
+	<!-- Page content here -->
+</main>
+
+<!-- INCORRECT -->
+<main class="container">...</main>
+<main style="padding: 1rem">...</main>
+```
+
 ### Key Development Patterns
 
 #### Svelte 5 Modern Syntax
@@ -121,6 +140,25 @@ export const actions = {
 	}
 };
 ```
+
+#### Page Metadata Pattern
+
+All pages MUST include metadata in their `+page.js` file for proper SEO and browser title display. The header component automatically uses this data.
+
+```javascript
+// +page.js
+/** @type {import('./$types').PageLoad} */
+export async function load() {
+	return {
+		meta: {
+			title: '페이지 제목',
+			description: '페이지 설명'
+		}
+	};
+}
+```
+
+NEVER use `<svelte:head>` for titles - always use the load function metadata pattern with the `meta` object structure.
 
 ### Testing Strategy
 
