@@ -116,7 +116,7 @@
 	});
 </script>
 
-<main class="p-4">
+<main class="p-4 space-y-4">
 	<!-- 검색 폼 -->
 	<form onsubmit={handleSearch} class="mb-6">
 		<div class="input-group grid-cols-[1fr_auto]">
@@ -152,7 +152,7 @@
 		</div>
 	{:else if searchQuery && filteredNotes.length === 0}
 		<!-- 검색 결과 없음 -->
-		<div class="card preset-filled-surface-50-950 p-12 text-center">
+		<div class="card preset-filled-secondary-50-950 p-12 text-center">
 			<FileText size={48} class="mx-auto mb-4 text-surface-400" />
 			<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
 			<p class="text-surface-600">다른 검색어로 시도해보세요.</p>
@@ -166,7 +166,7 @@
 		</div>
 	{:else if !searchQuery}
 		<!-- 검색어 입력 안내 -->
-		<div class="card preset-filled-surface-50-950 p-12 text-center">
+		<div class="card preset-filled-secondary-50-950 p-12 text-center">
 			<Search size={48} class="mx-auto mb-4 text-surface-400" />
 			<h3 class="text-lg font-semibold mb-2">노트를 검색해보세요</h3>
 			<p class="text-surface-600">제목이나 내용으로 검색할 수 있습니다.</p>

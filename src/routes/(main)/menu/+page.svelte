@@ -28,12 +28,12 @@
 	const navItems = [
 		{ id: 'dashboard', label: '대시보드', icon: Home, href: '/dashboard' },
 		{ id: 'todos', label: '할 일', icon: SquareCheckBig, href: '/todos' },
+		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
 		{ id: 'search', label: '검색', icon: Search, href: '/search' },
 		{ id: 'categories', label: '분류', icon: Folder, href: '/categories' },
 		{ id: 'calendar', label: '캘린더', icon: Calendar, href: '/calendar' },
-		{ id: 'challenges', label: '챌린지', icon: Trophy, href: '/challenges' },
 		{ id: 'timer', label: '타이머', icon: Clock, href: '/timer' },
-		{ id: 'profile', label: '내 정보 (준비중)', icon: User, href: '/profile' }
+		{ id: 'profile', label: '내 정보', icon: User, href: '/profile' }
 	];
 
 	const toolItems = [
@@ -47,7 +47,7 @@
 	<UserInfoWidget />
 
 	<!-- 메인 메뉴 -->
-	<div class="card preset-filled-surface-50-950 p-4">
+	<div class="card preset-filled-secondary-50-950 p-4">
 		<h2 class="text-lg font-semibold">메인 메뉴</h2>
 		<div class="space-y-2">
 			{#each navItems as item}
@@ -61,7 +61,7 @@
 	</div>
 
 	<!-- 도구 -->
-	<div class="card preset-filled-surface-50-950 p-4">
+	<div class="card preset-filled-secondary-50-950 p-4">
 		<h2 class="text-lg font-semibold">도구</h2>
 		<div class="space-y-2">
 			{#each toolItems as item}
@@ -75,7 +75,7 @@
 	</div>
 
 	<!-- 설정 -->
-	<div class="card preset-filled-surface-50-950 p-4">
+	<div class="card preset-filled-secondary-50-950 p-4">
 		<h2 class="text-lg font-semibold">설정</h2>
 		<div class="space-y-2">
 			<!-- 다크모드 토글 -->

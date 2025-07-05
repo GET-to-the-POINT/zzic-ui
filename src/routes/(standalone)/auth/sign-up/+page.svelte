@@ -5,7 +5,7 @@
 	import User from '@lucide/svelte/icons/user';
 </script>
 
-<main class="p-4">
+<main class="p-4 space-y-4">
 	<div class="card p-4 preset-filled-surface-50-950 space-y-4">
 		<!-- Header -->
 		<header class="text-center">

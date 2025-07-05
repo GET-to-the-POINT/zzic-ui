@@ -67,7 +67,7 @@
 	});
 </script>
 
-<main class="p-4">
+<main class="p-4 space-y-4">
 	<!-- 검색 바 -->
 	{#if memos.length > 0}
 		<div class="mb-6">
@@ -94,14 +94,14 @@
 	<!-- 노트 목록 -->
 	{#if memos.length === 0}
 		<!-- 빈 상태 -->
-		<div class="card preset-filled-surface-50-950 p-12 text-center">
+		<div class="card preset-filled-secondary-50-950 p-12 text-center">
 			<FileText size={48} class="mx-auto mb-4 text-surface-400" />
 			<h3 class="text-lg font-semibold mb-2">아직 노트가 없습니다</h3>
 			<p class="text-surface-600">첫 번째 노트를 작성해보세요!</p>
 		</div>
 	{:else if filteredMemos.length === 0}
 		<!-- 검색 결과 없음 -->
-		<div class="card preset-filled-surface-50-950 p-12 text-center">
+		<div class="card preset-filled-secondary-50-950 p-12 text-center">
 			<Search size={48} class="mx-auto mb-4 text-surface-400" />
 			<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
 			<p class="text-surface-600">다른 검색어로 시도해보세요.</p>

@@ -32,7 +32,7 @@
 	let zone3Items = $state([]);
 </script>
 
-<main>
+<main class="p-4 space-y-4">
 	<div class="container mx-auto p-8">
 		<h1 class="h1 mb-8">드래그 앤 드롭 컴포넌트 테스트</h1>
 

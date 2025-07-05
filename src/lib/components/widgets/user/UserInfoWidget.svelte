@@ -1,6 +1,7 @@
 <script>
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
+	import User from '@lucide/svelte/icons/user';
 
 	// Props
 	let {
@@ -17,7 +18,8 @@
 	let userInfo = $derived({
 		name: data?.user?.nickname || '사용자',
 		initial: data?.user?.nickname?.[0] || '사',
-		email: data?.user?.email
+		email: data?.user?.email,
+		profilePictureUrl: data?.user?.profilePictureUrl || null
 	});
 
 	// 경험치 정보 정리
@@ -38,26 +40,34 @@
 
 {#if variant === 'minimal'}
 	<!-- 최소 버전: 아바타와 이름만 -->
-	<div class="flex items-center {className}">
-		<Avatar name={userInfo.initial} size="size-10" classes="mr-2" />
+	<a href="/profile" class="flex items-center {className} hover:opacity-80 transition-opacity cursor-pointer">
+		<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-10" classes="mr-2">
+			<User size={16} />
+		</Avatar>
 		<span class="font-semibold">{userInfo.name}</span>
-	</div>
+	</a>
 {:else if variant === 'compact'}
-	<!-- 컴팩트 버전: 카드 없이 정보만 -->
-	<div class="flex items-center {className}">
-		<Avatar name={userInfo.initial} size="size-12" classes="mr-3" />
-		<div class="flex-1">
-			<h3 class="font-semibold">{userInfo.name}</h3>
-			<p class="text-sm text-surface-600-300">
-				레벨 {experienceInfo.level} • {experienceInfo.currentExp} XP
-			</p>
+	<!-- 컴팩트 버전: 카드 스타일 -->
+	<a href="/profile" class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block">
+		<div class="flex items-center">
+			<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-12" classes="mr-3">
+				<User size={20} />
+			</Avatar>
+			<div class="flex-1">
+				<h3 class="font-semibold">{userInfo.name}</h3>
+				<p class="text-sm text-surface-600-300">
+					레벨 {experienceInfo.level} • {experienceInfo.currentExp} XP
+				</p>
+			</div>
 		</div>
-	</div>
+	</a>
 {:else}
 	<!-- 기본 버전: 전체 카드 -->
-	<div class="card preset-filled-surface-50-950 p-4 {className}">
+	<a href="/profile" class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block">
 		<div class="flex items-center mb-4">
-			<Avatar name={userInfo.initial} size="size-12" classes="mr-3" />
+			<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-12" classes="mr-3">
+				<User size={20} />
+			</Avatar>
 			<div>
 				<h2 class="font-semibold text-lg">{userInfo.name}</h2>
 				<p class="text-sm text-surface-600-300">
@@ -77,5 +87,5 @@
 				<Progress value={xpProgress} max={100} meterBg="bg-primary-500" />
 			</div>
 		{/if}
-	</div>
+	</a>
 {/if}

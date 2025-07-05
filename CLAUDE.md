@@ -94,17 +94,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **IMPORTANT**: All `+page.svelte` files MUST follow this structure:
 
 - **Root element**: Always start with a `<main>` tag
-- **No attributes on main**: The `<main>` tag must have NO attributes (no classes, no styles)
-- **Layout styling**: All page layout/styling is handled by parent layouts
-- **Content only**: The `<main>` tag should only contain the page's actual content
+- **Main tag styling**: The `<main>` tag MUST have `class="p-4 space-y-4"` for consistent padding and spacing
+- **Content structure**: The main tag should contain sections with consistent spacing
+- **Functional areas**: Page functional areas (search bars, filters, action buttons) should use `preset-filled-secondary-50-950` for consistency
 
 ```svelte
 <!-- CORRECT -->
-<main>
+<main class="p-4 space-y-4">
 	<!-- Page content here -->
 </main>
 
 <!-- INCORRECT -->
+<main>...</main>
 <main class="container">...</main>
 <main style="padding: 1rem">...</main>
 ```
