@@ -4,7 +4,7 @@
 	const { data } = $props();
 </script>
 
-<TodoForm 
+<TodoForm
 	mode="detail"
 	todo={data.todo}
 	categories={data.categories?.content ?? []}

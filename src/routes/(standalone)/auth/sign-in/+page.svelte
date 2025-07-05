@@ -13,16 +13,15 @@
 				const redirectTo = page.url.searchParams.get('redirectTo');
 				const destination = redirectTo ? decodeURIComponent(redirectTo) : '/dashboard';
 				goto(destination, { replaceState: true, invalidateAll: true });
-			}
-			else if (result.type === 'redirect') {
+			} else if (result.type === 'redirect') {
 				goto(result.location, { replaceState: true, invalidateAll: true });
 			}
-		}
-	}
+		};
+	};
 </script>
 
 <main class="p-4 space-y-4">
-	<div class="p-4 preset-filled-surface-50-950 space-y-4">
+	<div class="card p-4 preset-filled-surface-50-950 space-y-4">
 		<!-- Header -->
 		<header class="text-center">
 			<h1 class="text-2xl font-bold">돌아오신 것을 환영합니다</h1>
@@ -31,7 +30,12 @@
 
 		<!-- Body -->
 		<section>
-			<form method="POST" action={page.url.pathname + page.url.search} class="space-y-4" use:enhance>
+			<form
+				method="POST"
+				action={page.url.pathname + page.url.search}
+				class="space-y-4"
+				use:enhance
+			>
 				<label class="label">
 					<span class="label-text">이메일</span>
 					<div class="input-group grid-cols-[auto_1fr]">
@@ -74,19 +78,21 @@
 		<footer class="text-center">
 			<p class="text-sm opacity-60">
 				계정이 없으신가요?
-				<a href="/auth/sign-up" class="font-medium underline">
-					회원가입하기
-				</a>
+				<a href="/auth/sign-up" class="font-medium underline"> 회원가입하기 </a>
 			</p>
 		</footer>
 	</div>
 
 	<!-- Section 2: 데모 계정 -->
 	<section>
-		<form method="POST" action={page.url.pathname + page.url.search} class="preset-filled-warning-500" use:enhance={handleEnhance}>
+		<form
+			method="POST"
+			action={page.url.pathname + page.url.search}
+			use:enhance={handleEnhance}
+		>
 			<input type="hidden" name="email" value="anon@zzic.com" />
 			<input type="hidden" name="password" value="" />
-			<button type="submit" class="card p-4 w-full text-left">
+			<button type="submit" class="card p-4 w-full text-left preset-filled-tertiary-500">
 				<div class="flex items-center gap-2 mb-2">
 					<User size="16" />
 					<span class="font-medium text-sm">데모 계정으로 체험해보세요</span>

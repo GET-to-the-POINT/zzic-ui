@@ -96,7 +96,7 @@ export async function load({ parent, url }) {
 		}
 
 		if (!url.searchParams.has('complete')) {
-			url.searchParams.set('complete', 'false'); // 기본적으로 진행중인 할일 보기
+			url.searchParams.set('complete', 'false'); // 기본적으로 진행중인 할 일 보기
 		}
 
 		redirect(303, `${url.pathname}?${url.searchParams.toString()}`);
@@ -117,13 +117,8 @@ export async function load({ parent, url }) {
 		categoryPromise = zzic.category.getCategory({ categoryId });
 	}
 
-	const [
-		{ data: todos, error: todosError },
-		{ data: category, error: categoryError }
-	] = await Promise.all([
-		todoPromise,
-		categoryPromise
-	]);
+	const [{ data: todos, error: todosError }, { data: category, error: categoryError }] =
+		await Promise.all([todoPromise, categoryPromise]);
 
 	if (todosError) error(500, String(todosError));
 	if (categoryError) error(500, String(categoryError));
@@ -168,8 +163,8 @@ export async function load({ parent, url }) {
 
 	return {
 		meta: {
-			title: `할일 : ${/** @type {any} */(category)?.name || '전체'}`,
-			description: '할일 관리 페이지입니다.'
+			title: `할 일 : ${/** @type {any} */ (category)?.name || '전체'}`,
+			description: '할 일 관리 페이지입니다.'
 		},
 		selectedDateTodos: todos,
 		weeklyTodos: weeklyTodos,

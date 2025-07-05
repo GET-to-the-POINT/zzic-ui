@@ -12,13 +12,13 @@
 <main class="p-4 space-y-4">
 	<!-- 사용자 정보 위젯 -->
 	<UserInfoWidget />
-	
+
 	<!-- 링크 위젯 그리드 -->
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 		<TodoLinkWidget />
 		<NoteLinkWidget />
 	</div>
-	
+
 	<!-- 캘린더 위젯 -->
 	<CalendarComponent />
 </main>

@@ -22,9 +22,9 @@
 		if (!searchQuery.trim()) {
 			return memos;
 		}
-		
+
 		const query = searchQuery.toLowerCase();
-		return memos.filter(memo => {
+		return memos.filter((memo) => {
 			const titleMatch = memo.title.toLowerCase().includes(query);
 			const contentMatch = memo.content.toLowerCase().includes(query);
 			return titleMatch || contentMatch;
@@ -52,7 +52,7 @@
 					createdAt: new Date(memo.createdAt),
 					updatedAt: new Date(memo.updatedAt)
 				}));
-				
+
 				// 최신순으로 정렬
 				memos.sort((a, b) => b.updatedAt - a.updatedAt);
 			}
@@ -115,4 +115,3 @@
 		</div>
 	{/if}
 </main>
-

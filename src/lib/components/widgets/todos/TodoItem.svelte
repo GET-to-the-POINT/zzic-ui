@@ -21,9 +21,10 @@
 	let currentX = $state(0);
 	let translateX = $state(0);
 	let isDragging = $state(false);
-	let isLeftRevealed = $state(false);  // 왼쪽 스와이프 (수정/삭제 버튼)
+	let isLeftRevealed = $state(false); // 왼쪽 스와이프 (수정/삭제 버튼)
 	let isRightRevealed = $state(false); // 오른쪽 스와이프 (고정 버튼)
-	let isPinned = $state(false); // 고정 상태 (임시로 로컬 상태 관리)
+	// 할일 데이터에서 pin 상태 확인 (isPinned 필드가 있으면 사용, 없으면 false)
+	let isPinned = $state(todo.isPinned || false);
 	let hasSwipedThisSession = $state(false); // 현재 세션에서 스와이프 발생 여부
 	let preventClick = $state(false); // 클릭 방지 플래그
 
@@ -56,16 +57,16 @@
 
 	const handleTouchMove = (/** @type {TouchEvent} */ e) => {
 		if (!isDragging) return;
-		
+
 		e.preventDefault(); // 스크롤 방지
 		currentX = e.touches[0].clientX;
 		const deltaX = currentX - startX;
-		
+
 		// 왼쪽으로 스와이프 (수정/삭제 버튼)
 		if (deltaX < 0) {
 			translateX = Math.max(deltaX, -ACTION_BUTTON_WIDTH);
 			isRightRevealed = false; // 오른쪽 버튼 숨기기
-		} 
+		}
 		// 오른쪽으로 스와이프 (고정 버튼)
 		else if (deltaX > 0) {
 			translateX = Math.min(deltaX, PIN_BUTTON_WIDTH);
@@ -78,7 +79,7 @@
 		isDragging = false;
 
 		const deltaX = currentX - startX;
-		
+
 		// 스와이프가 발생했으면 기본 터치 이벤트 무시
 		if (Math.abs(deltaX) > 5) {
 			e.preventDefault();
@@ -89,7 +90,7 @@
 				preventClick = false;
 			}, 100);
 		}
-		
+
 		if (deltaX < -SWIPE_THRESHOLD) {
 			// 왼쪽으로 충분히 스와이프했으면 액션 버튼 표시
 			translateX = -ACTION_BUTTON_WIDTH;
@@ -121,15 +122,15 @@
 
 	const handleMouseMove = (/** @type {MouseEvent} */ e) => {
 		if (!isDragging) return;
-		
+
 		currentX = e.clientX;
 		const deltaX = currentX - startX;
-		
+
 		// 왼쪽으로 스와이프 (수정/삭제 버튼)
 		if (deltaX < 0) {
 			translateX = Math.max(deltaX, -ACTION_BUTTON_WIDTH);
 			isRightRevealed = false; // 오른쪽 버튼 숨기기
-		} 
+		}
 		// 오른쪽으로 스와이프 (고정 버튼)
 		else if (deltaX > 0) {
 			translateX = Math.min(deltaX, PIN_BUTTON_WIDTH);
@@ -142,7 +143,7 @@
 		isDragging = false;
 
 		const deltaX = currentX - startX;
-		
+
 		// 스와이프가 발생했으면 클릭 방지
 		if (Math.abs(deltaX) > 5) {
 			hasSwipedThisSession = true;
@@ -152,7 +153,7 @@
 				preventClick = false;
 			}, 100);
 		}
-		
+
 		if (deltaX < -SWIPE_THRESHOLD) {
 			translateX = -ACTION_BUTTON_WIDTH;
 			isLeftRevealed = true;
@@ -195,8 +196,12 @@
 	const handleClickOutside = (/** @type {MouseEvent} */ e) => {
 		// 드래깅 중이거나 방금 스와이프했으면 무시
 		if (isDragging || preventClick) return;
-		
-		if ((isLeftRevealed || isRightRevealed) && containerElement && !containerElement.contains(/** @type {Node} */ (e.target))) {
+
+		if (
+			(isLeftRevealed || isRightRevealed) &&
+			containerElement &&
+			!containerElement.contains(/** @type {Node} */ (e.target))
+		) {
 			translateX = 0;
 			isLeftRevealed = false;
 			isRightRevealed = false;
@@ -209,24 +214,28 @@
 		window.location.href = `/todos/${todo.id}/update`;
 	};
 
-	// 고정하기 핸들러
-	const handlePin = async () => {
-		try {
-			// 여기에 고정 API 호출 로직 추가 예정
-			// await zzic.todo.pinTodo(todo.id, !isPinned);
-			
-			isPinned = !isPinned;
-			toaster.success({ 
-				title: isPinned ? '할 일이 고정되었습니다!' : '할 일 고정이 해제되었습니다!' 
-			});
-		} catch (error) {
-			toaster.error({ title: '고정 처리 중 오류가 발생했습니다.' });
-		}
+	// 고정하기 핸들러 (폼 제출용)
+	const handlePinSubmit = async () => {
 		// 고정 후 액션 버튼 숨기기
 		translateX = 0;
 		isLeftRevealed = false;
 		isRightRevealed = false;
 		hasSwipedThisSession = false;
+	};
+
+	// 핀 폼 enhance 핸들러
+	const handlePinEnhance = () => {
+		return async (/** @type {any} */ { result }) => {
+			if (result.type === 'success') {
+				isPinned = !isPinned;
+				await invalidateAll();
+				toaster.success({
+					title: isPinned ? '할 일이 고정되었습니다!' : '할 일 고정이 해제되었습니다!'
+				});
+			} else if (result.type === 'failure') {
+				toaster.error({ title: '고정 처리 중 오류가 발생했습니다.' });
+			}
+		};
 	};
 
 	// 삭제하기 핸들러
@@ -236,7 +245,7 @@
 				const response = await fetch(`/todos/${todo.id}`, {
 					method: 'DELETE'
 				});
-				
+
 				if (response.ok) {
 					await invalidateAll();
 					toaster.success({ title: '할 일이 삭제되었습니다!' });
@@ -255,13 +264,13 @@
 	};
 </script>
 
-<svelte:window 
-	onmousemove={handleMouseMove} 
+<svelte:window
+	onmousemove={handleMouseMove}
 	onmouseup={handleMouseUp}
 	onclick={handleClickOutside}
 />
 
-<div class="card relative overflow-hidden">
+<div class="card relative overflow-hidden" style="view-transition-name: {todo.id}-todo;">
 	<!-- 왼쪽 스와이프 액션 버튼들 (수정/삭제) -->
 	<div class="absolute top-0 right-0 h-full flex">
 		<!-- 수정 버튼 -->
@@ -273,7 +282,7 @@
 		>
 			<Edit size={20} />
 		</button>
-		
+
 		<!-- 삭제 버튼 -->
 		<button
 			type="button"
@@ -287,18 +296,26 @@
 
 	<!-- 오른쪽 스와이프 액션 버튼 (고정) -->
 	<div class="absolute top-0 left-0 h-full flex">
-		<button
-			type="button"
-			class="w-15 h-full {isPinned ? 'preset-filled-error-500' : 'preset-filled-warning-500'} flex items-center justify-center"
-			onclick={handlePin}
-			aria-label={isPinned ? "할 일 고정 해제" : "할 일 고정"}
+		<form
+			action="/todos/{todo.id}/pin"
+			method="POST"
+			use:enhance={handlePinEnhance}
+			onsubmit={handlePinSubmit}
 		>
-			<Pin size={20} class={isPinned ? "rotate-45" : ""} />
-		</button>
+			<button
+				type="submit"
+				class="w-15 h-full {isPinned
+					? 'preset-filled-error-500'
+					: 'preset-filled-warning-500'} flex items-center justify-center"
+				aria-label={isPinned ? '할 일 고정 해제' : '할 일 고정'}
+			>
+				<Pin size={20} class={isPinned ? 'rotate-45' : ''} />
+			</button>
+		</form>
 	</div>
 
 	<!-- 메인 컨텐츠 (앞쪽) -->
-	<div 
+	<div
 		bind:this={containerElement}
 		class={[
 			'transition-transform duration-200 ease-out',
@@ -315,48 +332,44 @@
 		tabindex="0"
 	>
 		<div class="flex items-start gap-2">
-			<!-- 체크박스 -->
-			<form
-				class="pt-4 pl-4"
-				action={`/todos/${todo.id}/update`}
-				method="POST"
-				use:enhance={handleEnhance}
-			>
-				<button
-					type="submit"
-					name="complete"
-					value={(!todo.complete).toString()}
-					class="mt-1 btn-icon {isCompleted
-						? 'preset-filled-primary-500'
-						: 'preset-filled-surface-50-950'}"
+			<!-- 체크박스와 핀 아이콘 -->
+			<div class="pt-4 pl-4 flex flex-col items-center gap-1">
+				<form
+					action={`/todos/${todo.id}/update`}
+					method="POST"
+					use:enhance={handleEnhance}
 				>
-					{#if todo.complete}
-						<!-- 완료 상태 -->
-						<Check size={16} />
-					{:else}
-						<!-- 미완료 상태 (진행중) -->
-						<Square size={16} />
-					{/if}
-				</button>
-			</form>
+					<button
+						type="submit"
+						name="complete"
+						value={(!todo.complete).toString()}
+						class="btn-icon {isCompleted
+							? 'preset-filled-primary-500'
+							: 'preset-filled-surface-50-950'}"
+					>
+						{#if todo.complete}
+							<!-- 완료 상태 -->
+							<Check size={16} />
+						{:else}
+							<!-- 미완료 상태 (진행중) -->
+							<Square size={16} />
+						{/if}
+					</button>
+				</form>
+				
+				<!-- 핀 아이콘 (pinned 상태일 때만 표시) -->
+				{#if isPinned}
+					<Pin size={12} />
+				{/if}
+			</div>
 
 			<!-- 컨텐츠 -->
-			<a
-				href={`/todos/${todo.id}`}
-				class="pl-2 py-4 pr-4 flex-1"
-				onclick={handleClick}
-			>
+			<a href={`/todos/${todo.id}`} class="pl-2 py-4 pr-4 flex-1" onclick={handleClick}>
 				<!-- 제목과 설명 -->
 				<div class="flex items-start gap-2">
 					<div class="flex-1">
-						<h3 class={[
-							'font-semibold flex items-center gap-1',
-							isCompleted && 'line-through'
-						]}>
+						<h3 class={['font-semibold', isCompleted && 'line-through']}>
 							{todo.title}
-							{#if isPinned}
-								<Pin size={14} class="text-warning-500" />
-							{/if}
 						</h3>
 						<p class={['text-xs', isCompleted && 'line-through']}>
 							{todo.description}
@@ -375,7 +388,7 @@
 					{#if todo.time}
 						<div class="badge text-xs flex items-center gap-1">
 							<Clock class="w-3 h-3" />
-							{todo.time.slice(0,5)}
+							{todo.time.slice(0, 5)}
 						</div>
 					{/if}
 

@@ -37,7 +37,7 @@ export async function load({ params, parent, url }) {
 	return {
 		meta: {
 			title: todoData.title,
-			description: '할일 상세 페이지입니다.'
+			description: '할 일 상세 페이지입니다.'
 		},
 		formId: crypto.randomUUID(),
 		contextMenu: TodoDetailContextMenu,

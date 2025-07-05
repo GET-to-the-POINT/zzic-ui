@@ -14,7 +14,7 @@
 	import { toaster } from '$lib/utils/toast';
 
 	// Props for controlling the form behavior
-	let { 
+	let {
 		mode = 'create', // 'create' | 'update' | 'detail'
 		todo = null,
 		categories = [],
@@ -62,7 +62,7 @@
 	// Helper function to get field value
 	const getFieldValue = (field, defaultValue = '') => {
 		if (!hasData) return defaultValue;
-		
+
 		switch (field) {
 			case 'dueDate':
 				return todo?.dueDate ? todo.dueDate.slice(0, 10) : defaultValue;
@@ -85,17 +85,17 @@
 		<!-- 제목/설명 그룹 -->
 		<div class="card preset-filled-surface-50-950 p-6 space-y-6">
 			<h2 class="text-lg font-semibold mb-4 border-b border-surface-200 pb-2">기본 정보</h2>
-			
+
 			<!-- 제목 입력 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconPencilLine size={20} />
 				</div>
-				<input 
-					class="ig-input" 
-					type="text" 
-					name="title" 
-					placeholder="할일 제목을 입력하세요"
+				<input
+					class="ig-input"
+					type="text"
+					name="title"
+					placeholder="할 일 제목을 입력하세요"
 					value={getFieldValue('title')}
 					readonly={isReadonly}
 					required
@@ -106,30 +106,30 @@
 			<div class="space-y-3">
 				<div class="flex items-center gap-3 text-sm font-medium text-surface-700">
 					<IconAlignLeft size={20} class="text-surface-600" />
-					<span>할일 설명</span>
+					<span>할 일 설명</span>
 				</div>
-				<textarea 
-					class="ig-input w-full p-3 rounded-lg border border-surface-300 text-surface-900 placeholder-surface-500 resize-y min-h-24 max-h-48" 
-					name="description" 
-					placeholder="할일에 대한 자세한 설명을 입력하세요... (선택사항)"
+				<textarea
+					class="ig-input w-full p-3 rounded-lg border border-surface-300 text-surface-900 placeholder-surface-500 resize-y min-h-24 max-h-48"
+					name="description"
+					placeholder="할 일에 대한 자세한 설명을 입력하세요... (선택사항)"
 					readonly={isReadonly}
-					rows="3"
-				>{getFieldValue('description')}</textarea>
+					rows="3">{getFieldValue('description')}</textarea
+				>
 			</div>
 		</div>
 
 		<!-- 시간 설정 그룹 -->
 		<div class="card preset-filled-surface-50-950 p-6 space-y-6">
 			<h2 class="text-lg font-semibold mb-4 border-b border-surface-200 pb-2">일정 설정</h2>
-			
+
 			<!-- 날짜 입력 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconCalendar size={20} />
 				</div>
-				<input 
-					class="ig-input" 
-					type="date" 
+				<input
+					class="ig-input"
+					type="date"
 					name="dueDate"
 					value={getFieldValue('dueDate')}
 					readonly={isReadonly}
@@ -141,9 +141,9 @@
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconClock size={20} />
 				</div>
-				<input 
-					class="ig-input" 
-					type="time" 
+				<input
+					class="ig-input"
+					type="time"
 					name="dueTime"
 					value={getFieldValue('dueTime')}
 					readonly={isReadonly}
@@ -155,11 +155,7 @@
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconRepeat size={20} />
 				</div>
-				<select 
-					class="ig-select" 
-					name="repeatType"
-					disabled={isReadonly}
-				>
+				<select class="ig-select" name="repeatType" disabled={isReadonly}>
 					{#each repeatTypes as repeatType}
 						<option value={repeatType.id} selected={isSelected(repeatType.id, 'repeatType')}>
 							{repeatType.name}
@@ -172,18 +168,13 @@
 		<!-- 분류 및 속성 그룹 -->
 		<div class="card preset-filled-surface-50-950 p-6 space-y-6">
 			<h2 class="text-lg font-semibold mb-4 border-b border-surface-200 pb-2">분류 및 속성</h2>
-			
+
 			<!-- 카테고리 선택 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconFolder size={20} />
 				</div>
-				<select 
-					class="ig-select" 
-					name="categoryId" 
-					required
-					disabled={isReadonly}
-				>
+				<select class="ig-select" name="categoryId" disabled={isReadonly}>
 					{#if mode === 'create'}
 						<option value="" selected disabled>카테고리를 선택하세요</option>
 					{/if}
@@ -200,12 +191,7 @@
 				<div class="ig-cell flex items-center justify-center text-surface-600">
 					<IconFlag size={20} />
 				</div>
-				<select 
-					class="ig-select" 
-					name="priorityId" 
-					required
-					disabled={isReadonly}
-				>
+				<select class="ig-select" name="priorityId" disabled={isReadonly}>
 					{#if mode === 'create'}
 						<option value="" selected disabled>중요도를 선택하세요</option>
 					{/if}
@@ -223,10 +209,10 @@
 					<IconTag size={20} class="text-surface-600" />
 					<span>태그</span>
 				</div>
-				<TagsInput 
-					name="tags" 
-					value={tags} 
-					onValueChange={(e) => (tags = e.value)} 
+				<TagsInput
+					name="tags"
+					value={tags}
+					onValueChange={(e) => (tags = e.value)}
 					placeholder="태그를 입력하고 Enter를 누르세요"
 					disabled={isReadonly}
 					classes="w-full"

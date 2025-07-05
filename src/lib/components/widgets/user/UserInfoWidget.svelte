@@ -1,25 +1,25 @@
 <script>
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	
+
 	// Props
-	let { 
+	let {
 		variant = 'default', // 'default' | 'compact' | 'minimal'
 		showProgress = true,
 		showEmail = false,
 		class: className = ''
 	} = $props();
-	
+
 	// page.data에서 직접 데이터 가져오기
 	let data = $derived(page.data);
-	
+
 	// 사용자 정보 정리
 	let userInfo = $derived({
 		name: data?.user?.nickname || '사용자',
 		initial: data?.user?.nickname?.[0] || '사',
 		email: data?.user?.email
 	});
-	
+
 	// 경험치 정보 정리
 	let experienceInfo = $derived({
 		level: data?.memberExperience?.currentLevel ?? 1,
@@ -29,9 +29,11 @@
 		currentLevelTotal: data?.memberExperience?.currentLevelTotal ?? 100,
 		expToNextLevel: data?.memberExperience?.expToNextLevel ?? 100
 	});
-	
+
 	// 경험치 진행률 계산
-	let xpProgress = $derived((experienceInfo.currentLevelProgress / experienceInfo.currentLevelTotal) * 100);
+	let xpProgress = $derived(
+		(experienceInfo.currentLevelProgress / experienceInfo.currentLevelTotal) * 100
+	);
 </script>
 
 {#if variant === 'minimal'}

@@ -25,21 +25,21 @@ export async function load({ parent, url }) {
 		new URLSearchParams({
 			startDate: today.toString(),
 			endDate: today.toString(),
-			complete: 'false', // 진행중인 할일만 조회
+			complete: 'false', // 진행중인 할 일만 조회
 			size: '1' // 오늘 할 일도 존재 여부만 확인
 		})
 	);
 
 	const timeoverTodosPromise = zzic.todo.getTodos(
 		new URLSearchParams({
-			// 시간 지난 할일은 별도 API나 필터가 필요할 수 있음
+			// 시간 지난 할 일은 별도 API나 필터가 필요할 수 있음
 			size: '1' // 시간 지난 할 일도 존재 여부만 확인
 		})
 	);
 
 	const doneTodosPromise = zzic.todo.getTodos(
 		new URLSearchParams({
-			complete: 'true', // 완료된 할일만 조회
+			complete: 'true', // 완료된 할 일만 조회
 			size: '1' // 완료된 할 일도 존재 여부만 확인
 		})
 	);
@@ -56,18 +56,19 @@ export async function load({ parent, url }) {
 		month: currentDate.month.toString()
 	});
 	const calendarTodosPromise = zzic.todo.getMonthlyCalendarTodos(searchParams);
-	
+
 	// 사용자 경험치 정보 가져오기
 	const memberExperiencePromise = zzic.member.getMemberExperience({ memberId: user.sub });
 
-	const [todayTodos, timeoverTodos, doneTodos, totalTodos, calendarTodos, memberExperience] = await Promise.all([
-		todayTodosPromise,
-		timeoverTodosPromise,
-		doneTodosPromise,
-		totalTodosPromise,
-		calendarTodosPromise,
-		memberExperiencePromise
-	]);
+	const [todayTodos, timeoverTodos, doneTodos, totalTodos, calendarTodos, memberExperience] =
+		await Promise.all([
+			todayTodosPromise,
+			timeoverTodosPromise,
+			doneTodosPromise,
+			totalTodosPromise,
+			calendarTodosPromise,
+			memberExperiencePromise
+		]);
 
 	return {
 		meta: {

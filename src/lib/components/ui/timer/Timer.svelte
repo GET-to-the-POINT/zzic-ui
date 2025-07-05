@@ -35,7 +35,11 @@
 	});
 </script>
 
-<div class="card preset-tonal-surface p-6 space-y-4 {className}" class:p-4={compact} class:space-y-2={compact}>
+<div
+	class="card preset-tonal-surface p-6 space-y-4 {className}"
+	class:p-4={compact}
+	class:space-y-2={compact}
+>
 	<div class="flex items-center justify-center gap-3">
 		{#if !compact}
 			<div class="text-primary-500">
@@ -47,7 +51,10 @@
 
 	{#if showProgress}
 		<div class="w-full h-2 bg-surface-200 dark:bg-surface-700 rounded-full overflow-hidden">
-			<div class="h-full bg-primary-500 transition-all duration-300" style="width: {$progress * 100}%"></div>
+			<div
+				class="h-full bg-primary-500 transition-all duration-300"
+				style="width: {$progress * 100}%"
+			></div>
 		</div>
 	{/if}
 
@@ -55,7 +62,7 @@
 		{#if $state === TimerState.IDLE || $state === TimerState.PAUSED}
 			<button
 				type="button"
-				class="btn preset-tonal-primary flex items-center gap-2"
+				class="btn preset-tonal-primary gap-2"
 				onclick={() => timer.start()}
 				aria-label="타이머 시작"
 			>
@@ -67,7 +74,7 @@
 		{:else if $state === TimerState.RUNNING}
 			<button
 				type="button"
-				class="btn preset-tonal-warning flex items-center gap-2"
+				class="btn preset-tonal-warning gap-2"
 				onclick={() => timer.pause()}
 				aria-label="타이머 일시정지"
 			>
@@ -81,7 +88,7 @@
 		{#if $state !== TimerState.IDLE}
 			<button
 				type="button"
-				class="btn preset-outlined-surface-500 flex items-center gap-2"
+				class="btn preset-outlined-surface-500 gap-2"
 				onclick={() => timer.stop()}
 				aria-label="타이머 초기화"
 			>
@@ -93,4 +100,3 @@
 		{/if}
 	</div>
 </div>
-

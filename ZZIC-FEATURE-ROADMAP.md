@@ -5,6 +5,7 @@
 ZZIC은 이미 매우 완성도 높은 생산성 앱으로, 다음과 같은 핵심 기능들이 잘 구현되어 있습니다:
 
 ### 🎯 완전히 구현된 핵심 기능들
+
 - ✅ **완전한 Todo 관리** (CRUD, 우선순위, 태그, 반복, 상태 관리)
 - ✅ **달력 통합** (월간 뷰, 일정 시각화)
 - ✅ **포모도로 타이머** (집중 세션, 자동 완료, 통계)
@@ -16,6 +17,7 @@ ZZIC은 이미 매우 완성도 높은 생산성 앱으로, 다음과 같은 핵
 - ✅ **반응형 UI** (모바일 퍼스트, 다크모드)
 
 ### ⚠️ 부분적으로 구현된 기능들
+
 - 🔶 **챌린지 시스템** (백엔드 완료, 프론트엔드 UI 미구현)
 - 🔶 **프로필 관리** (API 준비됨, UI "준비중")
 - 🔶 **설정 페이지** (경로 존재, 콘텐츠 미구현)
@@ -26,24 +28,27 @@ ZZIC은 이미 매우 완성도 높은 생산성 앱으로, 다음과 같은 핵
 ## 🚀 제안하는 새로운 기능들
 
 ### 1. AI 기반 스마트 기능
+
 **2024-2025 트렌드 반영**
 
-#### 1.1 AI 할일 제안 시스템
+#### 1.1 AI 할 일 제안 시스템
+
 ```javascript
 // 구현 아이디어
 const aiSuggestions = {
-  // 사용자 패턴 분석 기반 할일 제안
-  suggestTasks: (userHistory, currentTodos) => {
-    // 반복 패턴 분석, 미완료 할일 패턴 등
-  },
-  // 큰 작업을 세부 작업으로 분해
-  breakdownTask: (taskDescription) => {
-    // "프로젝트 완료" → ["기획서 작성", "개발", "테스트", "배포"]
-  }
-}
+	// 사용자 패턴 분석 기반 할 일 제안
+	suggestTasks: (userHistory, currentTodos) => {
+		// 반복 패턴 분석, 미완료 할 일 패턴 등
+	},
+	// 큰 작업을 세부 작업으로 분해
+	breakdownTask: (taskDescription) => {
+		// "프로젝트 완료" → ["기획서 작성", "개발", "테스트", "배포"]
+	}
+};
 ```
 
 #### 1.2 스마트 시간 배정
+
 - 과거 완료 시간 데이터 기반 소요 시간 예측
 - 캘린더와 연동한 자동 일정 블로킹
 - 에너지 레벨에 따른 작업 추천 (아침: 집중 작업, 오후: 루틴 작업)
@@ -51,31 +56,35 @@ const aiSuggestions = {
 ### 2. 고급 생산성 기능
 
 #### 2.1 Time Boxing & Energy Management
+
 ```svelte
 <!-- TimeBoxing.svelte -->
 <script>
-  // 에너지 레벨별 작업 분류
-  const energyLevels = {
-    high: [], // 창의적/집중 작업
-    medium: [], // 일반 업무
-    low: [] // 루틴/간단한 작업
-  };
+	// 에너지 레벨별 작업 분류
+	const energyLevels = {
+		high: [], // 창의적/집중 작업
+		medium: [], // 일반 업무
+		low: [] // 루틴/간단한 작업
+	};
 </script>
 ```
 
 #### 2.2 습관 트래킹 시스템
+
 - 일일/주간/월간 습관 체계
 - 스트릭 시각화 (연속 달성 일수)
 - 습관별 상세 통계 및 인사이트
 
 #### 2.3 목표 관리 (OKR 스타일)
+
 - 분기별/연간 목표 설정
-- 목표-할일 연결 시스템
+- 목표-할 일 연결 시스템
 - 목표 달성률 시각화
 
 ### 3. 협업 및 소셜 기능
 
 #### 3.1 챌린지 시스템 프론트엔드 완성
+
 ```
 /challenges
 ├── +page.svelte (챌린지 목록)
@@ -88,29 +97,32 @@ const aiSuggestions = {
 ```
 
 #### 3.2 소셜 기능 확장
+
 - 친구 시스템 (팔로우/팔로워)
-- 할일 공유 및 협업
+- 할 일 공유 및 협업
 - 팀 워크스페이스
 - 공개 프로필 페이지
 
 ### 4. 고급 인사이트 및 분석
 
 #### 4.1 생산성 대시보드 확장
+
 ```javascript
 // 고급 분석 기능
 const advancedAnalytics = {
-  // 시간대별 생산성 분석
-  productivityByHour: [],
-  // 작업 유형별 소요 시간
-  timeByCategory: {},
-  // 완료율 트렌드
-  completionTrends: [],
-  // 목표 달성률
-  goalProgress: {}
+	// 시간대별 생산성 분석
+	productivityByHour: [],
+	// 작업 유형별 소요 시간
+	timeByCategory: {},
+	// 완료율 트렌드
+	completionTrends: [],
+	// 목표 달성률
+	goalProgress: {}
 };
 ```
 
 #### 4.2 개인화된 리포트
+
 - 주간/월간 생산성 리포트
 - 성취 하이라이트
 - 개선 제안사항
@@ -119,41 +131,46 @@ const advancedAnalytics = {
 ### 5. 스마트 통합 및 자동화
 
 #### 5.1 외부 서비스 연동
-- **이메일 연동**: Gmail/Outlook 이메일을 할일로 변환
+
+- **이메일 연동**: Gmail/Outlook 이메일을 할 일로 변환
 - **캘린더 동기화**: Google Calendar, Apple Calendar 양방향 동기화
-- **메신저 연동**: Slack, Discord 메시지를 할일로 변환
-- **GitHub 연동**: 이슈와 PR을 할일로 자동 생성
+- **메신저 연동**: Slack, Discord 메시지를 할 일로 변환
+- **GitHub 연동**: 이슈와 PR을 할 일로 자동 생성
 
 #### 5.2 자동화 워크플로우
+
 ```javascript
 // 자동화 규칙 예시
 const automationRules = [
-  {
-    trigger: "todo_overdue",
-    action: "create_reminder",
-    condition: "priority >= 2"
-  },
-  {
-    trigger: "weekly_review",
-    action: "generate_report",
-    schedule: "every_sunday"
-  }
+	{
+		trigger: 'todo_overdue',
+		action: 'create_reminder',
+		condition: 'priority >= 2'
+	},
+	{
+		trigger: 'weekly_review',
+		action: 'generate_report',
+		schedule: 'every_sunday'
+	}
 ];
 ```
 
 ### 6. 사용자 경험 개선
 
 #### 6.1 음성 입력 및 명령
-- 음성으로 할일 추가
+
+- 음성으로 할 일 추가
 - 음성 명령으로 완료 표시
 - 다국어 음성 인식 지원
 
 #### 6.2 오프라인 지원
+
 - Service Worker 구현
 - 오프라인 데이터 동기화
 - 네트워크 상태 감지 및 대응
 
 #### 6.3 접근성 강화
+
 - 키보드 단축키 확장
 - 스크린 리더 최적화
 - 고대비 모드
@@ -162,15 +179,14 @@ const automationRules = [
 ### 7. 데이터 관리 및 백업
 
 #### 7.1 데이터 내보내기/가져오기
+
 ```javascript
 // 지원할 형식들
-const exportFormats = [
-  'json', 'csv', 'markdown', 
-  'todoist', 'any.do', 'notion'
-];
+const exportFormats = ['json', 'csv', 'markdown', 'todoist', 'any.do', 'notion'];
 ```
 
 #### 7.2 자동 백업 시스템
+
 - 클라우드 저장소 연동 (Google Drive, iCloud)
 - 버전 관리 (변경 이력 추적)
 - 복원 기능
@@ -178,24 +194,17 @@ const exportFormats = [
 ### 8. 고급 커스터마이징
 
 #### 8.1 테마 시스템 확장
+
 - 커스텀 컬러 팔레트
 - 레이아웃 옵션 (컴팩트/넓은 간격)
 - 글꼴 선택권
 
-#### 8.2 할일 템플릿 시스템
+#### 8.2 할 일 템플릿 시스템
+
 ```javascript
 const todoTemplates = {
-  "프로젝트 시작": [
-    "요구사항 분석",
-    "기술 스택 선정", 
-    "프로토타입 제작",
-    "개발 계획 수립"
-  ],
-  "주간 리뷰": [
-    "지난주 성과 정리",
-    "이번주 목표 설정",
-    "우선순위 재조정"
-  ]
+	'프로젝트 시작': ['요구사항 분석', '기술 스택 선정', '프로토타입 제작', '개발 계획 수립'],
+	'주간 리뷰': ['지난주 성과 정리', '이번주 목표 설정', '우선순위 재조정']
 };
 ```
 
@@ -204,32 +213,37 @@ const todoTemplates = {
 ## 🎯 우선순위 기반 구현 계획
 
 ### Phase 1: 기존 기능 완성 (1-2주)
+
 1. **챌린지 시스템 UI 구현** - 백엔드 완료된 상태
 2. **프로필 페이지 완성** - 설정과 함께 구현
 3. **Todo 고정 기능 연결** - UI 준비됨, 백엔드만 연결
 4. **설정 페이지 구현** - 테마, 알림, 개인화 설정
 
 ### Phase 2: 생산성 핵심 기능 (2-3주)
+
 1. **습관 트래킹 시스템**
 2. **고급 분석 대시보드**
 3. **시간 박싱 및 에너지 관리**
-4. **할일 템플릿 시스템**
+4. **할 일 템플릿 시스템**
 
 ### Phase 3: 스마트 기능 (3-4주)
-1. **AI 기반 할일 제안**
+
+1. **AI 기반 할 일 제안**
 2. **자동 시간 예측**
 3. **스마트 알림 시스템**
 4. **패턴 분석 및 인사이트**
 
 ### Phase 4: 통합 및 자동화 (4-5주)
+
 1. **외부 서비스 연동** (이메일, 캘린더)
 2. **자동화 워크플로우**
 3. **음성 입력 지원**
 4. **오프라인 기능**
 
 ### Phase 5: 소셜 및 협업 (5-6주)
+
 1. **팀 워크스페이스**
-2. **할일 공유 시스템**
+2. **할 일 공유 시스템**
 3. **소셜 챌린지 확장**
 4. **협업 도구 통합**
 
@@ -238,57 +252,59 @@ const todoTemplates = {
 ## 🏗️ 기술적 구현 가이드
 
 ### 새로운 의존성 추가 예상
+
 ```json
 {
-  "dependencies": {
-    // AI/ML 기능
-    "@tensorflow/tfjs": "^4.x", // 클라이언트 측 ML
-    
-    // 음성 인식
-    "speech-recognition-polyfill": "^1.x",
-    
-    // 외부 API 연동
-    "googleapis": "^128.x", // Google APIs
-    "microsoft-graph-client": "^3.x", // Microsoft Graph
-    
-    // 오프라인 지원
-    "workbox-webpack-plugin": "^7.x",
-    
-    // 고급 차트
-    "chart.js": "^4.x",
-    "date-fns": "^3.x", // Temporal 보완
-    
-    // 파일 처리
-    "jszip": "^3.x",
-    "papaparse": "^5.x" // CSV 처리
-  }
+	"dependencies": {
+		// AI/ML 기능
+		"@tensorflow/tfjs": "^4.x", // 클라이언트 측 ML
+
+		// 음성 인식
+		"speech-recognition-polyfill": "^1.x",
+
+		// 외부 API 연동
+		"googleapis": "^128.x", // Google APIs
+		"microsoft-graph-client": "^3.x", // Microsoft Graph
+
+		// 오프라인 지원
+		"workbox-webpack-plugin": "^7.x",
+
+		// 고급 차트
+		"chart.js": "^4.x",
+		"date-fns": "^3.x", // Temporal 보완
+
+		// 파일 처리
+		"jszip": "^3.x",
+		"papaparse": "^5.x" // CSV 처리
+	}
 }
 ```
 
 ### 새로운 API 엔드포인트 필요
+
 ```javascript
 // 추가 필요한 API 엔드포인트들
 const newApiEndpoints = {
-  // 습관 관리
-  '/api/habits': ['GET', 'POST', 'PUT', 'DELETE'],
-  '/api/habits/{id}/track': ['POST'], // 습관 체크
-  
-  // 목표 관리  
-  '/api/goals': ['GET', 'POST', 'PUT', 'DELETE'],
-  '/api/goals/{id}/progress': ['GET'], // 목표 진행률
-  
-  // 분석 및 인사이트
-  '/api/analytics/productivity': ['GET'],
-  '/api/analytics/patterns': ['GET'],
-  '/api/analytics/reports': ['GET'],
-  
-  // 자동화
-  '/api/automations': ['GET', 'POST', 'PUT', 'DELETE'],
-  '/api/integrations': ['GET', 'POST'], // 외부 서비스 연동
-  
-  // 백업/복원
-  '/api/backup/export': ['GET'],
-  '/api/backup/import': ['POST']
+	// 습관 관리
+	'/api/habits': ['GET', 'POST', 'PUT', 'DELETE'],
+	'/api/habits/{id}/track': ['POST'], // 습관 체크
+
+	// 목표 관리
+	'/api/goals': ['GET', 'POST', 'PUT', 'DELETE'],
+	'/api/goals/{id}/progress': ['GET'], // 목표 진행률
+
+	// 분석 및 인사이트
+	'/api/analytics/productivity': ['GET'],
+	'/api/analytics/patterns': ['GET'],
+	'/api/analytics/reports': ['GET'],
+
+	// 자동화
+	'/api/automations': ['GET', 'POST', 'PUT', 'DELETE'],
+	'/api/integrations': ['GET', 'POST'], // 외부 서비스 연동
+
+	// 백업/복원
+	'/api/backup/export': ['GET'],
+	'/api/backup/import': ['POST']
 };
 ```
 
@@ -297,21 +313,25 @@ const newApiEndpoints = {
 ## 💡 혁신적인 차별화 아이디어
 
 ### 1. "컨텍스트 스위칭" 최소화
+
 - 작업 모드별 환경 설정 (집중 모드, 창의 모드, 관리 모드)
-- 모드 전환 시 관련 할일만 필터링
+- 모드 전환 시 관련 할 일만 필터링
 - 환경 소음/배경 음악 통합
 
 ### 2. "에너지 기반" 스케줄링
+
 - 사용자의 에너지 패턴 학습
 - 최적 시간대에 중요 작업 자동 배치
 - 피로도 예측 및 휴식 제안
 
 ### 3. "감정 상태" 반영
-- 할일 완료 시 감정 상태 기록
+
+- 할 일 완료 시 감정 상태 기록
 - 감정별 생산성 패턴 분석
 - 기분에 맞는 작업 추천
 
 ### 4. "마이크로 게이미피케이션"
+
 - 작은 성취에 대한 즉각적 피드백
 - 개인화된 뱃지 시스템
 - 성취도에 따른 앱 테마 언락

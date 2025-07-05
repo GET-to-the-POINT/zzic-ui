@@ -21,12 +21,12 @@
 			if (browser) {
 				const saved = localStorage.getItem(STORAGE_KEY);
 				let memos = [];
-				
+
 				if (saved) {
 					const parsed = JSON.parse(saved);
 					memos = parsed.memos || [];
 				}
-				
+
 				// 새 메모 생성
 				const newMemo = {
 					id: crypto.randomUUID(),
@@ -35,18 +35,17 @@
 					createdAt: new Date(),
 					updatedAt: new Date()
 				};
-				
+
 				memos.push(newMemo);
-				
+
 				// 저장
 				const dataToSave = {
 					memos,
 					currentMemoId: newMemo.id
 				};
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-				
 			}
-			
+
 			if (result.type === 'redirect') {
 				// replaceState를 사용하여 히스토리에서 현재 페이지 제거
 				await goto(result.location, { replaceState: true, invalidateAll: true });
@@ -88,18 +87,8 @@
 
 		<!-- 하단 버튼 영역 -->
 		<div class="p-4 border-t border-surface-300 bg-surface-100 flex gap-3 justify-end">
-			<button
-				type="submit"
-				class="btn preset-filled-primary"
-			>
-				생성
-			</button>
-			<a
-				href="/notes"
-				class="btn preset-tonal-secondary"
-			>
-				취소
-			</a>
+			<button type="submit" class="btn preset-filled-primary"> 생성 </button>
+			<a href="/notes" class="btn preset-tonal-secondary"> 취소 </a>
 		</div>
 	</form>
 </main>

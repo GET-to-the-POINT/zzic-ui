@@ -61,7 +61,7 @@
 		>
 			<button
 				type="submit"
-				class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+				class="w-full justify-start btn hover:bg-surface-800-200 gap-2"
 				name="complete"
 				value={(!page.data.todo.complete).toString()}
 			>

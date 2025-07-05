@@ -4,7 +4,7 @@
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
-	
+
 	const today = $derived.by(() => {
 		return Temporal.Instant.fromEpochMilliseconds(page.data.temporal.epochMilliseconds)
 			.toZonedDateTimeISO(page.data.user.timeZone)
@@ -14,7 +14,7 @@
 	// 현재 날짜를 사용자 타임존으로 변환
 	const currentPlainDate = $derived.by(() => {
 		const yearMonth = page.url.searchParams.get('yearMonth');
-		
+
 		if (yearMonth) {
 			// URL에 yearMonth가 있으면 해당 년월의 1일 사용
 			const [year, month] = yearMonth.split('-').map(Number);
@@ -23,28 +23,30 @@
 			return today;
 		}
 	});
-	
+
 	const days = new SvelteSet();
 
 	$effect(() => {
 		days.clear();
-		
+
 		// 이번 달의 첫 번째 날
 		const firstDayOfMonth = currentPlainDate.with({ day: 1 });
-		
+
 		// 이번 달의 마지막 날
 		const lastDayOfMonth = firstDayOfMonth.add({ months: 1 }).subtract({ days: 1 });
-		
+
 		// 첫 주의 일요일 찾기 (dayOfWeek: 1=월요일, 7=일요일)
-		const firstSunday = firstDayOfMonth.dayOfWeek === 7 
-			? firstDayOfMonth 
-			: firstDayOfMonth.subtract({ days: firstDayOfMonth.dayOfWeek });
-		
+		const firstSunday =
+			firstDayOfMonth.dayOfWeek === 7
+				? firstDayOfMonth
+				: firstDayOfMonth.subtract({ days: firstDayOfMonth.dayOfWeek });
+
 		// 마지막 주의 토요일 찾기
-		const lastSaturday = lastDayOfMonth.dayOfWeek === 6 
-			? lastDayOfMonth 
-			: lastDayOfMonth.add({ days: 6 - lastDayOfMonth.dayOfWeek });
-		
+		const lastSaturday =
+			lastDayOfMonth.dayOfWeek === 6
+				? lastDayOfMonth
+				: lastDayOfMonth.add({ days: 6 - lastDayOfMonth.dayOfWeek });
+
 		// 첫 주 일요일부터 마지막 주 토요일까지 모든 날짜 추가
 		let currentDate = firstSunday;
 		while (currentDate.until(lastSaturday).days >= 0) {
@@ -52,7 +54,7 @@
 			currentDate = currentDate.add({ days: 1 });
 		}
 	});
-	
+
 	const prevMonthUrl = $derived.by(() => {
 		const url = new URL(page.url);
 		const currentDate = currentPlainDate.with({ day: 1 });
@@ -70,10 +72,10 @@
 	});
 
 	const monthName = $derived(
-		currentPlainDate.toLocaleString('ko-KR', { 
-			year: 'numeric', 
-			month: 'long', 
-			timeZone: page.data.user.timeZone 
+		currentPlainDate.toLocaleString('ko-KR', {
+			year: 'numeric',
+			month: 'long',
+			timeZone: page.data.user.timeZone
 		})
 	);
 </script>
@@ -108,7 +110,7 @@
 				{/each}
 			</tr>
 		</thead>
-		
+
 		<!-- Calendar Body -->
 		<tbody>
 			{#each Array.from(days).reduce((weeks, date, index) => {
@@ -125,9 +127,14 @@
 						{@const disabled = date.month !== currentPlainDate.month}
 						{@const isToday = date.equals(today)}
 						<td class="h-16">
-							<a 
+							<a
 								href={`/todos?${searchParams.toString()}`}
-								class={['btn h-full w-full', disabled && 'disabled', isToday && 'underline text-primary-500']}>
+								class={[
+									'btn h-full w-full',
+									disabled && 'disabled',
+									isToday && 'underline text-primary-500'
+								]}
+							>
 								{date.day}
 							</a>
 						</td>

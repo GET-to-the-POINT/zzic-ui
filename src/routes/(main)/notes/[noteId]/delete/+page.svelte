@@ -13,14 +13,14 @@
 			if (browser) {
 				const STORAGE_KEY = 'memo-app-data';
 				const saved = localStorage.getItem(STORAGE_KEY);
-				
+
 				if (saved) {
 					const parsed = JSON.parse(saved);
 					const memos = parsed.memos || [];
-					
+
 					// 메모 목록에서 제거
-					const updatedMemos = memos.filter(memo => memo.id !== data.noteId);
-					
+					const updatedMemos = memos.filter((memo) => memo.id !== data.noteId);
+
 					// 저장
 					const dataToSave = {
 						memos: updatedMemos,

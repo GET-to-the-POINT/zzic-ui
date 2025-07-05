@@ -9,7 +9,7 @@
 	};
 </script>
 
-<TodoForm 
+<TodoForm
 	mode="update"
 	todo={data.todo}
 	categories={data.categories?.content ?? []}

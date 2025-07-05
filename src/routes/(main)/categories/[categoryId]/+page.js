@@ -15,7 +15,7 @@ export async function load({ parent, params, url }) {
 	return {
 		meta: {
 			title: category.name,
-			description: '분류 상세 페이지입니다.',
+			description: '분류 상세 페이지입니다.'
 		},
 		category,
 		contextMenu: CategoryDetailContextMenu

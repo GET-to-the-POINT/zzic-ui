@@ -13,23 +13,25 @@
 	};
 </script>
 
-<section class="p-4 preset-filled-surface-50-950">
-	<form class="space-y-4" data-sveltekit-keepfocus data-sveltekit-replacestate bind:this={form} oninput={handleInput}>
-		<label class="label">
-			<div class="input-group grid-cols-[auto_1fr]">
-				<div class="ig-cell">
-					<IconSearch size="16" />
+<main class="p-4 space-y-4">
+	<div class="card preset-filled-surface-50-950 p-4">
+		<form
+			class="space-y-4"
+			data-sveltekit-keepfocus
+			data-sveltekit-replacestate
+			bind:this={form}
+			oninput={handleInput}
+		>
+			<label class="label">
+				<div class="input-group grid-cols-[auto_1fr]">
+					<div class="ig-cell">
+						<IconSearch size="16" />
+					</div>
+					<input name="keyword" type="text" value={page.url.searchParams.get('keyword')} />
 				</div>
-				<input
-					name="keyword"
-					type="text"
-					value={page.url.searchParams.get('keyword')}
-				/>
-			</div>
-		</label>
-	</form>
-</section>
+			</label>
+		</form>
+	</div>
 
-<main class="p-4">
 	<TodoList todoPage={data.todoPage} />
 </main>

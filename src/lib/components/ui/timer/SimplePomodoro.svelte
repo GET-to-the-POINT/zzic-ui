@@ -4,19 +4,18 @@
 	import Pause from '@lucide/svelte/icons/pause';
 	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
 	import ClockCarousel from './ClockCarousel.svelte';
+	import DraggableTodoList from '$lib/components/ui/common/DraggableTodoList.svelte';
+	import { page } from '$app/state';
 
 	// Props
-	let {
-		class: className = '',
-		onComplete = () => {}
-	} = $props();
+	let { class: className = '', onComplete = () => {} } = $props();
 
 	// 상태
 	let totalMinutes = $state(25);
 	let totalSeconds = $derived(totalMinutes * 60);
 	let remainingSeconds = $state(25 * 60);
 	let isRunning = $state(false);
-	let interval = $state(null);
+	let interval = $state(/** @type {number | null} */ (null));
 
 	// 계산된 값
 	let progress = $derived(
@@ -28,6 +27,14 @@
 		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 	});
 	let colonVisible = $derived(remainingSeconds % 2 === 1);
+
+	// 투두 리스트
+	let todos = $derived(page.data.todos?.content || []);
+
+	function handleTodoReorder(/** @type {any[]} */ newOrder) {
+		console.log('투두 순서 변경:', newOrder);
+		// TODO: API 호출하여 순서 저장
+	}
 
 	// 타이머 함수
 	function startTimer() {
@@ -79,44 +86,31 @@
 	});
 </script>
 
-<section class="card preset-filled-surface-50-950 max-w-2xl mx-auto {className}">
+<section class="p-4 space-y-4 card preset-filled-surface-50-950">
 	<!-- 헤더 -->
-	<header class="p-6 pb-0">
-		<h1 class="h3 font-bold">타이머</h1>
+	<header>
+		<h2 class="h2">심플 타이머</h2>
 	</header>
 
 	<!-- 컨텐츠 -->
-	<div class="p-6 space-y-6">
+	<div>
 		<!-- 시간 설정 -->
 		<div class="flex items-center justify-center gap-2 flex-wrap">
-			<button
-				class="btn btn-sm preset-ghost-surface"
-				onclick={() => setMinutes(15)}
-				disabled={isRunning}
-			>
-				15분
-			</button>
-			<button
-				class="btn btn-sm preset-ghost-surface"
-				onclick={() => setMinutes(30)}
-				disabled={isRunning}
-			>
-				30분
-			</button>
-			<button
-				class="btn btn-sm preset-ghost-surface"
-				onclick={() => setMinutes(45)}
-				disabled={isRunning}
-			>
-				45분
-			</button>
-			<button
-				class="btn btn-sm preset-ghost-surface"
-				onclick={() => setMinutes(60)}
-				disabled={isRunning}
-			>
-				60분
-			</button>
+			{#snippet timeButton(/** @type {number} */ minutes)}
+				<button
+					class="btn btn-sm hover:preset-tonal"
+					onclick={() => setMinutes(minutes)}
+					disabled={isRunning}
+				>
+					{minutes}분
+				</button>
+			{/snippet}
+
+			{@render timeButton(15)}
+			{@render timeButton(30)}
+			{@render timeButton(45)}
+			{@render timeButton(60)}
+
 			<button
 				class="btn btn-sm preset-tonal-primary"
 				onclick={addMinutes}
@@ -126,9 +120,8 @@
 			</button>
 		</div>
 
-
 		<!-- 시계 표시 -->
-		<ClockCarousel 
+		<ClockCarousel
 			time={formattedTime()}
 			{colonVisible}
 			{progress}
@@ -138,11 +131,11 @@
 	</div>
 
 	<!-- 액션 버튼 -->
-	<footer class="p-6 pt-0">
-		<div class="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+	<footer>
+		<div class="grid grid-cols-2 gap-2">
 			<button
 				type="button"
-				class="btn preset-ghost-surface flex items-center justify-center gap-2"
+				class="btn hover:preset-tonal"
 				onclick={resetTimer}
 				aria-label="타이머 리셋"
 			>
@@ -153,7 +146,7 @@
 			{#if !isRunning}
 				<button
 					type="button"
-					class="btn preset-tonal-primary flex items-center justify-center gap-2"
+					class="btn preset-tonal-primary"
 					onclick={startTimer}
 					aria-label="타이머 시작"
 					disabled={remainingSeconds === 0}
@@ -175,3 +168,10 @@
 		</div>
 	</footer>
 </section>
+
+<!-- 드래그 가능한 투두 리스트 -->
+{#if todos.length > 0}
+	<div class="mt-4">
+		<DraggableTodoList {todos} title="오늘의 할 일" onReorder={handleTodoReorder} />
+	</div>
+{/if}

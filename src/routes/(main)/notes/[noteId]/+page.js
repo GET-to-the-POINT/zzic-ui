@@ -6,7 +6,7 @@ import NoteContextMenu from '../NoteContextMenu.svelte';
  */
 export async function load({ parent, url, params }) {
 	await requireAuth(parent, url);
-	
+
 	return {
 		noteId: params.noteId,
 		meta: {

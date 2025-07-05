@@ -1,5 +1,4 @@
 <script>
-
 	// 계산기 상태
 	let display = $state('0');
 	let previousValue = $state(null);
@@ -108,7 +107,6 @@
 
 <main class="p-4">
 	<div class="space-y-4">
-
 		<!-- 계산기 본체 -->
 		<div class="preset-filled-surface-50-950 p-4 rounded-xl">
 			<!-- 디스플레이 -->

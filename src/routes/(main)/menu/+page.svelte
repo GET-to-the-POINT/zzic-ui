@@ -6,6 +6,7 @@
 	import Home from '@lucide/svelte/icons/house';
 	import LogOut from '@lucide/svelte/icons/log-out';
 	import Moon from '@lucide/svelte/icons/moon';
+	import Palette from '@lucide/svelte/icons/palette';
 	import Search from '@lucide/svelte/icons/search';
 	import Settings from '@lucide/svelte/icons/settings';
 	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
@@ -24,7 +25,6 @@
 		localStorage.setItem('mode', mode);
 	});
 
-
 	const navItems = [
 		{ id: 'dashboard', label: '대시보드', icon: Home, href: '/dashboard' },
 		{ id: 'todos', label: '할 일', icon: SquareCheckBig, href: '/todos' },
@@ -40,7 +40,6 @@
 		{ id: 'note', label: '노트', icon: StickyNote, href: '/notes' },
 		{ id: 'calculate', label: '계산기', icon: Calculator, href: '/calculate' }
 	];
-
 </script>
 
 <main class="p-4 space-y-4">
@@ -53,10 +52,7 @@
 		<div class="space-y-2">
 			{#each navItems as item}
 				{@const IconComponent = item.icon}
-				<a
-					href={item.href}
-					class="flex items-center h-12"
-				>
+				<a href={item.href} class="flex items-center h-12">
 					<IconComponent size={20} class="mr-3 text-primary-500" />
 					<span class="flex-1">{item.label}</span>
 				</a>
@@ -70,10 +66,7 @@
 		<div class="space-y-2">
 			{#each toolItems as item}
 				{@const IconComponent = item.icon}
-				<a
-					href={item.href}
-					class="flex items-center h-12"
-				>
+				<a href={item.href} class="flex items-center h-12">
 					<IconComponent size={20} class="mr-3" />
 					<span class="flex-1">{item.label}</span>
 				</a>
@@ -96,20 +89,20 @@
 				<input class="hidden" type="checkbox" bind:checked />
 			</label>
 
+			<!-- 테마 변경 -->
+			<a href="/theme" class="flex items-center h-12">
+				<Palette size={20} class="mr-3 text-surface-600-300" />
+				<span class="flex-1">테마 변경</span>
+			</a>
+
 			<!-- 설정 -->
-			<a
-				href="/settings"
-				class="flex items-center h-12"
-			>
+			<a href="/settings" class="flex items-center h-12">
 				<Settings size={20} class="mr-3 text-surface-600-300" />
 				<span class="flex-1">설정 (준비중)</span>
 			</a>
 
 			<!-- 로그아웃 -->
-			<a
-				href="/auth/sign-out"
-				class="flex items-center h-12 text-error-600"
-			>
+			<a href="/auth/sign-out" class="flex items-center h-12 text-error-600">
 				<LogOut size={20} class="mr-3 text-error-500" />
 				<span class="flex-1">로그아웃</span>
 			</a>

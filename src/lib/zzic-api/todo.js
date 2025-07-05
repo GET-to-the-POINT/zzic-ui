@@ -74,9 +74,11 @@ export function splitLocalDateTime(plainDateTime) {
 /**
  * @typedef {Object} TodoResponse
  * @property {string} id - Todo ID (가상 투두의 경우 '원본ID:반복순서' 형식)
- * @property {string} title - 할일 제목
- * @property {string} [description] - 할일 설명
+ * @property {string} title - 할 일 제목
+ * @property {string} [description] - 할 일 설명
  * @property {boolean} complete - 완료 여부 (true: 완료, false: 미완료)
+ * @property {boolean} [isPinned] - 상단 고정 여부
+ * @property {number} [displayOrder] - 정렬 순서 (0이 가장 먼저)
  * @property {number} [priorityId] - 우선순위 (0: 낮음, 1: 보통, 2: 높음)
  * @property {string} [priorityName] - 우선순위명
  * @property {number} [categoryId] - 카테고리 ID
@@ -245,7 +247,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			} else {
 				url = new URL(`${apiUrl}/todos/${todoId}`);
 			}
-			
+
 			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
@@ -304,7 +306,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			} else {
 				url = new URL(`${apiUrl}/todos/${todoId}`);
 			}
-			
+
 			const response = await fetchFn(url.toString(), {
 				method: 'PATCH',
 				body: formData,
@@ -338,11 +340,11 @@ export function createTodoClient(apiUrl, fetchFn) {
 			} else {
 				url = new URL(`${apiUrl}/todos/${todoId}`);
 			}
-			
+
 			// FormData 생성하여 deleteAll 파라미터 추가
 			const formData = new FormData();
 			formData.append('deleteAll', deleteAll.toString());
-			
+
 			const response = await fetchFn(url.toString(), {
 				method: 'DELETE',
 				body: formData,
@@ -371,7 +373,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 			if (date) {
 				url.searchParams.append('date', date);
 			}
-			
+
 			const response = await fetchFn(url.toString(), {
 				credentials: 'include'
 			});
@@ -418,6 +420,38 @@ export function createTodoClient(apiUrl, fetchFn) {
 		}
 	}
 
+	/**
+	 * 할 일 상단 고정 토글
+	 * @param {Object} params - 파라미터 객체
+	 * @param {number|string} params.todoId - 할 일 ID (반복 투두의 경우 'id:daysDifference' 형식)
+	 * @param {number} [params.daysDifference] - 반복 투두의 날짜 차이
+	 * @returns {Promise<{error: ApiError|null}>}
+	 */
+	async function togglePin({ todoId, daysDifference }) {
+		try {
+			let url;
+			if (daysDifference !== undefined) {
+				url = new URL(`${apiUrl}/todos/${todoId}:${daysDifference}/pin`);
+			} else {
+				url = new URL(`${apiUrl}/todos/${todoId}/pin`);
+			}
+
+			const response = await fetchFn(url.toString(), {
+				method: 'PATCH',
+				credentials: 'include'
+			});
+
+			if (response.status !== 204) {
+				const error = await response.json();
+				return { error };
+			}
+
+			return { error: null };
+		} catch (error) {
+			return { error: /** @type {any} */ (error) };
+		}
+	}
+
 	return {
 		getTodos,
 		getTodo,
@@ -425,6 +459,7 @@ export function createTodoClient(apiUrl, fetchFn) {
 		updateTodo,
 		deleteTodo,
 		getTodoStatistics,
-		getMonthlyCalendarTodos
+		getMonthlyCalendarTodos,
+		togglePin
 	};
 }

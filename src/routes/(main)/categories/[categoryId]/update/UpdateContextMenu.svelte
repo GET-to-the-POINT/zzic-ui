@@ -3,10 +3,6 @@
 	import Save from '@lucide/svelte/icons/save';
 </script>
 
-<button
-	type="submit"
-	form={page.data.formId}
-	class="btn-icon"
->
+<button type="submit" form={page.data.formId} class="btn-icon">
 	<Save />
 </button>

@@ -1,12 +1,12 @@
 <script>
-import { page } from '$app/state';
-import Check from '@lucide/svelte/icons/check';
-import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-import Plus from '@lucide/svelte/icons/plus';
-import CalendarDays from '@lucide/svelte/icons/calendar-days';
-import Search from '@lucide/svelte/icons/search';
-import X from '@lucide/svelte/icons/x';
-import { afterNavigate } from '$app/navigation';
+	import { page } from '$app/state';
+	import Check from '@lucide/svelte/icons/check';
+	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
+	import Plus from '@lucide/svelte/icons/plus';
+	import CalendarDays from '@lucide/svelte/icons/calendar-days';
+	import Search from '@lucide/svelte/icons/search';
+	import X from '@lucide/svelte/icons/x';
+	import { afterNavigate } from '$app/navigation';
 
 	const searchParams = new URLSearchParams(page.url.search);
 	searchParams.set('redirectTo', page.url.pathname);
@@ -45,27 +45,18 @@ import { afterNavigate } from '$app/navigation';
 		</button>
 	</form>
 	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col">
-		<a
-			href={redirectToTodosCreate}
-			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
-		>
+		<a href={redirectToTodosCreate} class="justify-start btn hover:bg-surface-800-200 gap-2">
 			<Plus size={16} />
-			새 할일 추가
+			새 할 일 추가
 		</a>
-	   <a
-		   href="/todos"
-		   class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
-	   >
-		   <CalendarDays size={16} />
-		   오늘 보기
-	   </a>
-	   <a
-		   href="/search"
-		   class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
-	   >
-		   <Search size={16} />
-		   검색
-	   </a>
+		<a href="/todos" class="justify-start btn hover:bg-surface-800-200 gap-2">
+			<CalendarDays size={16} />
+			오늘 보기
+		</a>
+		<a href="/search" class="justify-start btn hover:bg-surface-800-200 gap-2">
+			<Search size={16} />
+			검색
+		</a>
 		<form action={`${page.url.pathname}`} class="w-full">
 			<input type="hidden" name="startDate" value={page.url.searchParams.get('startDate')} />
 			<input type="hidden" name="endDate" value={page.url.searchParams.get('endDate')} />
@@ -77,7 +68,7 @@ import { afterNavigate } from '$app/navigation';
 					class="w-full justify-start btn hover:bg-surface-800-200"
 				>
 					<Check size={16} />
-					완료된 할일 표시하기
+					완료된 할 일 표시하기
 				</button>
 			{:else}
 				<button
@@ -87,7 +78,7 @@ import { afterNavigate } from '$app/navigation';
 					class="w-full justify-start btn hover:bg-surface-800-200"
 				>
 					<Check size={16} />
-					완료된 할일 숨기기
+					완료된 할 일 숨기기
 				</button>
 			{/if}
 		</form>

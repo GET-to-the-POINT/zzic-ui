@@ -11,11 +11,11 @@
 		<h2 class="text-lg font-semibold mb-4">카테고리 선택</h2>
 		<div class="space-y-2">
 			{#each data.categories.content as category (category.id)}
-				<label 
+				<label
 					class="flex items-center h-12 px-3 rounded-lg cursor-pointer transition-colors
-						   hover:bg-surface-200-700 
-						   [&:has(input:checked)]:bg-primary-500/20 
-						   [&:has(input:checked)]:text-primary-600 
+						   hover:bg-surface-200-700
+						   [&:has(input:checked)]:bg-primary-500/20
+						   [&:has(input:checked)]:text-primary-600
 						   [&:has(input:checked)]:dark:text-primary-400"
 				>
 					<input
@@ -36,11 +36,9 @@
 					{/if}
 				</label>
 			{/each}
-			
+
 			{#if data.categories.content.length === 0}
-				<p class="text-center py-8 text-surface-600-300">
-					선택 가능한 카테고리가 없습니다.
-				</p>
+				<p class="text-center py-8 text-surface-600-300">선택 가능한 카테고리가 없습니다.</p>
 			{/if}
 		</div>
 	</form>

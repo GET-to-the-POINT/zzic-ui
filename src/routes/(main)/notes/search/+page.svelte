@@ -59,7 +59,7 @@
 		isSearching = true;
 		const query = searchQuery.toLowerCase();
 
-		filteredNotes = allNotes.filter(note => {
+		filteredNotes = allNotes.filter((note) => {
 			const titleMatch = note.title.toLowerCase().includes(query);
 			const contentMatch = note.content.toLowerCase().includes(query);
 			return titleMatch || contentMatch;
@@ -67,7 +67,7 @@
 
 		// 검색 결과를 최신순으로 정렬
 		filteredNotes.sort((a, b) => b.updatedAt - a.updatedAt);
-		
+
 		isSearching = false;
 	}
 
@@ -76,7 +76,7 @@
 	 */
 	function handleSearch(e) {
 		e.preventDefault();
-		
+
 		// URL 쿼리 파라미터 업데이트
 		const url = new URL(page.url);
 		if (searchQuery) {
@@ -85,7 +85,7 @@
 			url.searchParams.delete('q');
 		}
 		goto(url.toString(), { replaceState: true });
-		
+
 		performSearch();
 	}
 
@@ -95,7 +95,7 @@
 	function clearSearch() {
 		searchQuery = '';
 		filteredNotes = [];
-		
+
 		const url = new URL(page.url);
 		url.searchParams.delete('q');
 		goto(url.toString(), { replaceState: true });
@@ -139,11 +139,7 @@
 			<h2 class="text-lg font-semibold">
 				"{searchQuery}" 검색 결과: {filteredNotes.length}개
 			</h2>
-			<button
-				type="button"
-				onclick={clearSearch}
-				class="btn btn-sm preset-tonal-secondary"
-			>
+			<button type="button" onclick={clearSearch} class="btn btn-sm preset-tonal-secondary">
 				초기화
 			</button>
 		</div>

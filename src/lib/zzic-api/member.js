@@ -32,14 +32,14 @@ export function createMemberClient(apiUrl, fetchFn) {
 	 * @param {string} params.memberId - 회원 ID
 	 * @returns {Promise<{data: MemberLevelResponse|null, error: any}>}
 	 */
-	async function getMemberExperience({memberId}) {
+	async function getMemberExperience({ memberId }) {
 		try {
 			const response = await fetchFn(`${apiUrl}/members/${memberId}/experience`, {
-				credentials: 'include',
+				credentials: 'include'
 			});
 
 			if (!response.ok) {
-                const error = await response.json();
+				const error = await response.json();
 				return {
 					data: null,
 					error
@@ -114,7 +114,7 @@ export function createMemberClient(apiUrl, fetchFn) {
 	async function updateMember(memberId, updateData) {
 		try {
 			const formData = new FormData();
-			
+
 			if (updateData.nickname) {
 				formData.append('nickname', updateData.nickname);
 			}

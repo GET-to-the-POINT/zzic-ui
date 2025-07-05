@@ -6,7 +6,7 @@ export const actions = {
 		const email = formData.get('email');
 		const password = formData.get('password');
 		const redirectTo = url.searchParams.get('redirectTo');
-		
+
 		const { error } = await zzic.auth.signIn({ email, password });
 
 		if (error) {

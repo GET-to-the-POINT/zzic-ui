@@ -5,9 +5,9 @@ import { requireAuth } from '$lib/utils/auth-guard.js';
  */
 export async function load({ parent, url }) {
 	await requireAuth(parent, url);
-	
+
 	const searchQuery = url.searchParams.get('q') || '';
-	
+
 	return {
 		meta: {
 			title: '노트 검색',

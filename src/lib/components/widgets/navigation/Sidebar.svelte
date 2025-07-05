@@ -25,7 +25,6 @@
 		localStorage.setItem('mode', mode);
 	});
 
-
 	// Props with default values
 	let {
 		user = {
@@ -63,7 +62,6 @@
 	function handleQuickAction(actionId) {
 		onQuickAction(actionId);
 	}
-
 </script>
 
 <aside
@@ -117,7 +115,7 @@
 				<div class="space-y-1 mt-1">
 					<a href="/todos/new" class="btn w-full hover:bg-surface-800-200">
 						<Plus size={12} class="w-4 mr-4 text-secondary-800-200" />
-						<span class="flex-1 text-xs">새 할일</span>
+						<span class="flex-1 text-xs">새 할 일</span>
 					</a>
 					<button
 						class="btn w-full hover:bg-surface-800-200"

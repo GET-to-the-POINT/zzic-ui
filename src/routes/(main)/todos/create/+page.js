@@ -29,8 +29,8 @@ export async function load({ parent, url }) {
 
 	return {
 		meta: {
-			title: '할일 생성',
-			description: '할일을 생성하는 페이지입니다.',
+			title: '할 일 생성',
+			description: '할 일을 생성하는 페이지입니다.',
 			modal: true
 		},
 		formId: crypto.randomUUID(),

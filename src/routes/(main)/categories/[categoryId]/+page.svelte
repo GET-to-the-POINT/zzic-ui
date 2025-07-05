@@ -68,17 +68,19 @@
 			{#if data.category.createdAt}
 				<div>
 					<span class="text-sm text-surface-600-300">생성일</span>
-					<p class="text-sm mt-1">{new Date(data.category.createdAt).toLocaleDateString('ko-KR')}</p>
+					<p class="text-sm mt-1">
+						{new Date(data.category.createdAt).toLocaleDateString('ko-KR')}
+					</p>
 				</div>
 			{/if}
 		</div>
 	</div>
 
-	<!-- 연관된 할일 카드 -->
+	<!-- 연관된 할 일 카드 -->
 	<div class="card preset-filled-surface-50-950 p-6">
-		<h3 class="text-lg font-semibold mb-4">이 카테고리의 할일</h3>
+		<h3 class="text-lg font-semibold mb-4">이 카테고리의 할 일</h3>
 		<div class="text-center py-12 text-surface-600-300">
-			<p>이 카테고리에 속한 할일들이 여기에 표시됩니다.</p>
+			<p>이 카테고리에 속한 할 일들이 여기에 표시됩니다.</p>
 		</div>
 	</div>
 </main>
@@ -97,10 +99,7 @@
 		</button>
 	</form>
 	<ul class="p-4 preset-filled-surface-50-950 w-full flex flex-col">
-		<a
-			href={redirectToCategoryUpdate}
-			class="justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
-		>
+		<a href={redirectToCategoryUpdate} class="justify-start btn hover:bg-surface-800-200 gap-2">
 			<Edit size={16} />
 			카테고리 수정
 		</a>

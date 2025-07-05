@@ -4,8 +4,8 @@
 export async function load() {
 	return {
 		meta: {
-			title: '회원가입',
-			description: '새 계정을 만들어 할 일 관리를 시작하세요.'
+			title: '로그아웃',
+			description: '계정에서 안전하게 로그아웃합니다.'
 		}
 	};
 }

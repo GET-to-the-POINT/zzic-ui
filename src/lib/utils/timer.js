@@ -50,7 +50,7 @@ export class Timer {
 		this.type = type;
 		this.onComplete = onComplete;
 		this.onTick = onTick;
-		
+
 		// 내부 상태
 		this._remainingTime = duration;
 		this._state = TimerState.IDLE;
@@ -76,7 +76,7 @@ export class Timer {
 		}
 
 		this._state = TimerState.RUNNING;
-		
+
 		this._intervalId = setInterval(() => {
 			const elapsed = Math.floor((Date.now() - this._startTime) / 1000);
 			this._remainingTime = Math.max(0, this.duration - elapsed);
@@ -103,7 +103,7 @@ export class Timer {
 
 		this._state = TimerState.PAUSED;
 		this._pausedTime = Date.now() - this._startTime;
-		
+
 		if (this._intervalId) {
 			clearInterval(this._intervalId);
 			this._intervalId = null;
@@ -118,7 +118,7 @@ export class Timer {
 		this._remainingTime = this.duration;
 		this._pausedTime = 0;
 		this._startTime = null;
-		
+
 		if (this._intervalId) {
 			clearInterval(this._intervalId);
 			this._intervalId = null;
@@ -130,7 +130,7 @@ export class Timer {
 	 */
 	complete() {
 		this._state = TimerState.COMPLETED;
-		
+
 		if (this._intervalId) {
 			clearInterval(this._intervalId);
 			this._intervalId = null;
@@ -211,7 +211,7 @@ export class PomodoroTimer {
 		}
 
 		const duration = this.getDurationForType(this.currentType);
-		
+
 		this.currentTimer = new Timer({
 			duration,
 			type: this.currentType,
@@ -251,7 +251,7 @@ export class PomodoroTimer {
 			this.currentTimer.stop();
 			this.currentTimer = null;
 		}
-		
+
 		this._nextSession();
 		this.start();
 	}
@@ -351,7 +351,7 @@ export function createTimerStore(initialDuration = 60) {
 	const remainingTime = writable(initialDuration);
 	const state = writable(TimerState.IDLE);
 	const type = writable(TimerType.REGULAR);
-	
+
 	let timer = null;
 
 	const formattedTime = derived(remainingTime, ($remainingTime) => {
@@ -360,20 +360,17 @@ export function createTimerStore(initialDuration = 60) {
 		return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 	});
 
-	const progress = derived(
-		[remainingTime, duration],
-		([$remainingTime, $duration]) => {
-			if ($duration === 0) return 0;
-			return 1 - ($remainingTime / $duration);
-		}
-	);
+	const progress = derived([remainingTime, duration], ([$remainingTime, $duration]) => {
+		if ($duration === 0) return 0;
+		return 1 - $remainingTime / $duration;
+	});
 
 	function start() {
 		if (timer) timer.destroy();
-		
+
 		const currentDuration = get(duration);
 		const currentType = get(type);
-		
+
 		timer = new Timer({
 			duration: currentDuration,
 			type: currentType,
@@ -426,7 +423,7 @@ export function createTimerStore(initialDuration = 60) {
 		type: { subscribe: type.subscribe },
 		formattedTime: { subscribe: formattedTime.subscribe },
 		progress: { subscribe: progress.subscribe },
-		
+
 		// 메서드
 		start,
 		pause,

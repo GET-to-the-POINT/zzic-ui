@@ -9,7 +9,7 @@
 	};
 </script>
 
-<TodoForm 
+<TodoForm
 	mode="create"
 	categories={data.categories.content}
 	priorities={data.priorities?.content ?? []}

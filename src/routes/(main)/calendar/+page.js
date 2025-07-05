@@ -46,6 +46,6 @@ export async function load({ parent, url }) {
 		meta: {
 			title: '캘린더',
 			description: '할 일 캘린더 페이지입니다.'
-		},
+		}
 	};
 }

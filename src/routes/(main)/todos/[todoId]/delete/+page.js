@@ -16,7 +16,7 @@ export async function load({ params, parent, url }) {
 	return {
 		meta: {
 			title: data.title,
-			description: '할일 수정 페이지입니다.',
+			description: '할 일 수정 페이지입니다.',
 			modal: true
 		},
 		todo: data,

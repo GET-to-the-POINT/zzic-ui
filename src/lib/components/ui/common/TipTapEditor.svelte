@@ -3,9 +3,9 @@
 	import { browser } from '$app/environment';
 
 	// Props
-	let { 
-		content = '', 
-		placeholder = '내용을 입력하세요...', 
+	let {
+		content = '',
+		placeholder = '내용을 입력하세요...',
 		onUpdate = null,
 		class: className = ''
 	} = $props();
@@ -28,12 +28,12 @@
 				extensions: [
 					StarterKit.configure({
 						heading: {
-							levels: [1, 2, 3, 4, 5, 6],
-						},
+							levels: [1, 2, 3, 4, 5, 6]
+						}
 					}),
 					Placeholder.configure({
-						placeholder,
-					}),
+						placeholder
+					})
 				],
 				content: content || '<p></p>',
 				onTransaction: () => {
@@ -48,9 +48,9 @@
 				},
 				editorProps: {
 					attributes: {
-						class: 'prose prose-sm focus:outline-none p-4 min-h-64',
-					},
-				},
+						class: 'prose prose-sm focus:outline-none p-4 min-h-64'
+					}
+				}
 			});
 		} catch (error) {
 			console.error('TipTap 에디터 초기화 실패:', error);
@@ -140,11 +140,8 @@
 	{/if}
 
 	<!-- Editor content -->
-	<div 
-		bind:this={editorElement} 
-		class="tiptap-content min-h-96"
-	></div>
-	
+	<div bind:this={editorElement} class="tiptap-content min-h-96"></div>
+
 	<!-- 에디터가 로드되지 않았을 때 폴백 -->
 	{#if !editor}
 		<div class="p-4 text-surface-500 min-h-96 flex items-center justify-center">

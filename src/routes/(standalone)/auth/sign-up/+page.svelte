@@ -6,7 +6,7 @@
 </script>
 
 <main class="p-4">
-	<div class="p-4 preset-filled-surface-50-950 space-y-4">
+	<div class="card p-4 preset-filled-surface-50-950 space-y-4">
 		<!-- Header -->
 		<header class="text-center">
 			<h1 class="text-2xl font-bold">새로운 시작을 축하합니다</h1>
@@ -95,9 +95,7 @@
 		<footer class="text-center">
 			<p class="text-sm opacity-60">
 				이미 계정이 있으신가요?
-				<a href="/auth/sign-in" class="font-medium underline">
-					로그인하기
-				</a>
+				<a href="/auth/sign-in" class="font-medium underline"> 로그인하기 </a>
 			</p>
 		</footer>
 	</div>

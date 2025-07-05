@@ -43,10 +43,10 @@ class PomodoroService {
 		this.startTime = null;
 		this.pausedTime = 0;
 		this.intervalId = null;
-		
+
 		// 스토어 생성
 		this.createStores();
-		
+
 		// 초기 상태 설정
 		this.updateStores();
 	}
@@ -76,7 +76,7 @@ class PomodoroService {
 		this.stores.completedSessions.set(this.completedSessions);
 		this.stores.currentSession.set(this.currentSession);
 		this.stores.formattedTime.set(this.formatTime(this.remainingTime));
-		
+
 		const totalTime = this.getCurrentSessionDuration();
 		const progress = totalTime > 0 ? (totalTime - this.remainingTime) / totalTime : 0;
 		this.stores.progress.set(progress);
@@ -123,7 +123,6 @@ class PomodoroService {
 				duration: this.getCurrentSessionDuration(),
 				session: this.currentSession
 			});
-
 		} catch (error) {
 			console.error('포모도로 시작 실패:', error);
 		}
@@ -147,7 +146,6 @@ class PomodoroService {
 				remainingTime: this.remainingTime,
 				session: this.currentSession
 			});
-
 		} catch (error) {
 			console.error('포모도로 일시정지 실패:', error);
 		}
@@ -170,7 +168,6 @@ class PomodoroService {
 				type: this.currentType,
 				session: this.currentSession
 			});
-
 		} catch (error) {
 			console.error('포모도로 중지 실패:', error);
 		}
@@ -183,10 +180,10 @@ class PomodoroService {
 		try {
 			// 타이머가 실행 중이면 먼저 중지
 			this.stopTicking();
-			
+
 			// 현재 세션 완료 처리
 			await this.completeCurrentSession();
-			
+
 			// 다음 세션으로 이동
 			await this.moveToNextSession();
 		} catch (error) {
@@ -208,7 +205,6 @@ class PomodoroService {
 
 			// 백엔드에 리셋 알림
 			await this.notifyBackend('pomodoro_reset', {});
-
 		} catch (error) {
 			console.error('포모도로 리셋 실패:', error);
 		}
@@ -219,7 +215,7 @@ class PomodoroService {
 	 */
 	startTicking() {
 		this.stopTicking(); // 중복 방지
-		
+
 		this.intervalId = setInterval(() => {
 			const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
 			const sessionDuration = this.getCurrentSessionDuration();
@@ -250,17 +246,16 @@ class PomodoroService {
 		try {
 			this.stopTicking();
 			this.state = PomodoroState.COMPLETED;
-			
+
 			await this.completeCurrentSession();
-			
+
 			// 알림 표시
 			this.showNotification();
-			
+
 			// 다음 세션으로 이동
 			setTimeout(async () => {
 				await this.moveToNextSession();
 			}, 1000);
-
 		} catch (error) {
 			console.error('세션 완료 처리 실패:', error);
 		}
@@ -282,7 +277,6 @@ class PomodoroService {
 				completedSessions: this.completedSessions,
 				duration: this.getCurrentSessionDuration()
 			});
-
 		} catch (error) {
 			console.error('세션 완료 알림 실패:', error);
 		}
@@ -310,7 +304,7 @@ class PomodoroService {
 			this.remainingTime = this.getCurrentSessionDuration();
 			this.startTime = null;
 			this.pausedTime = 0;
-			
+
 			this.updateStores();
 
 			// 백엔드에 새 세션 알림
@@ -319,7 +313,6 @@ class PomodoroService {
 				session: this.currentSession,
 				completedSessions: this.completedSessions
 			});
-
 		} catch (error) {
 			console.error('다음 세션 이동 실패:', error);
 		}
@@ -360,7 +353,7 @@ class PomodoroService {
 
 			// 로컬 스토리지에 기록 (백엔드 대신)
 			this.saveToLocalStorage(eventType, eventData);
-			
+
 			// TODO: 실제 백엔드 API 호출
 			// await fetch('/api/pomodoro/events', {
 			//   method: 'POST',
@@ -369,7 +362,6 @@ class PomodoroService {
 			// });
 
 			console.log(`Pomodoro Event: ${eventType}`, eventData);
-
 		} catch (error) {
 			console.error('백엔드 알림 실패:', error);
 		}
@@ -382,15 +374,15 @@ class PomodoroService {
 		try {
 			const key = `pomodoro_${eventType}_${Date.now()}`;
 			localStorage.setItem(key, JSON.stringify(data));
-			
+
 			// 최근 10개 이벤트만 유지
 			const keys = Object.keys(localStorage)
-				.filter(key => key.startsWith('pomodoro_'))
+				.filter((key) => key.startsWith('pomodoro_'))
 				.sort()
 				.reverse();
-			
+
 			if (keys.length > 10) {
-				keys.slice(10).forEach(key => localStorage.removeItem(key));
+				keys.slice(10).forEach((key) => localStorage.removeItem(key));
 			}
 		} catch (error) {
 			console.error('로컬 스토리지 저장 실패:', error);
@@ -411,7 +403,7 @@ class PomodoroService {
 	 */
 	updateSettings(newSettings) {
 		this.settings = { ...this.settings, ...newSettings };
-		
+
 		// 현재 IDLE 상태라면 시간 업데이트
 		if (this.state === PomodoroState.IDLE) {
 			this.remainingTime = this.getCurrentSessionDuration();

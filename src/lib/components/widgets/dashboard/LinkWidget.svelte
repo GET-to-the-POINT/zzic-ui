@@ -1,12 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 
-	let { 
-		title, 
-		description, 
-		href, 
-		icon: Icon
-	} = $props();
+	let { title, description, href, icon: Icon } = $props();
 
 	function handleClick() {
 		goto(href);

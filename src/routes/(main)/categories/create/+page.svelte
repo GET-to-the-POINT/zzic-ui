@@ -11,10 +11,10 @@
 	const action = $derived.by(() => {
 		const pageUrl = page.url.pathname;
 		const search = page.url.search;
-		return  `${pageUrl}${search}`;
+		return `${pageUrl}${search}`;
 	});
 
-	const handleEnhance = ( ) => {
+	const handleEnhance = () => {
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				await goto(`/categories`, { replaceState: true, invalidateAll: true });
@@ -48,7 +48,7 @@
 						class="input preset-tonal-surface"
 					/>
 				</label>
-				
+
 				<!-- 설명 -->
 				<label class="block">
 					<span class="flex items-center gap-2 text-sm font-medium mb-2">

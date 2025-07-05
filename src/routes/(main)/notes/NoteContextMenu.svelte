@@ -34,7 +34,7 @@
 		<!-- 수정하기 -->
 		<a
 			href={`/notes/${page.params.noteId}/update${page.url.search}`}
-			class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+			class="w-full justify-start btn hover:bg-surface-800-200 gap-2"
 		>
 			<Edit size={16} />
 			수정하기
@@ -43,7 +43,7 @@
 		<!-- 삭제하기 -->
 		<a
 			href={`/notes/${page.params.noteId}/delete${page.url.search}`}
-			class="w-full justify-start btn hover:bg-surface-800-200 flex items-center gap-2"
+			class="w-full justify-start btn hover:bg-surface-800-200 gap-2"
 		>
 			<Trash size={16} />
 			삭제하기

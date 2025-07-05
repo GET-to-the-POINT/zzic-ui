@@ -9,8 +9,8 @@
 	}
 </script>
 
-<div 
-	class="card preset-filled-surface-50-950 p-6 cursor-pointer hover:scale-[1.02] transition-transform" 
+<div
+	class="card preset-filled-surface-50-950 p-6 cursor-pointer hover:scale-[1.02] transition-transform"
 	onclick={selectNote}
 	role="button"
 	tabindex="0"

@@ -10,7 +10,7 @@
 	import Placeholder from '@tiptap/extension-placeholder';
 	import Typography from '@tiptap/extension-typography';
 	import { common, createLowlight } from 'lowlight';
-	
+
 	const lowlight = createLowlight(common);
 
 	let { content = $bindable(''), placeholder = '내용을 입력하세요...', editable = true } = $props();
@@ -165,7 +165,9 @@
 </script>
 
 {#if editable}
-	<div class="tiptap-toolbar flex flex-wrap gap-1 p-2 bg-surface-100-800-token rounded-t-lg border-b border-surface-300-600-token">
+	<div
+		class="tiptap-toolbar flex flex-wrap gap-1 p-2 bg-surface-100-800-token rounded-t-lg border-b border-surface-300-600-token"
+	>
 		<div class="flex gap-1">
 			<button
 				type="button"
@@ -255,7 +257,7 @@
 				class="btn btn-sm variant-ghost-surface"
 				class:variant-filled-primary={editor?.isActive('taskList')}
 			>
-				☐ 할일
+				☐ 할 일
 			</button>
 			<button
 				type="button"
@@ -296,11 +298,7 @@
 			>
 				코드 블록
 			</button>
-			<button
-				type="button"
-				onclick={setHorizontalRule}
-				class="btn btn-sm variant-ghost-surface"
-			>
+			<button type="button" onclick={setHorizontalRule} class="btn btn-sm variant-ghost-surface">
 				—
 			</button>
 		</div>
@@ -316,11 +314,7 @@
 			>
 				링크
 			</button>
-			<button
-				type="button"
-				onclick={addImage}
-				class="btn btn-sm variant-ghost-surface"
-			>
+			<button type="button" onclick={addImage} class="btn btn-sm variant-ghost-surface">
 				이미지
 			</button>
 		</div>
@@ -460,23 +454,23 @@
 		margin-left: 1.5rem;
 	}
 
-	:global(.tiptap-editor ul[data-type="taskList"]) {
+	:global(.tiptap-editor ul[data-type='taskList']) {
 		list-style: none;
 		padding: 0;
 	}
 
-	:global(.tiptap-editor ul[data-type="taskList"] li) {
+	:global(.tiptap-editor ul[data-type='taskList'] li) {
 		display: flex;
 		align-items: flex-start;
 		gap: 0.5rem;
 	}
 
-	:global(.tiptap-editor ul[data-type="taskList"] li > label) {
+	:global(.tiptap-editor ul[data-type='taskList'] li > label) {
 		flex: 0 0 auto;
 		margin-top: 0.25rem;
 	}
 
-	:global(.tiptap-editor ul[data-type="taskList"] li > div) {
+	:global(.tiptap-editor ul[data-type='taskList'] li > div) {
 		flex: 1 1 auto;
 	}
 

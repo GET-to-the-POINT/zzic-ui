@@ -34,7 +34,8 @@
 			<div class="space-y-2">
 				<h3 class="font-bold text-lg">주의사항</h3>
 				<p class="text-sm">
-					카테고리를 삭제하면 복구할 수 없습니다. 이 카테고리에 속한 할일들은 '미분류'로 변경됩니다.
+					카테고리를 삭제하면 복구할 수 없습니다. 이 카테고리에 속한 할 일들은 '미분류'로
+					변경됩니다.
 				</p>
 			</div>
 		</div>
@@ -62,12 +63,10 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- 확인 메시지 -->
 		<div class="card preset-filled-surface-50-950 p-6">
-			<p class="text-center text-surface-600-300">
-				정말로 이 카테고리를 삭제하시겠습니까?
-			</p>
+			<p class="text-center text-surface-600-300">정말로 이 카테고리를 삭제하시겠습니까?</p>
 		</div>
 	</form>
 </main>

@@ -1,4 +1,4 @@
-import { error } from "@sveltejs/kit";
+import { error } from '@sveltejs/kit';
 import { requireAuth } from '$lib/utils/auth-guard.js';
 
 export async function load({ parent, url }) {

@@ -43,11 +43,6 @@
 	}
 </script>
 
-<button
-	type="button"
-	class="btn-icon preset-tonal-error"
-	onclick={deleteMemo}
-	title="노트 삭제"
->
+<button type="button" class="btn-icon preset-tonal-error" onclick={deleteMemo} title="노트 삭제">
 	<Trash2 size={20} />
 </button>

@@ -49,8 +49,8 @@
 				}));
 
 				// 현재 메모 찾기
-				currentMemo = memos.find(memo => memo.id === noteId) || null;
-				
+				currentMemo = memos.find((memo) => memo.id === noteId) || null;
+
 				if (currentMemo) {
 					memoTitle = currentMemo.title;
 					memoContent = currentMemo.content;
@@ -69,7 +69,7 @@
 	 */
 	function renderContent(content) {
 		if (!content) return '';
-		
+
 		// HTML이 아닌 경우 마크다운으로 간주하고 변환
 		if (!content.startsWith('<')) {
 			try {
@@ -80,7 +80,7 @@
 				return content;
 			}
 		}
-		
+
 		// HTML인 경우 그대로 반환
 		return DOMPurify.sanitize(content);
 	}

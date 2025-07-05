@@ -4,7 +4,7 @@
 export async function load({ url }) {
 	// redirectTo 파라미터 처리
 	const redirectTo = url.searchParams.get('redirectTo');
-	
+
 	return {
 		meta: {
 			title: '로그인',

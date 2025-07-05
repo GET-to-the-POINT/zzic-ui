@@ -51,8 +51,8 @@
 				}));
 
 				// 현재 메모 찾기
-				currentMemo = memos.find(memo => memo.id === noteId) || null;
-				
+				currentMemo = memos.find((memo) => memo.id === noteId) || null;
+
 				if (currentMemo) {
 					memoTitle = currentMemo.title;
 					memoContent = currentMemo.content;
@@ -82,7 +82,6 @@
 			console.error('메모 데이터 저장 실패:', error);
 		}
 	}
-
 
 	const handleEnhance = ({}) => {
 		return async ({ result, formData }) => {
@@ -140,7 +139,6 @@
 					editable={true}
 				/>
 			</div>
-
 		</form>
 	{:else}
 		<!-- 메모를 찾을 수 없을 때 -->

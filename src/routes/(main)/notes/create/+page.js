@@ -6,7 +6,7 @@ import CreateContextMenu from './CreateContextMenu.svelte';
  */
 export async function load({ parent, url }) {
 	await requireAuth(parent, url);
-	
+
 	return {
 		meta: {
 			title: '노트 생성',

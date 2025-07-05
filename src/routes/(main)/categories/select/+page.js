@@ -21,6 +21,6 @@ export async function load({ parent, url }) {
 		},
 		categories: data,
 		formId: crypto.randomUUID(),
-		contextMenu: SelectContextMenu,
+		contextMenu: SelectContextMenu
 	};
 }

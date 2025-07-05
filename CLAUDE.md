@@ -51,6 +51,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **API modules**: Modular structure (`auth.js`, `todo.js`, `category.js`, etc.)
 
 #### Important API Design Rules:
+
 - **No client-side auth validation**: All API requests assume authentication is already validated by server hooks
 - **Server knows current user**: The backend API automatically knows the current user from JWT tokens, so member ID is not needed for "current user" endpoints
 - **Consistent error handling**: All API clients return `{data, error}` structure
@@ -91,6 +92,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Page Component Structure
 
 **IMPORTANT**: All `+page.svelte` files MUST follow this structure:
+
 - **Root element**: Always start with a `<main>` tag
 - **No attributes on main**: The `<main>` tag must have NO attributes (no classes, no styles)
 - **Layout styling**: All page layout/styling is handled by parent layouts
@@ -165,6 +167,84 @@ export async function load() {
 
 NEVER use `<svelte:head>` for titles - always use the load function metadata pattern with the `meta` object structure.
 
+### Modal Pages (`meta.modal: true`)
+
+For pages with `meta.modal: true` in their `+page.js` (like `/theme`):
+
+- **NO page titles**: The header component displays the title from metadata, so pages should not include their own `<h1>` or `<h2>` title elements
+- **Context menus**: Modal pages should have a separate `{PageName}ContextMenu.svelte` component in the same directory for confirm/cancel actions
+- **Preview functionality**: Modal pages should support real-time preview with confirm/cancel logic:
+  - Immediate preview on selection/change
+  - Confirm button: Apply changes and navigate back
+  - Cancel button: Revert to original state and navigate back
+- **Navigation**: Use `goto()` for modal dismissal rather than browser history
+- **HandleBack hooks**: Pages can customize header back button behavior using the `handleBack` configuration
+
+### Header Back Button Hooks
+
+Pages can customize the header's back button behavior by providing a `handleBack` function in their load function. This works similar to SvelteKit's `handle` hook, where the default handler is passed as a parameter:
+
+```javascript
+// +page.js
+export async function load() {
+    return {
+        handleBack: (event, defaultBack) => {
+            // Do something before
+            console.log('Custom logic before back');
+            
+            // Choose when/if to call default back
+            defaultBack(event);  // Calls preventDefault() + window.history.back()
+            
+            // Do something after (if needed)
+            console.log('Custom logic after back');
+        }
+    };
+}
+```
+
+**Pattern examples:**
+
+```javascript
+// 1. Execute default with custom logic before
+handleBack: (event, defaultBack) => {
+    saveFormDraft();
+    defaultBack(event);
+}
+
+// 2. Completely replace default behavior
+handleBack: (event, defaultBack) => {
+    if (hasUnsavedChanges) {
+        showUnsavedWarning();
+    } else {
+        customNavigation();
+    }
+    // Don't call defaultBack at all
+}
+
+// 3. Conditional execution
+handleBack: (event, defaultBack) => {
+    if (shouldPreventBack()) {
+        event.preventDefault();
+        return;
+    }
+    defaultBack(event);
+}
+```
+
+**Use cases:**
+- **Theme pages**: Restore original theme on cancel
+- **Form pages**: Save draft or warn about unsaved changes
+- **Analytics**: Track navigation patterns
+- **Custom navigation**: Override default back behavior entirely
+
+Example structure for modal pages:
+```
+src/routes/(main)/theme/
+├── +page.js          // meta: { modal: true }, handleBack: { before: [...] }
+├── +page.svelte      // No title, real-time preview
+└── ThemeContextMenu.svelte  // Confirm/Cancel actions
+```
+
 ### Testing Strategy
 
 - **Vitest** for unit tests (browser testing capable)
@@ -195,7 +275,8 @@ NEVER use `<svelte:head>` for titles - always use the load function metadata pat
 - `components.json`: shadcn-svelte component configuration
 
 ## Important Development Guidelines
+
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
