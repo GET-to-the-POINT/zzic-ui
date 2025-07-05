@@ -212,37 +212,37 @@
 	</h2>
 
 	<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<CheckCircle size={32} class="mx-auto mb-2 text-success-500" />
 			<div class="text-2xl font-bold">{stats.completedTodos.toLocaleString()}</div>
 			<div class="text-sm text-surface-600-300">완료한 할 일</div>
 		</div>
 
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<Timer size={32} class="mx-auto mb-2 text-primary-500" />
 			<div class="text-2xl font-bold">{formatFocusTime(stats.totalFocusTime)}</div>
 			<div class="text-sm text-surface-600-300">총 집중 시간</div>
 		</div>
 
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<Flame size={32} class="mx-auto mb-2 text-warning-500" />
 			<div class="text-2xl font-bold">{stats.currentStreak}일</div>
 			<div class="text-sm text-surface-600-300">현재 연속 기록</div>
 		</div>
 
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<Star size={32} class="mx-auto mb-2 text-secondary-500" />
 			<div class="text-2xl font-bold">{stats.longestStreak}일</div>
 			<div class="text-sm text-surface-600-300">최장 연속 기록</div>
 		</div>
 
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<Calendar size={32} class="mx-auto mb-2 text-error-500" />
 			<div class="text-2xl font-bold">{stats.categoriesCreated}</div>
 			<div class="text-sm text-surface-600-300">생성한 카테고리</div>
 		</div>
 
-		<div class="card preset-filled-secondary-50-950 p-4 text-center">
+		<div class="card preset-filled-surface-50-950 p-4 text-center">
 			<Trophy size={32} class="mx-auto mb-2 text-warning-500" />
 			<div class="text-2xl font-bold">{stats.challengesCompleted}</div>
 			<div class="text-sm text-surface-600-300">완료한 챌린지</div>
@@ -268,11 +268,11 @@
 			</div>
 
 			<div class="grid grid-cols-2 gap-4">
-				<div class="card preset-filled-secondary-50-950 p-3 text-center">
+				<div class="card preset-filled-surface-50-950 p-3 text-center">
 					<div class="text-xl font-bold text-warning-500">#{ranking.weeklyRank}</div>
 					<div class="text-sm text-surface-600-300">주간 순위</div>
 				</div>
-				<div class="card preset-filled-secondary-50-950 p-3 text-center">
+				<div class="card preset-filled-surface-50-950 p-3 text-center">
 					<div class="text-xl font-bold text-secondary-500">#{ranking.monthlyRank}</div>
 					<div class="text-sm text-surface-600-300">월간 순위</div>
 				</div>
@@ -313,7 +313,7 @@
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 		{#each achievements as achievement}
 			{@const Icon = achievement.icon}
-			<div class="card preset-filled-secondary-50-950 p-4 {achievement.earned ? '' : 'opacity-60'}">
+			<div class="card preset-filled-surface-50-950 p-4 {achievement.earned ? '' : 'opacity-60'}">
 				<div class="flex items-start gap-3">
 					<div
 						class="w-12 h-12 rounded-lg preset-filled-surface-100-800 flex items-center justify-center"

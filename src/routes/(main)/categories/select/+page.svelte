@@ -6,7 +6,7 @@
 </script>
 
 <!-- 메인 컨테이너 -->
-<form class="card preset-filled-secondary-50-950 p-4" {action}>
+<form class="card preset-filled-surface-50-950 p-4" {action}>
 	<h2 class="text-lg font-semibold mb-4">카테고리 선택</h2>
 	<div class="space-y-2">
 		{#each data.categories.content as category (category.id)}

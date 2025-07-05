@@ -16,7 +16,7 @@
 	}
 </script>
 
-<div class="card preset-filled-secondary-50-950 p-4 hover:shadow-lg transition-shadow">
+<div class="card preset-filled-surface-50-950 p-4 hover:shadow-lg transition-shadow">
 	<a href="/challenges" class="block">
 		<div class="flex items-start justify-between mb-3">
 			<div class="flex items-center gap-2">

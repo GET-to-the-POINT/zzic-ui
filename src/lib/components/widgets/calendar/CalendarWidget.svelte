@@ -78,6 +78,21 @@
 			timeZone: page.data.user.timeZone
 		})
 	);
+	
+	// 할 일이 있는 날짜를 SvelteMap으로 관리
+	const todoDates = new SvelteMap();
+	
+	$effect(() => {
+		todoDates.clear();
+		const calendarTodos = page.data.calendarTodos;
+		if (calendarTodos && Array.isArray(calendarTodos)) {
+			calendarTodos.forEach(item => {
+				if (item.hasTodo) {
+					todoDates.set(item.date, true);
+				}
+			});
+		}
+	});
 </script>
 
 <section class="card preset-filled-surface-50-950">
@@ -126,13 +141,15 @@
 						{@const __ = searchParams.set('endDate', date.toString())}
 						{@const disabled = date.month !== currentPlainDate.month}
 						{@const isToday = date.equals(today)}
+						{@const hasTodo = todoDates.has(date.toString())}
 						<td class="h-16">
 							<a
 								href={`/todos?${searchParams.toString()}`}
 								class={[
-									'btn h-full w-full',
+									'btn h-full w-full relative',
 									disabled && 'disabled',
-									isToday && 'underline text-primary-500'
+									isToday && 'underline text-primary-500',
+									hasTodo && !disabled && "before:content-[''] before:absolute before:top-1 before:right-1 before:w-2 before:h-2 before:bg-secondary-800-200 before:rounded-full"
 								]}
 							>
 								{date.day}

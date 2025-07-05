@@ -105,7 +105,7 @@
 </script>
 
 <!-- Friends Sub-tabs -->
-<section class="card preset-filled-tertiary-200-800 p-4 flex gap-2 overflow-x-auto">
+<section class="card preset-filled-surface-50-950 p-4 flex gap-2 overflow-x-auto">
 	{#each friendsSubTabs as subTab}
 		<button
 			class="btn {friendsSubTab === subTab.id ? 'preset-filled-primary-500' : 'hover:preset-tonal'}"
@@ -135,7 +135,7 @@
 			<div class="space-y-3">
 				{#each friends as friend}
 					<div
-						class="flex items-center justify-between p-4 rounded-lg preset-filled-secondary-50-950"
+						class="flex items-center justify-between p-4 rounded-lg preset-filled-surface-50-950"
 					>
 						<div class="flex items-center gap-3">
 							<div
@@ -197,7 +197,7 @@
 			<div class="space-y-3">
 				{#each searchResults as result}
 					<div
-						class="flex items-center justify-between p-4 rounded-lg preset-filled-secondary-50-950"
+						class="flex items-center justify-between p-4 rounded-lg preset-filled-surface-50-950"
 					>
 						<div class="flex items-center gap-3">
 							<div
@@ -285,7 +285,7 @@
 			<div class="space-y-3">
 				{#each friendRequests as request}
 					<div
-						class="flex items-center justify-between p-4 rounded-lg preset-filled-secondary-50-950"
+						class="flex items-center justify-between p-4 rounded-lg preset-filled-surface-50-950"
 					>
 						<div class="flex items-center gap-3">
 							<div

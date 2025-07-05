@@ -14,7 +14,7 @@
 	};
 </script>
 
-<div class="card preset-filled-secondary-50-950 p-4">
+<div class="card preset-filled-surface-50-950 p-4">
 	<form
 		class="space-y-4"
 		data-sveltekit-keepfocus

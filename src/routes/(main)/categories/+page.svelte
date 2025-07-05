@@ -6,7 +6,7 @@
 
 <!-- 메인 컨테이너 -->
 <!-- 카테고리 목록 카드 -->
-<div class="card preset-filled-secondary-50-950 p-4 space-y-2">
+<div class="card preset-filled-surface-50-950 p-4 space-y-2">
 	<h2 class="text-lg font-semibold mb-3">카테고리 선택</h2>
 
 	<!-- 전체 카테고리 -->

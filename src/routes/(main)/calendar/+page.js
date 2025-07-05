@@ -42,10 +42,21 @@ export async function load({ parent, url }) {
 		redirect(303, `${url.pathname}?${urlSearchParams.toString()}`);
 	}
 
+	// yearMonth 파라미터에서 year와 month 추출
+	const [year, month] = yearMonthParam.split('-').map(Number);
+	
+	// 월별 캘린더 할 일 데이터 가져오기
+	const searchParams = new URLSearchParams({
+		year: year.toString(),
+		month: month.toString()
+	});
+	const calendarTodos = await zzic.todo.getMonthlyCalendarTodos(searchParams);
+
 	return {
 		meta: {
 			title: '캘린더',
 			description: '할 일 캘린더 페이지입니다.'
-		}
+		},
+		calendarTodos: calendarTodos.data
 	};
 }

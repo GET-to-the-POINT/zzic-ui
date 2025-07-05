@@ -96,11 +96,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **No `<main>` tags in pages**: DO NOT use `<main>` tags in `+page.svelte` files. The main wrapper is already provided by the layout hierarchy
 - **Direct content**: Pages should directly contain their content sections without any wrapper
 - **Consistent spacing**: Use `space-y-4` between sections when needed
-- **Action components**: ALL action components (tab navigation, sub-tabs, filter bars, action buttons) MUST use `preset-filled-secondary-200-800` with `p-4` padding
+- **Action components**: ALL action components (tab navigation, sub-tabs, filter bars, action buttons) MUST use `preset-filled-surface-50-950` with `p-4` padding
 
 ```svelte
 <!-- CORRECT - Action components -->
-<section class="card preset-filled-secondary-200-800 p-4">
+<section class="card preset-filled-surface-50-950 p-4">
 	<!-- Tab navigation, filters, action buttons -->
 </section>
 
@@ -116,7 +116,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 <!-- INCORRECT - Wrong action component styling -->
 <div class="card preset-filled-secondary-50-950 p-2">
-	<!-- Should use secondary-200-800 with p-4 -->
+	<!-- Should use preset-filled-surface-50-950 with p-4 -->
 </div>
 ```
 

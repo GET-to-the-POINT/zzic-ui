@@ -15,7 +15,7 @@
 </section>
 
 <!-- 하단 정보 -->
-<section class="card preset-filled-secondary-50-950 p-4">
+<section class="card preset-filled-surface-50-950 p-4">
 	<div class="flex justify-between text-sm text-surface-600-300">
 		<span>생성일: {memo.createdAt.toLocaleString()}</span>
 		<span>수정일: {memo.updatedAt.toLocaleString()}</span>

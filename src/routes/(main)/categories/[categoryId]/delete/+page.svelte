@@ -41,7 +41,7 @@
 
 <form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
 	<!-- 삭제할 카테고리 정보 카드 -->
-	<div class="card preset-filled-secondary-50-950 p-6">
+	<div class="card preset-filled-surface-50-950 p-6">
 		<h3 class="text-lg font-semibold mb-4">삭제할 카테고리</h3>
 		<div class="flex items-start gap-4">
 			{#if data.category.color}
@@ -63,7 +63,7 @@
 	</div>
 
 	<!-- 확인 메시지 -->
-	<div class="card preset-filled-secondary-50-950 p-6">
+	<div class="card preset-filled-surface-50-950 p-6">
 		<p class="text-center text-surface-600-300">정말로 이 카테고리를 삭제하시겠습니까?</p>
 	</div>
 </form>

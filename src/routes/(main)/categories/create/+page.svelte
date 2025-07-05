@@ -28,7 +28,7 @@
 
 <form id={data.formId} {action} method="POST" use:enhance={handleEnhance} class="space-y-4">
 	<!-- 기본 정보 카드 -->
-	<div class="card preset-filled-secondary-50-950 p-6">
+	<div class="card preset-filled-surface-50-950 p-6">
 		<h2 class="text-lg font-semibold mb-4">카테고리 기본 정보</h2>
 		<div class="space-y-6">
 			<!-- 카테고리 이름 -->

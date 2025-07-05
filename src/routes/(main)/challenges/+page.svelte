@@ -180,7 +180,7 @@
 	<!-- 인기 챌린지 목록 -->
 	<div class="space-y-4">
 		{#each popularChallenges as challenge}
-			<div class="card preset-filled-secondary-50-950 p-4">
+			<div class="card preset-filled-surface-50-950 p-4">
 				<div class="flex items-start justify-between mb-2">
 					<div class="flex-1">
 						<div class="flex items-center gap-2 mb-1">

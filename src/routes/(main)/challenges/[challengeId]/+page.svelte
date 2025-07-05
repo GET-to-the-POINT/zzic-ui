@@ -129,7 +129,7 @@
 		<!-- 개요 탭 -->
 		<div class="space-y-6">
 			<!-- 챌린지 규칙 -->
-			<section class="card preset-filled-secondary-50-950 p-4">
+			<section class="card preset-filled-surface-50-950 p-4">
 				<h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
 					<Info size={20} class="text-primary-500" />
 					챌린지 규칙
@@ -145,7 +145,7 @@
 			</section>
 
 			<!-- 보상 -->
-			<section class="card preset-filled-secondary-50-950 p-4">
+			<section class="card preset-filled-surface-50-950 p-4">
 				<h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
 					<Award size={20} class="text-primary-500" />
 					보상
@@ -168,7 +168,7 @@
 			</section>
 
 			<!-- 챌린지 정보 -->
-			<section class="card preset-filled-secondary-50-950 p-4">
+			<section class="card preset-filled-surface-50-950 p-4">
 				<h3 class="text-lg font-semibold mb-3">챌린지 정보</h3>
 				<div class="space-y-2 text-sm">
 					<div class="flex justify-between">
@@ -190,7 +190,7 @@
 		</div>
 	{:else if activeTab === 'leaderboard'}
 		<!-- 리더보드 탭 -->
-		<section class="card preset-filled-secondary-50-950 p-4">
+		<section class="card preset-filled-surface-50-950 p-4">
 			<h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
 				<Trophy size={20} class="text-primary-500" />
 				상위 랭커
@@ -228,7 +228,7 @@
 		</section>
 	{:else if activeTab === 'activity'}
 		<!-- 활동 탭 -->
-		<section class="card preset-filled-secondary-50-950 p-4">
+		<section class="card preset-filled-surface-50-950 p-4">
 			<h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
 				<Clock size={20} class="text-primary-500" />
 				최근 활동

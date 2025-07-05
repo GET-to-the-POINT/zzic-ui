@@ -13,7 +13,7 @@
 </script>
 
 <!-- Action, Tab Navigation -->
-<section class="card preset-filled-secondary-200-800 p-4 flex gap-2">
+<section class="card preset-filled-surface-50-950 p-4 flex gap-2">
 	{#each tabs as tab}
 		{@const Icon = tab.icon}
 		<a

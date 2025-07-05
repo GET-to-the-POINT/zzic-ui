@@ -107,7 +107,7 @@
 
 <div class="space-y-4">
 	<!-- 계산기 본체 -->
-	<div class="preset-filled-secondary-50-950 p-4 rounded-xl">
+	<div class="preset-filled-surface-50-950 p-4 rounded-xl">
 		<!-- 디스플레이 -->
 		<div class="preset-filled-surface-100-900 p-4 rounded-lg mb-4 border border-surface-300-700">
 			<div
@@ -246,7 +246,7 @@
 	</div>
 
 	<!-- 사용법 안내 -->
-	<div class="preset-filled-secondary-50-950 p-4 rounded-xl">
+	<div class="preset-filled-surface-50-950 p-4 rounded-xl">
 		<h3 class="text-sm font-semibold text-surface-700-300 mb-2">사용법</h3>
 		<ul class="text-xs text-surface-600-400 space-y-1">
 			<li>• 숫자를 입력하고 연산자를 선택하세요</li>

@@ -4,7 +4,7 @@
 	import TodoList from '$lib/components/widgets/todos/TodoListWidget.svelte';
 </script>
 
-<section class="card preset-filled-secondary-200-800 p-4 flex justify-between">
+<section class="card preset-filled-surface-50-950 p-4 flex justify-between">
 	<a
 		href={`${page.url.pathname}?startDate=${page.data.weeklyTodos[0]?.startDate}&endDate=${page.data.weeklyTodos[0]?.endDate}&complete=${page.url.searchParams.get('complete')}`}
 	>

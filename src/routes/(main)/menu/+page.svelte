@@ -48,7 +48,7 @@
 <UserInfoWidget />
 
 <!-- 메인 메뉴 -->
-<div class="card preset-filled-secondary-50-950 p-4">
+<div class="card preset-filled-surface-50-950 p-4">
 	<h2 class="text-lg font-semibold">메인 메뉴</h2>
 	<div class="space-y-2">
 		{#each navItems as item}
@@ -62,7 +62,7 @@
 </div>
 
 <!-- 도구 -->
-<div class="card preset-filled-secondary-50-950 p-4">
+<div class="card preset-filled-surface-50-950 p-4">
 	<h2 class="text-lg font-semibold">도구</h2>
 	<div class="space-y-2">
 		{#each toolItems as item}
@@ -76,7 +76,7 @@
 </div>
 
 <!-- 설정 -->
-<div class="card preset-filled-secondary-50-950 p-4">
+<div class="card preset-filled-surface-50-950 p-4">
 	<h2 class="text-lg font-semibold">설정</h2>
 	<div class="space-y-2">
 		<!-- 다크모드 토글 -->
