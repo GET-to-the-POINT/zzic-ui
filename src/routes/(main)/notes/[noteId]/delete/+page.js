@@ -9,6 +9,10 @@ export async function load({ parent, url, params }) {
 
 	// 로컬 스토리지에서 노트 정보 가져오기 (실제로는 서버 API 사용)
 	let noteTitle = '노트';
+	let noteContent = '';
+	let createdAt = '';
+	let updatedAt = '';
+	
 	if (typeof window !== 'undefined') {
 		const saved = localStorage.getItem('memo-app-data');
 		if (saved) {
@@ -17,12 +21,21 @@ export async function load({ parent, url, params }) {
 			const note = memos.find((memo) => memo.id === params.noteId);
 			if (note) {
 				noteTitle = note.title;
+				noteContent = note.content || '';
+				createdAt = note.createdAt || '';
+				updatedAt = note.updatedAt || '';
 			}
 		}
 	}
 
 	return {
 		noteId: params.noteId,
+		note: {
+			title: noteTitle,
+			content: noteContent,
+			createdAt,
+			updatedAt
+		},
 		meta: {
 			title: noteTitle,
 			description: '노트를 삭제합니다.',

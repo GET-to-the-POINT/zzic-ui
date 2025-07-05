@@ -62,8 +62,4 @@
 		</div>
 	</div>
 
-	<!-- 확인 메시지 -->
-	<div class="card preset-filled-surface-50-950 p-6">
-		<p class="text-center text-surface-600-300">정말로 이 카테고리를 삭제하시겠습니까?</p>
-	</div>
 </form>
