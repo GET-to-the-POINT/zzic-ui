@@ -1,10 +1,7 @@
 <script>
+	import { Pause, Play, RotateCcw, TimerIcon } from '@lucide/svelte';
 	import { onDestroy } from 'svelte';
 	import { createTimerStore, TimerState } from '$lib/utils/timer.js';
-	import Play from '@lucide/svelte/icons/play';
-	import Pause from '@lucide/svelte/icons/pause';
-	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-	import TimerIcon from '@lucide/svelte/icons/timer';
 
 	const {
 		duration = 60 * 25, // 기본 25분

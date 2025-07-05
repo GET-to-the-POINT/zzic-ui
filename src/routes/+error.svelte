@@ -1,8 +1,8 @@
 <script>
+	import { ArrowLeft, Home } from '@lucide/svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import Home from '@lucide/svelte/icons/home';
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
+
 	import errorImage from '$lib/assets/error.webp';
 	import img404 from '$lib/assets/404.webp';
 	import img500 from '$lib/assets/500.webp';

@@ -55,40 +55,38 @@
 	};
 </script>
 
-<main class="h-screen flex flex-col preset-filled-surface-50-950">
-	<form
-		id={data.formId}
-		action={`${page.url.pathname}${page.url.search}`}
-		method="POST"
-		use:enhance={handleEnhance}
-		class="flex flex-col h-full"
-	>
-		<!-- 제목 입력 -->
-		<div class="p-4 border-b border-surface-300 bg-surface-100">
-			<input
-				type="text"
-				name="title"
-				bind:value={memoTitle}
-				class="w-full px-4 py-2 text-lg font-medium bg-transparent border rounded-lg border-surface-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
-				placeholder="노트 제목을 입력하세요"
-				required
-			/>
-		</div>
+<form
+	id={data.formId}
+	action={`${page.url.pathname}${page.url.search}`}
+	method="POST"
+	use:enhance={handleEnhance}
+	class="flex flex-col h-full"
+>
+	<!-- 제목 입력 -->
+	<div class="p-4 border-b border-surface-300 bg-surface-100">
+		<input
+			type="text"
+			name="title"
+			bind:value={memoTitle}
+			class="w-full px-4 py-2 text-lg font-medium bg-transparent border rounded-lg border-surface-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+			placeholder="노트 제목을 입력하세요"
+			required
+		/>
+	</div>
 
-		<!-- 에디터 영역 -->
-		<div class="flex-1 p-4 overflow-y-auto">
-			<input type="hidden" name="content" value={memoContent} />
-			<TiptapEditor
-				bind:content={memoContent}
-				placeholder="여기에 내용을 작성하세요..."
-				editable={true}
-			/>
-		</div>
+	<!-- 에디터 영역 -->
+	<div class="flex-1 p-4 overflow-y-auto">
+		<input type="hidden" name="content" value={memoContent} />
+		<TiptapEditor
+			bind:content={memoContent}
+			placeholder="여기에 내용을 작성하세요..."
+			editable={true}
+		/>
+	</div>
 
-		<!-- 하단 버튼 영역 -->
-		<div class="p-4 border-t border-surface-300 bg-surface-100 flex gap-3 justify-end">
-			<button type="submit" class="btn preset-filled-primary"> 생성 </button>
-			<a href="/notes" class="btn preset-tonal-secondary"> 취소 </a>
-		</div>
-	</form>
-</main>
+	<!-- 하단 버튼 영역 -->
+	<div class="p-4 border-t border-surface-300 bg-surface-100 flex gap-3 justify-end">
+		<button type="submit" class="btn preset-filled-primary"> 생성 </button>
+		<a href="/notes" class="btn preset-tonal-secondary"> 취소 </a>
+	</div>
+</form>

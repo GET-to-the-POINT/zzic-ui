@@ -1,8 +1,6 @@
 <script>
+	import { Gauge, Menu, Plus } from '@lucide/svelte';
 	import { page } from '$app/state';
-	import Gauge from '@lucide/svelte/icons/gauge';
-	import Menu from '@lucide/svelte/icons/menu';
-	import Plus from '@lucide/svelte/icons/plus';
 
 	const search = $derived.by(() => {
 		const isModal = page.data.meta?.modal;
@@ -15,11 +13,8 @@
 	});
 </script>
 
-<div class="h-16"></div>
-<!-- Placeholder for fixed bottom navigation -->
-
 <nav
-	class="fixed bottom-0 left-0 right-0 z-50 h-16 preset-filled-surface-50-950 border-t border-primary-500/50"
+	class="card rounded-b-none sticky bottom-0 h-16 preset-filled-surface-50-950 border-t border-primary-500/50"
 >
 	<div class="flex h-full justify-around">
 		<!-- 대시보드 -->

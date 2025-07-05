@@ -1,5 +1,6 @@
 <script>
-	import Check from '@lucide/svelte/icons/check';
+	import { Check } from '@lucide/svelte';
+
 	import { page } from '$app/state';
 </script>
 

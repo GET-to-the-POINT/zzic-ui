@@ -1,20 +1,24 @@
 <script>
+	import {
+		Calculator,
+		Clock,
+		Home,
+		LogOut,
+		Moon,
+		Plus,
+		Settings,
+		SquareCheckBig,
+		StickyNote,
+		Sun,
+		Trophy,
+		User,
+		Wrench,
+		Zap
+	} from '@lucide/svelte';
 	import { page } from '$app/state';
-	import Calculator from '@lucide/svelte/icons/calculator';
+
 	import { default as Calendar, default as ChevronDown } from '@lucide/svelte/icons/chevron-down';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Home from '@lucide/svelte/icons/house';
-	import LogOut from '@lucide/svelte/icons/log-out';
-	import Moon from '@lucide/svelte/icons/moon';
-	import Plus from '@lucide/svelte/icons/plus';
-	import Settings from '@lucide/svelte/icons/settings';
-	import SquareCheckBig from '@lucide/svelte/icons/square-check-big';
-	import StickyNote from '@lucide/svelte/icons/sticky-note';
-	import Sun from '@lucide/svelte/icons/sun';
-	import Trophy from '@lucide/svelte/icons/trophy';
-	import User from '@lucide/svelte/icons/user';
-	import Wrench from '@lucide/svelte/icons/wrench';
-	import Zap from '@lucide/svelte/icons/zap';
+
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 
 	let checked = $state(false);

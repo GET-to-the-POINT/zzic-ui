@@ -42,7 +42,7 @@ export function getCurrentTheme() {
  */
 export function setTheme(theme) {
 	if (!browser) return;
-	
+
 	const html = document.documentElement;
 	html.setAttribute('data-theme', theme);
 	localStorage.setItem('theme', theme);
@@ -53,7 +53,7 @@ export function setTheme(theme) {
  */
 export function initializeTheme() {
 	if (!browser) return;
-	
+
 	const savedTheme = localStorage.getItem('theme') || 'pinky';
 	setTheme(savedTheme);
 }

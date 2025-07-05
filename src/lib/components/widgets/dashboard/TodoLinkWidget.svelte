@@ -1,6 +1,6 @@
 <script>
+	import { CheckSquare } from '@lucide/svelte';
 	import LinkWidget from './LinkWidget.svelte';
-	import CheckSquare from '@lucide/svelte/icons/check-square';
 </script>
 
 <LinkWidget

@@ -1,7 +1,7 @@
 <script>
+	import { User } from '@lucide/svelte';
 	import { Avatar, Progress } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
-	import User from '@lucide/svelte/icons/user';
 
 	// Props
 	let {
@@ -40,17 +40,35 @@
 
 {#if variant === 'minimal'}
 	<!-- 최소 버전: 아바타와 이름만 -->
-	<a href="/profile" class="flex items-center {className} hover:opacity-80 transition-opacity cursor-pointer">
-		<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-10" classes="mr-2">
+	<a
+		href="/profile"
+		class="flex items-center {className} hover:opacity-80 transition-opacity cursor-pointer"
+	>
+		<Avatar
+			src={userInfo.profilePictureUrl}
+			name="icon"
+			background="preset-filled-primary-500"
+			size="size-10"
+			classes="mr-2"
+		>
 			<User size={16} />
 		</Avatar>
 		<span class="font-semibold">{userInfo.name}</span>
 	</a>
 {:else if variant === 'compact'}
 	<!-- 컴팩트 버전: 카드 스타일 -->
-	<a href="/profile" class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block">
+	<a
+		href="/profile"
+		class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block"
+	>
 		<div class="flex items-center">
-			<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-12" classes="mr-3">
+			<Avatar
+				src={userInfo.profilePictureUrl}
+				name="icon"
+				background="preset-filled-primary-500"
+				size="size-12"
+				classes="mr-3"
+			>
 				<User size={20} />
 			</Avatar>
 			<div class="flex-1">
@@ -63,9 +81,18 @@
 	</a>
 {:else}
 	<!-- 기본 버전: 전체 카드 -->
-	<a href="/profile" class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block">
+	<a
+		href="/profile"
+		class="card preset-filled-surface-50-950 p-4 {className} hover:card-hover transition-all cursor-pointer block"
+	>
 		<div class="flex items-center mb-4">
-			<Avatar src={userInfo.profilePictureUrl} name="icon" background="preset-filled-primary-500" size="size-12" classes="mr-3">
+			<Avatar
+				src={userInfo.profilePictureUrl}
+				name="icon"
+				background="preset-filled-primary-500"
+				size="size-12"
+				classes="mr-3"
+			>
 				<User size={20} />
 			</Avatar>
 			<div>

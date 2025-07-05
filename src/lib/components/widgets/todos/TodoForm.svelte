@@ -1,15 +1,16 @@
 <script>
+	import AlignLeft from '@lucide/svelte/icons/align-left';
+	import Calendar from '@lucide/svelte/icons/calendar';
+	import Clock from '@lucide/svelte/icons/clock';
+	import Flag from '@lucide/svelte/icons/flag';
+	import Folder from '@lucide/svelte/icons/folder';
+	import PencilLine from '@lucide/svelte/icons/pencil-line';
+	import Repeat from '@lucide/svelte/icons/repeat';
+	import Tag from '@lucide/svelte/icons/tag';
 	import { enhance } from '$app/forms';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
-	import IconPencilLine from '@lucide/svelte/icons/pencil-line';
-	import IconAlignLeft from '@lucide/svelte/icons/align-left';
-	import IconCalendar from '@lucide/svelte/icons/calendar';
-	import IconClock from '@lucide/svelte/icons/clock';
-	import IconRepeat from '@lucide/svelte/icons/repeat';
-	import IconFolder from '@lucide/svelte/icons/folder';
-	import IconTag from '@lucide/svelte/icons/tag';
-	import IconFlag from '@lucide/svelte/icons/flag';
+
 	import { TagsInput } from '@skeletonlabs/skeleton-svelte';
 	import { toaster } from '$lib/utils/toast';
 
@@ -89,7 +90,7 @@
 			<!-- 제목 입력 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconPencilLine size={20} />
+					<PencilLine size={20} />
 				</div>
 				<input
 					class="ig-input"
@@ -105,7 +106,7 @@
 			<!-- 설명 입력 영역 -->
 			<div class="space-y-3">
 				<div class="flex items-center gap-3 text-sm font-medium text-surface-700">
-					<IconAlignLeft size={20} class="text-surface-600" />
+					<AlignLeft size={20} class="text-surface-600" />
 					<span>할 일 설명</span>
 				</div>
 				<textarea
@@ -125,7 +126,7 @@
 			<!-- 날짜 입력 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconCalendar size={20} />
+					<Calendar size={20} />
 				</div>
 				<input
 					class="ig-input"
@@ -139,7 +140,7 @@
 			<!-- 시간 입력 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconClock size={20} />
+					<Clock size={20} />
 				</div>
 				<input
 					class="ig-input"
@@ -153,7 +154,7 @@
 			<!-- 반복 설정 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconRepeat size={20} />
+					<Repeat size={20} />
 				</div>
 				<select class="ig-select" name="repeatType" disabled={isReadonly}>
 					{#each repeatTypes as repeatType}
@@ -172,7 +173,7 @@
 			<!-- 카테고리 선택 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconFolder size={20} />
+					<Folder size={20} />
 				</div>
 				<select class="ig-select" name="categoryId" disabled={isReadonly}>
 					{#if mode === 'create'}
@@ -189,7 +190,7 @@
 			<!-- 중요도 선택 그룹 -->
 			<div class="input-group grid-cols-[auto_1fr]">
 				<div class="ig-cell flex items-center justify-center text-surface-600">
-					<IconFlag size={20} />
+					<Flag size={20} />
 				</div>
 				<select class="ig-select" name="priorityId" disabled={isReadonly}>
 					{#if mode === 'create'}
@@ -206,7 +207,7 @@
 			<!-- 태그 입력 섹션 -->
 			<div class="space-y-3">
 				<div class="flex items-center gap-3 text-sm font-medium text-surface-700">
-					<IconTag size={20} class="text-surface-600" />
+					<Tag size={20} class="text-surface-600" />
 					<span>태그</span>
 				</div>
 				<TagsInput

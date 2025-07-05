@@ -1,11 +1,10 @@
 <script>
+	import { FileText, Search } from '@lucide/svelte';
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import NoteItem from '$lib/components/ui/note/NoteItem.svelte';
-	import Search from '@lucide/svelte/icons/search';
-	import FileText from '@lucide/svelte/icons/file-text';
 
 	const { data } = $props();
 
@@ -116,60 +115,58 @@
 	});
 </script>
 
-<main class="p-4 space-y-4">
-	<!-- 검색 폼 -->
-	<form onsubmit={handleSearch} class="mb-6">
-		<div class="input-group grid-cols-[1fr_auto]">
-			<input
-				type="search"
-				bind:value={searchQuery}
-				placeholder="노트 제목 또는 내용 검색..."
-				class="ig-input"
-				autocomplete="off"
-			/>
-			<button type="submit" class="ig-cell btn preset-filled-primary">
-				<Search size={20} />
-			</button>
-		</div>
-	</form>
+<!-- 검색 폼 -->
+<form onsubmit={handleSearch} class="mb-6">
+	<div class="input-group grid-cols-[1fr_auto]">
+		<input
+			type="search"
+			bind:value={searchQuery}
+			placeholder="노트 제목 또는 내용 검색..."
+			class="ig-input"
+			autocomplete="off"
+		/>
+		<button type="submit" class="ig-cell btn preset-filled-primary">
+			<Search size={20} />
+		</button>
+	</div>
+</form>
 
-	<!-- 검색 결과 -->
-	{#if searchQuery}
-		<div class="mb-4 flex items-center justify-between">
-			<h2 class="text-lg font-semibold">
-				"{searchQuery}" 검색 결과: {filteredNotes.length}개
-			</h2>
-			<button type="button" onclick={clearSearch} class="btn btn-sm preset-tonal-secondary">
-				초기화
-			</button>
-		</div>
-	{/if}
+<!-- 검색 결과 -->
+{#if searchQuery}
+	<div class="mb-4 flex items-center justify-between">
+		<h2 class="text-lg font-semibold">
+			"{searchQuery}" 검색 결과: {filteredNotes.length}개
+		</h2>
+		<button type="button" onclick={clearSearch} class="btn btn-sm preset-tonal-secondary">
+			초기화
+		</button>
+	</div>
+{/if}
 
-	{#if isSearching}
-		<!-- 검색 중 -->
-		<div class="text-center py-8">
-			<p class="text-surface-600">검색 중...</p>
-		</div>
-	{:else if searchQuery && filteredNotes.length === 0}
-		<!-- 검색 결과 없음 -->
-		<div class="card preset-filled-secondary-50-950 p-12 text-center">
-			<FileText size={48} class="mx-auto mb-4 text-surface-400" />
-			<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
-			<p class="text-surface-600">다른 검색어로 시도해보세요.</p>
-		</div>
-	{:else if filteredNotes.length > 0}
-		<!-- 검색 결과 목록 -->
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-			{#each filteredNotes as note (note.id)}
-				<NoteItem {note} />
-			{/each}
-		</div>
-	{:else if !searchQuery}
-		<!-- 검색어 입력 안내 -->
-		<div class="card preset-filled-secondary-50-950 p-12 text-center">
-			<Search size={48} class="mx-auto mb-4 text-surface-400" />
-			<h3 class="text-lg font-semibold mb-2">노트를 검색해보세요</h3>
-			<p class="text-surface-600">제목이나 내용으로 검색할 수 있습니다.</p>
-		</div>
-	{/if}
-</main>
+{#if isSearching}
+	<!-- 검색 중 -->
+	<div class="text-center py-8">
+		<p class="text-surface-600">검색 중...</p>
+	</div>
+{:else if searchQuery && filteredNotes.length === 0}
+	<!-- 검색 결과 없음 -->
+	<div class="card preset-filled-secondary-50-950 p-12 text-center">
+		<FileText size={48} class="mx-auto mb-4 text-surface-400" />
+		<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
+		<p class="text-surface-600">다른 검색어로 시도해보세요.</p>
+	</div>
+{:else if filteredNotes.length > 0}
+	<!-- 검색 결과 목록 -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		{#each filteredNotes as note (note.id)}
+			<NoteItem {note} />
+		{/each}
+	</div>
+{:else if !searchQuery}
+	<!-- 검색어 입력 안내 -->
+	<div class="card preset-filled-secondary-50-950 p-12 text-center">
+		<Search size={48} class="mx-auto mb-4 text-surface-400" />
+		<h3 class="text-lg font-semibold mb-2">노트를 검색해보세요</h3>
+		<p class="text-surface-600">제목이나 내용으로 검색할 수 있습니다.</p>
+	</div>
+{/if}

@@ -91,23 +91,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Page Component Structure
 
-**IMPORTANT**: All `+page.svelte` files MUST follow this structure:
+**IMPORTANT**: Page structure rules:
 
-- **Root element**: Always start with a `<main>` tag
-- **Main tag styling**: The `<main>` tag MUST have `class="p-4 space-y-4"` for consistent padding and spacing
-- **Content structure**: The main tag should contain sections with consistent spacing
-- **Functional areas**: Page functional areas (search bars, filters, action buttons) should use `preset-filled-secondary-50-950` for consistency
+- **No `<main>` tags in pages**: DO NOT use `<main>` tags in `+page.svelte` files. The main wrapper is already provided by the layout hierarchy
+- **Direct content**: Pages should directly contain their content sections without any wrapper
+- **Consistent spacing**: Use `space-y-4` between sections when needed
+- **Action components**: ALL action components (tab navigation, sub-tabs, filter bars, action buttons) MUST use `preset-filled-secondary-200-800` with `p-4` padding
 
 ```svelte
-<!-- CORRECT -->
-<main class="p-4 space-y-4">
-	<!-- Page content here -->
-</main>
+<!-- CORRECT - Action components -->
+<section class="card preset-filled-secondary-200-800 p-4">
+	<!-- Tab navigation, filters, action buttons -->
+</section>
+
+<!-- CORRECT - Content sections -->
+<section class="card preset-filled-surface-50-950 p-6 space-y-4">
+	<!-- Section content -->
+</section>
 
 <!-- INCORRECT -->
-<main>...</main>
-<main class="container">...</main>
-<main style="padding: 1rem">...</main>
+<main class="p-4 space-y-4">
+	<!-- Don't use main tags -->
+</main>
+
+<!-- INCORRECT - Wrong action component styling -->
+<div class="card preset-filled-secondary-50-950 p-2">
+	<!-- Should use secondary-200-800 with p-4 -->
+</div>
 ```
 
 ### Key Development Patterns
@@ -188,18 +198,18 @@ Pages can customize the header's back button behavior by providing a `handleBack
 ```javascript
 // +page.js
 export async function load() {
-    return {
-        handleBack: (event, defaultBack) => {
-            // Do something before
-            console.log('Custom logic before back');
-            
-            // Choose when/if to call default back
-            defaultBack(event);  // Calls preventDefault() + window.history.back()
-            
-            // Do something after (if needed)
-            console.log('Custom logic after back');
-        }
-    };
+	return {
+		handleBack: (event, defaultBack) => {
+			// Do something before
+			console.log('Custom logic before back');
+
+			// Choose when/if to call default back
+			defaultBack(event); // Calls preventDefault() + window.history.back()
+
+			// Do something after (if needed)
+			console.log('Custom logic after back');
+		}
+	};
 }
 ```
 
@@ -208,37 +218,39 @@ export async function load() {
 ```javascript
 // 1. Execute default with custom logic before
 handleBack: (event, defaultBack) => {
-    saveFormDraft();
-    defaultBack(event);
-}
+	saveFormDraft();
+	defaultBack(event);
+};
 
 // 2. Completely replace default behavior
 handleBack: (event, defaultBack) => {
-    if (hasUnsavedChanges) {
-        showUnsavedWarning();
-    } else {
-        customNavigation();
-    }
-    // Don't call defaultBack at all
-}
+	if (hasUnsavedChanges) {
+		showUnsavedWarning();
+	} else {
+		customNavigation();
+	}
+	// Don't call defaultBack at all
+};
 
 // 3. Conditional execution
 handleBack: (event, defaultBack) => {
-    if (shouldPreventBack()) {
-        event.preventDefault();
-        return;
-    }
-    defaultBack(event);
-}
+	if (shouldPreventBack()) {
+		event.preventDefault();
+		return;
+	}
+	defaultBack(event);
+};
 ```
 
 **Use cases:**
+
 - **Theme pages**: Restore original theme on cancel
 - **Form pages**: Save draft or warn about unsaved changes
 - **Analytics**: Track navigation patterns
 - **Custom navigation**: Override default back behavior entirely
 
 Example structure for modal pages:
+
 ```
 src/routes/(main)/theme/
 ├── +page.js          // meta: { modal: true }, handleBack: { before: [...] }
@@ -281,3 +293,16 @@ Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+### Icon Import Rules
+
+**IMPORTANT**: Always import Lucide icons individually to avoid slow loading times:
+
+```javascript
+// CORRECT - Import icons individually
+import User from '@lucide/svelte/icons/user';
+import Trophy from '@lucide/svelte/icons/trophy';
+
+// INCORRECT - Named imports cause slow loading
+import { User, Trophy } from '@lucide/svelte';
+```

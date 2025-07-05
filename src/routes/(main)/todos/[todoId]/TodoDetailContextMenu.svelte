@@ -1,12 +1,8 @@
 <script>
+	import { Check, Edit, EllipsisVertical, Trash, X } from '@lucide/svelte';
 	import { enhance } from '$app/forms';
 	import { afterNavigate, goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
-	import Check from '@lucide/svelte/icons/check';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Edit from '@lucide/svelte/icons/pencil';
-	import Trash from '@lucide/svelte/icons/trash';
-	import X from '@lucide/svelte/icons/x';
 
 	const searchParams = new URLSearchParams(page.url.search);
 	searchParams.set('redirectTo', page.url.pathname);

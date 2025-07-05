@@ -1,11 +1,8 @@
 <script>
+	import { Pause, Play, RotateCcw } from '@lucide/svelte';
 	import { onDestroy } from 'svelte';
-	import Play from '@lucide/svelte/icons/play';
-	import Pause from '@lucide/svelte/icons/pause';
-	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
+
 	import ClockCarousel from './ClockCarousel.svelte';
-	import DraggableTodoList from '$lib/components/ui/common/DraggableTodoList.svelte';
-	import { page } from '$app/state';
 
 	// Props
 	let { class: className = '', onComplete = () => {} } = $props();
@@ -28,13 +25,6 @@
 	});
 	let colonVisible = $derived(remainingSeconds % 2 === 1);
 
-	// 투두 리스트
-	let todos = $derived(page.data.todos?.content || []);
-
-	function handleTodoReorder(/** @type {any[]} */ newOrder) {
-		console.log('투두 순서 변경:', newOrder);
-		// TODO: API 호출하여 순서 저장
-	}
 
 	// 타이머 함수
 	function startTimer() {
@@ -169,9 +159,3 @@
 	</footer>
 </section>
 
-<!-- 드래그 가능한 투두 리스트 -->
-{#if todos.length > 0}
-	<div class="mt-4">
-		<DraggableTodoList {todos} title="오늘의 할 일" onReorder={handleTodoReorder} />
-	</div>
-{/if}

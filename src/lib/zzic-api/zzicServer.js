@@ -7,6 +7,7 @@ import { createPriorityClient } from './priority.js';
 import { createRepeatClient } from './repeat.js';
 import { createTagClient } from './tag.js';
 import { createMemberClient } from './member.js';
+import { createFriendsClient } from './friends.js';
 
 /**
  * 서버 사이드용 ZZIC 인증 클라이언트
@@ -45,6 +46,7 @@ export function createZzicServerClient(apiUrl, options) {
 	const repeat = createRepeatClient(apiUrl, fetchFn);
 	const tag = createTagClient(apiUrl, fetchFn);
 	const member = createMemberClient(apiUrl, fetchFn);
+	const friends = createFriendsClient(apiUrl, fetchFn);
 
-	return { auth, todo, challenge, category, priority, repeat, tag, member };
+	return { auth, todo, challenge, category, priority, repeat, tag, member, friends };
 }

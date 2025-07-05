@@ -6,7 +6,7 @@ describe('TodoListWidget Component Logic', () => {
 			numberOfElements: 0,
 			content: []
 		};
-		
+
 		// Test the logic that determines if todos should be shown
 		const shouldShowTodos = emptyTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(false);
@@ -20,7 +20,7 @@ describe('TodoListWidget Component Logic', () => {
 				{ id: 2, title: 'Test Todo 2', completed: true }
 			]
 		};
-		
+
 		const shouldShowTodos = todoPageWithTodos?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(true);
 		expect(todoPageWithTodos.content).toHaveLength(2);
@@ -28,25 +28,23 @@ describe('TodoListWidget Component Logic', () => {
 
 	it('should handle null todoPage correctly', () => {
 		const nullTodoPage = null;
-		
+
 		const shouldShowTodos = nullTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(false);
 	});
 
 	it('should handle undefined todoPage correctly', () => {
 		const undefinedTodoPage = undefined;
-		
+
 		const shouldShowTodos = undefinedTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(false);
 	});
 
 	it('should handle todoPage without numberOfElements', () => {
 		const invalidTodoPage = {
-			content: [
-				{ id: 1, title: 'Todo without count', completed: false }
-			]
+			content: [{ id: 1, title: 'Todo without count', completed: false }]
 		};
-		
+
 		const shouldShowTodos = invalidTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(false);
 	});
@@ -54,11 +52,9 @@ describe('TodoListWidget Component Logic', () => {
 	it('should validate todo content structure', () => {
 		const validTodoPage = {
 			numberOfElements: 1,
-			content: [
-				{ id: 1, title: 'Valid Todo', completed: false }
-			]
+			content: [{ id: 1, title: 'Valid Todo', completed: false }]
 		};
-		
+
 		expect(validTodoPage.content[0]).toHaveProperty('id');
 		expect(validTodoPage.content[0]).toHaveProperty('title');
 		expect(validTodoPage.content[0]).toHaveProperty('completed');
@@ -73,7 +69,7 @@ describe('TodoListWidget Component Logic', () => {
 				completed: i % 2 === 0
 			}))
 		};
-		
+
 		const shouldShowTodos = largeTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(true);
 		expect(largeTodoPage.content).toHaveLength(100);
@@ -82,15 +78,13 @@ describe('TodoListWidget Component Logic', () => {
 	it('should handle edge case where numberOfElements does not match content length', () => {
 		const mismatchedTodoPage = {
 			numberOfElements: 5,
-			content: [
-				{ id: 1, title: 'Only Todo', completed: false }
-			]
+			content: [{ id: 1, title: 'Only Todo', completed: false }]
 		};
-		
+
 		// Component should still work based on numberOfElements
 		const shouldShowTodos = mismatchedTodoPage?.numberOfElements > 0;
 		expect(shouldShowTodos).toBe(true);
-		
+
 		// But actual content is different
 		expect(mismatchedTodoPage.content).toHaveLength(1);
 	});

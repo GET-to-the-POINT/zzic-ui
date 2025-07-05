@@ -1,17 +1,19 @@
 <script>
-	import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import Award from '@lucide/svelte/icons/award';
-	import Bot from '@lucide/svelte/icons/bot';
-	import ChartColumn from '@lucide/svelte/icons/chart-column';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import CircleCheck from '@lucide/svelte/icons/circle-check';
-	import Flame from '@lucide/svelte/icons/flame';
-	import Play from '@lucide/svelte/icons/play';
-	import Star from '@lucide/svelte/icons/star';
-	import Target from '@lucide/svelte/icons/target';
-	import Timer from '@lucide/svelte/icons/timer';
-	import Users from '@lucide/svelte/icons/users';
-	import Zap from '@lucide/svelte/icons/zap';
+	import {
+		ArrowRight,
+		Award,
+		Bot,
+		ChartColumn,
+		ChevronDown,
+		CircleCheck,
+		Flame,
+		Play,
+		Star,
+		Target,
+		Timer,
+		Users,
+		Zap
+	} from '@lucide/svelte';
 
 	const { data } = $props();
 </script>

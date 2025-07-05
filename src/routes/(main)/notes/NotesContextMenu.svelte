@@ -1,5 +1,5 @@
 <script>
-	import Plus from '@lucide/svelte/icons/plus';
+	import { Plus } from '@lucide/svelte';
 </script>
 
 <a href="/notes/create" class="btn-icon">

@@ -1,8 +1,8 @@
 <script>
+	import { Trash2 } from '@lucide/svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import Trash2 from '@lucide/svelte/icons/trash-2';
 
 	// 현재 노트 ID
 	const noteId = $derived(page.params.noteId);

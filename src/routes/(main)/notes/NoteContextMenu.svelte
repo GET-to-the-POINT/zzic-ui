@@ -1,9 +1,6 @@
 <script>
+	import { Edit, EllipsisVertical, Trash, X } from '@lucide/svelte';
 	import { page } from '$app/state';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Edit from '@lucide/svelte/icons/pencil';
-	import Trash from '@lucide/svelte/icons/trash';
-	import X from '@lucide/svelte/icons/x';
 
 	/** @type {HTMLDialogElement} */
 	let dialog;

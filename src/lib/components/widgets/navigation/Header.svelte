@@ -1,7 +1,6 @@
 <script>
+	import { ChevronLeft, X } from '@lucide/svelte';
 	import { page } from '$app/state';
-	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
-	import X from '@lucide/svelte/icons/x';
 
 	/**
 	 * @param {Event} event
@@ -17,7 +16,7 @@
 	 */
 	const handleBack = (event) => {
 		const customHandleBack = page.data?.handleBack;
-		
+
 		if (customHandleBack) {
 			// 사용자 정의 핸들러에 기본 핸들러를 전달
 			customHandleBack(event, defaultHandleBack);
@@ -48,7 +47,7 @@
 			<!-- 대시보드에서는 빈 공간 -->
 		</div>
 	{:else}
-		<a href='./' class="btn-icon cursor-pointer" onclick={handleBack}>
+		<a href="./" class="btn-icon cursor-pointer" onclick={handleBack}>
 			{#if page.data.meta?.modal}
 				<X />
 			{:else}

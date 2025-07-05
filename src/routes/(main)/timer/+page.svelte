@@ -18,10 +18,8 @@
 	}
 </script>
 
-<main class="p-4 space-y-4">
-	<!-- 타이머 섹션 -->
-	<SimplePomodoro onComplete={handleTimerComplete} />
+<!-- 타이머 섹션 -->
+<SimplePomodoro onComplete={handleTimerComplete} />
 
-	<!-- 오늘의 투두 섹션 -->
-	<TodayTodos title="오늘의 할 일" />
-</main>
+<!-- 오늘의 투두 섹션 -->
+<TodayTodos title="오늘의 할 일" />

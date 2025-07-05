@@ -1,9 +1,8 @@
 <script>
+	import { FileText, Search } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import NoteItem from '$lib/components/ui/note/NoteItem.svelte';
-	import FileText from '@lucide/svelte/icons/file-text';
-	import Search from '@lucide/svelte/icons/search';
 
 	// 메모 데이터 구조
 	/**
@@ -67,51 +66,49 @@
 	});
 </script>
 
-<main class="p-4 space-y-4">
-	<!-- 검색 바 -->
-	{#if memos.length > 0}
-		<div class="mb-6">
-			<div class="input-group grid-cols-[auto_1fr]">
-				<div class="ig-cell flex items-center justify-center">
-					<Search size={20} />
-				</div>
-				<input
-					type="search"
-					bind:value={searchQuery}
-					placeholder="노트 검색..."
-					class="ig-input"
-					autocomplete="off"
-				/>
+<!-- 검색 바 -->
+{#if memos.length > 0}
+	<div class="mb-6">
+		<div class="input-group grid-cols-[auto_1fr]">
+			<div class="ig-cell flex items-center justify-center">
+				<Search size={20} />
 			</div>
-			{#if searchQuery}
-				<p class="text-sm text-surface-600 mt-2">
-					{filteredMemos.length}개의 노트를 찾았습니다
-				</p>
-			{/if}
+			<input
+				type="search"
+				bind:value={searchQuery}
+				placeholder="노트 검색..."
+				class="ig-input"
+				autocomplete="off"
+			/>
 		</div>
-	{/if}
+		{#if searchQuery}
+			<p class="text-sm text-surface-600 mt-2">
+				{filteredMemos.length}개의 노트를 찾았습니다
+			</p>
+		{/if}
+	</div>
+{/if}
 
-	<!-- 노트 목록 -->
-	{#if memos.length === 0}
-		<!-- 빈 상태 -->
-		<div class="card preset-filled-secondary-50-950 p-12 text-center">
-			<FileText size={48} class="mx-auto mb-4 text-surface-400" />
-			<h3 class="text-lg font-semibold mb-2">아직 노트가 없습니다</h3>
-			<p class="text-surface-600">첫 번째 노트를 작성해보세요!</p>
-		</div>
-	{:else if filteredMemos.length === 0}
-		<!-- 검색 결과 없음 -->
-		<div class="card preset-filled-secondary-50-950 p-12 text-center">
-			<Search size={48} class="mx-auto mb-4 text-surface-400" />
-			<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
-			<p class="text-surface-600">다른 검색어로 시도해보세요.</p>
-		</div>
-	{:else}
-		<!-- 노트 그리드 -->
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-			{#each filteredMemos as note (note.id)}
-				<NoteItem {note} />
-			{/each}
-		</div>
-	{/if}
-</main>
+<!-- 노트 목록 -->
+{#if memos.length === 0}
+	<!-- 빈 상태 -->
+	<div class="card preset-filled-secondary-50-950 p-12 text-center">
+		<FileText size={48} class="mx-auto mb-4 text-surface-400" />
+		<h3 class="text-lg font-semibold mb-2">아직 노트가 없습니다</h3>
+		<p class="text-surface-600">첫 번째 노트를 작성해보세요!</p>
+	</div>
+{:else if filteredMemos.length === 0}
+	<!-- 검색 결과 없음 -->
+	<div class="card preset-filled-secondary-50-950 p-12 text-center">
+		<Search size={48} class="mx-auto mb-4 text-surface-400" />
+		<h3 class="text-lg font-semibold mb-2">검색 결과가 없습니다</h3>
+		<p class="text-surface-600">다른 검색어로 시도해보세요.</p>
+	</div>
+{:else}
+	<!-- 노트 그리드 -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		{#each filteredMemos as note (note.id)}
+			<NoteItem {note} />
+		{/each}
+	</div>
+{/if}

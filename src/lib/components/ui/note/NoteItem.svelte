@@ -1,6 +1,6 @@
 <script>
+	import { Calendar } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
-	import Calendar from '@lucide/svelte/icons/calendar';
 
 	let { note } = $props();
 

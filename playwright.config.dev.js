@@ -10,7 +10,7 @@ export default defineConfig({
 	},
 
 	testDir: 'e2e',
-	
+
 	// 테스트 타임아웃
 	timeout: 30000,
 
@@ -18,21 +18,18 @@ export default defineConfig({
 	use: {
 		// 개발 서버 URL
 		baseURL: 'http://localhost:6100',
-		
+
 		// 스크린샷 설정
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
-		
+
 		// 브라우저 옵션
 		headless: true, // 헤드리스 모드
-		slowMo: 0, // 딜레이 제거
+		slowMo: 0 // 딜레이 제거
 	},
 
 	// 리포터 설정
-	reporter: [
-		['list'],
-		['html', { open: 'never' }]
-	],
+	reporter: [['list'], ['html', { open: 'never' }]],
 
 	// 프로젝트 설정
 	projects: [

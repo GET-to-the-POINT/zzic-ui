@@ -1,8 +1,8 @@
 <script>
+	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import { page } from '$app/state';
 	import { Temporal } from '@js-temporal/polyfill';
-	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+
 	import { SvelteSet, SvelteMap } from 'svelte/reactivity';
 
 	const today = $derived.by(() => {

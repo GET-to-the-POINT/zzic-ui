@@ -5,7 +5,7 @@ import { getCurrentTheme, setTheme } from '$lib/utils/theme.js';
 export async function load() {
 	// 원래 테마 저장
 	const originalTheme = getCurrentTheme();
-	
+
 	return {
 		meta: {
 			title: '테마 변경',
@@ -18,7 +18,7 @@ export async function load() {
 			// 테마 복구 후 기본 뒤로가기 실행
 			console.log('테마 페이지: 원래 테마로 복구 중...');
 			setTheme(originalTheme);
-			
+
 			// 기본 뒤로가기 실행
 			defaultBack(event);
 		}

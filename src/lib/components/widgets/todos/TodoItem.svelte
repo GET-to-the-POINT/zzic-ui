@@ -1,13 +1,8 @@
 <script>
+	import { Check, Clock, Edit, Pin, Square, Trash2 } from '@lucide/svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { toaster } from '$lib/utils/toast';
-	import Check from '@lucide/svelte/icons/check';
-	import Clock from '@lucide/svelte/icons/clock';
-	import Edit from '@lucide/svelte/icons/edit';
-	import Pin from '@lucide/svelte/icons/pin';
-	import Square from '@lucide/svelte/icons/square';
-	import Trash2 from '@lucide/svelte/icons/trash-2';
 
 	/**
 	 * @typedef {import('../../../zzic-api/todo.js').TodoResponse} TodoResponse
@@ -16,25 +11,31 @@
 	/** @type {{ todo: TodoResponse }} */
 	let { todo } = $props();
 
+	// DOM 요소 참조
 	let containerElement = $state(/** @type {HTMLDivElement | null} */ (null));
+
+	// 스와이프 상태 관리
 	let startX = $state(0);
 	let currentX = $state(0);
 	let translateX = $state(0);
 	let isDragging = $state(false);
 	let isLeftRevealed = $state(false); // 왼쪽 스와이프 (수정/삭제 버튼)
 	let isRightRevealed = $state(false); // 오른쪽 스와이프 (고정 버튼)
-	// 할일 데이터에서 pin 상태 확인 (isPinned 필드가 있으면 사용, 없으면 false)
+
+	// 할일 상태 관리
 	let isPinned = $state(todo.isPinned || false);
-	let hasSwipedThisSession = $state(false); // 현재 세션에서 스와이프 발생 여부
-	let preventClick = $state(false); // 클릭 방지 플래그
+	let hasSwipedThisSession = $state(false);
+	let preventClick = $state(false);
 
-	const SWIPE_THRESHOLD = 80; // 스와이프 임계값
-	const ACTION_BUTTON_WIDTH = 120; // 액션 버튼들의 너비
-	const PIN_BUTTON_WIDTH = 60; // 고정 버튼 너비
+	// 스와이프 설정
+	const SWIPE_THRESHOLD = 80;
+	const ACTION_BUTTON_WIDTH = 120;
+	const PIN_BUTTON_WIDTH = 60;
 
-	/**
-	 * Form enhance 핸들러
-	 */
+	// 파생 상태
+	const isCompleted = $derived(todo.complete);
+
+	// Form enhance 핸들러
 	const handleEnhance = () => {
 		return async (/** @type {any} */ { result }) => {
 			if (result.type === 'success') {
@@ -44,33 +45,50 @@
 		};
 	};
 
-	const isCompleted = $derived(todo.complete);
+	// 스와이프 상태 초기화
+	function initSwipeState() {
+		hasSwipedThisSession = false;
+		preventClick = false;
+	}
+
+	// 스와이프 종료 처리
+	function finishSwipe(/** @type {number} */ deltaX) {
+		if (deltaX < -SWIPE_THRESHOLD) {
+			translateX = -ACTION_BUTTON_WIDTH;
+			isLeftRevealed = true;
+			isRightRevealed = false;
+		} else if (deltaX > SWIPE_THRESHOLD) {
+			translateX = PIN_BUTTON_WIDTH;
+			isRightRevealed = true;
+			isLeftRevealed = false;
+		} else {
+			translateX = 0;
+			isLeftRevealed = false;
+			isRightRevealed = false;
+		}
+	}
 
 	// 터치 이벤트 핸들러
 	const handleTouchStart = (/** @type {TouchEvent} */ e) => {
 		startX = e.touches[0].clientX;
 		currentX = startX;
 		isDragging = true;
-		hasSwipedThisSession = false;
-		preventClick = false;
+		initSwipeState();
 	};
 
 	const handleTouchMove = (/** @type {TouchEvent} */ e) => {
 		if (!isDragging) return;
 
-		e.preventDefault(); // 스크롤 방지
+		e.preventDefault();
 		currentX = e.touches[0].clientX;
 		const deltaX = currentX - startX;
 
-		// 왼쪽으로 스와이프 (수정/삭제 버튼)
 		if (deltaX < 0) {
 			translateX = Math.max(deltaX, -ACTION_BUTTON_WIDTH);
-			isRightRevealed = false; // 오른쪽 버튼 숨기기
-		}
-		// 오른쪽으로 스와이프 (고정 버튼)
-		else if (deltaX > 0) {
+			isRightRevealed = false;
+		} else if (deltaX > 0) {
 			translateX = Math.min(deltaX, PIN_BUTTON_WIDTH);
-			isLeftRevealed = false; // 왼쪽 버튼 숨기기
+			isLeftRevealed = false;
 		}
 	};
 
@@ -80,42 +98,22 @@
 
 		const deltaX = currentX - startX;
 
-		// 스와이프가 발생했으면 기본 터치 이벤트 무시
 		if (Math.abs(deltaX) > 5) {
 			e.preventDefault();
 			hasSwipedThisSession = true;
 			preventClick = true;
-			// 짧은 시간 후 클릭 방지 해제
-			setTimeout(() => {
-				preventClick = false;
-			}, 100);
+			setTimeout(() => (preventClick = false), 100);
 		}
 
-		if (deltaX < -SWIPE_THRESHOLD) {
-			// 왼쪽으로 충분히 스와이프했으면 액션 버튼 표시
-			translateX = -ACTION_BUTTON_WIDTH;
-			isLeftRevealed = true;
-			isRightRevealed = false;
-		} else if (deltaX > SWIPE_THRESHOLD) {
-			// 오른쪽으로 충분히 스와이프했으면 고정 버튼 표시
-			translateX = PIN_BUTTON_WIDTH;
-			isRightRevealed = true;
-			isLeftRevealed = false;
-		} else {
-			// 임계값에 못 미치면 원래 위치로 되돌리기
-			translateX = 0;
-			isLeftRevealed = false;
-			isRightRevealed = false;
-		}
+		finishSwipe(deltaX);
 	};
 
-	// 마우스 이벤트 핸들러 (데스크톱 지원)
+	// 마우스 이벤트 핸들러
 	const handleMouseDown = (/** @type {MouseEvent} */ e) => {
 		startX = e.clientX;
 		currentX = startX;
 		isDragging = true;
-		hasSwipedThisSession = false;
-		preventClick = false;
+		initSwipeState();
 		e.preventDefault();
 		e.stopPropagation();
 	};
@@ -126,15 +124,12 @@
 		currentX = e.clientX;
 		const deltaX = currentX - startX;
 
-		// 왼쪽으로 스와이프 (수정/삭제 버튼)
 		if (deltaX < 0) {
 			translateX = Math.max(deltaX, -ACTION_BUTTON_WIDTH);
-			isRightRevealed = false; // 오른쪽 버튼 숨기기
-		}
-		// 오른쪽으로 스와이프 (고정 버튼)
-		else if (deltaX > 0) {
+			isRightRevealed = false;
+		} else if (deltaX > 0) {
 			translateX = Math.min(deltaX, PIN_BUTTON_WIDTH);
-			isLeftRevealed = false; // 왼쪽 버튼 숨기기
+			isLeftRevealed = false;
 		}
 	};
 
@@ -144,34 +139,25 @@
 
 		const deltaX = currentX - startX;
 
-		// 스와이프가 발생했으면 클릭 방지
 		if (Math.abs(deltaX) > 5) {
 			hasSwipedThisSession = true;
 			preventClick = true;
-			// 짧은 시간 후 클릭 방지 해제
-			setTimeout(() => {
-				preventClick = false;
-			}, 100);
+			setTimeout(() => (preventClick = false), 100);
 		}
 
-		if (deltaX < -SWIPE_THRESHOLD) {
-			translateX = -ACTION_BUTTON_WIDTH;
-			isLeftRevealed = true;
-			isRightRevealed = false;
-		} else if (deltaX > SWIPE_THRESHOLD) {
-			translateX = PIN_BUTTON_WIDTH;
-			isRightRevealed = true;
-			isLeftRevealed = false;
-		} else {
-			translateX = 0;
-			isLeftRevealed = false;
-			isRightRevealed = false;
-		}
+		finishSwipe(deltaX);
 	};
 
-	// 클릭 이벤트 처리 (스와이프와 클릭 구분)
+	// 액션 버튼 상태 초기화
+	function resetActionButtons() {
+		translateX = 0;
+		isLeftRevealed = false;
+		isRightRevealed = false;
+		hasSwipedThisSession = false;
+	}
+
+	// 클릭 이벤트 처리
 	const handleClick = (/** @type {MouseEvent} */ e) => {
-		// 클릭 방지 플래그가 설정되어 있거나, 스와이프가 발생했거나, 액션 버튼이 열려있으면 클릭 이벤트 무시
 		if (preventClick || hasSwipedThisSession || isLeftRevealed || isRightRevealed) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -181,20 +167,14 @@
 
 	// 키보드 이벤트 처리
 	const handleKeydown = (/** @type {KeyboardEvent} */ e) => {
-		if (e.key === 'Enter' || e.key === ' ') {
-			if (isLeftRevealed || isRightRevealed) {
-				// 액션 버튼이 열려있으면 닫기
-				translateX = 0;
-				isLeftRevealed = false;
-				isRightRevealed = false;
-				e.preventDefault();
-			}
+		if ((e.key === 'Enter' || e.key === ' ') && (isLeftRevealed || isRightRevealed)) {
+			resetActionButtons();
+			e.preventDefault();
 		}
 	};
 
-	// 외부 클릭 시 액션 버튼 숨기기
+	// 외부 클릭 처리
 	const handleClickOutside = (/** @type {MouseEvent} */ e) => {
-		// 드래깅 중이거나 방금 스와이프했으면 무시
 		if (isDragging || preventClick) return;
 
 		if (
@@ -202,35 +182,26 @@
 			containerElement &&
 			!containerElement.contains(/** @type {Node} */ (e.target))
 		) {
-			translateX = 0;
-			isLeftRevealed = false;
-			isRightRevealed = false;
-			hasSwipedThisSession = false;
+			resetActionButtons();
 		}
 	};
 
-	// 수정하기 핸들러
+	// 액션 핸들러들
 	const handleEdit = () => {
 		window.location.href = `/todos/${todo.id}/update`;
 	};
 
-	// 고정하기 핸들러 (폼 제출용)
-	const handlePinSubmit = async () => {
-		// 고정 후 액션 버튼 숨기기
-		translateX = 0;
-		isLeftRevealed = false;
-		isRightRevealed = false;
-		hasSwipedThisSession = false;
+	const handlePinSubmit = () => {
+		resetActionButtons();
 	};
 
-	// 핀 폼 enhance 핸들러
 	const handlePinEnhance = () => {
 		return async (/** @type {any} */ { result }) => {
 			if (result.type === 'success') {
 				isPinned = !isPinned;
 				await invalidateAll();
 				toaster.success({
-					title: isPinned ? '할 일이 고정되었습니다!' : '할 일 고정이 해제되었습니다!'
+					title: isPinned ? '할일이 고정되었습니다!' : '할일 고정이 해제되었습니다!'
 				});
 			} else if (result.type === 'failure') {
 				toaster.error({ title: '고정 처리 중 오류가 발생했습니다.' });
@@ -238,29 +209,28 @@
 		};
 	};
 
-	// 삭제하기 핸들러
 	const handleDelete = async () => {
-		if (confirm('정말로 이 할 일을 삭제하시겠습니까?')) {
-			try {
-				const response = await fetch(`/todos/${todo.id}`, {
-					method: 'DELETE'
-				});
-
-				if (response.ok) {
-					await invalidateAll();
-					toaster.success({ title: '할 일이 삭제되었습니다!' });
-				} else {
-					toaster.error({ title: '삭제에 실패했습니다.' });
-				}
-			} catch (error) {
-				toaster.error({ title: '삭제 중 오류가 발생했습니다.' });
-			}
+		if (!confirm('정말로 이 할 일을 삭제하시겠습니까?')) {
+			resetActionButtons();
+			return;
 		}
-		// 삭제 후 액션 버튼 숨기기
-		translateX = 0;
-		isLeftRevealed = false;
-		isRightRevealed = false;
-		hasSwipedThisSession = false;
+
+		try {
+			const response = await fetch(`/todos/${todo.id}`, {
+				method: 'DELETE'
+			});
+
+			if (response.ok) {
+				await invalidateAll();
+				toaster.success({ title: '할 일이 삭제되었습니다!' });
+			} else {
+				toaster.error({ title: '삭제에 실패했습니다.' });
+			}
+		} catch (error) {
+			toaster.error({ title: '삭제 중 오류가 발생했습니다.' });
+		} finally {
+			resetActionButtons();
+		}
 	};
 </script>
 
@@ -270,7 +240,7 @@
 	onclick={handleClickOutside}
 />
 
-<div class="card relative overflow-hidden" style="view-transition-name: {todo.id}-todo;">
+<div class="card relative overflow-hidden" style:view-transition-name="{todo.id}-todo">
 	<!-- 왼쪽 스와이프 액션 버튼들 (수정/삭제) -->
 	<div class="absolute top-0 right-0 h-full flex">
 		<!-- 수정 버튼 -->
@@ -334,11 +304,7 @@
 		<div class="flex items-start gap-2">
 			<!-- 체크박스와 핀 아이콘 -->
 			<div class="pt-4 pl-4 flex flex-col items-center gap-1">
-				<form
-					action={`/todos/${todo.id}/update`}
-					method="POST"
-					use:enhance={handleEnhance}
-				>
+				<form action={`/todos/${todo.id}/update`} method="POST" use:enhance={handleEnhance}>
 					<button
 						type="submit"
 						name="complete"
@@ -356,7 +322,7 @@
 						{/if}
 					</button>
 				</form>
-				
+
 				<!-- 핀 아이콘 (pinned 상태일 때만 표시) -->
 				{#if isPinned}
 					<Pin size={12} />

@@ -1,18 +1,12 @@
 <script>
+	import { Coffee, Info, Pause, Play, RotateCcw, SkipForward, Target, X } from '@lucide/svelte';
 	import {
 		getPomodoroService,
 		PomodoroState,
 		requestNotificationPermission,
 		SessionType
 	} from '$lib/services/pomodoro.js';
-	import Coffee from '@lucide/svelte/icons/coffee';
-	import Info from '@lucide/svelte/icons/info';
-	import Pause from '@lucide/svelte/icons/pause';
-	import Play from '@lucide/svelte/icons/play';
-	import RotateCcw from '@lucide/svelte/icons/rotate-ccw';
-	import SkipForward from '@lucide/svelte/icons/skip-forward';
-	import Target from '@lucide/svelte/icons/target';
-	import X from '@lucide/svelte/icons/x';
+
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 

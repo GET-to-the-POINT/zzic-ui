@@ -241,15 +241,57 @@
 }
 
 @layer base {
-	html, body {
+	html,
+	body {
 		@apply overscroll-none;
 	}
-	
+
 	body {
 		@apply max-w-screen-sm mx-auto;
 	}
 
 	dialog {
 		@apply max-w-full max-h-full;
+	}
+}
+
+/* View Transitions */
+@view-transition {
+	navigation: auto;
+}
+
+/* Default page transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 0.25s;
+	animation-timing-function: ease-in-out;
+}
+
+/* Smooth page transitions */
+::view-transition-old(root) {
+	animation-name: fade-out;
+	opacity: 1;
+}
+
+::view-transition-new(root) {
+	animation-name: fade-in;
+	opacity: 0;
+}
+
+@keyframes fade-out {
+	to {
+		opacity: 0;
+		transform: translateX(10px);
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
 	}
 }

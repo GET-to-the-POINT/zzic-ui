@@ -14,14 +14,12 @@
 	};
 </script>
 
-<main class="p-4 space-y-4">
-	<form
-		id={data.formId}
-		action={`${page.url.pathname}${page.url.search}`}
-		method="POST"
-		use:enhance={handleEnhance}
-		class="space-y-4"
-	>
-		정말 삭제하시겠습니까?
-	</form>
-</main>
+<form
+	id={data.formId}
+	action={`${page.url.pathname}${page.url.search}`}
+	method="POST"
+	use:enhance={handleEnhance}
+	class="space-y-4"
+>
+	정말 삭제하시겠습니까?
+</form>

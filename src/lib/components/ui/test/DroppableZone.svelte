@@ -29,12 +29,12 @@
 		try {
 			const jsonData = e.dataTransfer.getData('application/json');
 			console.log('Retrieved data from dataTransfer:', jsonData);
-			
+
 			if (!jsonData) {
 				console.error('No data found in dataTransfer');
 				return;
 			}
-			
+
 			const data = JSON.parse(jsonData);
 			console.log('Parsed data:', data);
 

@@ -1,11 +1,7 @@
 <script>
+	import { CalendarDays, Check, EllipsisVertical, Plus, Search, X } from '@lucide/svelte';
 	import { page } from '$app/state';
-	import Check from '@lucide/svelte/icons/check';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Plus from '@lucide/svelte/icons/plus';
-	import CalendarDays from '@lucide/svelte/icons/calendar-days';
-	import Search from '@lucide/svelte/icons/search';
-	import X from '@lucide/svelte/icons/x';
+
 	import { afterNavigate } from '$app/navigation';
 
 	const searchParams = new URLSearchParams(page.url.search);

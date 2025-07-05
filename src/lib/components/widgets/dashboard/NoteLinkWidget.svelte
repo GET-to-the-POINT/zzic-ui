@@ -1,6 +1,6 @@
 <script>
+	import { FileText } from '@lucide/svelte';
 	import LinkWidget from './LinkWidget.svelte';
-	import FileText from '@lucide/svelte/icons/file-text';
 </script>
 
 <LinkWidget
